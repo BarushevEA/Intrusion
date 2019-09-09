@@ -1,0 +1,14 @@
+{
+  "name": "appView",
+  "version": "1.0.0",
+  "description": "app modules with view",
+  "main": "main.js",
+  "author": "Barushev E.A.",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^6.0.7"
+  }
+}
