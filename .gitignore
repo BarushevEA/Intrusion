@@ -60,5 +60,5 @@ fabric.properties
 .idea/httpRequests
 /dist/
 /package-lock.json
-
 yarn.lock
+/dist_dev/
