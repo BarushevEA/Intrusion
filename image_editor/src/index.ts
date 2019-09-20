@@ -1,3 +1,4 @@
-import {Options} from './initModule';
+import {InitModule} from "./initModule";
+import "./initOuterVariables"
 
-console.log(new Options('SM_CH'));
+console.log('HELLO', new InitModule().getName());
