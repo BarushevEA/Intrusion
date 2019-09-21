@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .oldClass {
+            background-color: red;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="oldClass">
+<script type="text/javascript">
+    let stylesheet = document.styleSheets[0];
+    console.log(stylesheet.cssRules);
+    // stylesheet.cssRules[0].style.backgroundColor = "blue";
+    let newStyle = document.createElement('style');
+    document.head.appendChild(newStyle);
+    let newStyleSheet = newStyle.sheet;
+    newStyleSheet.insertRule('.newClass{background: green}', 0);
+    document.body.classList.add('newClass');
+</script>
+</body>
+</html>

@@ -2,9 +2,10 @@ export class Screen {
     private readonly canvas: HTMLCanvasElement;
     private readonly context: CanvasRenderingContext2D;
 
-    constructor(canvasId: string) {
-        this.canvas = <HTMLCanvasElement>document.getElementById(canvasId);
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d', {alpha: false});
+    constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
+        // this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d', {alpha: false});
+        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
     }
 
     public clear(): void {
