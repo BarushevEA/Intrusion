@@ -10,22 +10,32 @@
         }
 
         .oldClass {
-            background-color: red;
+            background-color: white;
             width: 100vw;
             height: 100vh;
         }
     </style>
 </head>
 <body class="oldClass">
-<script type="text/javascript">
-    let stylesheet = document.styleSheets[0];
-    console.log(stylesheet.cssRules);
-    // stylesheet.cssRules[0].style.backgroundColor = "blue";
-    let newStyle = document.createElement('style');
-    document.head.appendChild(newStyle);
-    let newStyleSheet = newStyle.sheet;
-    newStyleSheet.insertRule('.newClass{background: green}', 0);
-    document.body.classList.add('newClass');
+<script>
+    const elem = document.createElement('template');
+    const newStyle = document.createElement('style');
+    elem.content.appendChild(newStyle);
+    newStyle.innerHTML = 'div{background:red; height:100px; width:100px;}';
+    const elemDiv = document.createElement('div');
+    elem.content.appendChild(elemDiv);
+    elemDiv.innerHTML = "HELLO!!!";
+    customElements.define('my-paragraph',
+        class extends HTMLElement {
+            constructor() {
+                super();
+                let templateContent = elem.content;
+                const shadowRoot = this.attachShadow({mode: 'open'}).appendChild(templateContent.cloneNode(true));
+            }
+        });
+    const custom = document.createElement('my-paragraph');
+    custom.innerText = 123;
+    document.body.appendChild(custom);
 </script>
 </body>
 </html>
