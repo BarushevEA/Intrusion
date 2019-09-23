@@ -9,7 +9,7 @@ class Manager {
     private screen: Screen;
 
     constructor() {
-        this.initClasses();
+        Manager.initClasses();
         this.container = document.getElementById('custom_animation');
         if (!this.container) {
             this.createCustomContainer();
@@ -29,7 +29,7 @@ class Manager {
         document.body.appendChild(customContainer);
     }
 
-    private initClasses(): void {
+    private static initClasses(): void {
         cssPool.canvas = {
             className: 'custom-canvas',
             rule: {}

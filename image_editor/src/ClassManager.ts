@@ -11,8 +11,10 @@ export type IClassManager = {
 }
 
 const newStyle = document.createElement('style');
+const rules: { [key: string]: string } = {};
 document.head.appendChild(newStyle);
-const newStyleSheet = <IStyleSheet><any>newStyle.sheet;
+
+// const newStyleSheet = <IStyleSheet><any>newStyle.sheet;
 
 
 class CssClassManager implements IClassManager {
@@ -20,6 +22,7 @@ class CssClassManager implements IClassManager {
         if (customClass &&
             customClass.rule &&
             customClass.rule) {
+            let currentRules = '';
             const className = customClass.className.trim();
             let rule: string;
             if (className[0] === '.') {
@@ -38,7 +41,12 @@ class CssClassManager implements IClassManager {
                 rule += `${correctedKey}: ${customClass.rule[key]};`
             });
             rule += '}';
-            newStyleSheet.insertRule(rule);
+
+            rules[customClass.className] = rule;
+            Object.keys(rules).forEach(key => {
+                currentRules += rules[key];
+            });
+            newStyle.innerHTML = currentRules;
         }
     }
 
