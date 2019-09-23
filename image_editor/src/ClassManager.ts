@@ -6,18 +6,30 @@ export type IStyleSheet = HTMLStyleElement & {
     insertRule: (rule: string, index?: number) => void
 };
 export type IClassManager = {
+    addRoot(rootElement?: HTMLElement): void;
     addClassToSheet(customClass: ICustomClass): void;
     addClassToElement(element: HTMLElement, customClass: ICustomClass): void;
 }
 
-const newStyle = document.createElement('style');
+function getStileElement() {
+    let style = document.createElement('style');
+    style.id = '$_LIB_CTM_ANIMATION_VID_GET';
+    return style;
+}
+
+let style = getStileElement();
 const rules: { [key: string]: string } = {};
-document.head.appendChild(newStyle);
-
-// const newStyleSheet = <IStyleSheet><any>newStyle.sheet;
-
+let root: HTMLElement = document.head;
 
 class CssClassManager implements IClassManager {
+    addRoot(rootElement?: HTMLElement): void {
+        if (rootElement) {
+            root = rootElement;
+        } else {
+            root = document.head;
+        }
+    }
+
     addClassToSheet(customClass: ICustomClass): void {
         if (customClass &&
             customClass.rule &&
@@ -46,7 +58,26 @@ class CssClassManager implements IClassManager {
             Object.keys(rules).forEach(key => {
                 currentRules += rules[key];
             });
-            newStyle.innerHTML = currentRules;
+
+            const styles = Array.from(root.getElementsByTagName('style'));
+            if (styles.length) {
+                let isStylePresent = false;
+                for (let i = 0; i < styles.length; i++) {
+                    const styleElement = styles[i];
+                    if (styleElement.id === style.id) {
+                        isStylePresent = true;
+                        style = styleElement;
+                        break;
+                    }
+                }
+                if (!isStylePresent) {
+                    style = getStileElement();
+                    root.append(style);
+                }
+            } else {
+                root.append(style);
+            }
+            style.innerHTML = currentRules;
         }
     }
 

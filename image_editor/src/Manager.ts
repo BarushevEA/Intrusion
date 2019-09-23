@@ -9,24 +9,32 @@ class Manager {
     private screen: Screen;
 
     constructor() {
-        Manager.initClasses();
         this.container = document.getElementById('custom_animation');
         if (!this.container) {
-            this.createCustomContainer();
+            this.container = document.body;
+            cssManager.addRoot();
+        } else {
+            cssManager.addRoot(this.container)
         }
+        Manager.initClasses();
+        this.createCustomContainer(this.container);
         this.canvas = this.getCanvas();
         this.screen = new Screen(this.canvas);
         this.fillContainer()
     }
 
-    private createCustomContainer(): void {
+    private createCustomContainer(container: HTMLElement): void {
         const customContainer = document.createElement('div');
         const customCanvasContainer = document.createElement('div');
         customContainer.appendChild(customCanvasContainer);
-        cssManager.addClassToElement(customContainer, cssPool.customContainer);
+        if (container === document.body) {
+            cssManager.addClassToElement(customContainer, cssPool.customContainer);
+        } else {
+            cssManager.addClassToElement(customContainer, cssPool.customContainer_div);
+        }
         cssManager.addClassToElement(customCanvasContainer, cssPool.customCanvasContainer);
         this.container = customCanvasContainer;
-        document.body.appendChild(customContainer);
+        container.appendChild(customContainer);
     }
 
     private static initClasses(): void {
@@ -48,6 +56,18 @@ class Manager {
                 alignItems: 'center'
             }
         };
+        cssPool.customContainer_div = {
+            className: 'custom-container-div',
+            rule: {
+                padding: '0',
+                margin: '0',
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }
+        };
         cssPool.customCanvasContainer = {
             className: 'custom-canvas-container',
             rule: {
@@ -62,6 +82,7 @@ class Manager {
         };
         cssManager.addClassToSheet(cssPool.canvas);
         cssManager.addClassToSheet(cssPool.customContainer);
+        cssManager.addClassToSheet(cssPool.customContainer_div);
         cssManager.addClassToSheet(cssPool.customCanvasContainer);
     }
 
