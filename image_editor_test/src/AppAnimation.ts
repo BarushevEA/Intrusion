@@ -1,5 +1,4 @@
-import {ICustomClass} from "../../image_editor/src/ClassManager";
-import {cssConverter, ICssPool} from "./CssClassConverter";
+import {cssConverter, ICssPool, ICustomClass} from "./CssClassConverter";
 
 class AppAnimation extends HTMLElement {
     customCanvas: HTMLElement;
