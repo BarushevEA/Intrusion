@@ -36,7 +36,7 @@ class AppAnimation extends HTMLElement {
                 wrapperHeight = this.customWrapper.offsetHeight;
                 console.log('addCustomEventResizeCustomWrapper');
             }
-        }, 200);
+        }, 100);
     }
 
     connectedCallback() {
@@ -71,4 +71,4 @@ class AppAnimation extends HTMLElement {
     }
 }
 
-customElements.define('app-animation', AppAnimation);
+customElements.define('app-animation-component', AppAnimation);
