@@ -57,10 +57,8 @@ class AppAnimation extends HTMLElement {
 
     private static fillCssPool(cssPool: ICssPool) {
         cssPool.wrapper = {
-            className: 'wrapper',
+            name: 'wrapper',
             rule: {
-                padding: '0',
-                margin: '0',
                 height: '100%',
                 width: '100%',
                 display: 'flex',
@@ -69,17 +67,26 @@ class AppAnimation extends HTMLElement {
             }
         };
         cssPool.wrapperContainer = {
-            className: 'wrapper__colored',
+            name: 'wrapper__colored',
             rule: {
                 background: 'green'
             }
         };
         cssPool.wrapperFullScrees = {
-            className: 'wrapper__fullscreen',
+            name: 'wrapper__fullscreen',
             rule: {
                 position: 'fixed',
                 height: '100vh',
                 width: '100vw',
+            }
+        };
+        cssPool.global = {
+            name: '*',
+            isNoClass: true,
+            rule: {
+                padding: '0',
+                margin: '0',
+                boxSizing: 'border-box'
             }
         };
     }

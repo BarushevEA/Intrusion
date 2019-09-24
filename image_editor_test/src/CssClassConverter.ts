@@ -1,6 +1,7 @@
 export type ICustomClass = {
-    className: string;
-    rule: { [key: string]: string }
+    name: string;
+    isNoClass?: boolean;
+    rule: { [key: string]: string };
 };
 
 export type ICssPool = { [key: string]: ICustomClass };
@@ -20,9 +21,9 @@ class CssClassConverter implements IClassConverter {
         if (customClass &&
             customClass.rule &&
             customClass.rule) {
-            const className = customClass.className.trim();
+            const className = customClass.name.trim();
             let rule: string;
-            if (className[0] === '.') {
+            if (className[0] === '.' || customClass.isNoClass) {
                 rule = className;
             } else {
                 rule = `.${className}`;
@@ -45,7 +46,7 @@ class CssClassConverter implements IClassConverter {
     }
 
     addClassToSheet(customClass: ICustomClass): void {
-        rules[customClass.className] = this.convertCustomClassToString(customClass);
+        rules[customClass.name] = this.convertCustomClassToString(customClass);
     }
 
     addClassPool(cssPool: ICssPool): void {
@@ -63,7 +64,7 @@ class CssClassConverter implements IClassConverter {
     }
 
     addClassToElement(element: HTMLElement, customClass: ICustomClass): void {
-        let className = customClass.className.trim();
+        let className = customClass.name.trim();
         if (className[0] === '.') {
             className = className.substr(1);
         }
