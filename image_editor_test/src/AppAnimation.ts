@@ -1,7 +1,16 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {MovedCircle} from "./CustomDraw";
+import {IController} from "./initOuterVariables";
 
-class AppAnimation extends HTMLElement {
+export type IAppAnimation = {
+    customCanvas: HTMLCanvasElement;
+    customWrapper: HTMLElement;
+    customStyle: HTMLStyleElement;
+    cssPool: ICssPool;
+    setRedColor(): void;
+};
+
+class AppAnimation extends HTMLElement implements IAppAnimation {
     customCanvas: HTMLCanvasElement;
     customWrapper: HTMLElement;
     customStyle: HTMLStyleElement;
@@ -34,7 +43,6 @@ class AppAnimation extends HTMLElement {
                 callback();
                 wrapperWidth = this.customWrapper.offsetWidth;
                 wrapperHeight = this.customWrapper.offsetHeight;
-                console.log('addCustomEventResizeCustomWrapper');
             }
         }, 100);
     }
@@ -43,6 +51,11 @@ class AppAnimation extends HTMLElement {
         this.setCanvasSize();
         this.addCustomEventResizeCustomWrapperListener(this.setCanvasSize.bind(this));
         this.customDraw();
+        (<IController>(<any>window)['AppAnimationController']).add(this);
+    }
+
+    setRedColor(): void {
+        this.customWrapper.classList.replace('wrapper__colored', 'wrapper__red');
     }
 
     private customDraw() {
@@ -70,6 +83,12 @@ class AppAnimation extends HTMLElement {
             name: 'wrapper__colored',
             rule: {
                 background: 'green'
+            }
+        };
+        cssPool.wrapperContainerRed = {
+            name: 'wrapper__red',
+            rule: {
+                background: 'red'
             }
         };
         cssPool.wrapperFullScrees = {

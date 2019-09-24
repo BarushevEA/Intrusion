@@ -36,8 +36,9 @@ export class MovedCircle extends CustomDraw {
         const radiusCalc = radius + 5;
 
         const move = () => {
+            requestAnimationFrame(move);
             if (mute) {
-                requestAnimationFrame(move);
+                console.log('muted');
                 return;
             }
             mute = true;
@@ -65,7 +66,6 @@ export class MovedCircle extends CustomDraw {
             x += dx;
             y += dy;
             mute = false;
-            requestAnimationFrame(move);
         };
         move();
     }
