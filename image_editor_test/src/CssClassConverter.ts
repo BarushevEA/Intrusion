@@ -3,10 +3,14 @@ export type ICustomClass = {
     rule: { [key: string]: string }
 };
 
+export type ICssPool = { [key: string]: ICustomClass };
+
 export type IClassConverter = {
     convertCustomClassToString(customClass: ICustomClass): string;
-    addClassToSheet(customClass: ICustomClass): string;
+    addClassToSheet(customClass: ICustomClass): void;
     addClassToElement(element: HTMLElement, customClass: ICustomClass): void;
+    getRules(): string;
+    addClassPool(cssPool: ICssPool): void;
 }
 
 const rules: { [key: string]: string } = {};
@@ -40,13 +44,21 @@ class CssClassConverter implements IClassConverter {
         }
     }
 
-    addClassToSheet(customClass: ICustomClass): string {
-        let currentRules = '';
+    addClassToSheet(customClass: ICustomClass): void {
         rules[customClass.className] = this.convertCustomClassToString(customClass);
+    }
+
+    addClassPool(cssPool: ICssPool): void {
+        Object.keys(cssPool).forEach(key => {
+            this.addClassToSheet(cssPool[key]);
+        });
+    }
+
+    getRules(): string {
+        let currentRules = '';
         Object.keys(rules).forEach(key => {
             currentRules += rules[key];
         });
-
         return currentRules;
     }
 
