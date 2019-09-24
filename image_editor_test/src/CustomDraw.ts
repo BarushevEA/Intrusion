@@ -4,20 +4,29 @@ export type ICustomDraw = {
     start(): void;
 }
 
-export class CustomDraw implements ICustomDraw{
-    customCanvas: HTMLCanvasElement;
-    customScreen: CustomScreen;
+export abstract class CustomDraw implements ICustomDraw {
+    protected customCanvas: HTMLCanvasElement;
+    protected customScreen: CustomScreen;
 
-    constructor(canvas: HTMLCanvasElement) {
+    protected constructor(canvas: HTMLCanvasElement) {
         this.customCanvas = canvas;
         this.customScreen = new CustomScreen(this.customCanvas);
     }
 
-    public start() {
-        this.customDraw();
+    public abstract start(): void;
+
+    public randomize(): number {
+        return Math.round(Math.random() * 15)
+    }
+}
+
+export class MovedCircle extends CustomDraw {
+
+    constructor(canvas: HTMLCanvasElement) {
+        super(canvas);
     }
 
-    private customDraw(): void {
+    start(): void {
         let x = 0;
         let y = 0;
         let dx = 1;
@@ -59,9 +68,5 @@ export class CustomDraw implements ICustomDraw{
             requestAnimationFrame(move);
         };
         move();
-    }
-
-    private randomize(): number {
-        return Math.round(Math.random() * 15)
     }
 }

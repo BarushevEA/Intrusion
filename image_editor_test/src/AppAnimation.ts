@@ -1,5 +1,5 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
-import {CustomDraw} from "./CustomDraw";
+import {MovedCircle} from "./CustomDraw";
 
 class AppAnimation extends HTMLElement {
     customCanvas: HTMLCanvasElement;
@@ -21,7 +21,7 @@ class AppAnimation extends HTMLElement {
         cssConverter.addClassPool(this.cssPool);
         this.customStyle.textContent = cssConverter.getRules();
         shadow.appendChild(this.customStyle);
-        this.customWrapper.setAttribute('class', 'wrapper wrapper__red');
+        this.customWrapper.setAttribute('class', 'wrapper wrapper__colored');
         shadow.appendChild(this.customWrapper);
         this.customWrapper.appendChild(this.customCanvas);
     }
@@ -46,7 +46,7 @@ class AppAnimation extends HTMLElement {
     }
 
     private customDraw() {
-        const circles = new CustomDraw(this.customCanvas);
+        const circles = new MovedCircle(this.customCanvas);
         circles.start();
     }
 
@@ -69,9 +69,17 @@ class AppAnimation extends HTMLElement {
             }
         };
         cssPool.wrapperContainer = {
-            className: 'wrapper__red',
+            className: 'wrapper__colored',
             rule: {
                 background: 'green'
+            }
+        };
+        cssPool.wrapperFullScrees = {
+            className: 'wrapper__fullscreen',
+            rule: {
+                position: 'fixed',
+                height: '100vh',
+                width: '100vw',
             }
         };
     }
