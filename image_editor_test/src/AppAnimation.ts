@@ -1,9 +1,10 @@
-import {cssConverter, ICssPool, ICustomClass} from "./CssClassConverter";
+import {cssConverter, ICssPool} from "./CssClassConverter";
+import {CustomDraw} from "./CustomDraw";
 
 class AppAnimation extends HTMLElement {
-    customCanvas: HTMLElement;
+    customCanvas: HTMLCanvasElement;
     customWrapper: HTMLElement;
-    customStyle: HTMLElement;
+    customStyle: HTMLStyleElement;
     cssPool: ICssPool = {};
 
     constructor() {
@@ -41,6 +42,12 @@ class AppAnimation extends HTMLElement {
     connectedCallback() {
         this.setCanvasSize();
         this.addCustomEventResizeCustomWrapperListener(this.setCanvasSize.bind(this));
+        this.customDraw();
+    }
+
+    private customDraw() {
+        const circles = new CustomDraw(this.customCanvas);
+        circles.start();
     }
 
     private setCanvasSize() {
@@ -48,7 +55,7 @@ class AppAnimation extends HTMLElement {
         this.customCanvas.setAttribute('width', '' + this.customWrapper.offsetWidth);
     }
 
-    private static fillCssPool(cssPool: { [p: string]: ICustomClass }) {
+    private static fillCssPool(cssPool: ICssPool) {
         cssPool.wrapper = {
             className: 'wrapper',
             rule: {
