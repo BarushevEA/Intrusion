@@ -7,7 +7,7 @@ export type IAppAnimation = {
     customWrapper: HTMLElement;
     customStyle: HTMLStyleElement;
     cssPool: ICssPool;
-    setRedColor(): void;
+    toggleColors(): void;
 };
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
@@ -30,7 +30,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         cssConverter.addClassPool(this.cssPool);
         this.customStyle.textContent = cssConverter.getRules();
         shadow.appendChild(this.customStyle);
-        this.customWrapper.setAttribute('class', 'wrapper wrapper__colored');
+        this.customWrapper.setAttribute('class', 'wrapper wrapper__green');
         shadow.appendChild(this.customWrapper);
         this.customWrapper.appendChild(this.customCanvas);
     }
@@ -38,13 +38,17 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     addCustomEventResizeCustomWrapperListener(callback: () => void) {
         let wrapperWidth = 0;
         let wrapperHeight = 0;
-        setInterval(() => {
+
+        const resizeHandler = () => {
+            requestAnimationFrame(resizeHandler);
             if (wrapperWidth != this.customWrapper.offsetWidth || wrapperHeight != this.customWrapper.offsetHeight) {
-                callback();
                 wrapperWidth = this.customWrapper.offsetWidth;
                 wrapperHeight = this.customWrapper.offsetHeight;
+                callback();
             }
-        }, 100);
+        };
+
+        resizeHandler();
     }
 
     connectedCallback() {
@@ -55,7 +59,19 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     setRedColor(): void {
-        this.customWrapper.classList.replace('wrapper__colored', 'wrapper__red');
+        this.customWrapper.classList.replace('wrapper__green', 'wrapper__red');
+    }
+
+    setGreenColor(): void {
+        this.customWrapper.classList.replace('wrapper__red', 'wrapper__green');
+    }
+
+    toggleColors(): void {
+        if (this.customWrapper.classList.contains('wrapper__green')) {
+            this.setRedColor();
+        } else {
+            this.setGreenColor();
+        }
     }
 
     private customDraw() {
@@ -80,7 +96,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
             }
         };
         cssPool.wrapperContainer = {
-            name: 'wrapper__colored',
+            name: 'wrapper__green',
             rule: {
                 background: 'green'
             }
