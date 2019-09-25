@@ -2,10 +2,13 @@ export class CustomScreen {
     private readonly canvas: HTMLCanvasElement;
     private readonly context: CanvasRenderingContext2D;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
-        // this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d', {alpha: false});
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        if (isSetAlpha) {
+            this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        } else {
+            this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d', {alpha: false});
+        }
     }
 
     public clear(): void {
