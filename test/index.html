@@ -56,7 +56,7 @@
         }
     }
     const delay = Date.now() - start;
-    console.log('delay ms:', delay);
+    console.log('delay real draw ms:', delay);
 </script>
 <script>
     const canvas1 = document.getElementById('canvas1');
@@ -112,7 +112,7 @@
         context1.drawImage(canvasTmp2, 0, 0);
     }
     const delay1 = Date.now() - start1;
-    console.log('delay ms:', delay1);
+    console.log('delay virtual draw ms:', delay1);
 </script>
 </body>
 </html>
