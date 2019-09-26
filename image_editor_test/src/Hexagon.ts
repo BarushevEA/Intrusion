@@ -35,19 +35,19 @@ export class Hexagon extends CustomDraw {
 
         this.customScreen.setVirtualCanvas(virtualCanvasName, 3000, 3000);
         this.customScreen.setLineWidth(20);
-        this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(50,50,50,1)');
+        this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(150,100,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
         this.customScreen.setVirtualCanvas(virtualCanvasShadowName, 3000, 3000);
         this.customScreen.setLineWidth(30);
-        this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(130,130,130,1)');
+        this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(130,80,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
         this.customScreen.setVirtualCanvas(virtualCanvasShadowName1, 3000, 3000);
-        this.customScreen.setLineWidth(30);
-        this.customScreen.setColors('rgba(100,100,100,1)', 'rgba(200,200,200,1)');
+        this.customScreen.setLineWidth(35);
+        this.customScreen.setColors('rgba(180,150,50,1)', 'rgba(100,70,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
