@@ -17,25 +17,102 @@
     </style>
 </head>
 <body class="oldClass">
+<canvas id="canvas" height="600" width="600"></canvas>
+<canvas id="canvas1" height="600" width="600"></canvas>
 <script>
-    const elem = document.createElement('template');
-    const newStyle = document.createElement('style');
-    elem.content.appendChild(newStyle);
-    newStyle.innerHTML = 'div{background:red; height:100px; width:100px;}';
-    const elemDiv = document.createElement('div');
-    elem.content.appendChild(elemDiv);
-    elemDiv.innerHTML = "HELLO!!!";
-    customElements.define('my-paragraph',
-        class extends HTMLElement {
-            constructor() {
-                super();
-                let templateContent = elem.content;
-                const shadowRoot = this.attachShadow({mode: 'open'}).appendChild(templateContent.cloneNode(true));
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    function drawCircle(x, y, radius) {
+        context.fillStyle = 'yellow';
+        context.strokeStyle = 'green';
+        context.beginPath();
+        context.arc(x, y, radius, 0, 2 * Math.PI);
+        context.closePath();
+        context.fill();
+        context.stroke();
+        context.fillStyle = 'cyan';
+        context.strokeStyle = 'green';
+        context.beginPath();
+        context.arc(x + 10, y + 10, radius, 0, 2 * Math.PI);
+        context.closePath();
+        context.fill();
+        context.stroke();
+        context.fillStyle = 'gray';
+        context.strokeStyle = 'green';
+        context.beginPath();
+        context.arc(x + 20, y + 20, radius, 0, 2 * Math.PI);
+        context.closePath();
+        context.fill();
+        context.stroke();
+    }
+
+    let start = Date.now();
+    for (let i = 0; i < 100; i++) {
+        for (let j = 0; j < 600; j += 51) {
+            for (let k = 0; k < 600; k += 51) {
+                drawCircle(k, j, 50);
             }
-        });
-    const custom = document.createElement('my-paragraph');
-    custom.innerText = 123;
-    document.body.appendChild(custom);
+        }
+    }
+    const delay = Date.now() - start;
+    console.log('delay ms:', delay);
+</script>
+<script>
+    const canvas1 = document.getElementById('canvas1');
+    const context1 = canvas1.getContext('2d');
+    const canvasTmp = document.createElement('canvas');
+    const contextTmp = canvasTmp.getContext('2d');
+    const canvasTmp2 = document.createElement('canvas');
+    const contextTmp2 = canvasTmp2.getContext('2d');
+    canvasTmp.height = 123;
+    canvasTmp.width = 123;
+    canvasTmp2.height = canvas1.height;
+    canvasTmp2.width = canvas1.width;
+
+
+    function prepareCircle(x = 52, y = 52, radius = 50) {
+        contextTmp.fillStyle = 'red';
+        contextTmp.strokeStyle = 'green';
+        contextTmp.beginPath();
+        contextTmp.arc(x, y, radius, 0, 2 * Math.PI);
+        contextTmp.closePath();
+        contextTmp.fill();
+        contextTmp.stroke();
+        contextTmp.fillStyle = 'yellow';
+        contextTmp.strokeStyle = 'green';
+        contextTmp.beginPath();
+        contextTmp.arc(x + 10, y + 10, radius, 0, 2 * Math.PI);
+        contextTmp.closePath();
+        contextTmp.fill();
+        contextTmp.stroke();
+        contextTmp.fillStyle = 'gray';
+        contextTmp.strokeStyle = 'green';
+        contextTmp.beginPath();
+        contextTmp.arc(x + 20, y + 20, radius, 0, 2 * Math.PI);
+        contextTmp.closePath();
+        contextTmp.fill();
+        contextTmp.stroke();
+    }
+
+    prepareCircle();
+
+    function drawCircle1(x, y) {
+        contextTmp2.drawImage(canvasTmp, x, y);
+    }
+
+    let start1 = Date.now();
+    for (let j = 0; j < 600; j += 51) {
+        for (let k = 0; k < 600; k += 51) {
+            drawCircle1(k - 50, j - 50, 50);
+        }
+    }
+
+    for (let i = 0; i < 100; i++) {
+        context1.drawImage(canvasTmp2, 0, 0);
+    }
+    const delay1 = Date.now() - start1;
+    console.log('delay ms:', delay1);
 </script>
 </body>
 </html>

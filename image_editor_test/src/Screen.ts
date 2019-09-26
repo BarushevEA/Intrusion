@@ -21,12 +21,12 @@ export class CustomScreen {
 
     public stopDrawing(): void {
         this.context.closePath();
+        this.context.fill();
+        this.context.stroke();
     }
 
     public drawCircle(x: number, y: number, radius: number): void {
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
-        this.context.fill();
-        this.context.stroke();
     }
 
     public setColors(backgroundColor: string, borderColor: string) {
