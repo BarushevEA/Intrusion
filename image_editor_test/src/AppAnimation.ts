@@ -1,6 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
-import {MovedCircle} from "./CustomDraw";
 import {IController} from "./initOuterVariables";
+// import {MovedCircle} from "./MovedCircle";
+import {Hexagon} from "./Hexagon";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -75,8 +76,10 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private customDraw() {
-        const circles = new MovedCircle(this.customCanvas);
-        circles.start();
+        // const circles = new MovedCircle(this.customCanvas);
+        const hexagon = new Hexagon(this.customCanvas);
+        // circles.start();
+        hexagon.start();
     }
 
     private setCanvasSize() {
@@ -98,13 +101,13 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         cssPool.wrapperContainer = {
             name: 'wrapper__green',
             rule: {
-                background: 'green'
+                // background: 'green'
             }
         };
         cssPool.wrapperContainerRed = {
             name: 'wrapper__red',
             rule: {
-                background: 'red'
+                // background: 'red'
             }
         };
         cssPool.wrapperFullScrees = {
