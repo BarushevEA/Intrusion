@@ -46,7 +46,7 @@ export class Hexagon extends CustomDraw {
         this.customScreen.restoreCanvas();
 
         this.customScreen.setVirtualCanvas(virtualCanvasShadowName1, 5000, 5000);
-        this.customScreen.setLineWidth(55);
+        this.customScreen.setLineWidth(40);
         this.customScreen.setColors('rgba(180,150,50,1)', 'rgba(100,70,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
@@ -102,7 +102,7 @@ export class Hexagon extends CustomDraw {
             }
 
             this.customScreen.clear();
-            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName1, -startDelta - 20 + Math.round(x * 1.07), -startDelta - 15 + Math.round(y * 1.07));
+            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName1, -startDelta - 15 + Math.round(x * 1.07), -startDelta - 15 + Math.round(y * 1.07));
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName, -startDelta - 10 + Math.round(x * 1.05), -startDelta - 10 + Math.round(y * 1.05));
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasName, -startDelta + x, -startDelta + y);
             x += dx;
