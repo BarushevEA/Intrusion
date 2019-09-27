@@ -15,17 +15,32 @@
             background: #B49632;
         }
 
-        .text {
+        .text-wrapper {
             position: fixed;
             width: 100%;
             height: 100%;
             display: flex;
+            flex-flow: column nowrap;
             justify-content: center;
             align-items: center;
-            font-size: 10vw;
             font-weight: 900;
+        }
+
+        .text {
+            font-size: 10vw;
             font-family: Verdana, serif;
             color: #B49632;
+            text-transform: uppercase;
+        }
+
+        .text-small {
+            font-size: 5vw;
+            font-family: Verdana, serif;
+            color: #B49632;
+            text-transform: uppercase;
+        }
+
+        .shadow {
             text-shadow: 5px 5px 5px #825000,
             -5px -5px 5px #825000,
             0 5px 5px #825000,
@@ -33,12 +48,19 @@
             -5px 0 5px #825000,
             5px 0 5px #825000,
             0px 0px 5px #825000;
-            text-transform: uppercase;
+        }
+
+        p::first-letter {
+            font-size: 200%;
+            color: #8c0711;
         }
     </style>
 </head>
 <body onclick="AppAnimationController.toggleColors()">
-<div class="text">Sweet-Spot :)</div>
+<div class="text-wrapper">
+    <p class="text shadow">Sweet-Spot</p>
+    <p class="text-small shadow">Lets dream for real</p>
+</div>
 <div style="height: 100%; width: 100%;">
     <app-animation-component></app-animation-component>
 </div>
