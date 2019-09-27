@@ -7,7 +7,7 @@ export class Hexagon extends CustomDraw {
     }
 
     start(): void {
-        const startDelta = 1000;
+        const startDelta = 1300;
         const dx = 45;
         const dy = 75;
         const radius = 45;
@@ -33,20 +33,20 @@ export class Hexagon extends CustomDraw {
         let modDY = dy * multiplier;
         let modRadius = radius * multiplier;
 
-        this.customScreen.setVirtualCanvas(virtualCanvasName, 3000, 3000);
+        this.customScreen.setVirtualCanvas(virtualCanvasName, 5000, 5000);
         this.customScreen.setLineWidth(20);
         this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(150,100,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
-        this.customScreen.setVirtualCanvas(virtualCanvasShadowName, 3000, 3000);
-        this.customScreen.setLineWidth(30);
+        this.customScreen.setVirtualCanvas(virtualCanvasShadowName, 5000, 5000);
+        this.customScreen.setLineWidth(40);
         this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(130,80,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
-        this.customScreen.setVirtualCanvas(virtualCanvasShadowName1, 3000, 3000);
-        this.customScreen.setLineWidth(35);
+        this.customScreen.setVirtualCanvas(virtualCanvasShadowName1, 5000, 5000);
+        this.customScreen.setLineWidth(55);
         this.customScreen.setColors('rgba(180,150,50,1)', 'rgba(100,70,0,1)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
@@ -102,7 +102,7 @@ export class Hexagon extends CustomDraw {
             }
 
             this.customScreen.clear();
-            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName1, -startDelta - 15 + Math.round(x * 1.07), -startDelta - 15 + Math.round(y * 1.07));
+            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName1, -startDelta - 20 + Math.round(x * 1.07), -startDelta - 15 + Math.round(y * 1.07));
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName, -startDelta - 10 + Math.round(x * 1.05), -startDelta - 10 + Math.round(y * 1.05));
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasName, -startDelta + x, -startDelta + y);
             x += dx;
