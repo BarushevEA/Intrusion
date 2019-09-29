@@ -1,7 +1,8 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "./initOuterVariables";
-// import {MovedCircle} from "./MovedCircle";
-import {Hexagon} from "./Hexagon";
+import {HexagonGreed} from "./animation_models/HexagonGreed";
+import {MovedCircle} from "./animation_models/MovedCircle";
+import {renderController} from "./RenderController";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -16,6 +17,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     customWrapper: HTMLElement;
     customStyle: HTMLStyleElement;
     cssPool: ICssPool = {};
+    renderController = renderController;
 
     constructor() {
         super();
@@ -23,6 +25,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customWrapper = document.createElement('div');
         this.customCanvas = document.createElement('canvas');
         this.customStyle = document.createElement('style');
+        this.renderController.setCanvas(this.customCanvas);
         this.customInit(shadow);
     }
 
@@ -55,7 +58,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     connectedCallback() {
         this.setCanvasSize();
         this.addCustomEventResizeCustomWrapperListener(this.setCanvasSize.bind(this));
-        this.customDraw();
+        this.renderCanvas();
         (<IController>(<any>window)['AppAnimationController']).add(this);
     }
 
@@ -75,11 +78,16 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         }
     }
 
-    private customDraw() {
-        // const circles = new MovedCircle(this.customCanvas);
-        const hexagon = new Hexagon(this.customCanvas);
-        // circles.start();
-        hexagon.start();
+    private renderCanvas() {
+        const hexagon = new HexagonGreed(this.customCanvas);
+        hexagon.setName('hexagon');
+        this.renderController.setDrawElement(hexagon);
+        for (let i = 0; i < 100; i++) {
+            const circles = new MovedCircle(this.customCanvas);
+            circles.setName('circles' + i);
+            this.renderController.setDrawElement(circles);
+        }
+        this.renderController.render();
     }
 
     private setCanvasSize() {

@@ -1,12 +1,12 @@
-import {CustomDraw} from "./CustomDraw";
-import {IPolygon} from "./Screen";
+import {CustomDraw} from "../CustomDraw";
+import {IPolygon} from "../Screen";
 
 export class Hexagon extends CustomDraw {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
     }
 
-    start(): void {
+    renderFrame(): void {
         const startDelta = 1300;
         const dx = 45;
         const dy = 75;
