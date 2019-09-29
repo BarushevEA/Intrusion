@@ -7,9 +7,9 @@ export class MovedCircle extends CustomDraw {
     dx = this.randomize(this.maxStep) + 1;
     dy = this.randomize(this.maxStep) + 1;
     radius = this.randomize(100) + 20;
-    radiusCalc = (this.radius + 5) * 2;
-    bottomLayerName = 'circle';
     lineWidth = 10;
+    radiusCalc = (this.radius + this.lineWidth) * 2;
+    bottomLayerName = 'circle';
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {

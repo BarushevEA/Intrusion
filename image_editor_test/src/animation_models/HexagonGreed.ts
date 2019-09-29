@@ -6,12 +6,14 @@ export class HexagonGreed extends CustomDraw {
     y = 0;
     dx = 1;
     dy = 1;
-    startDelta = 2000;
+    radius = 45;
+    multiplier = 2;
+    startDelta = 1000;
     maxStep = 5;
     bound = Math.round(this.startDelta / 2);
     bottomLayerName = 'bottomLayer';
-    height = 5000;
-    width = 5000;
+    height = 2000;
+    width = 3000;
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -26,8 +28,7 @@ export class HexagonGreed extends CustomDraw {
     init(): void {
         const dx = 45;
         const dy = 75;
-        const radius = 45;
-        const multiplier = 2;
+
         const hexagon = [
             {x: 50, y: 0},
             {x: 95, y: 25},
@@ -41,13 +42,13 @@ export class HexagonGreed extends CustomDraw {
         const topLayerName = 'topLayer';
 
         hexagon.forEach(element => {
-            element.x *= multiplier;
-            element.y *= multiplier;
+            element.x *= this.multiplier;
+            element.y *= this.multiplier;
         });
 
-        let modDX = dx * 2 * multiplier;
-        let modDY = dy * multiplier;
-        let modRadius = radius * multiplier;
+        let modDX = dx * 2 * this.multiplier;
+        let modDY = dy * this.multiplier;
+        let modRadius = this.radius * this.multiplier;
 
         this.customScreen.setVirtualCanvas(this.bottomLayerName, this.height, this.width);
         this.customScreen.setLineWidth(11);
@@ -108,11 +109,13 @@ export class HexagonGreed extends CustomDraw {
 
         if (!this.throttlingCounter) {
             this.throttlingCounter = 1 + this.randomize(500);
-            this.dx = this.randomize(1) ? -this.randomize(this.maxStep): this.randomize(this.maxStep);
-            this.dy = this.randomize(1) ? -this.randomize(this.maxStep): this.randomize(this.maxStep);
+            this.dx = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
+            this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.customScreen.drawVirtualOnRealCanvas(this.bottomLayerName, -this.startDelta + this.x, -this.startDelta + this.y);
+        this.customScreen.drawVirtualOnRealCanvas(this.bottomLayerName,
+            -this.bound + this.x - this.radius * this.multiplier,
+            -this.bound + this.y - this.radius * this.multiplier);
         this.x += this.dx;
         this.y += this.dy;
     }
