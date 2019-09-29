@@ -80,12 +80,13 @@ export class CustomScreen {
         this.context = this.savedContext;
     }
 
-    setVirtualCanvas(name: string, height: number, width: number): void {
+    setVirtualCanvas(name: string, height: number, width: number): HTMLCanvasElement {
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
         this.canvas.width = width;
         this.virtualPool[name] = {canvas: this.canvas, context: this.context};
+        return this.canvas;
     }
 
     drawVirtualOnRealCanvas(name: string, x: number, y: number): void {
