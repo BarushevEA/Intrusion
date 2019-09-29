@@ -1,2 +1,2 @@
 import "./initOuterVariables"
-import "./Manager"
+import "./AppAnimation"
