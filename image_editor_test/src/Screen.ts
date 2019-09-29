@@ -91,4 +91,12 @@ export class CustomScreen {
     drawVirtualOnRealCanvas(name: string, x: number, y: number): void {
         this.savedContext.drawImage(this.virtualPool[name].canvas, x, y);
     }
+
+    drawVirtualOnVirtualCanvas(name1: string, name2: string, x: number, y: number): void {
+        this.virtualPool[name1].context.drawImage(this.virtualPool[name2].canvas, x, y);
+    }
+
+    deleteVirtualCanvas(name1: string) {
+        delete this.virtualPool[name1];
+    }
 }

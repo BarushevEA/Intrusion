@@ -20,9 +20,9 @@ export class Hexagon extends CustomDraw {
             {x: 5, y: 75},
             {x: 5, y: 25},
         ];
-        const virtualCanvasName = 'hexagon';
-        const virtualCanvasShadowName = 'hexagonShadow';
-        const virtualCanvasShadowName1 = 'hexagonShadow1';
+        const bottomLayer = 'bottomLayer';
+        const centerLayer = 'centerLayer';
+        const topLayer = 'topLayer';
 
         hexagon.forEach(element => {
             element.x *= multiplier;
@@ -33,25 +33,31 @@ export class Hexagon extends CustomDraw {
         let modDY = dy * multiplier;
         let modRadius = radius * multiplier;
 
-        this.customScreen.setVirtualCanvas(virtualCanvasName, 5000, 5000);
-        this.customScreen.setLineWidth(20);
-        this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(150,100,0,1)');
+        this.customScreen.setVirtualCanvas(bottomLayer, 2500, 3500);
+        this.customScreen.setLineWidth(11);
+        this.customScreen.setColors('rgb(15,15,50)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
-        this.customScreen.setVirtualCanvas(virtualCanvasShadowName, 5000, 5000);
-        this.customScreen.setLineWidth(40);
-        this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(130,80,0,1)');
+        this.customScreen.setVirtualCanvas(centerLayer, 2500, 3500);
+        this.customScreen.setLineWidth(3);
+        this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.2)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
-        this.customScreen.setVirtualCanvas(virtualCanvasShadowName1, 5000, 5000);
-        this.customScreen.setLineWidth(40);
-        this.customScreen.setColors('rgba(180,150,50,1)', 'rgba(100,70,0,1)');
+        this.customScreen.setVirtualCanvas(topLayer, 2500, 3500);
+        this.customScreen.setLineWidth(3);
+        this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.customScreen.restoreCanvas();
 
-        this.drawCanvases(virtualCanvasName, virtualCanvasShadowName, virtualCanvasShadowName1, startDelta);
+        this.customScreen.drawVirtualOnVirtualCanvas(bottomLayer, centerLayer, 3, 1);
+        this.customScreen.drawVirtualOnVirtualCanvas(bottomLayer, topLayer, 0, 0);
+
+        this.customScreen.deleteVirtualCanvas(centerLayer);
+        this.customScreen.deleteVirtualCanvas(topLayer);
+
+        this.drawCanvases(bottomLayer, startDelta);
     }
 
     private createVirtualGreed(modRadius: number, hexagon: IPolygon, modDX: number, modDY: number) {
@@ -67,7 +73,7 @@ export class Hexagon extends CustomDraw {
         }
     }
 
-    drawCanvases(virtualCanvasName: string, virtualCanvasShadowName: string, virtualCanvasShadowName1: string, startDelta: number) {
+    drawCanvases(virtualCanvasName: string, startDelta: number) {
         let x = 0;
         let y = 0;
         let dx = 1;
@@ -102,8 +108,6 @@ export class Hexagon extends CustomDraw {
             }
 
             this.customScreen.clear();
-            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName1, -startDelta - 15 + Math.round(x * 1.07), -startDelta - 15 + Math.round(y * 1.07));
-            this.customScreen.drawVirtualOnRealCanvas(virtualCanvasShadowName, -startDelta - 10 + Math.round(x * 1.05), -startDelta - 10 + Math.round(y * 1.05));
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasName, -startDelta + x, -startDelta + y);
             x += dx;
             y += dy;
