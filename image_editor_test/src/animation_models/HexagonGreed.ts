@@ -9,7 +9,7 @@ export class HexagonGreed extends CustomDraw {
     radius = 45;
     multiplier = 2;
     startDelta = 1000;
-    maxStep = 5;
+    maxStep = 2;
     bound = Math.round(this.startDelta / 2);
     bottomLayerName = 'bottomLayer';
     virtualLayerName = 'virtualLayer';
@@ -127,6 +127,7 @@ export class HexagonGreed extends CustomDraw {
             this.customCanvas.height);
         this.x += this.dx;
         this.y += this.dy;
+        this.throttlingCounter--;
     }
 
     getModified(hexagon: IPolygon, deltaX = 0, deltaY = 0): IPolygon {
