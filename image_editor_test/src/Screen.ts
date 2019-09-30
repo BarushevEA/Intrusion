@@ -89,8 +89,21 @@ export class CustomScreen {
         return this.canvas;
     }
 
-    drawVirtualOnRealCanvas(name: string, x: number, y: number): void {
-        this.savedContext.drawImage(this.virtualPool[name].canvas, x, y);
+    drawVirtualOnRealCanvas(name: string,
+                            x: number,
+                            y: number,
+                            width = -1,
+                            height = -1,
+                            xD = -1,
+                            yD = -1,
+                            widthD = -1,
+                            heightD = -1
+    ): void {
+        if (width > -1 && height > -1 && xD > -1 && yD > -1 && widthD > -1 && heightD > -1) {
+            this.savedContext.drawImage(this.virtualPool[name].canvas, x, y, width, height, xD, yD, widthD, heightD);
+        } else {
+            this.savedContext.drawImage(this.virtualPool[name].canvas, x, y);
+        }
     }
 
     drawVirtualOnVirtualCanvas(name1: string, name2: string, x: number, y: number): void {

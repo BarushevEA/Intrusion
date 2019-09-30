@@ -13,7 +13,6 @@ export class HexagonGreed extends CustomDraw {
     bound = Math.round(this.startDelta / 2);
     bottomLayerName = 'bottomLayer';
     virtualLayerName = 'virtualLayer';
-    virtual: HTMLCanvasElement;
     height = 2000;
     width = 3000;
     throttlingCounter = 0;
@@ -21,7 +20,6 @@ export class HexagonGreed extends CustomDraw {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
         this.init();
-        this.virtual = this.customScreen.setVirtualCanvas(this.virtualLayerName, 1080, 1920);
         this.customScreen.restoreCanvas();
     }
 
@@ -117,11 +115,16 @@ export class HexagonGreed extends CustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.customScreen.drawVirtualOnVirtualCanvas(this.virtualLayerName,
+        this.customScreen.drawVirtualOnRealCanvas(
             this.bottomLayerName,
-            -this.bound + this.x - this.radius * this.multiplier,
-            -this.bound + this.y - this.radius * this.multiplier);
-        this.customScreen.drawVirtualOnRealCanvas(this.virtualLayerName, 0, 0);
+            +this.bound + this.x + this.radius * this.multiplier,
+            +this.bound + this.y + this.radius * this.multiplier,
+            this.customCanvas.width,
+            this.customCanvas.height,
+            0,
+            0,
+            this.customCanvas.width,
+            this.customCanvas.height);
         this.x += this.dx;
         this.y += this.dy;
     }
