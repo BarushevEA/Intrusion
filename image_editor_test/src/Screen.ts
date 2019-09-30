@@ -164,4 +164,32 @@ export class CustomScreen {
     public drawFrame(x: number, y: number) {
         this.savedContext.drawImage(this.getFrame(), x, y);
     }
+
+    getFramePool(): IFramePool {
+        return this.framePool;
+    }
+
+    setFramePool(pool: IFramePool): void {
+        pool.frames.forEach(element => {
+            const newFrame: IFrame = {delay: element.delay, counter: element.delay, frame: element.frame};
+            this.framePool.frames.push(newFrame);
+        });
+    }
+
+    setDelayToFrame(index: number, delay: number) {
+        console.log(this.framePool.frames.length);
+        for (let i = 0; i < this.framePool.frames.length; i++) {
+            if (i === index) {
+                console.log('setDelayToFrame');
+                const element = this.framePool.frames[i];
+                element.delay = delay;
+                element.counter = delay;
+                break;
+            }
+        }
+    }
+
+    setShowedFrame(index: number) {
+        this.framePool.showedFrame = index;
+    }
 }
