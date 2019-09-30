@@ -7,6 +7,17 @@ export type IVirtualCanvasesPool = {
     [key: string]: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D };
 };
 
+export type IFrame = {
+    delay: number;
+    counter: number;
+    frame: HTMLCanvasElement;
+}
+
+export type IFramePool = {
+    showedFrame: number;
+    frames: IFrame[];
+}
+
 export type IPolygon = IPoint[];
 
 export class CustomScreen {
@@ -15,6 +26,10 @@ export class CustomScreen {
     private readonly savedCanvas: HTMLCanvasElement;
     private readonly savedContext: CanvasRenderingContext2D;
     private readonly virtualPool: IVirtualCanvasesPool = {};
+    private readonly framePool: IFramePool = {
+        showedFrame: -1,
+        frames: []
+    };
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -112,5 +127,41 @@ export class CustomScreen {
 
     deleteVirtualCanvas(name1: string) {
         delete this.virtualPool[name1];
+    }
+
+    setFrame(height: number, width: number, delay = 0): void {
+        this.canvas = document.createElement('canvas');
+        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.canvas.height = height;
+        this.canvas.width = width;
+        this.framePool.frames.push({delay: delay, counter: delay, frame: this.canvas});
+    }
+
+    getFrame(): HTMLCanvasElement {
+        let frame: IFrame = {delay: 0, counter: 0, frame: <any>null};
+
+        if (this.framePool.showedFrame > -1) {
+            frame = this.framePool.frames[this.framePool.showedFrame];
+        }
+
+        if (frame.frame) {
+            if (frame.counter) {
+                frame.counter--;
+                return frame.frame;
+            } else {
+                frame.counter = frame.delay;
+            }
+        }
+
+        this.framePool.showedFrame++;
+
+        if (this.framePool.showedFrame >= this.framePool.frames.length) {
+            this.framePool.showedFrame = 0;
+        }
+        return this.framePool.frames[this.framePool.showedFrame].frame;
+    }
+
+    public drawFrame(x: number, y: number) {
+        this.savedContext.drawImage(this.getFrame(), x, y);
     }
 }

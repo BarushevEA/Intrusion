@@ -3,6 +3,7 @@ import {IController} from "./initOuterVariables";
 import {HexagonGreed} from "./animation_models/HexagonGreed";
 import {MovedCircle} from "./animation_models/MovedCircle";
 import {renderController} from "./RenderController";
+import {SpaceSpiral} from "./animation_models/SpaceSpiral";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -82,7 +83,19 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         const hexagon = new HexagonGreed(this.customCanvas);
         hexagon.setName('hexagon');
         this.renderController.setDrawElement(hexagon);
-        for (let i = 0; i < 200; i++) {
+
+        let z = 0;
+        let t = setInterval(() => {
+            const spaceSpiral = new SpaceSpiral(this.customCanvas);
+            spaceSpiral.setName('spaceSpiral' + z);
+            this.renderController.setDrawElement(spaceSpiral);
+            z++;
+            if (z == 20) {
+                clearInterval(t);
+            }
+        }, 1000);
+
+        for (let i = 0; i < 100; i++) {
             const circles = new MovedCircle(this.customCanvas);
             circles.setName('circles' + i);
             this.renderController.setDrawElement(circles);
