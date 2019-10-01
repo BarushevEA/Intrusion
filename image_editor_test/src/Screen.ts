@@ -3,6 +3,13 @@ export type IPoint = {
     y: number;
 };
 
+export type IDimensions = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
 export type IVirtualCanvasesPool = {
     [key: string]: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D };
 };

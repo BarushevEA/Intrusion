@@ -1,4 +1,4 @@
-import {ICustomDraw} from "./CustomDraw";
+import {ICustomDraw} from "./animation_models/AbstractCustomDraw";
 
 class RenderController {
     private canvas: HTMLCanvasElement = <any>null;

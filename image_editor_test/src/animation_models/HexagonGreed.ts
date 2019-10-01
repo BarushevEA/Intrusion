@@ -1,7 +1,7 @@
-import {CustomDraw} from "../CustomDraw";
+import {AbstractCustomDraw} from "./AbstractCustomDraw";
 import {IPolygon} from "../Screen";
 
-export class HexagonGreed extends CustomDraw {
+export class HexagonGreed extends AbstractCustomDraw {
     x = 0;
     y = 0;
     dx = 1;

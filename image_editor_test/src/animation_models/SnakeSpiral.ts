@@ -1,9 +1,9 @@
-import {CustomDraw} from "../CustomDraw";
+import {AbstractCustomDraw} from "./AbstractCustomDraw";
 import {IFramePool} from "../Screen";
 
 let savedFramePool: IFramePool = <any>null;
 
-export class SnakeSpiral extends CustomDraw {
+export class SnakeSpiral extends AbstractCustomDraw {
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);

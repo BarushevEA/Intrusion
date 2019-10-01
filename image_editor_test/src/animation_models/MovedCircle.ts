@@ -1,6 +1,6 @@
-import {CustomDraw} from "../CustomDraw";
+import {AbstractCustomDraw} from "./AbstractCustomDraw";
 
-export class MovedCircle extends CustomDraw {
+export class MovedCircle extends AbstractCustomDraw {
     x = 0;
     y = 0;
     maxStep = 7;
@@ -22,16 +22,16 @@ export class MovedCircle extends CustomDraw {
     }
 
     init() {
-        this.customScreen.setVirtualCanvas(
-            this.bottomLayerName,
-            this.radius * 2 + this.lineWidth,
-            this.radius * 2 + this.lineWidth);
+        const height = this.radius * 2 + this.lineWidth;
+        const width = this.radius * 2 + this.lineWidth;
+        this.customScreen.setVirtualCanvas(this.bottomLayerName, height, width);
         this.customScreen.setLineWidth(this.lineWidth);
         this.customScreen.setColors(
             `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
             `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
         this.customScreen.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.customScreen.restoreCanvas();
+        this.setSize(height, width);
     }
 
     renderFrame(): void {
