@@ -3,7 +3,7 @@ import {IFramePool} from "../Screen";
 
 let savedFramePool: IFramePool = <any>null;
 
-export class SpaceSpiral extends CustomDraw {
+export class SnakeSpiral extends CustomDraw {
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
