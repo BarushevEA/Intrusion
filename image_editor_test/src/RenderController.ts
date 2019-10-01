@@ -4,6 +4,7 @@ class RenderController {
     private canvas: HTMLCanvasElement = <any>null;
     private mute = false;
     private elementsPool: ICustomDraw[] = [];
+    private animFrameIndex = -1;
 
     setCanvas(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -13,9 +14,9 @@ class RenderController {
         this.elementsPool.push(element);
     }
 
-    public render(): void {
+    public renderStart(): void {
         this.canvas.width = this.canvas.width;
-        requestAnimationFrame(this.render.bind(this));
+        this.animFrameIndex = requestAnimationFrame(this.renderStart.bind(this));
         if (this.mute) {
             return;
         }
@@ -24,6 +25,10 @@ class RenderController {
             this.elementsPool[i].renderFrame();
         }
         this.mute = false;
+    }
+
+    public renderStop() {
+        cancelAnimationFrame(this.animFrameIndex);
     }
 
     deleteDrawElement(name: string): void {

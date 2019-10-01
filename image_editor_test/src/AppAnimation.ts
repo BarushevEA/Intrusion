@@ -93,7 +93,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
             circles.setName('circles' + i);
             this.renderController.setDrawElement(circles);
         }
-        this.renderController.render();
+        this.renderController.renderStart();
     }
 
     private setCanvasSize() {

@@ -14,11 +14,13 @@ export class HexagonGreed extends AbstractCustomDraw {
     bottomLayerName = 'bottomLayer';
     virtualLayerName = 'virtualLayer';
     height = 2000;
-    width = 3000;
+    width = 2000;
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
+        this.height = Math.round(canvas.height + this.startDelta * 1.2);
+        this.width = Math.round(canvas.width + this.startDelta * 1.2);
         this.init();
         this.customScreen.restoreCanvas();
     }
