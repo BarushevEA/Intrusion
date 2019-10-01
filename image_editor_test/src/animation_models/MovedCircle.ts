@@ -59,7 +59,7 @@ export class MovedCircle extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.customScreen.drawVirtualOnRealCanvas(this.bottomLayerName, this.x, this.y);
+        this.customScreen.drawVirtualOnRealCanvas(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
         this.x += this.dx;
         this.y += this.dy;
         this.throttlingCounter--;

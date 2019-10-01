@@ -117,8 +117,8 @@ export class HexagonGreed extends AbstractCustomDraw {
 
         this.customScreen.drawVirtualOnRealCanvas(
             this.bottomLayerName,
-            +this.bound + this.x + this.radius * this.multiplier,
-            +this.bound + this.y + this.radius * this.multiplier,
+            +this.bound + this.x + this.radius * this.multiplier + this.elementX,
+            +this.bound + this.y + this.radius * this.multiplier + this.elementY,
             this.customCanvas.width,
             this.customCanvas.height,
             0,

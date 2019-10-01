@@ -1,6 +1,6 @@
 import {AbstractCustomDraw} from "./AbstractCustomDraw";
 import {IFramePool} from "../Screen";
-
+//TODO frame pool technology need to use for lot of entities of class
 let savedFramePool: IFramePool = <any>null;
 
 export class SnakeSpiral extends AbstractCustomDraw {
@@ -62,7 +62,9 @@ export class SnakeSpiral extends AbstractCustomDraw {
     }
 
     renderFrame(): void {
-        this.customScreen.drawFrame(Math.round(this.customCanvas.width / 2 - 190), Math.round(10));
+        this.customScreen.drawFrame(
+            Math.round(this.customCanvas.width / 2 - 190) + this.elementX,
+            Math.round(10) + this.elementY);
     }
 
     setName(name: string): void {
