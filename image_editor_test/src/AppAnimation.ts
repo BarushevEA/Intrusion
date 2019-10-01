@@ -84,9 +84,9 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         hexagon.setName('hexagon');
         this.renderController.setDrawElement(hexagon);
 
-        const spaceSpiral = new SnakeSpiral(this.customCanvas);
-        spaceSpiral.setName('spaceSpiral');
-        this.renderController.setDrawElement(spaceSpiral);
+        const snakeSpiral = new SnakeSpiral(this.customCanvas);
+        snakeSpiral.setName('spaceSpiral');
+        this.renderController.setDrawElement(snakeSpiral);
 
         for (let i = 0; i < 50; i++) {
             const circles = new MovedCircle(this.customCanvas);

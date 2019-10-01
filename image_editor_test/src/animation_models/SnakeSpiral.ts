@@ -1,7 +1,4 @@
 import {AbstractCustomDraw} from "./AbstractCustomDraw";
-import {IFramePool} from "../Screen";
-//TODO frame pool technology need to use for lot of entities of class
-let savedFramePool: IFramePool = <any>null;
 
 export class SnakeSpiral extends AbstractCustomDraw {
 
@@ -11,8 +8,8 @@ export class SnakeSpiral extends AbstractCustomDraw {
     }
 
     init() {
-        if (savedFramePool) {
-            this.customScreen.setFramePool(savedFramePool);
+        if (SnakeSpiral.savedFramePool) {
+            this.customScreen.setFramePool(SnakeSpiral.savedFramePool);
             return;
         }
 
@@ -58,7 +55,7 @@ export class SnakeSpiral extends AbstractCustomDraw {
             }
             this.customScreen.restoreCanvas();
         }
-        savedFramePool = this.customScreen.getFramePool();
+        SnakeSpiral.savedFramePool = this.customScreen.getFramePool();
     }
 
     renderFrame(): void {

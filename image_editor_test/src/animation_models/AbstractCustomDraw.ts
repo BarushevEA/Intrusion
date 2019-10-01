@@ -1,4 +1,6 @@
-import {CustomScreen, IDimensions} from "../Screen";
+import {CustomScreen, IDimensions, IFramePool} from "../Screen";
+
+//TODO frame pool technology need to use for lot of entities of class
 
 export type ICustomDraw = {
     name: string;
@@ -7,6 +9,7 @@ export type ICustomDraw = {
 }
 
 export abstract class AbstractCustomDraw implements ICustomDraw {
+    static savedFramePool: IFramePool = <any>null;
     protected customCanvas: HTMLCanvasElement;
     protected customScreen: CustomScreen;
     protected elementX = 0;
