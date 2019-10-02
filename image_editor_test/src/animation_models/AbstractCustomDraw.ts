@@ -9,7 +9,9 @@ export type ICustomDraw = {
 }
 
 export abstract class AbstractCustomDraw implements ICustomDraw {
-    static savedFramePool: IFramePool = <any>null;
+    static _savedFramePool: { [key: string]: IFramePool } = {};
+
+    protected framePoolName: string = '';
     protected customCanvas: HTMLCanvasElement;
     protected customScreen: CustomScreen;
     protected elementX = 0;
@@ -26,6 +28,19 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     public abstract renderFrame(): void;
 
     public abstract setName(name: string): void;
+
+    setFramePoolName(name: string) {
+        AbstractCustomDraw._savedFramePool[name] = <any>null;
+        this.framePoolName = name;
+    }
+
+    set framePool(pool: IFramePool) {
+        AbstractCustomDraw._savedFramePool[this.framePoolName] = pool;
+    }
+
+    get framePool(): IFramePool {
+        return AbstractCustomDraw._savedFramePool[this.framePoolName];
+    }
 
     public setPosition(x: number, y: number): void {
         this.elementX = x;

@@ -4,12 +4,13 @@ export class SnakeSpiral extends AbstractCustomDraw {
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
+        this.setFramePoolName('SnakeSpiral');
         this.init();
     }
 
     init() {
-        if (SnakeSpiral.savedFramePool) {
-            this.customScreen.setFramePool(SnakeSpiral.savedFramePool);
+        if (this.framePool) {
+            this.customScreen.setFramePool(this.framePool);
             return;
         }
 
@@ -55,7 +56,7 @@ export class SnakeSpiral extends AbstractCustomDraw {
             }
             this.customScreen.restoreCanvas();
         }
-        SnakeSpiral.savedFramePool = this.customScreen.getFramePool();
+        this.framePool = this.customScreen.getFramePool();
     }
 
     renderFrame(): void {
