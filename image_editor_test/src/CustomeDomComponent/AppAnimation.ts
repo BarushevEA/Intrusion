@@ -1,9 +1,9 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
-import {IController} from "./initOuterVariables";
-import {HexagonGreed} from "./animation_models/HexagonGreed";
-import {MovedCircle} from "./animation_models/MovedCircle";
-import {renderController} from "./RenderController";
-import {SnakeSpiral} from "./animation_models/SnakeSpiral";
+import {IController} from "../CustomeLibraries/initOuterVariables";
+import {HexagonGreed} from "../AnimationModels/HexagonGreed";
+import {MovedCircle} from "../AnimationModels/MovedCircle";
+import {renderController} from "../AnimationEngine/RenderController";
+import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
