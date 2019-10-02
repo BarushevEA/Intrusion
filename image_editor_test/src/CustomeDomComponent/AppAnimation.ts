@@ -1,10 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
-import {HexagonGreed} from "../AnimationModels/HexagonGreed";
-import {MovedCircle} from "../AnimationModels/MovedCircle";
 import {renderController} from "../AnimationEngine/RenderController";
-import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
-import {AnimatedRectangle1} from "../AnimationModels/AnimatedRectangle1";
+import {TestScene} from "../Scenes/TestScene";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -81,25 +78,8 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private renderCanvas() {
-        const hexagon = new HexagonGreed(this.customCanvas);
-        hexagon.setName('hexagon');
-        this.renderController.setDrawElement(hexagon);
-
-        const snakeSpiral = new SnakeSpiral(this.customCanvas);
-        snakeSpiral.setName('spaceSpiral');
-        this.renderController.setDrawElement(snakeSpiral);
-
-        for (let i = 0; i < 50; i++) {
-            const circles = new MovedCircle(this.customCanvas);
-            circles.setName('circles' + i);
-            this.renderController.setDrawElement(circles);
-        }
-
-        const rectangle1 = new AnimatedRectangle1(this.customCanvas);
-        rectangle1.setName('rectangle1');
-        this.renderController.setDrawElement(rectangle1);
-
-        this.renderController.renderStart();
+        const test = new TestScene(this.customCanvas, this.renderController);
+        test.renderStart();
     }
 
     private setCanvasSize() {

@@ -26,6 +26,14 @@
             font-weight: 900;
         }
 
+        .wrapper {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .text {
             font-size: 10vw;
             font-family: Verdana, serif;
@@ -57,18 +65,14 @@
     </style>
 </head>
 <body onclick="AppAnimationController.toggleColors()">
-<div class="text-wrapper">
+<div class="wrapper">
     <div style="
-    /*background: rgba(14,75,180,0.5);*/
-    border-radius: 80px;
-    /*border: #825000 solid 20px;*/
-    padding: 20px;">
-        <p class="text shadow">Sweet Spot</p>
-        <p class="text-small shadow">Lets dream for real</p>
+    width: 1200px;
+    height: 600px;
+    border: 3px solid #580954;
+">
+        <app-animation-component></app-animation-component>
     </div>
-</div>
-<div style="height: 100%; width: 100%;">
-    <app-animation-component></app-animation-component>
 </div>
 <script src="../dist_dev/libs/bundle.js"></script>
 </body>

@@ -1,16 +1,25 @@
 import {ICustomDraw} from "./rootModels/AbstractCustomDraw";
 
-class RenderController {
+export type IRenderController = {
+    setCanvas(canvas: HTMLCanvasElement): void;
+    setDrawElement(element: ICustomDraw): void;
+    renderStart(): void;
+    renderStop(): void;
+    deleteDrawElement(name: string): void;
+}
+
+
+class RenderController implements IRenderController {
     private canvas: HTMLCanvasElement = <any>null;
     private mute = false;
     private elementsPool: ICustomDraw[] = [];
     private animFrameIndex = -1;
 
-    setCanvas(canvas: HTMLCanvasElement) {
+    public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
     }
 
-    setDrawElement(element: ICustomDraw) {
+    public setDrawElement(element: ICustomDraw): void {
         this.elementsPool.push(element);
     }
 
@@ -31,7 +40,7 @@ class RenderController {
         cancelAnimationFrame(this.animFrameIndex);
     }
 
-    deleteDrawElement(name: string): void {
+    public deleteDrawElement(name: string): void {
         this.elementsPool = this.elementsPool.filter(element => {
             return element.name !== name;
         });
