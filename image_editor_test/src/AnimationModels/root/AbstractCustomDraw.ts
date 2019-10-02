@@ -1,4 +1,4 @@
-import {CustomScreen, IDimensions, IFramePool} from "../AnimationEngine/Screen";
+import {CustomScreen, IDimensions, IFramePool} from "../../AnimationEngine/Screen";
 
 //TODO frame pool technology need to use for lot of entities of class
 

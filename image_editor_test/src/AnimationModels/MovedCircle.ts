@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractCustomDraw} from "./root/AbstractCustomDraw";
 
 export class MovedCircle extends AbstractCustomDraw {
     x = 0;

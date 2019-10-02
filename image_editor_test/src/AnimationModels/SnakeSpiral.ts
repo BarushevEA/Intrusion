@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "./AbstractFramedShape";
+import {AbstractFramedShape} from "./root/AbstractFramedShape";
 
 export class SnakeSpiral extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {

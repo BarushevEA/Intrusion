@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractCustomDraw} from "./root/AbstractCustomDraw";
 import {IPolygon} from "../AnimationEngine/Screen";
 
 export class HexagonGreed extends AbstractCustomDraw {
