@@ -50,7 +50,6 @@ export class SnakeSpiral extends AbstractFramedShape {
                     ])
                 }
             }
-            this.customScreen.restoreCanvas();
         }
     }
 }
