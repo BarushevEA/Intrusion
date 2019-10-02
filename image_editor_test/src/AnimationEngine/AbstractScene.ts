@@ -12,10 +12,13 @@ export abstract class AbstractScene {
         this.createScene();
     }
 
+    protected setActor(actor: AbstractCustomDraw): void {
+        this.actors.push(actor);
+        this.renderController.setDrawElement(actor);
+    }
     protected abstract createScene(): void;
 
     public renderStart(): void {
-        this.actors.forEach(actor => this.renderController.setDrawElement(actor));
         this.renderController.renderStart();
     }
 

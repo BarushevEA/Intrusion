@@ -13,21 +13,45 @@ export class TestScene extends AbstractScene {
     protected createScene(): void {
         const hexagon = new HexagonGreed(this.customCanvas);
         hexagon.setName('hexagon');
-        this.actors.push(hexagon);
+        this.setActor(hexagon);
+
+        const arr: AnimatedRectangle1[] = [];
+        for (let k = 0; k < 6; k++) {
+            for (let i = 0; i < 10; i++) {
+                const rectangle0 = new AnimatedRectangle1(this.customCanvas);
+                rectangle0.setName('rectangle' + i);
+                rectangle0.elementX = -1500 + i * 100;
+                rectangle0.elementY = k * 100;
+                arr.push(rectangle0);
+            }
+        }
+
+        let counter = 600;
+        let dx = 5;
+        const recMove = () => {
+            requestAnimationFrame(recMove);
+            arr.forEach(el => {
+                el.elementX += dx;
+            });
+            counter--;
+            if (counter < 1) {
+                counter = 500;
+                dx *= -1;
+            }
+        };
+
+
+        arr.forEach(el => this.setActor(el));
 
         const snakeSpiral = new SnakeSpiral(this.customCanvas);
         snakeSpiral.setName('spaceSpiral');
-        this.actors.push(snakeSpiral);
-
+        this.setActor(snakeSpiral);
 
         for (let i = 0; i < 50; i++) {
             const circle = new MovedCircle(this.customCanvas);
             circle.setName('circles' + i);
-            this.actors.push(circle);
+            this.setActor(circle);
         }
-
-        const rectangle1 = new AnimatedRectangle1(this.customCanvas);
-        rectangle1.setName('rectangle1');
-        this.actors.push(rectangle1);
+        requestAnimationFrame(recMove);
     }
 }

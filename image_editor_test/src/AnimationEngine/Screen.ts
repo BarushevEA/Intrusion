@@ -193,10 +193,8 @@ export class CustomScreen {
     }
 
     setDelayToFrame(index: number, delay: number) {
-        console.log(this.framePool.frames.length);
         for (let i = 0; i < this.framePool.frames.length; i++) {
             if (i === index) {
-                console.log('setDelayToFrame');
                 const element = this.framePool.frames[i];
                 element.delay = delay;
                 element.counter = delay;
