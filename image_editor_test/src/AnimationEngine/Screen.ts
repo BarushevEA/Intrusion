@@ -158,6 +158,9 @@ export class CustomScreen {
         }
 
         if (frame.frame) {
+            if (frame.delay < 0) {
+                return frame.frame;
+            }
             if (frame.counter) {
                 frame.counter--;
                 return frame.frame;
