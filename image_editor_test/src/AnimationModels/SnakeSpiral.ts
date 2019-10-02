@@ -1,19 +1,15 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractFramedShape} from "./AbstractFramedShape";
 
-export class SnakeSpiral extends AbstractCustomDraw {
-
+export class SnakeSpiral extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
-        this.setFramePoolName('SnakeSpiral');
-        this.init();
     }
 
-    init() {
-        if (this.framePool) {
-            this.customScreen.setFramePool(this.framePool);
-            return;
-        }
+    protected setFramesName(): void {
+        this.setFramePoolName('SnakeSpiral');
+    }
 
+    protected initShape(): void {
         const height = 250;
         const width = 380;
         for (let k = 0; k < Math.PI * 2; k += 0.1) {
@@ -56,16 +52,5 @@ export class SnakeSpiral extends AbstractCustomDraw {
             }
             this.customScreen.restoreCanvas();
         }
-        this.framePool = this.customScreen.getFramePool();
-    }
-
-    renderFrame(): void {
-        this.customScreen.drawFrame(
-            Math.round(this.customCanvas.width / 2 - 190) + this.elementX,
-            Math.round(10) + this.elementY);
-    }
-
-    setName(name: string): void {
-        this.name = name;
     }
 }
