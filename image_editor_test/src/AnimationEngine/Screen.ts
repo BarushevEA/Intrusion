@@ -84,6 +84,12 @@ export class CustomScreen {
         this.stopDrawing();
     }
 
+    public drawRectangle(x: number, y: number, width: number, height: number): void {
+        this.startDrawing();
+        this.context.rect(x, y, width, height);
+        this.stopDrawing();
+    }
+
     public drawPolygon(polygon: IPolygon): void {
         this.startDrawing();
         if (!polygon.length) {
