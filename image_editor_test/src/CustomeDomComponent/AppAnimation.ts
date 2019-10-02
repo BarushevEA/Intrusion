@@ -4,6 +4,7 @@ import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
 import {renderController} from "../AnimationEngine/RenderController";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
+import {AnimatedRectangle1} from "../AnimationModels/AnimatedRectangle1";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -93,6 +94,11 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
             circles.setName('circles' + i);
             this.renderController.setDrawElement(circles);
         }
+
+        const rectangle1 = new AnimatedRectangle1(this.customCanvas);
+        rectangle1.setName('rectangle1');
+        this.renderController.setDrawElement(rectangle1);
+
         this.renderController.renderStart();
     }
 
