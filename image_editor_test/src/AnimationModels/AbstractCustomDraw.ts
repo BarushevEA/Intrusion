@@ -14,8 +14,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     protected framePoolName: string = '';
     protected customCanvas: HTMLCanvasElement;
     protected customScreen: CustomScreen;
-    protected elementX = 0;
-    protected elementY = 0;
+    private _elementX = 0;
+    private _elementY = 0;
     protected elementWidth = 0;
     protected elementHeight = 0;
     public name = '';
@@ -43,8 +43,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     }
 
     public setPosition(x: number, y: number): void {
-        this.elementX = x;
-        this.elementY = y;
+        this._elementX = x;
+        this._elementY = y;
     }
 
     protected setSize(height: number, width: number): void {
@@ -53,10 +53,26 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     }
 
     public getDimensions(): IDimensions {
-        return {x: this.elementX, y: this.elementY, height: this.elementHeight, width: this.elementWidth}
+        return {x: this._elementX, y: this._elementY, height: this.elementHeight, width: this.elementWidth}
     }
 
     randomize(num: number): number {
         return Math.round(Math.random() * num)
+    }
+
+    get elementX(): number {
+        return this._elementX;
+    }
+
+    set elementX(value: number) {
+        this._elementX = value;
+    }
+
+    get elementY(): number {
+        return this._elementY;
+    }
+
+    set elementY(value: number) {
+        this._elementY = value;
     }
 }
