@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "./root/AbstractCustomDraw";
+import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
 
 export class MovedCircle extends AbstractCustomDraw {
     x = 0;

@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "./root/AbstractFramedShape";
+import {AbstractFramedShape} from "../AnimationEngine/rootModels/AbstractFramedShape";
 
 export class AnimatedRectangle1 extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
