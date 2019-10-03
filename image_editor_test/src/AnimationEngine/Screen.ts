@@ -239,7 +239,6 @@ export class CustomScreen {
         for (let i = 0; i < pool.reverseFrames.length; i++) {
             this.framePool.reverseFrames.push({...pool.reverseFrames[i]});
         }
-        console.log(this.framePool);
     }
 
     setDelayToFrame(index: number, delay: number) {
@@ -260,9 +259,9 @@ export class CustomScreen {
     }
 
     setReverse(): void {
-        const lastIndex = this.framePool.playedFrames.length - 1;
+        const lastIndex = this.framePool.playedFrames.length;
         for (let i = 0; i < lastIndex; i++) {
-            const frame = this.framePool.playedFrames[lastIndex - i];
+            const frame = {...this.framePool.playedFrames[lastIndex - i]};
             this.framePool.reverseFrames.push(frame);
         }
     }

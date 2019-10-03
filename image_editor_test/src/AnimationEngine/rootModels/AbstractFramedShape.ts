@@ -13,6 +13,8 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
             return;
         }
         this.initShape();
+        this.customScreen.setOriginal();
+        this.customScreen.setReverse();
         this.framePool = this.customScreen.getFramePool();
         this.customScreen.restoreCanvas();
     }
