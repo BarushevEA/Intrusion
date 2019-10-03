@@ -15,11 +15,15 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
         this.initShape();
         this.customScreen.setOriginal();
         this.customScreen.setReverse();
+        this.customScreen.setReverseToPlay();
+        this.customScreen.setLastFrameToStop();
+        this.customScreen.setOriginalToPlay();
         this.framePool = this.customScreen.getFramePool();
         this.customScreen.restoreCanvas();
     }
 
     protected abstract setFramesName(): void;
+
     protected abstract initShape(): void;
 
     setName(name: string): void {

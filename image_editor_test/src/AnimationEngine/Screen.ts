@@ -266,6 +266,14 @@ export class CustomScreen {
         }
     }
 
+    setReverseToPlay() {
+        this.framePool.playedFrames = this.framePool.reverseFrames;
+    }
+
+    setOriginalToPlay() {
+        this.framePool.playedFrames = this.framePool.originalFrames;
+    }
+
     setShowedFrame(index: number) {
         this.framePool.showedFrame = index;
     }
