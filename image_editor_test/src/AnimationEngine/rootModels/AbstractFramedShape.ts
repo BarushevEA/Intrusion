@@ -30,6 +30,10 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
         this.name = name;
     }
 
+    setFrame(delay: number) {
+        this.customScreen.setFrame(this.elementHeight, this.elementWidth, delay);
+    }
+
     renderFrame(): void {
         this.customScreen.drawFrame(this.elementX, this.elementY);
     }

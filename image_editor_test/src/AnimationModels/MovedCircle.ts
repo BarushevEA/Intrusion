@@ -22,16 +22,17 @@ export class MovedCircle extends AbstractCustomDraw {
     }
 
     init() {
-        const height = this.radius * 2 + this.lineWidth;
-        const width = this.radius * 2 + this.lineWidth;
-        this.customScreen.setVirtualCanvas(this.bottomLayerName, height, width);
+        this.setSize(
+            this.radius * 2 + this.lineWidth,
+            this.radius * 2 + this.lineWidth);
+
+        this.setVirtualCanvas(this.bottomLayerName);
         this.customScreen.setLineWidth(this.lineWidth);
         this.customScreen.setColors(
             `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
             `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
         this.customScreen.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.customScreen.restoreCanvas();
-        this.setSize(height, width);
     }
 
     renderFrame(): void {
