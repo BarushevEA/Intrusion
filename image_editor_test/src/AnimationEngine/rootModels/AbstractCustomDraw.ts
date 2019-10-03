@@ -20,7 +20,9 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     protected elementHeight = 0;
     public name = '';
 
-    protected constructor(canvas: HTMLCanvasElement) {
+    protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
+        this.elementHeight = height;
+        this.elementWidth = width;
         this.customCanvas = canvas;
         this.customScreen = new CustomScreen(this.customCanvas);
     }

@@ -1,6 +1,8 @@
 import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
 import {IPolygon} from "../AnimationEngine/Screen";
 
+const startDelta = 1000;
+
 export class HexagonGreed extends AbstractCustomDraw {
     x = 0;
     y = 0;
@@ -8,18 +10,17 @@ export class HexagonGreed extends AbstractCustomDraw {
     dy = 1;
     radius = 45;
     multiplier = 2;
-    startDelta = 1000;
     maxStep = 2;
-    bound = Math.round(this.startDelta / 2);
+    bound = Math.round(startDelta / 2);
     bottomLayerName = 'bottomLayer';
     virtualLayerName = 'virtualLayer';
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
-        this.setSize(
-            Math.round(canvas.height + this.startDelta * 1.2),
-            Math.round(canvas.width + this.startDelta * 1.2));
+        super(
+            canvas,
+            Math.round(canvas.height + startDelta * 1.2),
+            Math.round(canvas.width + startDelta * 1.2));
         this.init();
         this.customScreen.restoreCanvas();
     }

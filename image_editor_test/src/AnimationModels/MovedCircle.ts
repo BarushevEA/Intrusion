@@ -13,7 +13,7 @@ export class MovedCircle extends AbstractCustomDraw {
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, 0, 0);
         this.init();
     }
 

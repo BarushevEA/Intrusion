@@ -2,7 +2,7 @@ import {AbstractFramedShape} from "../AnimationEngine/rootModels/AbstractFramedS
 
 export class AnimatedRectangle1 extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, 100, 100);
     }
 
     protected setFramesName(): void {
@@ -10,7 +10,6 @@ export class AnimatedRectangle1 extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        this.setSize(100, 100);
         this.setFrame(0);
         for (let i = 0; i < 50; i += 4) {
             this.setFrame(0);

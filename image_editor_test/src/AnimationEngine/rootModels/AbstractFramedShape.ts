@@ -1,8 +1,8 @@
 import {AbstractCustomDraw} from "./AbstractCustomDraw";
 
 export abstract class AbstractFramedShape extends AbstractCustomDraw {
-    protected constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+    protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
+        super(canvas, height, width);
         this.setFramesName();
         this.init();
     }

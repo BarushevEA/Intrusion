@@ -2,7 +2,7 @@ import {AbstractFramedShape} from "../AnimationEngine/rootModels/AbstractFramedS
 
 export class SnakeSpiral extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, 250, 380);
     }
 
     protected setFramesName(): void {
@@ -10,7 +10,6 @@ export class SnakeSpiral extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        this.setSize(250, 380);
         for (let k = 0; k < Math.PI * 2; k += 0.1) {
             let radius = 1;
             this.customScreen.setFrame(500, 700, 1);
