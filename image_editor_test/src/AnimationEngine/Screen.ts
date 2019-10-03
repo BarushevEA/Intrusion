@@ -24,7 +24,9 @@ export type IFrame = {
 export type IFramePool = {
     startFrame: number;
     showedFrame: number;
-    frames: IFrame[];
+    playedFrames: IFrame[];
+    reverseFrames: IFrame[];
+    originalFrames: IFrame[];
 }
 
 export type IPolygon = IPoint[];
@@ -38,7 +40,9 @@ export class CustomScreen {
     private readonly framePool: IFramePool = {
         startFrame: 0,
         showedFrame: -1,
-        frames: []
+        playedFrames: [],
+        reverseFrames: [],
+        originalFrames: []
     };
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
@@ -150,16 +154,16 @@ export class CustomScreen {
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
         this.canvas.width = width;
-        this.framePool.frames.push({delay: delay, counter: delay, frame: this.canvas});
+        this.framePool.playedFrames.push({delay: delay, counter: delay, frame: this.canvas});
     }
 
     getFrame(): HTMLCanvasElement {
         let frame: IFrame = {delay: 0, counter: 0, frame: <any>null};
 
         if (this.framePool.showedFrame > -1) {
-            frame = this.framePool.frames[this.framePool.showedFrame];
+            frame = this.framePool.playedFrames[this.framePool.showedFrame];
         } else {
-            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.frames.length) {
+            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.playedFrames.length) {
                 this.framePool.showedFrame = this.framePool.startFrame - 1;
             }
         }
@@ -178,25 +182,25 @@ export class CustomScreen {
 
         this.framePool.showedFrame++;
 
-        if (this.framePool.showedFrame >= this.framePool.frames.length) {
-            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.frames.length) {
+        if (this.framePool.showedFrame >= this.framePool.playedFrames.length) {
+            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.playedFrames.length) {
                 this.framePool.showedFrame = this.framePool.startFrame;
             } else {
                 this.framePool.showedFrame = 0;
             }
         }
-        return this.framePool.frames[this.framePool.showedFrame].frame;
+        return this.framePool.playedFrames[this.framePool.showedFrame].frame;
     }
 
     public setStopFrame(index: number): void {
-        for (let i = 0; i < this.framePool.frames.length; i++) {
-            const frame = this.framePool.frames[i];
+        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
+            const frame = this.framePool.playedFrames[i];
             if (frame.isStopFrame) {
                 frame.isStopFrame = false;
                 break;
             }
         }
-        this.framePool.frames[index].isStopFrame = true;
+        this.framePool.playedFrames[index].isStopFrame = true;
     }
 
     public setFirstFrameToStop() {
@@ -204,12 +208,12 @@ export class CustomScreen {
     }
 
     public setLastFrameToStop() {
-        this.setStopFrame(this.framePool.frames.length - 1);
+        this.setStopFrame(this.framePool.playedFrames.length - 1);
     }
 
     public resetStopFrame() {
-        for (let i = 0; i < this.framePool.frames.length; i++) {
-            this.framePool.frames[i].isStopFrame = false;
+        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
+            this.framePool.playedFrames[i].isStopFrame = false;
         }
     }
 
@@ -226,20 +230,40 @@ export class CustomScreen {
     }
 
     setFramePool(pool: IFramePool): void {
-        pool.frames.forEach(element => {
-            const newFrame: IFrame = {delay: element.delay, counter: element.delay, frame: element.frame};
-            this.framePool.frames.push(newFrame);
-        });
+        for (let i = 0; i < pool.playedFrames.length; i++) {
+            this.framePool.playedFrames.push({...pool.playedFrames[i]});
+        }
+        for (let i = 0; i < pool.originalFrames.length; i++) {
+            this.framePool.originalFrames.push({...pool.originalFrames[i]});
+        }
+        for (let i = 0; i < pool.reverseFrames.length; i++) {
+            this.framePool.reverseFrames.push({...pool.reverseFrames[i]});
+        }
+        console.log(this.framePool);
     }
 
     setDelayToFrame(index: number, delay: number) {
-        for (let i = 0; i < this.framePool.frames.length; i++) {
+        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
             if (i === index) {
-                const element = this.framePool.frames[i];
+                const element = this.framePool.playedFrames[i];
                 element.delay = delay;
                 element.counter = delay;
                 break;
             }
+        }
+    }
+
+    setOriginal(): void {
+        this.framePool.playedFrames.forEach(frame => {
+            this.framePool.originalFrames.push(frame);
+        });
+    }
+
+    setReverse(): void {
+        const lastIndex = this.framePool.playedFrames.length - 1;
+        for (let i = 0; i < lastIndex; i++) {
+            const frame = this.framePool.playedFrames[lastIndex - i];
+            this.framePool.reverseFrames.push(frame);
         }
     }
 

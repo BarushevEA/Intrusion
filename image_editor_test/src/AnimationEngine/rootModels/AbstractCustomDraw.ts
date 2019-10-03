@@ -30,7 +30,6 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     public abstract setName(name: string): void;
 
     protected setFramePoolName(name: string) {
-        AbstractCustomDraw._savedFramePool[name] = <any>null;
         this.framePoolName = name;
     }
 

@@ -42,8 +42,6 @@ export class TestScene extends AbstractScene {
 
         setTimeout(() => {
             arr[0].resetStopFrame();
-            arr[11].resetStopFrame();
-            console.log(AnimatedRectangle1._savedFramePool);
         }, 5000);
 
         arr.forEach(el => this.setActor(el));
