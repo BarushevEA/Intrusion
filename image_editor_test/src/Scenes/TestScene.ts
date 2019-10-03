@@ -20,13 +20,13 @@ export class TestScene extends AbstractScene {
             for (let i = 0; i < 10; i++) {
                 const rectangle0 = new AnimatedRectangle1(this.customCanvas);
                 rectangle0.setName('rectangle' + i);
-                rectangle0.elementX = -1500 + i * 100;
+                rectangle0.elementX = 100 + i * 100;
                 rectangle0.elementY = k * 100;
                 arr.push(rectangle0);
             }
         }
 
-        let counter = 600;
+        let counter = 100;
         let dx = 5;
         const recMove = () => {
             requestAnimationFrame(recMove);
@@ -35,11 +35,16 @@ export class TestScene extends AbstractScene {
             });
             counter--;
             if (counter < 1) {
-                counter = 500;
+                counter = 100;
                 dx *= -1;
             }
         };
 
+        setTimeout(() => {
+            arr[0].resetStopFrame();
+            arr[11].resetStopFrame();
+            console.log(AnimatedRectangle1._savedFramePool);
+        }, 5000);
 
         arr.forEach(el => this.setActor(el));
 

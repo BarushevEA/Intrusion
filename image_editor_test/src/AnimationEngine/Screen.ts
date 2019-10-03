@@ -15,12 +15,14 @@ export type IVirtualCanvasesPool = {
 };
 
 export type IFrame = {
+    isStopFrame?: boolean;
     delay: number;
     counter: number;
     frame: HTMLCanvasElement;
 }
 
 export type IFramePool = {
+    startFrame: number;
     showedFrame: number;
     frames: IFrame[];
 }
@@ -34,6 +36,7 @@ export class CustomScreen {
     private readonly savedContext: CanvasRenderingContext2D;
     private readonly virtualPool: IVirtualCanvasesPool = {};
     private readonly framePool: IFramePool = {
+        startFrame: 0,
         showedFrame: -1,
         frames: []
     };
@@ -155,10 +158,14 @@ export class CustomScreen {
 
         if (this.framePool.showedFrame > -1) {
             frame = this.framePool.frames[this.framePool.showedFrame];
+        } else {
+            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.frames.length) {
+                this.framePool.showedFrame = this.framePool.startFrame - 1;
+            }
         }
 
         if (frame.frame) {
-            if (frame.delay < 0) {
+            if (frame.isStopFrame) {
                 return frame.frame;
             }
             if (frame.counter) {
@@ -172,9 +179,42 @@ export class CustomScreen {
         this.framePool.showedFrame++;
 
         if (this.framePool.showedFrame >= this.framePool.frames.length) {
-            this.framePool.showedFrame = 0;
+            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.frames.length) {
+                this.framePool.showedFrame = this.framePool.startFrame;
+            } else {
+                this.framePool.showedFrame = 0;
+            }
         }
         return this.framePool.frames[this.framePool.showedFrame].frame;
+    }
+
+    public setStopFrame(index: number): void {
+        for (let i = 0; i < this.framePool.frames.length; i++) {
+            const frame = this.framePool.frames[i];
+            if (frame.isStopFrame) {
+                frame.isStopFrame = false;
+                break;
+            }
+        }
+        this.framePool.frames[index].isStopFrame = true;
+    }
+
+    public setFirstFrameToStop() {
+        this.setStopFrame(0);
+    }
+
+    public setLastFrameToStop() {
+        this.setStopFrame(this.framePool.frames.length - 1);
+    }
+
+    public resetStopFrame() {
+        for (let i = 0; i < this.framePool.frames.length; i++) {
+            this.framePool.frames[i].isStopFrame = false;
+        }
+    }
+
+    public setStartFrame(index: number) {
+        this.framePool.startFrame = index;
     }
 
     public drawFrame(x: number, y: number) {

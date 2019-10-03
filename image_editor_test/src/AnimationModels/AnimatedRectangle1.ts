@@ -20,6 +20,6 @@ export class AnimatedRectangle1 extends AbstractFramedShape {
             this.customScreen.setLineWidth(10);
             this.customScreen.drawRectangle(width / 2 - i, height / 2 - i, i * 2, i * 2);
         }
-        this.customScreen.setDelayToFrame(this.customScreen.getFramePool().frames.length - 1, -1);
+        this.customScreen.setLastFrameToStop();
     }
 }

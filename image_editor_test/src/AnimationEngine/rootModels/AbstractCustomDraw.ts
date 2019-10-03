@@ -75,4 +75,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     set elementY(value: number) {
         this._elementY = value;
     }
+
+    public resetStopFrame() {
+        this.customScreen.resetStopFrame();
+    }
 }
