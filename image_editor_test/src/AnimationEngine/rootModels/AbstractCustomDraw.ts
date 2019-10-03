@@ -85,6 +85,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
         this.customScreen.setReverseToPlay();
     }
 
+    public setAnimationOriginal() {
+        this.customScreen.setOriginalToPlay();
+    }
+
     setVirtualCanvas(name: string): HTMLCanvasElement {
         return this.customScreen.setVirtualCanvas(name, this.elementHeight, this.elementWidth);
     }

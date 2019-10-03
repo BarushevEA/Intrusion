@@ -212,6 +212,7 @@ export class CustomScreen {
     }
 
     public resetStopFrame() {
+        this.framePool.playedFrames = this.framePool.originalFrames;
         for (let i = 0; i < this.framePool.playedFrames.length; i++) {
             this.framePool.playedFrames[i].isStopFrame = false;
         }
