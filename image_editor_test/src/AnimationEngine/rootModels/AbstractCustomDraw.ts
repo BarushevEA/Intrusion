@@ -78,4 +78,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     public resetStopFrame() {
         this.customScreen.resetStopFrame();
     }
+
+    public setAnimationReverse() {
+        this.customScreen.setReverseToPlay();
+    }
 }

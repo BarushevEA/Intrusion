@@ -12,6 +12,7 @@ export class AnimatedRectangle1 extends AbstractFramedShape {
     protected initShape(): void {
         const width = 100;
         const height = 100;
+        this.customScreen.setFrame(height, width, 0);
         for (let i = 0; i < 50; i += 4) {
             this.customScreen.setFrame(height, width, 0);
             this.customScreen.setColors(

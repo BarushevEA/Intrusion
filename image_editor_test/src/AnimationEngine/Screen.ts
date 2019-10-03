@@ -268,10 +268,12 @@ export class CustomScreen {
 
     setReverseToPlay() {
         this.framePool.playedFrames = this.framePool.reverseFrames;
+        this.framePool.showedFrame = this.framePool.startFrame;
     }
 
     setOriginalToPlay() {
         this.framePool.playedFrames = this.framePool.originalFrames;
+        this.framePool.showedFrame = this.framePool.startFrame;
     }
 
     setShowedFrame(index: number) {

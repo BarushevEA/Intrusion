@@ -42,6 +42,7 @@ export class TestScene extends AbstractScene {
 
         setTimeout(() => {
             arr[0].resetStopFrame();
+            arr[11].setAnimationReverse();
         }, 5000);
 
         arr.forEach(el => this.setActor(el));
