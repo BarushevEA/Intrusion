@@ -50,7 +50,9 @@ export class CTMObservable<T> implements IObserver<T> {
     next(value: T): void {
         this._value = value;
         Object.keys(this.listeners).forEach(key => {
-            this.listeners[key](this._value);
+            if (this.listeners[key]) {
+                this.listeners[key](this._value);
+            }
         });
     }
 

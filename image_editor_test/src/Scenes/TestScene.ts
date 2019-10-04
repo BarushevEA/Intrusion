@@ -70,7 +70,7 @@ export class TestScene extends AbstractScene {
         }
 
         arr.forEach(el => {
-            el.isMouseOver$.subscribe(isOver => {
+            this.setToCollector(el.isMouseOver$.subscribe(isOver => {
                 if (isOver) {
                     el.setAnimationReverse();
                     // setTimeout(() => {
@@ -79,14 +79,18 @@ export class TestScene extends AbstractScene {
                 } else {
                     el.setAnimationOriginal();
                 }
-            });
+            }));
         });
 
-        arr[59].isMouseClick$.subscribe(() => {
+        this.setToCollector(arr[59].isMouseClick$.subscribe(() => {
             arr.forEach(el => {
                 el.setAnimationReverse();
             });
-        });
+        }));
+        this.setToCollector(arr[59].isMouseClick$.subscribe(() => {
+            console.log('TEST SUBSCRIBE');
+            this.destroy();
+        }));
 
         requestAnimationFrame(recMove);
     }

@@ -134,6 +134,12 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     }
 
     destroy() {
-        this.subscribers.forEach(subscribe => subscribe.unsubscribe());
+        for (let i = 0; i < this.subscribers.length; i++) {
+            const subscriber = this.subscribers.pop();
+            if (subscriber) {
+                subscriber.unsubscribe();
+            }
+        }
+        this.subscribers.length = 0;
     }
 }

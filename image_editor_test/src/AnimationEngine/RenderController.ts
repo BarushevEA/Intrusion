@@ -49,10 +49,13 @@ class RenderController implements IRenderController {
 
     public destroyElements(): void {
         this.renderStop();
-        this.elementsPool.forEach(element => {
-            element.destroy();
-        });
-        this.elementsPool = [];
+        for (let i = 0; i <  this.elementsPool.length; i++) {
+            const element =  this.elementsPool.pop();
+            if (element) {
+                element.destroy();
+            }
+        }
+        this.elementsPool.length = 0;
     }
 }
 
