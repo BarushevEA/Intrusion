@@ -38,6 +38,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     setMouseLocation(event: MouseEvent): void {
+        event.stopImmediatePropagation();
         const x = (event.clientX - this.customCanvas.offsetLeft);
         const y = (event.clientY - this.customCanvas.offsetTop);
         mousePosition.x = x;
