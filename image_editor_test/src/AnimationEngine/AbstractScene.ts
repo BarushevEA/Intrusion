@@ -1,7 +1,13 @@
 import {IRenderController} from "./RenderController";
 import {AbstractCustomDraw} from "./rootModels/AbstractCustomDraw";
 
-export abstract class AbstractScene {
+export type IScene = {
+    renderStart(): void;
+    renderStop(): void;
+    destroy(): void;
+}
+
+export abstract class AbstractScene implements IScene {
     protected renderController: IRenderController;
     protected customCanvas: HTMLCanvasElement;
     protected actors: AbstractCustomDraw[] = [];
@@ -16,6 +22,7 @@ export abstract class AbstractScene {
         this.actors.push(actor);
         this.renderController.setDrawElement(actor);
     }
+
     protected abstract createScene(): void;
 
     public renderStart(): void {
@@ -25,5 +32,9 @@ export abstract class AbstractScene {
     public renderStop(): void {
         this.renderController.renderStop();
         this.actors.forEach(actor => this.renderController.deleteDrawElement(actor.name));
+    }
+
+    public destroy(): void {
+        this.renderController.destroyElements();
     }
 }

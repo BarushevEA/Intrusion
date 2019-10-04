@@ -6,6 +6,7 @@ export type IRenderController = {
     renderStart(): void;
     renderStop(): void;
     deleteDrawElement(name: string): void;
+    destroyElements(): void;
 }
 
 
@@ -44,6 +45,14 @@ class RenderController implements IRenderController {
         this.elementsPool = this.elementsPool.filter(element => {
             return element.name !== name;
         });
+    }
+
+    public destroyElements(): void {
+        this.renderStop();
+        this.elementsPool.forEach(element => {
+            element.destroy();
+        });
+        this.elementsPool = [];
     }
 }
 
