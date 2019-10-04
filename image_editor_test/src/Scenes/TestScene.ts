@@ -82,6 +82,12 @@ export class TestScene extends AbstractScene {
             });
         });
 
+        arr[59].isMouseClick$.subscribe(() => {
+            arr.forEach(el => {
+                el.setAnimationReverse();
+            });
+        });
+
         requestAnimationFrame(recMove);
     }
 }

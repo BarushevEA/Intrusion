@@ -2,7 +2,7 @@ import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
 import {renderController} from "../AnimationEngine/RenderController";
 import {TestScene} from "../Scenes/TestScene";
-import {mousePosition$} from "../Store/EventStore";
+import {mouseClickPosition$, mouseMovePosition$} from "../Store/EventStore";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -17,7 +17,8 @@ export type IMousePosition = {
     y: number;
 }
 
-export const mousePosition: IMousePosition = {x: 0, y: 0};
+export const mouseMovePosition: IMousePosition = {x: 0, y: 0};
+export const mouseClickPosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
     customCanvas: HTMLCanvasElement;
@@ -34,16 +35,26 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customStyle = document.createElement('style');
         this.renderController.setCanvas(this.customCanvas);
         this.customInit(shadow);
-        this.customCanvas.addEventListener('mousemove', this.setMouseLocation.bind(this));
+        this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
+        this.customCanvas.addEventListener('click', this.setMouseClickLocation.bind(this));
     }
 
-    setMouseLocation(event: MouseEvent): void {
+    setMouseMoveLocation(event: MouseEvent): void {
         event.stopImmediatePropagation();
         const x = (event.clientX - this.customCanvas.offsetLeft);
         const y = (event.clientY - this.customCanvas.offsetTop);
-        mousePosition.x = x;
-        mousePosition.y = y;
-        mousePosition$.next(mousePosition);
+        mouseMovePosition.x = x;
+        mouseMovePosition.y = y;
+        mouseMovePosition$.next(mouseMovePosition);
+    }
+
+    setMouseClickLocation(event: MouseEvent): void {
+        event.stopImmediatePropagation();
+        const x = (event.clientX - this.customCanvas.offsetLeft);
+        const y = (event.clientY - this.customCanvas.offsetTop);
+        mouseClickPosition.x = x;
+        mouseClickPosition.y = y;
+        mouseClickPosition$.next(mouseClickPosition);
     }
 
     private customInit(shadow: ShadowRoot): void {

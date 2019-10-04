@@ -1,4 +1,5 @@
 import {CTMObservable} from "../CustomeLibraries/CTMObservable";
 import {IMousePosition} from "../CustomeDomComponent/AppAnimation";
 
-export const mousePosition$ = new CTMObservable(<IMousePosition>{x: 0, y: 0});
+export const mouseMovePosition$ = new CTMObservable(<IMousePosition>{x: 0, y: 0});
+export const mouseClickPosition$ = new CTMObservable(<IMousePosition>{x: 0, y: 0});

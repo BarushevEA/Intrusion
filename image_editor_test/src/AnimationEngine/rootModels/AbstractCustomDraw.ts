@@ -1,5 +1,5 @@
 import {CustomScreen, IDimensions, IFramePool} from "../Screen";
-import {mousePosition$} from "../../Store/EventStore";
+import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObservable";
 
@@ -26,16 +26,35 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new CTMObservable(<boolean>false);
+    public isMouseClick$ = new CTMObservable(<boolean>false);
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this.elementHeight = height;
         this.elementWidth = width;
         this.customCanvas = canvas;
         this.customScreen = new CustomScreen(this.customCanvas);
-        this.subscribers.push(mousePosition$.subscribe(this.mouseOver.bind(this)));
+        this.subscribers.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
+        this.subscribers.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
     }
 
     private mouseOver(position: IMousePosition) {
+        let isOver = this.checkOverPosition(position);
+
+        if (isOver != this.isMouseOver) {
+            this.isMouseOver = isOver;
+            this.isMouseOver$.next(isOver);
+        }
+    }
+
+    private mouseClick(position: IMousePosition) {
+        let isOver = this.checkOverPosition(position);
+
+        if (isOver) {
+            this.isMouseClick$.next(isOver);
+        }
+    }
+
+    private checkOverPosition(position: IMousePosition): boolean {
         let isOver = false;
         if (
             position.x >= this._elementX &&
@@ -45,11 +64,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
         ) {
             isOver = true;
         }
-
-        if (isOver != this.isMouseOver) {
-            this.isMouseOver = isOver;
-            this.isMouseOver$.next(isOver);
-        }
+        return isOver;
     }
 
     public abstract renderFrame(): void;
