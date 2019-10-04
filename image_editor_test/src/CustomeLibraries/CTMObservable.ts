@@ -1,7 +1,7 @@
 export type ICallback = (value?: any) => void;
 
 export type ISubscribe = {
-    subscribe(callback: ICallback): number;
+    subscribe(callback: ICallback): ISubscriptionLike;
 }
 
 export type IUnSubscribe = {
@@ -14,6 +14,24 @@ export type INotify = {
 
 export type IListeners = {
     [key: string]: ICallback;
+}
+
+export type ISubscriptionLike = {
+    unsubscribe(): void;
+};
+
+class SubscriberLike implements ISubscriptionLike {
+    private readonly observable: IUnSubscribe;
+    private readonly index: number;
+
+    constructor(callback: IUnSubscribe, index: number) {
+        this.observable = callback;
+        this.index = index;
+    }
+
+    public unsubscribe(): void {
+        this.observable.unSubscribe(this.index);
+    }
 }
 
 export type IObserver<T> = INotify & ISubscribe & IUnSubscribe & {
@@ -48,9 +66,9 @@ export class CTMObservable<T> implements IObserver<T> {
         return this._value;
     }
 
-    subscribe(callback: ICallback): number {
+    subscribe(callback: ICallback): ISubscriptionLike {
         this.indexCounter++;
         this.listeners[this.indexCounter] = callback;
-        return this.indexCounter;
+        return new SubscriberLike(this, this.indexCounter);
     }
 }

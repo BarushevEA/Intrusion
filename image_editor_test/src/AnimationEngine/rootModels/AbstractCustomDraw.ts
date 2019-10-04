@@ -1,7 +1,7 @@
 import {CustomScreen, IDimensions, IFramePool} from "../Screen";
 import {mousePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
-import {CTMObservable} from "../../CustomeLibraries/CTMObservable";
+import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObservable";
 
 //TODO frame pool technology need to use for lot of entities of class
 
@@ -23,7 +23,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     protected elementWidth = 0;
     protected elementHeight = 0;
     public name = '';
-    private readonly moseMoveId: number;
+    private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new CTMObservable(<boolean>false);
 
@@ -32,7 +32,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
         this.elementWidth = width;
         this.customCanvas = canvas;
         this.customScreen = new CustomScreen(this.customCanvas);
-        this.moseMoveId = mousePosition$.subscribe(this.mouseOver.bind(this))
+        this.subscribers.push(mousePosition$.subscribe(this.mouseOver.bind(this)));
     }
 
     private mouseOver(position: IMousePosition) {
@@ -119,6 +119,6 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     }
 
     destroy() {
-        mousePosition$.unSubscribe(this.moseMoveId);
+        this.subscribers.forEach(subscribe => subscribe.unsubscribe());
     }
 }
