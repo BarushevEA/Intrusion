@@ -1,4 +1,7 @@
 import {CustomScreen, IDimensions, IFramePool} from "../Screen";
+import {mousePosition$} from "../../Store/EventStore";
+import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
+import {CTMObservable} from "../../CustomeLibraries/CTMObservable";
 
 //TODO frame pool technology need to use for lot of entities of class
 
@@ -6,6 +9,7 @@ export type ICustomDraw = {
     name: string;
     renderFrame(): void;
     setName(name: string): void;
+    destroy(): void;
 }
 
 export abstract class AbstractCustomDraw implements ICustomDraw {
@@ -19,12 +23,33 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     protected elementWidth = 0;
     protected elementHeight = 0;
     public name = '';
+    private readonly moseMoveId: number;
+    private isMouseOver = false;
+    public isMouseOver$ = new CTMObservable(<boolean>false);
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this.elementHeight = height;
         this.elementWidth = width;
         this.customCanvas = canvas;
         this.customScreen = new CustomScreen(this.customCanvas);
+        this.moseMoveId = mousePosition$.subscribe(this.mouseOver.bind(this))
+    }
+
+    private mouseOver(position: IMousePosition) {
+        let isOver = false;
+        if (
+            position.x >= this._elementX &&
+            position.x <= (this._elementX + this.elementWidth) &&
+            position.y >= this._elementY &&
+            position.y <= (this._elementY + this.elementHeight)
+        ) {
+            isOver = true;
+        }
+
+        if (isOver != this.isMouseOver) {
+            this.isMouseOver = isOver;
+            this.isMouseOver$.next(isOver);
+        }
     }
 
     public abstract renderFrame(): void;
@@ -91,5 +116,9 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
 
     setVirtualCanvas(name: string): HTMLCanvasElement {
         return this.customScreen.setVirtualCanvas(name, this.elementHeight, this.elementWidth);
+    }
+
+    destroy() {
+        mousePosition$.unSubscribe(this.moseMoveId);
     }
 }

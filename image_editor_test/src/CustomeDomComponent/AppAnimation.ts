@@ -2,6 +2,7 @@ import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
 import {renderController} from "../AnimationEngine/RenderController";
 import {TestScene} from "../Scenes/TestScene";
+import {mousePosition$} from "../Store/EventStore";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -10,6 +11,13 @@ export type IAppAnimation = {
     cssPool: ICssPool;
     toggleColors(): void;
 };
+
+export type IMousePosition = {
+    x: number;
+    y: number;
+}
+
+export const mousePosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
     customCanvas: HTMLCanvasElement;
@@ -26,6 +34,15 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customStyle = document.createElement('style');
         this.renderController.setCanvas(this.customCanvas);
         this.customInit(shadow);
+        this.customCanvas.addEventListener('mousemove', this.setMouseLocation.bind(this));
+    }
+
+    setMouseLocation(event: MouseEvent): void {
+        const x = (event.clientX - this.customCanvas.offsetLeft);
+        const y = (event.clientY - this.customCanvas.offsetTop);
+        mousePosition.x = x;
+        mousePosition.y = y;
+        mousePosition$.next(mousePosition);
     }
 
     private customInit(shadow: ShadowRoot): void {
@@ -37,6 +54,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         shadow.appendChild(this.customWrapper);
         this.customWrapper.appendChild(this.customCanvas);
     }
+
 
     addCustomEventResizeCustomWrapperListener(callback: () => void) {
         let wrapperWidth = 0;

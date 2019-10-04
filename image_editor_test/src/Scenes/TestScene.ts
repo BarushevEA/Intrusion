@@ -40,22 +40,24 @@ export class TestScene extends AbstractScene {
             }
         };
 
-        let isReverse = true;
+        // let isReverse = true;
+        //
+        // setInterval(() => {
+        //     if (isReverse) {
+        //         arr.forEach(el => {
+        //             el.setAnimationReverse();
+        //         });
+        //     } else {
+        //         arr.forEach(el => {
+        //             el.setAnimationOriginal();
+        //         });
+        //     }
+        //     isReverse = !isReverse;
+        // }, 5000);
 
-        setInterval(() => {
-            if (isReverse) {
-                arr.forEach(el => {
-                    el.setAnimationReverse();
-                });
-            } else {
-                arr.forEach(el => {
-                    el.setAnimationOriginal();
-                });
-            }
-            isReverse = !isReverse;
-        }, 5000);
-
-        arr.forEach(el => this.setActor(el));
+        arr.forEach(el => {
+            this.setActor(el)
+        });
 
         const snakeSpiral = new SnakeSpiral(this.customCanvas);
         snakeSpiral.setName('spaceSpiral');
@@ -66,6 +68,20 @@ export class TestScene extends AbstractScene {
             circle.setName('circles' + i);
             this.setActor(circle);
         }
+
+        arr.forEach(el => {
+            el.isMouseOver$.subscribe(isOver => {
+                if (isOver) {
+                    el.setAnimationReverse();
+                    // setTimeout(() => {
+                    //     el.setAnimationOriginal();
+                    // }, 300);
+                } else {
+                    el.setAnimationOriginal();
+                }
+            });
+        });
+
         requestAnimationFrame(recMove);
     }
 }

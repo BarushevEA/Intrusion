@@ -14,7 +14,7 @@ export class AnimatedRectangle1 extends AbstractFramedShape {
         for (let i = 0; i < 50; i += 4) {
             this.setFrame(0);
             this.customScreen.setColors(
-                'rgba(0,0,0,0.5)',
+                'rgba(255,255,255,0.2)',
                 'rgba(0,0,0,0.7)');
             this.customScreen.setLineWidth(10);
             this.customScreen.drawRectangle(this.elementWidth / 2 - i, this.elementWidth / 2 - i, i * 2, i * 2);
