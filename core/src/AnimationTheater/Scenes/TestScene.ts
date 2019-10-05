@@ -6,6 +6,7 @@ import {AnimatedRectangleLightGray} from "../AnimationModels/rectangles/Animated
 import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/AnimatedRectangleLightCyan";
 import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
+import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -13,7 +14,7 @@ export class TestScene extends AbstractScene {
     }
 
     protected createScene(): void {
-        const hexagon = new HexagonGreed(this.customCanvas);
+        const hexagon = new HexagonGreed(this.generalLayer);
         this.setActor(hexagon);
 
         const arr: AbstractCustomDraw[] = [];
@@ -21,12 +22,16 @@ export class TestScene extends AbstractScene {
             for (let i = 0; i < 10; i++) {
                 let rectangle0;
                 if (i === 9 && k == 5) {
-                    rectangle0 = new AnimatedRectangleLightYellow(this.customCanvas);
+                    rectangle0 = new AnimatedRectangleLightYellow(this.generalLayer);
                 } else {
                     if (i < 8) {
-                        rectangle0 = new AnimatedRectangleLightGray(this.customCanvas);
+                        rectangle0 = new AnimatedRectangleLightGray(this.generalLayer);
                     } else {
-                        rectangle0 = new AnimatedRectangleLightCyan(this.customCanvas);
+                        if (i === 8 && k == 5) {
+                            rectangle0 = new AnimatedRectangleLightRed(this.generalLayer);
+                        } else {
+                            rectangle0 = new AnimatedRectangleLightCyan(this.generalLayer);
+                        }
                     }
                 }
                 rectangle0.elementX = i * 100 - 50;
@@ -68,11 +73,11 @@ export class TestScene extends AbstractScene {
             this.setActor(el)
         });
 
-        const snakeSpiral = new SnakeSpiral(this.customCanvas);
+        const snakeSpiral = new SnakeSpiral(this.generalLayer);
         this.setActor(snakeSpiral);
 
         for (let i = 0; i < 50; i++) {
-            const circle = new MovedCircle(this.customCanvas);
+            const circle = new MovedCircle(this.generalLayer);
             this.collect(circle.isMouseOver$.subscribe(() => {
                 circle.moreSpeed();
             }));
@@ -92,9 +97,14 @@ export class TestScene extends AbstractScene {
             }));
         });
 
-        this.collect(arr[59].isMouseClick$.subscribe(() => {
-            requestAnimationFrame(recMove);
-        }));
+        this.collect(
+            arr[59].isMouseClick$.subscribe(() => {
+                requestAnimationFrame(recMove);
+            }),
+            arr[58].isMouseClick$.subscribe(() => {
+                this.renderStop();
+            })
+        );
 
         this.userData = {
             test: 123,

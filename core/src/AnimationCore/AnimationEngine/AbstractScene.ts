@@ -14,7 +14,7 @@ export type IUserData = {
 
 export abstract class AbstractScene implements IScene {
     protected renderController: IRenderController;
-    protected customCanvas: HTMLCanvasElement;
+    protected generalLayer: HTMLCanvasElement;
     protected actors: AbstractCustomDraw[] = [];
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new CTMObservable(<IUserData><any>null);
@@ -23,7 +23,7 @@ export abstract class AbstractScene implements IScene {
     private readonly _userData: IUserData = {};
 
     protected constructor(canvas: HTMLCanvasElement) {
-        this.customCanvas = canvas;
+        this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
         this.createScene();

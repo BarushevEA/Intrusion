@@ -8,11 +8,14 @@ export class SergeyScene extends AbstractScene {
     }
 
     protected createScene(): void {
-        const rectangle = new AnimatedRectangleLightRed(this.customCanvas);
+        const rectangle = new AnimatedRectangleLightRed(this.generalLayer);
         this.setActor(rectangle);
         this.collect(
             this.onSetUserData$.subscribe(() => {
                 console.log(this.userData);
+            }),
+            rectangle.isMouseClick$.subscribe(() => {
+                this.renderStop();
             })
         );
     }
