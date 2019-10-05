@@ -3,7 +3,10 @@ import {IRenderController} from "../AnimationEngine/RenderController";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
-import {AnimatedRectangle1} from "../AnimationModels/AnimatedRectangle1";
+import {AnimatedRectangleLightGray} from "../AnimationModels/AnimatedRectangleLightGray";
+import {AnimatedRectangleLightCyan} from "../AnimationModels/AnimatedRectangleLightCyan";
+import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
+import {AnimatedRectangleLightYellow} from "../AnimationModels/AnimatedRectangleLightYellow";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement, renderController: IRenderController) {
@@ -15,10 +18,19 @@ export class TestScene extends AbstractScene {
         hexagon.setName('hexagon');
         this.setActor(hexagon);
 
-        const arr: AnimatedRectangle1[] = [];
+        const arr: AbstractCustomDraw[] = [];
         for (let k = 0; k < 6; k++) {
             for (let i = 0; i < 10; i++) {
-                const rectangle0 = new AnimatedRectangle1(this.customCanvas);
+                let rectangle0;
+                if (i === 9 && k == 5) {
+                    rectangle0 = new AnimatedRectangleLightYellow(this.customCanvas);
+                } else {
+                    if (i < 8) {
+                        rectangle0 = new AnimatedRectangleLightGray(this.customCanvas);
+                    } else {
+                        rectangle0 = new AnimatedRectangleLightCyan(this.customCanvas);
+                    }
+                }
                 rectangle0.setName('rectangle' + i);
                 rectangle0.elementX = i * 100 - 50;
                 rectangle0.elementY = k * 100;
@@ -40,20 +52,20 @@ export class TestScene extends AbstractScene {
             }
         };
 
-        // let isReverse = true;
-        //
-        // setInterval(() => {
-        //     if (isReverse) {
-        //         arr.forEach(el => {
-        //             el.setAnimationReverse();
-        //         });
-        //     } else {
-        //         arr.forEach(el => {
-        //             el.setAnimationOriginal();
-        //         });
-        //     }
-        //     isReverse = !isReverse;
-        // }, 5000);
+        let isReverse = true;
+
+        setInterval(() => {
+            if (isReverse) {
+                arr.forEach(el => {
+                    el.setAnimationReverse();
+                });
+            } else {
+                arr.forEach(el => {
+                    el.setAnimationOriginal();
+                });
+            }
+            isReverse = !isReverse;
+        }, 10000);
 
         arr.forEach(el => {
             this.setActor(el)
@@ -83,15 +95,8 @@ export class TestScene extends AbstractScene {
         });
 
         this.setToCollector(arr[59].isMouseClick$.subscribe(() => {
-            arr.forEach(el => {
-                el.setAnimationReverse();
-            });
-        }));
-        this.setToCollector(arr[59].isMouseClick$.subscribe(() => {
-            console.log('TEST SUBSCRIBE');
-            this.destroy();
+            requestAnimationFrame(recMove);
         }));
 
-        requestAnimationFrame(recMove);
     }
 }
