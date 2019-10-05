@@ -1,5 +1,5 @@
 import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
-import {IPolygon} from "../AnimationEngine/Screen";
+import {IPolygon} from "../AnimationEngine/LayerHandler";
 
 const startDelta = 1000;
 
@@ -22,7 +22,7 @@ export class HexagonGreed extends AbstractCustomDraw {
             Math.round(canvas.height + startDelta * 1.2),
             Math.round(canvas.width + startDelta * 1.2));
         this.init();
-        this.customScreen.restoreCanvas();
+        this.layerHandler.restoreCanvas();
     }
 
     setName(name: string): void {
@@ -55,28 +55,28 @@ export class HexagonGreed extends AbstractCustomDraw {
         let modRadius = this.radius * this.multiplier;
 
         this.setVirtualCanvas(this.bottomLayerName);
-        this.customScreen.setLineWidth(11);
-        this.customScreen.setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
+        this.layerHandler.setLineWidth(11);
+        this.layerHandler.setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.customScreen.restoreCanvas();
+        this.layerHandler.restoreCanvas();
 
         this.setVirtualCanvas(centerLayerName);
-        this.customScreen.setLineWidth(3);
-        this.customScreen.setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
+        this.layerHandler.setLineWidth(3);
+        this.layerHandler.setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.customScreen.restoreCanvas();
+        this.layerHandler.restoreCanvas();
 
         this.setVirtualCanvas(topLayerName);
-        this.customScreen.setLineWidth(3);
-        this.customScreen.setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
+        this.layerHandler.setLineWidth(3);
+        this.layerHandler.setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.customScreen.restoreCanvas();
+        this.layerHandler.restoreCanvas();
 
-        this.customScreen.drawVirtualOnVirtualCanvas(this.bottomLayerName, centerLayerName, 3, 1);
-        this.customScreen.drawVirtualOnVirtualCanvas(this.bottomLayerName, topLayerName, 0, 0);
+        this.layerHandler.drawVirtualOnVirtualCanvas(this.bottomLayerName, centerLayerName, 3, 1);
+        this.layerHandler.drawVirtualOnVirtualCanvas(this.bottomLayerName, topLayerName, 0, 0);
 
-        this.customScreen.deleteVirtualCanvas(centerLayerName);
-        this.customScreen.deleteVirtualCanvas(topLayerName);
+        this.layerHandler.deleteVirtualCanvas(centerLayerName);
+        this.layerHandler.deleteVirtualCanvas(topLayerName);
     }
 
     private createVirtualGreed(modRadius: number, hexagon: IPolygon, modDX: number, modDY: number) {
@@ -87,7 +87,7 @@ export class HexagonGreed extends AbstractCustomDraw {
                     deltaX = modRadius;
                 }
                 let modifiedHexagon: IPolygon = this.getModified(hexagon, j * modDX + deltaX, i * modDY);
-                this.customScreen.drawPolygon(modifiedHexagon);
+                this.layerHandler.drawPolygon(modifiedHexagon);
             }
         }
     }
@@ -117,7 +117,7 @@ export class HexagonGreed extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.customScreen.drawVirtualOnRealCanvas(
+        this.layerHandler.drawVirtualOnRealCanvas(
             this.bottomLayerName,
             +this.bound + this.x + this.radius * this.multiplier + this.elementX,
             +this.bound + this.y + this.radius * this.multiplier + this.elementY,

@@ -4,10 +4,10 @@ export type IPoint = {
 };
 
 export type IDimensions = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    elementX: number;
+    elementY: number;
+    elementWidth: number;
+    elementHeight: number;
 }
 
 export type IVirtualCanvasesPool = {
@@ -31,7 +31,7 @@ export type IFramePool = {
 
 export type IPolygon = IPoint[];
 
-export class CustomScreen {
+export class LayerHandler {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private readonly savedCanvas: HTMLCanvasElement;

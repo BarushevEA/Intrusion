@@ -27,12 +27,12 @@ export class MovedCircle extends AbstractCustomDraw {
             this.radius * 2 + this.lineWidth);
 
         this.setVirtualCanvas(this.bottomLayerName);
-        this.customScreen.setLineWidth(this.lineWidth);
-        this.customScreen.setColors(
+        this.layerHandler.setLineWidth(this.lineWidth);
+        this.layerHandler.setColors(
             `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
             `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
-        this.customScreen.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
-        this.customScreen.restoreCanvas();
+        this.layerHandler.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
+        this.layerHandler.restoreCanvas();
     }
 
     renderFrame(): void {
@@ -60,7 +60,7 @@ export class MovedCircle extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.customScreen.drawVirtualOnRealCanvas(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
+        this.layerHandler.drawVirtualOnRealCanvas(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
         this.x += this.dx;
         this.y += this.dy;
         this.throttlingCounter--;

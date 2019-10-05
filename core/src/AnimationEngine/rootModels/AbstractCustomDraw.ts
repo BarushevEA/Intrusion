@@ -1,4 +1,4 @@
-import {CustomScreen, IDimensions, IFramePool} from "../Screen";
+import {LayerHandler, IDimensions, IFramePool} from "../LayerHandler";
 import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObservable";
@@ -12,16 +12,16 @@ export type ICustomDraw = {
     destroy(): void;
 }
 
-export abstract class AbstractCustomDraw implements ICustomDraw {
+export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     static _savedFramePool: { [key: string]: IFramePool } = {};
 
     protected framePoolName: string = '';
     protected customCanvas: HTMLCanvasElement;
-    protected customScreen: CustomScreen;
+    protected layerHandler: LayerHandler;
     private _elementX = 0;
     private _elementY = 0;
-    protected elementWidth = 0;
-    protected elementHeight = 0;
+    private _elementWidth = 0;
+    private _elementHeight = 0;
     public name = '';
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
@@ -29,10 +29,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     public isMouseClick$ = new CTMObservable(<boolean>false);
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
-        this.elementHeight = height;
-        this.elementWidth = width;
+        this._elementHeight = height;
+        this._elementWidth = width;
         this.customCanvas = canvas;
-        this.customScreen = new CustomScreen(this.customCanvas);
+        this.layerHandler = new LayerHandler(this.customCanvas);
         this.subscribers.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
         this.subscribers.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
     }
@@ -58,9 +58,9 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
         let isOver = false;
         if (
             position.x >= this._elementX &&
-            position.x <= (this._elementX + this.elementWidth) &&
+            position.x <= (this._elementX + this._elementWidth) &&
             position.y >= this._elementY &&
-            position.y <= (this._elementY + this.elementHeight)
+            position.y <= (this._elementY + this._elementHeight)
         ) {
             isOver = true;
         }
@@ -89,12 +89,12 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
     }
 
     protected setSize(height: number, width: number): void {
-        this.elementHeight = height;
-        this.elementWidth = width;
+        this._elementHeight = height;
+        this._elementWidth = width;
     }
 
     public getDimensions(): IDimensions {
-        return {x: this._elementX, y: this._elementY, height: this.elementHeight, width: this.elementWidth}
+        return {elementX: this._elementX, elementY: this._elementY, elementHeight: this._elementHeight, elementWidth: this._elementWidth}
     }
 
     randomize(num: number): number {
@@ -117,20 +117,36 @@ export abstract class AbstractCustomDraw implements ICustomDraw {
         this._elementY = value;
     }
 
+    get elementWidth(): number {
+        return this._elementWidth;
+    }
+
+    set elementWidth(value: number) {
+        this._elementWidth = value;
+    }
+
+    get elementHeight(): number {
+        return this._elementHeight;
+    }
+
+    set elementHeight(value: number) {
+        this._elementHeight = value;
+    }
+
     public resetStopFrame() {
-        this.customScreen.resetStopFrame();
+        this.layerHandler.resetStopFrame();
     }
 
     public setAnimationReverse() {
-        this.customScreen.setReverseToPlay();
+        this.layerHandler.setReverseToPlay();
     }
 
     public setAnimationOriginal() {
-        this.customScreen.setOriginalToPlay();
+        this.layerHandler.setOriginalToPlay();
     }
 
     setVirtualCanvas(name: string): HTMLCanvasElement {
-        return this.customScreen.setVirtualCanvas(name, this.elementHeight, this.elementWidth);
+        return this.layerHandler.setVirtualCanvas(name, this._elementHeight, this._elementWidth);
     }
 
     destroy() {

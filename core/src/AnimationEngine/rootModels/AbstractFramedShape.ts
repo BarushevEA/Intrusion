@@ -9,17 +9,17 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
 
     private init() {
         if (this.framePool) {
-            this.customScreen.setFramePool(this.framePool);
+            this.layerHandler.setFramePool(this.framePool);
             return;
         }
         this.initShape();
-        this.customScreen.setOriginal();
-        this.customScreen.setReverse();
-        this.customScreen.setReverseToPlay();
-        this.customScreen.setLastFrameToStop();
-        this.customScreen.setOriginalToPlay();
-        this.framePool = this.customScreen.getFramePool();
-        this.customScreen.restoreCanvas();
+        this.layerHandler.setOriginal();
+        this.layerHandler.setReverse();
+        this.layerHandler.setReverseToPlay();
+        this.layerHandler.setLastFrameToStop();
+        this.layerHandler.setOriginalToPlay();
+        this.framePool = this.layerHandler.getFramePool();
+        this.layerHandler.restoreCanvas();
     }
 
     protected abstract setFramesName(): void;
@@ -31,10 +31,10 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
     }
 
     setFrame(delay: number) {
-        this.customScreen.setFrame(this.elementHeight, this.elementWidth, delay);
+        this.layerHandler.setFrame(this.elementHeight, this.elementWidth, delay);
     }
 
     renderFrame(): void {
-        this.customScreen.drawFrame(this.elementX, this.elementY);
+        this.layerHandler.drawFrame(this.elementX, this.elementY);
     }
 }
