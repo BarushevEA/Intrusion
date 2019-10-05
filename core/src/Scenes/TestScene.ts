@@ -3,10 +3,10 @@ import {IRenderController} from "../AnimationEngine/RenderController";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
-import {AnimatedRectangleLightGray} from "../AnimationModels/AnimatedRectangleLightGray";
-import {AnimatedRectangleLightCyan} from "../AnimationModels/AnimatedRectangleLightCyan";
+import {AnimatedRectangleLightGray} from "../AnimationModels/rectangles/AnimatedRectangleLightGray";
+import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/AnimatedRectangleLightCyan";
 import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
-import {AnimatedRectangleLightYellow} from "../AnimationModels/AnimatedRectangleLightYellow";
+import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement, renderController: IRenderController) {

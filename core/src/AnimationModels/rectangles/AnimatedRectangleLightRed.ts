@@ -1,12 +1,12 @@
-import {AbstractFramedShape} from "../AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../AnimationEngine/rootModels/AbstractFramedShape";
 
-export class AnimatedRectangleLightYellow extends AbstractFramedShape {
+export class AnimatedRectangleLightRed extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 100, 100);
     }
 
     protected setFramesName(): void {
-        this.setFramePoolName('AnimatedRectangleLightYellow');
+        this.setFramePoolName('AnimatedRectangleLightRed');
     }
 
     protected initShape(): void {
@@ -14,7 +14,7 @@ export class AnimatedRectangleLightYellow extends AbstractFramedShape {
         for (let i = 0; i < 50; i += 4) {
             this.setFrame(0);
             this.customScreen.setColors(
-                'rgba(255,255,0,0.3)',
+                'rgba(255,0,0,0.3)',
                 'rgba(0,0,0,0.7)');
             this.customScreen.setLineWidth(10);
             this.customScreen.drawRectangle(this.elementWidth / 2 - i, this.elementWidth / 2 - i, i * 2, i * 2);
