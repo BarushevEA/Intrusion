@@ -1,5 +1,11 @@
 import {AbstractCustomDraw} from "./AbstractCustomDraw";
 
+/**
+ * WARNING !!!
+ * DO not create empty frame with this.createFrame(0), it is wrong flow;
+ * Create empty frame with this.createEmptyFrame();
+ **/
+
 export abstract class AbstractFramedShape extends AbstractCustomDraw {
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         super(canvas, height, width);
@@ -30,8 +36,20 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
         this.name = name;
     }
 
-    setFrame(delay: number) {
-        this.layerHandler.setFrame(this.elementHeight, this.elementWidth, delay);
+    protected createFrame(delay: number) {
+        this.layerHandler.createFrame(this.elementHeight, this.elementWidth, delay);
+    }
+
+    protected setLastFrameToStop() {
+        this.layerHandler.setLastFrameToStop();
+    }
+
+    protected createEmptyFrame(): void {
+        this.createFrame(0);
+        this.setColors(
+            'rgba(0,255,0,0)',
+            'rgba(0,255,0,0)');
+        this.drawSimpleCircle(0, 0, 1);
     }
 
     renderFrame(): void {

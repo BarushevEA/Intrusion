@@ -74,7 +74,7 @@ export class LayerHandler {
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
     }
 
-    public setColors(backgroundColor: string, borderColor: string) {
+    public setColors(backgroundColor: string, borderColor: string): void {
         this.context.fillStyle = backgroundColor;
         this.context.strokeStyle = borderColor;
     }
@@ -149,7 +149,7 @@ export class LayerHandler {
         delete this.virtualPool[name1];
     }
 
-    setFrame(height: number, width: number, delay = 0): void {
+    createFrame(height: number, width: number, delay = 0): void {
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
@@ -260,8 +260,8 @@ export class LayerHandler {
     }
 
     setReverse(): void {
-        const lastIndex = this.framePool.playedFrames.length;
-        for (let i = 0; i < lastIndex; i++) {
+        const lastIndex = this.framePool.playedFrames.length - 1;
+        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
             const frame = {...this.framePool.playedFrames[lastIndex - i]};
             this.framePool.reverseFrames.push(frame);
         }

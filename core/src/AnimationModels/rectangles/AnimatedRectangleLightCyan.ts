@@ -10,15 +10,17 @@ export class AnimatedRectangleLightCyan extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        this.setFrame(0);
+        this.createFrame(0);
+        // this.createFrame(0); //for firefox
         for (let i = 0; i < 50; i += 4) {
-            this.setFrame(0);
-            this.layerHandler.setColors(
+            this.createFrame(0);
+            this.setColors(
                 'rgba(0,200,255,0.3)',
                 'rgba(0,0,0,0.7)');
-            this.layerHandler.setLineWidth(10);
-            this.layerHandler.drawRectangle(this.elementWidth / 2 - i, this.elementWidth / 2 - i, i * 2, i * 2);
+            this.setLineWidth(10);
+            this.drawRectangle(this.elementWidth / 2 - i,
+                this.elementWidth / 2 - i, i * 2, i * 2);
         }
-        this.layerHandler.setLastFrameToStop();
+        this.setLastFrameToStop();
     }
 }

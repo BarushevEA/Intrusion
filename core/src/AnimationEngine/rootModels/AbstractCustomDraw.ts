@@ -1,4 +1,4 @@
-import {LayerHandler, IDimensions, IFramePool} from "../LayerHandler";
+import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler";
 import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObservable";
@@ -94,7 +94,12 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     public getDimensions(): IDimensions {
-        return {elementX: this._elementX, elementY: this._elementY, elementHeight: this._elementHeight, elementWidth: this._elementWidth}
+        return {
+            elementX: this._elementX,
+            elementY: this._elementY,
+            elementHeight: this._elementHeight,
+            elementWidth: this._elementWidth
+        }
     }
 
     randomize(num: number): number {
@@ -143,6 +148,33 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     public setAnimationOriginal() {
         this.layerHandler.setOriginalToPlay();
+    }
+
+    protected setLineWidth(width: number) {
+        this.layerHandler.setLineWidth(width);
+    }
+
+    protected setColors(backgroundColor: string,
+                        borderColor: string): void {
+        this.layerHandler.setColors(
+            backgroundColor,
+            borderColor
+        );
+    }
+
+    protected drawSimpleCircle(x: number, y: number, radius: number): void {
+        this.layerHandler.drawSimpleCircle(x, y, radius);
+    }
+
+    protected drawPolygon(polygon: IPolygon): void {
+        this.layerHandler.drawPolygon(polygon);
+    }
+
+    protected drawRectangle(x: number,
+                            y: number,
+                            width: number,
+                            height: number): void {
+        this.layerHandler.drawRectangle(x, y, width, height);
     }
 
     setVirtualLayer(name: string): HTMLCanvasElement {
