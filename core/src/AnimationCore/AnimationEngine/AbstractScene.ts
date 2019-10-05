@@ -57,8 +57,10 @@ export abstract class AbstractScene implements IScene {
         this.renderController.setDrawElement(actor);
     }
 
-    public collect(subscriber: ISubscriptionLike) {
-        this.collector.push(subscriber);
+    public collect(...subscribers: ISubscriptionLike[]) {
+        for (let i = 0; i < subscribers.length; i++) {
+            this.collector.push(subscribers[i]);
+        }
     }
 
     protected abstract createScene(): void;

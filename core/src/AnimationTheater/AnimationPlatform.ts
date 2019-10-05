@@ -15,8 +15,7 @@ export class AnimationPlatform extends AbstractPlatform {
             test.onDestroy$.subscribe((data) => {
                 sergScene.userData = data;
                 sergScene.renderStart();
-            }));
-        test.collect(
+            }),
             test.onStop$.subscribe(() => {
                 setTimeout(() => {
                     test.renderStart();
@@ -24,7 +23,15 @@ export class AnimationPlatform extends AbstractPlatform {
                         test.destroy();
                     }, 5000);
                 }, 5000);
-            }));
+            })
+        );
+        sergScene.collect(
+            sergScene.onSetUserData$.subscribe(() => {
+                setTimeout(() => {
+                    sergScene.destroy();
+                }, 5000);
+            })
+        );
         setTimeout(() => {
             test.renderStop();
         }, 5000);
