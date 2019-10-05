@@ -1,4 +1,4 @@
-import {AbstractScene} from "../AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 
 export class SergeyScene extends AbstractScene {

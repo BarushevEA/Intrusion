@@ -1,10 +1,10 @@
-import {AbstractScene} from "../AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
 import {AnimatedRectangleLightGray} from "../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/AnimatedRectangleLightCyan";
-import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 
 export class TestScene extends AbstractScene {

@@ -1,5 +1,5 @@
-import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
-import {IPolygon} from "../AnimationEngine/LayerHandler";
+import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler";
 
 const startDelta = 1000;
 

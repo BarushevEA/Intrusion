@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
 
 export class MovedCircle extends AbstractCustomDraw {
     maxStep = 7;

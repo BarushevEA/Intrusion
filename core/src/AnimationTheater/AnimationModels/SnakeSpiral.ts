@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "../AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
 export class SnakeSpiral extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {

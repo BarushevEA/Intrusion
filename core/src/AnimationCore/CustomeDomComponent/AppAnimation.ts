@@ -1,7 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
 import {mouseClickPosition$, mouseMovePosition$} from "../Store/EventStore";
-import {TestScene} from "../Scenes/TestScene";
+import {AnimationPlatform} from "../../AnimationTheater/AnimationPlatform";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -105,19 +105,8 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private renderCanvas() {
-        const test = new TestScene(this.customCanvas);
-        test.renderStart();
-        setTimeout(() => {
-            test.renderStop();
-            setTimeout(() => {
-                test.renderStart();
-            }, 5000);
-        }, 5000);
-        // setTimeout(() => {
-        //     test.destroy();
-        //     const sergScene = new SergeyScene(this.customCanvas, this.renderController);
-        //     sergScene.renderStart();
-        // }, 15000);
+        const platform = new AnimationPlatform(this.customCanvas);
+        platform.create();
     }
 
     private setCanvasSize() {
