@@ -8,7 +8,7 @@ export type IUnSubscribe = {
     unSubscribe(index: number): void;
 }
 
-export type INotify = {
+export type ISetObservableValue = {
     next(value: any): void;
 }
 
@@ -34,7 +34,7 @@ class SubscriberLike implements ISubscriptionLike {
     }
 }
 
-export type IObserver<T> = INotify & ISubscribe & IUnSubscribe & {
+export type IObserver<T> = ISetObservableValue & ISubscribe & IUnSubscribe & {
     getValue(): T;
 };
 
