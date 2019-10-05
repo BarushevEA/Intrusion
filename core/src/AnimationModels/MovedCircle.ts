@@ -1,8 +1,6 @@
 import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
 
 export class MovedCircle extends AbstractCustomDraw {
-    // x = 0;
-    // y = 0;
     maxStep = 7;
     dx = this.randomize(this.maxStep) + 1;
     dy = this.randomize(this.maxStep) + 1;
@@ -18,8 +16,8 @@ export class MovedCircle extends AbstractCustomDraw {
     }
 
     public moreSpeed() {
-        this.dx *= 2;
-        this.dy *= 2;
+        this.dx *= 5;
+        this.dy *= 5;
     }
 
     setName(name: string): void {

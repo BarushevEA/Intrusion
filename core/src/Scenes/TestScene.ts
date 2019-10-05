@@ -78,6 +78,9 @@ export class TestScene extends AbstractScene {
         for (let i = 0; i < 50; i++) {
             const circle = new MovedCircle(this.customCanvas);
             circle.setName('circles' + i);
+            this.setToCollector(circle.isMouseOver$.subscribe(() => {
+                circle.moreSpeed();
+            }));
             this.setActor(circle);
         }
 
