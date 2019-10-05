@@ -27,25 +27,25 @@ export class MovedCircle extends AbstractCustomDraw {
             this.radius * 2 + this.lineWidth);
 
         this.setVirtualLayer(this.bottomLayerName);
-        this.layerHandler.setLineWidth(this.lineWidth);
-        this.layerHandler.setColors(
+        this.setLineWidth(this.lineWidth);
+        this.setColors(
             `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
             `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
-        this.layerHandler.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
-        this.layerHandler.restoreLayer();
+        this.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
+        this.restorePreviousLayer();
     }
 
     renderFrame(): void {
         if (this.x <= 0) {
             this.dx = this.randomize(this.maxStep);
         }
-        if (this.x >= this.customCanvas.width - this.radiusCalc) {
+        if (this.x >= this.generalLayer.width - this.radiusCalc) {
             this.dx = -1 * this.randomize(this.maxStep);
         }
         if (this.y <= 0) {
             this.dy = this.randomize(this.maxStep);
         }
-        if (this.y >= this.customCanvas.height - this.radiusCalc) {
+        if (this.y >= this.generalLayer.height - this.radiusCalc) {
             this.dy = -1 * this.randomize(this.maxStep);
         }
 
@@ -60,7 +60,7 @@ export class MovedCircle extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.layerHandler.drawVirtualOnGeneral(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
+        this.drawVirtualOnGeneral(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
         this.x += this.dx;
         this.y += this.dy;
         this.throttlingCounter--;

@@ -110,7 +110,7 @@ export class LayerHandler {
         this.stopDrawing();
     }
 
-    public restoreLayer(): void {
+    public restorePreviousLayer(): void {
         this.canvas = this.savedCanvas;
         this.context = this.savedContext;
     }
@@ -124,7 +124,7 @@ export class LayerHandler {
         return this.canvas;
     }
 
-    drawVirtualOnGeneral(name: string,
+    drawVirtualOnGeneral(sourceName: string,
                          x: number,
                          y: number,
                          width = -1,
@@ -135,18 +135,21 @@ export class LayerHandler {
                          heightD = -1
     ): void {
         if (width > -1 && height > -1 && xD > -1 && yD > -1 && widthD > -1 && heightD > -1) {
-            this.savedContext.drawImage(this.virtualPool[name].canvas, x, y, width, height, xD, yD, widthD, heightD);
+            this.savedContext.drawImage(this.virtualPool[sourceName].canvas,
+                x, y, width, height, xD, yD, widthD, heightD);
         } else {
-            this.savedContext.drawImage(this.virtualPool[name].canvas, x, y);
+            this.savedContext.drawImage(this.virtualPool[sourceName].canvas, x, y);
         }
     }
 
-    drawVirtualOnVirtual(name1: string, name2: string, x: number, y: number): void {
-        this.virtualPool[name1].context.drawImage(this.virtualPool[name2].canvas, x, y);
+    drawVirtualOnVirtual(targetName: string,
+                         sourceName: string,
+                         x: number, y: number): void {
+        this.virtualPool[targetName].context.drawImage(this.virtualPool[sourceName].canvas, x, y);
     }
 
-    deleteVirtual(name1: string) {
-        delete this.virtualPool[name1];
+    deleteVirtual(targetName: string): void {
+        delete this.virtualPool[targetName];
     }
 
     createFrame(height: number, width: number, delay = 0): void {

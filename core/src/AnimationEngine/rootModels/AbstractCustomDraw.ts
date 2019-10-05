@@ -16,7 +16,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     static _savedFramePool: { [key: string]: IFramePool } = {};
 
     protected framePoolName: string = '';
-    protected customCanvas: HTMLCanvasElement;
+    protected generalLayer: HTMLCanvasElement;
     protected layerHandler: LayerHandler;
     private _elementX = 0;
     private _elementY = 0;
@@ -31,8 +31,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
-        this.customCanvas = canvas;
-        this.layerHandler = new LayerHandler(this.customCanvas);
+        this.generalLayer = canvas;
+        this.layerHandler = new LayerHandler(this.generalLayer);
         this.subscribers.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
         this.subscribers.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
     }
@@ -179,6 +179,42 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     setVirtualLayer(name: string): HTMLCanvasElement {
         return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
+    }
+
+    restorePreviousLayer() {
+        this.layerHandler.restorePreviousLayer();
+    }
+
+    deleteVirtual(targetName: string): void {
+        this.layerHandler.deleteVirtual(targetName);
+    }
+
+    drawVirtualOnVirtual(targetName: string,
+                         sourceName: string,
+                         x: number, y: number): void {
+        this.layerHandler.drawVirtualOnVirtual(targetName, sourceName, x, y);
+    }
+
+    drawVirtualOnGeneral(sourceName: string,
+                         x: number,
+                         y: number,
+                         width?: number,
+                         height?: number,
+                         xD?: number,
+                         yD?: number,
+                         widthD?: number,
+                         heightD?: number
+    ): void {
+        this.layerHandler.drawVirtualOnGeneral(
+            sourceName,
+            x,
+            y,
+            width,
+            height,
+            xD,
+            yD,
+            widthD,
+            heightD);
     }
 
     destroy() {
