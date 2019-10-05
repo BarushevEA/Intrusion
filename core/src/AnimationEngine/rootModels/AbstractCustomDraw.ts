@@ -231,6 +231,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             heightD);
     }
 
+    get tickCounter$() {
+        return AbstractCustomDraw.tickCount$;
+    }
+
     destroy() {
         for (let i = 0; i < this.subscribers.length; i++) {
             const subscriber = this.subscribers.pop();
