@@ -77,14 +77,14 @@ export class TestScene extends AbstractScene {
         for (let i = 0; i < 50; i++) {
             const circle = new MovedCircle(this.customCanvas);
             circle.setName('circles' + i);
-            this.setToCollector(circle.isMouseOver$.subscribe(() => {
+            this.collect(circle.isMouseOver$.subscribe(() => {
                 circle.moreSpeed();
             }));
             this.setActor(circle);
         }
 
         arr.forEach(el => {
-            this.setToCollector(el.isMouseOver$.subscribe(isOver => {
+            this.collect(el.isMouseOver$.subscribe(isOver => {
                 if (isOver) {
                     el.setAnimationReverse();
                     // setTimeout(() => {
@@ -96,9 +96,13 @@ export class TestScene extends AbstractScene {
             }));
         });
 
-        this.setToCollector(arr[59].isMouseClick$.subscribe(() => {
+        this.collect(arr[59].isMouseClick$.subscribe(() => {
             requestAnimationFrame(recMove);
         }));
 
+        this.userData = {
+            test: 123,
+            status: 'Ok'
+        }
     }
 }
