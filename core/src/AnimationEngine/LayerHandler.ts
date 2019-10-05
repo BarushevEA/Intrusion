@@ -110,12 +110,12 @@ export class LayerHandler {
         this.stopDrawing();
     }
 
-    public restoreCanvas(): void {
+    public restoreLayer(): void {
         this.canvas = this.savedCanvas;
         this.context = this.savedContext;
     }
 
-    setVirtualCanvas(name: string, height: number, width: number): HTMLCanvasElement {
+    setVirtualLayer(name: string, height: number, width: number): HTMLCanvasElement {
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
@@ -124,15 +124,15 @@ export class LayerHandler {
         return this.canvas;
     }
 
-    drawVirtualOnRealCanvas(name: string,
-                            x: number,
-                            y: number,
-                            width = -1,
-                            height = -1,
-                            xD = -1,
-                            yD = -1,
-                            widthD = -1,
-                            heightD = -1
+    drawVirtualOnGeneral(name: string,
+                         x: number,
+                         y: number,
+                         width = -1,
+                         height = -1,
+                         xD = -1,
+                         yD = -1,
+                         widthD = -1,
+                         heightD = -1
     ): void {
         if (width > -1 && height > -1 && xD > -1 && yD > -1 && widthD > -1 && heightD > -1) {
             this.savedContext.drawImage(this.virtualPool[name].canvas, x, y, width, height, xD, yD, widthD, heightD);
@@ -141,11 +141,11 @@ export class LayerHandler {
         }
     }
 
-    drawVirtualOnVirtualCanvas(name1: string, name2: string, x: number, y: number): void {
+    drawVirtualOnVirtual(name1: string, name2: string, x: number, y: number): void {
         this.virtualPool[name1].context.drawImage(this.virtualPool[name2].canvas, x, y);
     }
 
-    deleteVirtualCanvas(name1: string) {
+    deleteVirtual(name1: string) {
         delete this.virtualPool[name1];
     }
 

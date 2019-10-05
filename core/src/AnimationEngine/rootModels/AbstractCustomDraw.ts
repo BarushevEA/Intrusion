@@ -145,8 +145,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.layerHandler.setOriginalToPlay();
     }
 
-    setVirtualCanvas(name: string): HTMLCanvasElement {
-        return this.layerHandler.setVirtualCanvas(name, this._elementHeight, this._elementWidth);
+    setVirtualLayer(name: string): HTMLCanvasElement {
+        return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
     }
 
     destroy() {

@@ -19,7 +19,7 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
         this.layerHandler.setLastFrameToStop();
         this.layerHandler.setOriginalToPlay();
         this.framePool = this.layerHandler.getFramePool();
-        this.layerHandler.restoreCanvas();
+        this.layerHandler.restoreLayer();
     }
 
     protected abstract setFramesName(): void;
