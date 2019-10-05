@@ -10,8 +10,8 @@ export class AnimatedRectangleLightCyan extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        this.createFrame(0);
-        // this.createFrame(0); //for firefox
+        this.createEmptyFrame();
+
         for (let i = 0; i < 50; i += 4) {
             this.createFrame(0);
             this.setColors(

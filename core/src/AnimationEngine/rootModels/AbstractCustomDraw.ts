@@ -13,7 +13,14 @@ export type ICustomDraw = {
 }
 
 export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
-    static _savedFramePool: { [key: string]: IFramePool } = {};
+    private static _savedFramePool: { [key: string]: IFramePool } = {};
+    private static mousePosition: IMousePosition = <any>null;
+    public static tickCount$ = new CTMObservable(<boolean>false);
+
+    public static tickCount() {
+        requestAnimationFrame(AbstractCustomDraw.tickCount);
+        AbstractCustomDraw.tickCount$.next(true);
+    }
 
     protected framePoolName: string = '';
     protected generalLayer: HTMLCanvasElement;
@@ -35,15 +42,21 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.layerHandler = new LayerHandler(this.generalLayer);
         this.subscribers.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
         this.subscribers.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
+        this.subscribers.push(AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
     private mouseOver(position: IMousePosition) {
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
+            AbstractCustomDraw.mousePosition = position;
             this.isMouseOver = isOver;
             this.isMouseOver$.next(isOver);
         }
+    }
+
+    private checkMouseOver() {
+        this.mouseOver(AbstractCustomDraw.mousePosition);
     }
 
     private mouseClick(position: IMousePosition) {
@@ -57,6 +70,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private checkOverPosition(position: IMousePosition): boolean {
         let isOver = false;
         if (
+            position &&
             position.x >= this._elementX &&
             position.x <= (this._elementX + this._elementWidth) &&
             position.y >= this._elementY &&
@@ -227,3 +241,5 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.subscribers.length = 0;
     }
 }
+
+AbstractCustomDraw.tickCount();

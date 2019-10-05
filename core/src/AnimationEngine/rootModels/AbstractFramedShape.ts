@@ -47,9 +47,11 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
     protected createEmptyFrame(): void {
         this.createFrame(0);
         this.setColors(
-            'rgba(0,255,0,0)',
-            'rgba(0,255,0,0)');
-        this.drawSimpleCircle(0, 0, 1);
+            'rgba(0,0,0,0)',
+            'rgba(0,0,0,0)');
+        this.drawRectangle(0, 0,
+            this.generalLayer.width,
+            this.generalLayer.height);
     }
 
     renderFrame(): void {
