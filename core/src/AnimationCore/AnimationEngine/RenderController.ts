@@ -5,7 +5,7 @@ export type IRenderController = {
     setDrawElement(element: ICustomDraw): void;
     renderStart(): void;
     renderStop(): void;
-    deleteDrawElement(name: string): void;
+    deleteDrawElement(element: ICustomDraw): void;
     destroyElements(): void;
 }
 
@@ -41,9 +41,9 @@ export class RenderController implements IRenderController {
         cancelAnimationFrame(this.animFrameIndex);
     }
 
-    public deleteDrawElement(name: string): void {
+    public deleteDrawElement(elementForDelete: ICustomDraw): void {
         this.elementsPool = this.elementsPool.filter(element => {
-            return element.name !== name;
+            return element !== elementForDelete;
         });
     }
 

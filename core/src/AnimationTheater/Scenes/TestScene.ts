@@ -14,7 +14,6 @@ export class TestScene extends AbstractScene {
 
     protected createScene(): void {
         const hexagon = new HexagonGreed(this.customCanvas);
-        hexagon.setName('hexagon');
         this.setActor(hexagon);
 
         const arr: AbstractCustomDraw[] = [];
@@ -30,7 +29,6 @@ export class TestScene extends AbstractScene {
                         rectangle0 = new AnimatedRectangleLightCyan(this.customCanvas);
                     }
                 }
-                rectangle0.setName('rectangle' + i);
                 rectangle0.elementX = i * 100 - 50;
                 rectangle0.elementY = k * 100;
                 arr.push(rectangle0);
@@ -71,12 +69,10 @@ export class TestScene extends AbstractScene {
         });
 
         const snakeSpiral = new SnakeSpiral(this.customCanvas);
-        snakeSpiral.setName('spaceSpiral');
         this.setActor(snakeSpiral);
 
         for (let i = 0; i < 50; i++) {
             const circle = new MovedCircle(this.customCanvas);
-            circle.setName('circles' + i);
             this.collect(circle.isMouseOver$.subscribe(() => {
                 circle.moreSpeed();
             }));

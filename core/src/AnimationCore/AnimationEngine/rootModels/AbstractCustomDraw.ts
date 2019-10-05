@@ -6,9 +6,7 @@ import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObserv
 //TODO frame pool technology need to use for lot of entities of class
 
 export type ICustomDraw = {
-    name: string;
     renderFrame(): void;
-    setName(name: string): void;
     destroy(): void;
 }
 
@@ -29,7 +27,6 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private _elementY = 0;
     private _elementWidth = 0;
     private _elementHeight = 0;
-    public name = '';
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new CTMObservable(<boolean>false);
@@ -82,8 +79,6 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     public abstract renderFrame(): void;
-
-    public abstract setName(name: string): void;
 
     protected setFramePoolName(name: string) {
         this.framePoolName = name;

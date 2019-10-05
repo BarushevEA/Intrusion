@@ -13,7 +13,6 @@ export class HexagonGreed extends AbstractCustomDraw {
     maxStep = 2;
     bound = Math.round(startDelta / 2);
     bottomLayerName = 'bottomLayer';
-    virtualLayerName = 'virtualLayer';
     throttlingCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -23,10 +22,6 @@ export class HexagonGreed extends AbstractCustomDraw {
             Math.round(canvas.width + startDelta * 1.2));
         this.init();
         this.restorePreviousLayer();
-    }
-
-    setName(name: string): void {
-        this.name = name;
     }
 
     init(): void {

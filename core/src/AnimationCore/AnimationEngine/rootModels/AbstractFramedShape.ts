@@ -32,10 +32,6 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
 
     protected abstract initShape(): void;
 
-    setName(name: string): void {
-        this.name = name;
-    }
-
     protected createFrame(delay: number) {
         this.layerHandler.createFrame(this.elementHeight, this.elementWidth, delay);
     }

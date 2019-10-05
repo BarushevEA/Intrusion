@@ -20,10 +20,6 @@ export class MovedCircle extends AbstractCustomDraw {
         this.dy *= 5;
     }
 
-    setName(name: string): void {
-        this.name = name;
-    }
-
     init() {
         this.setSize(
             this.radius * 2 + this.lineWidth,
