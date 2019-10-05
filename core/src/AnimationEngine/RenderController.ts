@@ -10,7 +10,7 @@ export type IRenderController = {
 }
 
 
-class RenderController implements IRenderController {
+export class RenderController implements IRenderController {
     private canvas: HTMLCanvasElement = <any>null;
     private mute = false;
     private elementsPool: ICustomDraw[] = [];
@@ -58,5 +58,3 @@ class RenderController implements IRenderController {
         this.elementsPool.length = 0;
     }
 }
-
-export const renderController = new RenderController();

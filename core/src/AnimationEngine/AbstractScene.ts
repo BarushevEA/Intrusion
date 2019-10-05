@@ -1,4 +1,4 @@
-import {IRenderController} from "./RenderController";
+import {IRenderController, RenderController} from "./RenderController";
 import {AbstractCustomDraw} from "./rootModels/AbstractCustomDraw";
 import {ISubscriptionLike} from "../CustomeLibraries/CTMObservable";
 
@@ -14,9 +14,10 @@ export abstract class AbstractScene implements IScene {
     protected actors: AbstractCustomDraw[] = [];
     private subscribersCollector: ISubscriptionLike[] = [];
 
-    protected constructor(canvas: HTMLCanvasElement, renderController: IRenderController) {
+    protected constructor(canvas: HTMLCanvasElement) {
         this.customCanvas = canvas;
-        this.renderController = renderController;
+        this.renderController = new RenderController();
+        this.renderController.setCanvas(canvas);
         this.createScene();
     }
 
@@ -37,7 +38,6 @@ export abstract class AbstractScene implements IScene {
 
     public renderStop(): void {
         this.renderController.renderStop();
-        this.actors.forEach(actor => this.renderController.deleteDrawElement(actor.name));
     }
 
     public destroy(): void {

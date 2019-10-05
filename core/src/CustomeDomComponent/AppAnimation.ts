@@ -1,8 +1,6 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
-import {renderController} from "../AnimationEngine/RenderController";
 import {mouseClickPosition$, mouseMovePosition$} from "../Store/EventStore";
-import {SergeyScene} from "../Scenes/SergeyScene";
 import {TestScene} from "../Scenes/TestScene";
 
 export type IAppAnimation = {
@@ -26,7 +24,6 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     customWrapper: HTMLElement;
     customStyle: HTMLStyleElement;
     cssPool: ICssPool = {};
-    renderController = renderController;
 
     constructor() {
         super();
@@ -34,7 +31,6 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customWrapper = document.createElement('div');
         this.customCanvas = document.createElement('canvas');
         this.customStyle = document.createElement('style');
-        this.renderController.setCanvas(this.customCanvas);
         this.customInit(shadow);
         this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
         this.customCanvas.addEventListener('click', this.setMouseClickLocation.bind(this));
@@ -109,13 +105,19 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private renderCanvas() {
-        const test = new TestScene(this.customCanvas, this.renderController);
+        const test = new TestScene(this.customCanvas);
         test.renderStart();
         setTimeout(() => {
-            test.destroy();
-            const sergScene = new SergeyScene(this.customCanvas, this.renderController);
-            sergScene.renderStart();
-        }, 15000);
+            test.renderStop();
+            setTimeout(() => {
+                test.renderStart();
+            }, 5000);
+        }, 5000);
+        // setTimeout(() => {
+        //     test.destroy();
+        //     const sergScene = new SergeyScene(this.customCanvas, this.renderController);
+        //     sergScene.renderStart();
+        // }, 15000);
     }
 
     private setCanvasSize() {

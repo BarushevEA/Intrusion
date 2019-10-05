@@ -1,5 +1,4 @@
 import {AbstractScene} from "../AnimationEngine/AbstractScene";
-import {IRenderController} from "../AnimationEngine/RenderController";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
@@ -9,8 +8,8 @@ import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDr
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 
 export class TestScene extends AbstractScene {
-    constructor(canvas: HTMLCanvasElement, renderController: IRenderController) {
-        super(canvas, renderController);
+    constructor(canvas: HTMLCanvasElement) {
+        super(canvas);
     }
 
     protected createScene(): void {
