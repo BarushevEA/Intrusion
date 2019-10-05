@@ -1,8 +1,8 @@
 import {AbstractCustomDraw} from "../AnimationEngine/rootModels/AbstractCustomDraw";
 
 export class MovedCircle extends AbstractCustomDraw {
-    x = 0;
-    y = 0;
+    // x = 0;
+    // y = 0;
     maxStep = 7;
     dx = this.randomize(this.maxStep) + 1;
     dy = this.randomize(this.maxStep) + 1;
@@ -15,6 +15,11 @@ export class MovedCircle extends AbstractCustomDraw {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 0, 0);
         this.init();
+    }
+
+    public moreSpeed() {
+        this.dx *= 2;
+        this.dy *= 2;
     }
 
     setName(name: string): void {
@@ -36,16 +41,16 @@ export class MovedCircle extends AbstractCustomDraw {
     }
 
     renderFrame(): void {
-        if (this.x <= 0) {
+        if (this.elementX <= 0) {
             this.dx = this.randomize(this.maxStep);
         }
-        if (this.x >= this.generalLayer.width - this.radiusCalc) {
+        if (this.elementX >= this.generalLayer.width - this.radiusCalc) {
             this.dx = -1 * this.randomize(this.maxStep);
         }
-        if (this.y <= 0) {
+        if (this.elementY <= 0) {
             this.dy = this.randomize(this.maxStep);
         }
-        if (this.y >= this.generalLayer.height - this.radiusCalc) {
+        if (this.elementY >= this.generalLayer.height - this.radiusCalc) {
             this.dy = -1 * this.randomize(this.maxStep);
         }
 
@@ -60,9 +65,9 @@ export class MovedCircle extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.drawVirtualOnGeneral(this.bottomLayerName, this.x + this.elementX, this.y + this.elementY);
-        this.x += this.dx;
-        this.y += this.dy;
+        this.drawVirtualOnGeneral(this.bottomLayerName, this.elementX, this.elementY);
+        this.elementX += this.dx;
+        this.elementY += this.dy;
         this.throttlingCounter--;
     }
 }
