@@ -18,6 +18,7 @@ export abstract class AbstractScene implements IScene {
     protected actors: AbstractCustomDraw[] = [];
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new CTMObservable(<IUserData><any>null);
+    private readonly _onStart$ = new CTMObservable(<IUserData><any>null);
     private readonly _onDestroy$ = new CTMObservable(<IUserData><any>null);
     private readonly _onSetUserData$ = new CTMObservable(<IUserData><any>null);
     private readonly _userData: IUserData = {};
@@ -48,6 +49,10 @@ export abstract class AbstractScene implements IScene {
         return this._onStop$;
     }
 
+    get onStart$(): CTMObservable<IUserData> {
+        return this._onStart$;
+    }
+
     get onDestroy$(): CTMObservable<IUserData> {
         return this._onDestroy$;
     }
@@ -67,6 +72,7 @@ export abstract class AbstractScene implements IScene {
 
     public renderStart(): void {
         this.renderController.renderStart();
+        this._onStart$.next({...this._userData});
     }
 
     public renderStop(): void {
