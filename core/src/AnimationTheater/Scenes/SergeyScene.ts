@@ -11,8 +11,6 @@ export class SergeyScene extends AbstractScene {
     protected createScene(): void {
         const rectangle = new AnimatedRectangleLightRed(this.generalLayer);
         const human = new SimpleHuman(this.generalLayer);
-        this.setActor(human);
-        this.setActor(rectangle);
 
         for (let i = 0; i < 10; i++) {
             const anotherHuman = new SimpleHuman(this.generalLayer);
@@ -24,6 +22,10 @@ export class SergeyScene extends AbstractScene {
         human.elementX = 200;
 
         this.collect(
+            this.onStart$.subscribe(() => {
+                this.setActor(human);
+                this.setActor(rectangle);
+            }),
             this.onSetUserData$.subscribe(() => {
                 console.log(this.userData);
             }),
