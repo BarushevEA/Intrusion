@@ -36,8 +36,12 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
         this.layerHandler.createFrame(this.elementHeight, this.elementWidth, delay);
     }
 
-    protected setLastFrameToStop() {
+    public setLastFrameToStop() {
         this.layerHandler.setLastFrameToStop();
+    }
+
+    public setShowedFrame(index: number) {
+        this.layerHandler.setShowedFrame(index);
     }
 
     protected createEmptyFrame(): void {
