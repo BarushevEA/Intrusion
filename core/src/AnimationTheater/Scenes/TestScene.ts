@@ -7,6 +7,7 @@ import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/Animated
 import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
+import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -24,10 +25,12 @@ export class TestScene extends AbstractScene {
                 if (i === 9 && k == 5) {
                     rectangle0 = new AnimatedRectangleLightYellow(this.generalLayer);
                 } else {
-                    if (i < 8) {
+                    if (i < 7) {
                         rectangle0 = new AnimatedRectangleLightGray(this.generalLayer);
                     } else {
-                        if (i === 8 && k == 5) {
+                        if (i === 7 && k == 5) {
+                            rectangle0 = new AnimatedRectangleLightGreen(this.generalLayer);
+                        } else if (i === 8 && k == 5) {
                             rectangle0 = new AnimatedRectangleLightRed(this.generalLayer);
                         } else {
                             rectangle0 = new AnimatedRectangleLightCyan(this.generalLayer);
@@ -40,10 +43,12 @@ export class TestScene extends AbstractScene {
             }
         }
 
+        let fameindex = 0;
+
         let counter = 100;
         let dx = 3;
         const recMove = () => {
-            requestAnimationFrame(recMove);
+            fameindex = requestAnimationFrame(recMove);
             arr.forEach(el => {
                 el.elementX += dx;
             });
@@ -99,9 +104,12 @@ export class TestScene extends AbstractScene {
 
         this.collect(
             arr[59].isMouseClick$.subscribe(() => {
-                requestAnimationFrame(recMove);
+                recMove();
             }),
             arr[58].isMouseClick$.subscribe(() => {
+                cancelAnimationFrame(fameindex);
+            }),
+            arr[57].isMouseClick$.subscribe(() => {
                 this.renderStop();
             })
         );
