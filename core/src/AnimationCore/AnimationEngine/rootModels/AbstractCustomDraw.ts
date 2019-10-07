@@ -31,6 +31,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private isMouseOver = false;
     public isMouseOver$ = new CTMObservable(<boolean>false);
     public isMouseClick$ = new CTMObservable(<boolean>false);
+    private isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -42,7 +43,19 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.subscribers.push(AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
+    disableEvents() {
+        this.isIgnoreEvents = true;
+    }
+
+    enableEvents() {
+        this.isIgnoreEvents = false;
+    }
+
     private mouseOver(position: IMousePosition) {
+        if (this.isIgnoreEvents) {
+            return;
+        }
+
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
@@ -53,10 +66,18 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     private checkMouseOver() {
+        if (this.isIgnoreEvents) {
+            return;
+        }
+
         this.mouseOver(AbstractCustomDraw.mousePosition);
     }
 
     private mouseClick(position: IMousePosition) {
+        if (this.isIgnoreEvents) {
+            return;
+        }
+
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {

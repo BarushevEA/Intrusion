@@ -73,11 +73,17 @@ export abstract class AbstractScene implements IScene {
     public renderStart(): void {
         this.renderController.renderStart();
         this._onStart$.next({...this._userData});
+        this.actors.forEach(actor => {
+            actor.enableEvents();
+        });
     }
 
     public renderStop(): void {
         this.renderController.renderStop();
         this._onStop$.next({...this._userData});
+        this.actors.forEach(actor => {
+            actor.disableEvents();
+        });
     }
 
     public destroy(): void {
@@ -89,6 +95,11 @@ export abstract class AbstractScene implements IScene {
             }
         }
         this.collector.length = 0;
+        this.collector = <any>0;
         this.renderController.destroyElements();
+        for (let i = 0; i < this.actors.length; i++) {
+            this.actors.pop();
+        }
+        this.actors = <any>0;
     }
 }
