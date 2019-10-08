@@ -1,6 +1,6 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
-import {mouseClickPosition$, mouseLeftDown$, mouseMovePosition$} from "../Store/EventStore";
+import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../Store/EventStore";
 import {AnimationPlatform} from "../../AnimationTheater/AnimationPlatform";
 
 export type IAppAnimation = {
@@ -47,7 +47,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
 
     setMouseLeftUp(event: MouseEvent) {
         this.convertOuterCoordinates(event, mouseLeftUpPosition);
-        mouseLeftDown$.next(mouseLeftUpPosition);
+        mouseLeftUp$.next(mouseLeftUpPosition);
     }
 
     setMouseMoveLocation(event: MouseEvent): void {
