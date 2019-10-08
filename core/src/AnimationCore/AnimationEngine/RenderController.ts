@@ -1,4 +1,5 @@
 import {ICustomDraw} from "./rootModels/AbstractCustomDraw";
+import {findElementOnArray} from "../CustomeLibraries/FunctionLibs";
 
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
@@ -47,10 +48,21 @@ export class RenderController implements IRenderController {
         });
     }
 
+    public setElementOnTop(element: ICustomDraw) {
+        const index = findElementOnArray(this.elementsPool, element);
+        if (index === -1) {
+            return;
+        }
+        for (let i = index; i < this.elementsPool.length-1; i++) {
+            this.elementsPool[i] = this.elementsPool[i + 1];
+        }
+        this.elementsPool[this.elementsPool.length - 1] = element;
+    }
+
     public destroyElements(): void {
         this.renderStop();
-        for (let i = 0; i <  this.elementsPool.length; i++) {
-            const element =  this.elementsPool.pop();
+        for (let i = 0; i < this.elementsPool.length; i++) {
+            const element = this.elementsPool.pop();
             if (element) {
                 element.destroy();
             }
