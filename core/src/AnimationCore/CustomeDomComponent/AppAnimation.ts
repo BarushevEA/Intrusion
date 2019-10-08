@@ -1,6 +1,6 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
-import {mouseClickPosition$, mouseMovePosition$} from "../Store/EventStore";
+import {mouseClickPosition$, mouseLeftDown$, mouseMovePosition$} from "../Store/EventStore";
 import {AnimationPlatform} from "../../AnimationTheater/AnimationPlatform";
 
 export type IAppAnimation = {
@@ -18,6 +18,8 @@ export type IMousePosition = {
 
 export const mouseMovePosition: IMousePosition = {x: 0, y: 0};
 export const mouseClickPosition: IMousePosition = {x: 0, y: 0};
+export const mouseLeftDownPosition: IMousePosition = {x: 0, y: 0};
+export const mouseLeftUpPosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
     customCanvas: HTMLCanvasElement;
@@ -33,25 +35,35 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customStyle = document.createElement('style');
         this.customInit(shadow);
         this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
+        this.customCanvas.addEventListener('mousedown', this.setMouseLeftDown.bind(this));
+        this.customCanvas.addEventListener('mouseup', this.setMouseLeftUp.bind(this));
         this.customCanvas.addEventListener('click', this.setMouseClickLocation.bind(this));
     }
 
+    setMouseLeftDown(event: MouseEvent) {
+        this.convertOuterCoordinates(event, mouseLeftDownPosition);
+        mouseLeftDown$.next(mouseLeftDownPosition);
+    }
+
+    setMouseLeftUp(event: MouseEvent) {
+        this.convertOuterCoordinates(event, mouseLeftUpPosition);
+        mouseLeftDown$.next(mouseLeftUpPosition);
+    }
+
     setMouseMoveLocation(event: MouseEvent): void {
-        event.stopImmediatePropagation();
-        const x = (event.clientX - this.customCanvas.offsetLeft);
-        const y = (event.clientY - this.customCanvas.offsetTop);
-        mouseMovePosition.x = x;
-        mouseMovePosition.y = y;
+        this.convertOuterCoordinates(event, mouseMovePosition);
         mouseMovePosition$.next(mouseMovePosition);
     }
 
     setMouseClickLocation(event: MouseEvent): void {
-        event.stopImmediatePropagation();
-        const x = (event.clientX - this.customCanvas.offsetLeft);
-        const y = (event.clientY - this.customCanvas.offsetTop);
-        mouseClickPosition.x = x;
-        mouseClickPosition.y = y;
+        this.convertOuterCoordinates(event, mouseClickPosition);
         mouseClickPosition$.next(mouseClickPosition);
+    }
+
+    private convertOuterCoordinates(event: MouseEvent, coordinates: IMousePosition) {
+        event.stopImmediatePropagation();
+        coordinates.x = (event.clientX - this.customCanvas.offsetLeft);
+        coordinates.y = (event.clientY - this.customCanvas.offsetTop);
     }
 
     private customInit(shadow: ShadowRoot): void {
