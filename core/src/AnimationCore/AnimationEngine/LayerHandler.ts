@@ -39,7 +39,7 @@ export class LayerHandler {
     private readonly virtualPool: IVirtualCanvasesPool = {};
     private readonly framePool: IFramePool = {
         startFrame: 0,
-        showedFrame: -1,
+        showedFrame: 0,
         playedFrames: [],
         reverseFrames: [],
         originalFrames: []
@@ -161,38 +161,22 @@ export class LayerHandler {
     }
 
     getFrame(): HTMLCanvasElement {
-        let frame: IFrame = {delay: 0, counter: 0, frame: <any>null};
-
-        if (this.framePool.showedFrame > -1) {
-            frame = this.framePool.playedFrames[this.framePool.showedFrame];
+        const frame = this.framePool.playedFrames[this.framePool.showedFrame];
+        if (frame.isStopFrame) {
+            return frame.frame;
+        }
+        if (frame.counter) {
+            frame.counter--;
+            return frame.frame;
         } else {
-            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.playedFrames.length) {
-                this.framePool.showedFrame = this.framePool.startFrame - 1;
-            }
+            frame.counter = frame.delay;
         }
 
-        if (frame.frame) {
-            if (frame.isStopFrame) {
-                return frame.frame;
-            }
-            if (frame.counter) {
-                frame.counter--;
-                return frame.frame;
-            } else {
-                frame.counter = frame.delay;
-            }
+        if (++this.framePool.showedFrame >= this.framePool.playedFrames.length) {
+            this.framePool.showedFrame = this.framePool.startFrame;
         }
 
-        this.framePool.showedFrame++;
-
-        if (this.framePool.showedFrame >= this.framePool.playedFrames.length) {
-            if (this.framePool.startFrame > 0 && this.framePool.startFrame < this.framePool.playedFrames.length) {
-                this.framePool.showedFrame = this.framePool.startFrame;
-            } else {
-                this.framePool.showedFrame = 0;
-            }
-        }
-        return this.framePool.playedFrames[this.framePool.showedFrame].frame;
+        return frame.frame;
     }
 
     public setStopFrame(index: number): void {
@@ -222,7 +206,11 @@ export class LayerHandler {
     }
 
     public setStartFrame(index: number) {
-        this.framePool.startFrame = index;
+        if (index > -1 && index < this.framePool.playedFrames.length) {
+            this.framePool.startFrame = index;
+        } else {
+            this.framePool.startFrame = 0;
+        }
     }
 
     public drawFrame(x: number, y: number) {
@@ -246,13 +234,10 @@ export class LayerHandler {
     }
 
     setDelayToFrame(index: number, delay: number) {
-        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
-            if (i === index) {
-                const element = this.framePool.playedFrames[i];
-                element.delay = delay;
-                element.counter = delay;
-                break;
-            }
+        if (index > 0 && index < this.framePool.playedFrames.length) {
+            const element = this.framePool.playedFrames[index];
+            element.delay = delay;
+            element.counter = delay;
         }
     }
 
@@ -281,6 +266,8 @@ export class LayerHandler {
     }
 
     setShowedFrame(index: number) {
-        this.framePool.showedFrame = index;
+        if (index > 0 && index < this.framePool.playedFrames.length) {
+            this.framePool.showedFrame = index;
+        }
     }
 }
