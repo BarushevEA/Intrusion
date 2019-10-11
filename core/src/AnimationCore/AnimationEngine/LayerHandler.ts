@@ -222,15 +222,13 @@ export class LayerHandler {
     }
 
     setFramePool(pool: IFramePool): void {
-        for (let i = 0; i < pool.playedFrames.length; i++) {
-            this.framePool.playedFrames.push({...pool.playedFrames[i]});
-        }
         for (let i = 0; i < pool.originalFrames.length; i++) {
             this.framePool.originalFrames.push({...pool.originalFrames[i]});
         }
         for (let i = 0; i < pool.reverseFrames.length; i++) {
             this.framePool.reverseFrames.push({...pool.reverseFrames[i]});
         }
+        this.setOriginalToPlay();
     }
 
     setDelayToFrame(index: number, delay: number) {
