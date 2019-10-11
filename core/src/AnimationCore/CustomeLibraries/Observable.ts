@@ -38,7 +38,7 @@ export type IObserver<T> = ISetObservableValue & ISubscribe & IUnSubscribe & {
     getValue(): T;
 };
 
-export class CTMObservable<T> implements IObserver<T> {
+export class Observable<T> implements IObserver<T> {
     private _value: T;
     private listeners: IListeners = {};
     private indexCounter = -1;

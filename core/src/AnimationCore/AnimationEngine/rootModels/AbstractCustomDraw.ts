@@ -1,7 +1,7 @@
 import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler";
 import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
-import {CTMObservable, ISubscriptionLike} from "../../CustomeLibraries/CTMObservable";
+import {Observable, ISubscriptionLike} from "../../CustomeLibraries/Observable";
 
 //TODO frame pool technology need to use for lot of entities of class
 
@@ -13,7 +13,7 @@ export type ICustomDraw = {
 export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
     private static mousePosition: IMousePosition = <any>null;
-    public static tickCount$ = new CTMObservable(<boolean>false);
+    public static tickCount$ = new Observable(<boolean>false);
 
     public static tickCount() {
         requestAnimationFrame(AbstractCustomDraw.tickCount);
@@ -29,8 +29,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private _elementHeight = 0;
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
-    public isMouseOver$ = new CTMObservable(<boolean>false);
-    public isMouseClick$ = new CTMObservable(<boolean>false);
+    public isMouseOver$ = new Observable(<boolean>false);
+    public isMouseClick$ = new Observable(<boolean>false);
     private isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {

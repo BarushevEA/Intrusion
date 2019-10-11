@@ -1,6 +1,6 @@
 import {IRenderController, RenderController} from "./RenderController";
 import {AbstractCustomDraw} from "./rootModels/AbstractCustomDraw";
-import {CTMObservable, ISubscriptionLike} from "../CustomeLibraries/CTMObservable";
+import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
 
 export type IScene = {
     renderStart(): void;
@@ -17,10 +17,10 @@ export abstract class AbstractScene implements IScene {
     protected generalLayer: HTMLCanvasElement;
     protected actors: AbstractCustomDraw[] = [];
     private collector: ISubscriptionLike[] = [];
-    private readonly _onStop$ = new CTMObservable(<IUserData><any>null);
-    private readonly _onStart$ = new CTMObservable(<IUserData><any>null);
-    private readonly _onDestroy$ = new CTMObservable(<IUserData><any>null);
-    private readonly _onSetUserData$ = new CTMObservable(<IUserData><any>null);
+    private readonly _onStop$ = new Observable(<IUserData><any>null);
+    private readonly _onStart$ = new Observable(<IUserData><any>null);
+    private readonly _onDestroy$ = new Observable(<IUserData><any>null);
+    private readonly _onSetUserData$ = new Observable(<IUserData><any>null);
     private readonly _userData: IUserData = {};
 
     protected constructor(canvas: HTMLCanvasElement) {
@@ -37,7 +37,7 @@ export abstract class AbstractScene implements IScene {
         this.onSetUserData$.next(this._userData);
     }
 
-    get onSetUserData$(): CTMObservable<IUserData> {
+    get onSetUserData$(): Observable<IUserData> {
         return this._onSetUserData$;
     }
 
@@ -45,15 +45,15 @@ export abstract class AbstractScene implements IScene {
         return this._userData;
     }
 
-    get onStop$(): CTMObservable<IUserData> {
+    get onStop$(): Observable<IUserData> {
         return this._onStop$;
     }
 
-    get onStart$(): CTMObservable<IUserData> {
+    get onStart$(): Observable<IUserData> {
         return this._onStart$;
     }
 
-    get onDestroy$(): CTMObservable<IUserData> {
+    get onDestroy$(): Observable<IUserData> {
         return this._onDestroy$;
     }
 
