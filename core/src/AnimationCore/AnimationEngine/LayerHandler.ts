@@ -264,7 +264,7 @@ export class LayerHandler {
     }
 
     setShowedFrame(index: number) {
-        if (index > 0 && index < this.framePool.playedFrames.length) {
+        if (index >= 0 && index < this.framePool.playedFrames.length) {
             this.framePool.showedFrame = index;
         }
     }
