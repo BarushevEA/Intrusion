@@ -66,8 +66,12 @@ export class LayerHandler {
 
     public stopDrawing(): void {
         this.context.closePath();
-        this.context.fill();
-        this.context.stroke();
+        if (this.context.fillStyle && (<string>this.context.fillStyle).length) {
+            this.context.fill();
+        }
+        if (this.context.strokeStyle && (<string>this.context.strokeStyle).length) {
+            this.context.stroke();
+        }
     }
 
     public drawCircle(x: number, y: number, radius: number): void {
