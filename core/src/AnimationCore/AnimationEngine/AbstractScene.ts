@@ -113,4 +113,15 @@ export abstract class AbstractScene implements IScene {
         }
         this.actors = <any>0;
     }
+
+    public destroySubscriber(subscriber: ISubscriptionLike) {
+        for (let i = 0; i < this.collector.length; i++) {
+            const savedSubscriber = this.collector[i];
+            if (savedSubscriber && savedSubscriber === subscriber) {
+                savedSubscriber.unsubscribe();
+                this.collector[i] = <any>0;
+                break;
+            }
+        }
+    }
 }

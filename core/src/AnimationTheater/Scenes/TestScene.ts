@@ -43,14 +43,18 @@ export class TestScene extends AbstractScene {
             }
         }
 
-        let fameindex = 0;
-
         let counter = 100;
         let dx = 3;
+        let move = <any>0;
 
+        const recMoveStart = () => {
+            if (!move) {
+                move = AbstractCustomDraw.tickCount$.subscribe(recMove.bind(this));
+                this.collect(move);
+            }
+        };
 
         const recMove = () => {
-            fameindex = requestAnimationFrame(recMove);
             arr.forEach(el => {
                 el.elementX += dx;
             });
@@ -103,10 +107,11 @@ export class TestScene extends AbstractScene {
 
         this.collect(
             arr[59].isMouseClick$.subscribe(() => {
-                recMove();
+                recMoveStart();
             }),
             arr[58].isMouseClick$.subscribe(() => {
-                cancelAnimationFrame(fameindex);
+                this.destroySubscriber(move);
+                move = <any>0;
             }),
             arr[57].isMouseClick$.subscribe(() => {
                 this.renderStop();
