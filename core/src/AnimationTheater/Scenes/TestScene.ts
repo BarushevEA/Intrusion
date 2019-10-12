@@ -36,8 +36,6 @@ export class TestScene extends AbstractScene {
         wave2.setShowedFrame(43);
         wave3.setShowedFrame(56);
 
-        console.log(wave2.framePool);
-
         const arr: AbstractCustomDraw[] = [];
         for (let k = 0; k < 6; k++) {
             for (let i = 0; i < 10; i++) {

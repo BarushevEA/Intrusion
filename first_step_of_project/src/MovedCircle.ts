@@ -11,18 +11,12 @@ export class MovedCircle extends CustomDraw {
         let y = 0;
         let dx = 1;
         let dy = 1;
-        let mute = false;
         const radius = 50;
         const maxStep = 15;
         const radiusCalc = radius + 5;
 
         const move = () => {
             requestAnimationFrame(move);
-            if (mute) {
-                console.log('muted');
-                return;
-            }
-            mute = true;
             if (x <= radiusCalc) {
                 dx = this.randomize(maxStep);
             }
@@ -46,7 +40,6 @@ export class MovedCircle extends CustomDraw {
             this.customScreen.drawSimpleCircle(x, y, radius);
             x += dx;
             y += dy;
-            mute = false;
         };
         move();
     }

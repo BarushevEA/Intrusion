@@ -72,17 +72,12 @@ export class Hexagon extends CustomDraw {
         let y = 0;
         let dx = 1;
         let dy = 1;
-        let mute = false;
         const maxStep = 5;
         const bound = Math.round(startDelta / 2);
 
         const move = () => {
             requestAnimationFrame(move);
-            if (mute) {
-                console.log('muted');
-                return;
-            }
-            mute = true;
+
             if (x <= 0) {
                 dx = this.randomize(maxStep);
             }
@@ -107,7 +102,6 @@ export class Hexagon extends CustomDraw {
             this.customScreen.drawVirtualOnRealCanvas(virtualCanvasName, -startDelta + x, -startDelta + y);
             x += dx;
             y += dy;
-            mute = false;
         };
         move();
     }
