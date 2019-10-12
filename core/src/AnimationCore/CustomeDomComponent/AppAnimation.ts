@@ -169,4 +169,6 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 }
 
-customElements.define('app-animation-component', AppAnimation);
+document.addEventListener("DOMContentLoaded", () => {
+    customElements.define('app-animation-component', AppAnimation);
+});

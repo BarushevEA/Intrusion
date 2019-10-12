@@ -18,7 +18,7 @@ export class AnimatedWave extends AbstractFramedShape {
             points.push(point);
         }
 
-        for (let i = 0; i < points.length; i++) {
+        for (let i = 0; i < Math.trunc(points.length / 4); i++) {
             this.createFrame(2);
             this.isCustomStoke = true;
             this.setColors(

@@ -224,17 +224,15 @@ export class LayerHandler {
     }
 
     getFramePool(): IFramePool {
-        return this.framePool;
+        return {...this.framePool};
     }
 
     setFramePool(pool: IFramePool): void {
         for (let i = 0; i < pool.originalFrames.length; i++) {
             this.framePool.originalFrames.push({...pool.originalFrames[i]});
-        }
-        for (let i = 0; i < pool.reverseFrames.length; i++) {
             this.framePool.reverseFrames.push({...pool.reverseFrames[i]});
         }
-        this.setOriginalToPlay();
+        this.framePool.playedFrames = this.framePool.originalFrames;
     }
 
     setDelayToFrame(index: number, delay: number) {
@@ -285,8 +283,9 @@ export class LayerHandler {
 
     public setFramesDelay(delay: number) {
         for (let i = 0; i < this.framePool.playedFrames.length; i++) {
-            const playedFrame = this.framePool.playedFrames[i];
-            playedFrame.delay = delay;
+            this.framePool.playedFrames[i].delay = delay;
+            this.framePool.originalFrames[i].delay = delay;
+            this.framePool.reverseFrames[i].delay = delay;
         }
     }
 }
