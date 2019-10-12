@@ -260,6 +260,18 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         }
         this.subscribers.length = 0;
     }
+
+    get isCustomStoke(): boolean {
+        return this.layerHandler.isCustomStroke;
+    }
+
+    set isCustomStoke(value: boolean) {
+        this.layerHandler.isCustomStroke = value;
+    }
+
+    public setFramesDelay(delay: number) {
+        this.layerHandler.setFramesDelay(delay);
+    }
 }
 
 AbstractCustomDraw.tickCount();

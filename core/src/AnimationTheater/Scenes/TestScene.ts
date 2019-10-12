@@ -8,6 +8,8 @@ import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/AnimatedRectangleLightGreen";
+import {AnimatedWave} from "../AnimationModels/AnimatedWave";
+import {AnimatedWaveDark} from "../AnimationModels/AnimatedWaveDark";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -17,6 +19,22 @@ export class TestScene extends AbstractScene {
     protected createScene(): void {
         const hexagon = new HexagonGreed(this.generalLayer);
         this.setActor(hexagon);
+        const wave = new AnimatedWave(this.generalLayer);
+        const wave1 = new AnimatedWaveDark(this.generalLayer);
+        const wave2 = new AnimatedWave(this.generalLayer);
+        const wave3 = new AnimatedWaveDark(this.generalLayer);
+        wave1.elementY = 470;
+        wave2.elementY = 485;
+        wave.elementY = 500;
+        wave3.elementY = 515;
+        wave1.setFramesDelay(0);
+        wave2.setFramesDelay(1);
+        wave.setFramesDelay(2);
+        wave3.setFramesDelay(3);
+
+        wave1.setShowedFrame(15);
+        wave2.setShowedFrame(43);
+        wave3.setShowedFrame(56);
 
         const arr: AbstractCustomDraw[] = [];
         for (let k = 0; k < 6; k++) {
@@ -80,9 +98,14 @@ export class TestScene extends AbstractScene {
             isReverse = !isReverse;
         }, 10000);
 
+        this.setActor(wave3);
+        this.setActor(wave);
+
         arr.forEach(el => {
             this.setActor(el)
         });
+
+        this.setActor(wave1);
 
         const snakeSpiral = new SnakeSpiral(this.generalLayer);
         this.setActor(snakeSpiral);
@@ -123,6 +146,8 @@ export class TestScene extends AbstractScene {
                 this.exit();
             }),
         );
+
+        this.setActor(wave2);
 
         this.userData = {
             test: 123,

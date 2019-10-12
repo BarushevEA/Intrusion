@@ -44,6 +44,7 @@ export class LayerHandler {
         reverseFrames: [],
         originalFrames: []
     };
+    private _isCustomStroke = false;
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -66,10 +67,8 @@ export class LayerHandler {
 
     public stopDrawing(): void {
         this.context.closePath();
-        if (this.context.fillStyle && (<string>this.context.fillStyle).length) {
+        if (!this._isCustomStroke) {
             this.context.fill();
-        }
-        if (this.context.strokeStyle && (<string>this.context.strokeStyle).length) {
             this.context.stroke();
         }
     }
@@ -110,6 +109,9 @@ export class LayerHandler {
         for (let i = 1; i < polygon.length; i++) {
             const node = polygon[i];
             this.context.lineTo(node.x, node.y);
+        }
+        if (this._isCustomStroke) {
+            this.context.stroke();
         }
         this.stopDrawing();
     }
@@ -270,6 +272,21 @@ export class LayerHandler {
     setShowedFrame(index: number) {
         if (index >= 0 && index < this.framePool.playedFrames.length) {
             this.framePool.showedFrame = index;
+        }
+    }
+
+    get isCustomStroke(): boolean {
+        return this._isCustomStroke;
+    }
+
+    set isCustomStroke(value: boolean) {
+        this._isCustomStroke = value;
+    }
+
+    public setFramesDelay(delay: number) {
+        for (let i = 0; i < this.framePool.playedFrames.length; i++) {
+            const playedFrame = this.framePool.playedFrames[i];
+            playedFrame.delay = delay;
         }
     }
 }
