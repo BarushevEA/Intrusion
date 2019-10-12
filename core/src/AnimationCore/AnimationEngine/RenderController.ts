@@ -13,14 +13,13 @@ export type IRenderController = {
 
 export class RenderController implements IRenderController {
     private canvas: HTMLCanvasElement = <any>0;
-    private mute = false;
     private elementsPool: ICustomDraw[] = [];
     private animFrameIndex = -1;
     private context: CanvasRenderingContext2D = <any>0;
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
-        this.context =  <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
     }
 
     public setDrawElement(element: ICustomDraw): void {
@@ -28,16 +27,11 @@ export class RenderController implements IRenderController {
     }
 
     public renderStart(): void {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.animFrameIndex = requestAnimationFrame(this.renderStart.bind(this));
-        if (this.mute) {
-            return;
-        }
-        this.mute = true;
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.elementsPool.length; i++) {
             this.elementsPool[i].renderFrame();
         }
-        this.mute = false;
     }
 
     public renderStop() {
@@ -55,7 +49,7 @@ export class RenderController implements IRenderController {
         if (index === -1) {
             return;
         }
-        for (let i = index; i < this.elementsPool.length-1; i++) {
+        for (let i = index; i < this.elementsPool.length - 1; i++) {
             this.elementsPool[i] = this.elementsPool[i + 1];
         }
         this.elementsPool[this.elementsPool.length - 1] = element;
