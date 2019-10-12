@@ -45,7 +45,7 @@ export class SergeyScene extends AbstractScene {
                 console.log(this.userData);
             }),
             rectangle.isMouseClick$.subscribe(() => {
-                this.renderStop();
+                this.exit();
             }),
             human.isMouseOver$.subscribe((isOver) => {
                 if (isOver) {

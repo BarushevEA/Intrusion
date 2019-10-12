@@ -47,6 +47,8 @@ export class TestScene extends AbstractScene {
 
         let counter = 100;
         let dx = 3;
+
+
         const recMove = () => {
             fameindex = requestAnimationFrame(recMove);
             arr.forEach(el => {
@@ -93,9 +95,6 @@ export class TestScene extends AbstractScene {
             this.collect(el.isMouseOver$.subscribe(isOver => {
                 if (isOver) {
                     el.setAnimationReverse();
-                    // setTimeout(() => {
-                    //     el.setAnimationOriginal();
-                    // }, 300);
                 } else {
                     el.setAnimationOriginal();
                 }
@@ -111,7 +110,13 @@ export class TestScene extends AbstractScene {
             }),
             arr[57].isMouseClick$.subscribe(() => {
                 this.renderStop();
-            })
+            }),
+            arr[56].isMouseClick$.subscribe(() => {
+                this.renderStart(true);
+            }),
+            arr[55].isMouseClick$.subscribe(() => {
+                this.exit();
+            }),
         );
 
         this.userData = {

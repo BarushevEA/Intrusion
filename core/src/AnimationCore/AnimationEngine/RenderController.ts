@@ -4,7 +4,7 @@ import {findElementOnArray} from "../CustomeLibraries/FunctionLibs";
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
     setDrawElement(element: ICustomDraw): void;
-    renderStart(): void;
+    renderStart(isBackgroundLayerPresent: boolean): void;
     renderStop(): void;
     deleteDrawElement(element: ICustomDraw): void;
     destroyElements(): void;
@@ -16,6 +16,7 @@ export class RenderController implements IRenderController {
     private elementsPool: ICustomDraw[] = [];
     private animFrameIndex = -1;
     private context: CanvasRenderingContext2D = <any>0;
+    private isBackgroundLayerPresent = false;
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
@@ -26,9 +27,18 @@ export class RenderController implements IRenderController {
         this.elementsPool.push(element);
     }
 
-    public renderStart(): void {
-        this.animFrameIndex = requestAnimationFrame(this.renderStart.bind(this));
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    public renderStart(isBackgroundLayerPresent: boolean): void {
+        this.isBackgroundLayerPresent = isBackgroundLayerPresent;
+        if (this.animFrameIndex === -1) {
+            this.renderBegin();
+        }
+    }
+
+    private renderBegin() {
+        this.animFrameIndex = requestAnimationFrame(this.renderBegin.bind(this));
+        if (!this.isBackgroundLayerPresent) {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
         for (let i = 0; i < this.elementsPool.length; i++) {
             this.elementsPool[i].renderFrame();
         }
@@ -36,6 +46,7 @@ export class RenderController implements IRenderController {
 
     public renderStop() {
         cancelAnimationFrame(this.animFrameIndex);
+        this.animFrameIndex = -1;
     }
 
     public deleteDrawElement(elementForDelete: ICustomDraw): void {

@@ -10,16 +10,16 @@ export class AnimationPlatform extends AbstractPlatform {
     create(): void {
         const test = new TestScene(this.canvas);
         const sergScene = new SergeyScene(this.canvas);
-        test.renderStart();
+        test.renderStart(true);
         test.collect(
-            test.onStop$.subscribe((data) => {
+            test.onExit$.subscribe((data) => {
                 sergScene.userData = data;
-                sergScene.renderStart();
+                sergScene.renderStart(false);
             }),
         );
         sergScene.collect(
-            sergScene.onStop$.subscribe(() => {
-                test.renderStart();
+            sergScene.onExit$.subscribe(() => {
+                test.renderStart(true);
             })
         );
     }

@@ -3,8 +3,9 @@ import {AbstractCustomDraw} from "./rootModels/AbstractCustomDraw";
 import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
 
 export type IScene = {
-    renderStart(): void;
+    renderStart(isBackgroundLayerPresent: boolean): void;
     renderStop(): void;
+    exit(): void;
     destroy(): void;
 }
 
@@ -18,6 +19,7 @@ export abstract class AbstractScene implements IScene {
     protected actors: AbstractCustomDraw[] = [];
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
+    private readonly _onExit$ = new Observable(<IUserData><any>0);
     private readonly _onStart$ = new Observable(<IUserData><any>0);
     private readonly _onDestroy$ = new Observable(<IUserData><any>0);
     private readonly _onSetUserData$ = new Observable(<IUserData><any>0);
@@ -49,6 +51,10 @@ export abstract class AbstractScene implements IScene {
         return this._onStop$;
     }
 
+    get onExit$(): Observable<IUserData> {
+        return this._onExit$;
+    }
+
     get onStart$(): Observable<IUserData> {
         return this._onStart$;
     }
@@ -70,8 +76,8 @@ export abstract class AbstractScene implements IScene {
 
     protected abstract createScene(): void;
 
-    public renderStart(): void {
-        this.renderController.renderStart();
+    public renderStart(isBackgroundLayerPresent: boolean): void {
+        this.renderController.renderStart(isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
         this.actors.forEach(actor => {
             actor.enableEvents();
@@ -81,9 +87,14 @@ export abstract class AbstractScene implements IScene {
     public renderStop(): void {
         this.renderController.renderStop();
         this._onStop$.next({...this._userData});
+    }
+
+    public exit() {
+        this.renderStop();
         this.actors.forEach(actor => {
             actor.disableEvents();
         });
+        this._onExit$.next({...this._userData});
     }
 
     public destroy(): void {
