@@ -12,7 +12,7 @@ export type ICustomDraw = {
 
 export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
-    private static mousePosition: IMousePosition = <any>null;
+    private static mousePosition: IMousePosition = <any>0;
     public static tickCount$ = new Observable(<boolean>false);
 
     public static tickCount() {

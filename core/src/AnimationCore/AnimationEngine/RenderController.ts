@@ -12,13 +12,15 @@ export type IRenderController = {
 
 
 export class RenderController implements IRenderController {
-    private canvas: HTMLCanvasElement = <any>null;
+    private canvas: HTMLCanvasElement = <any>0;
     private mute = false;
     private elementsPool: ICustomDraw[] = [];
     private animFrameIndex = -1;
+    private context: CanvasRenderingContext2D = <any>0;
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
+        this.context =  <CanvasRenderingContext2D>this.canvas.getContext('2d');
     }
 
     public setDrawElement(element: ICustomDraw): void {
@@ -26,7 +28,7 @@ export class RenderController implements IRenderController {
     }
 
     public renderStart(): void {
-        this.canvas.width = this.canvas.width;
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.animFrameIndex = requestAnimationFrame(this.renderStart.bind(this));
         if (this.mute) {
             return;

@@ -17,10 +17,10 @@ export abstract class AbstractScene implements IScene {
     protected generalLayer: HTMLCanvasElement;
     protected actors: AbstractCustomDraw[] = [];
     private collector: ISubscriptionLike[] = [];
-    private readonly _onStop$ = new Observable(<IUserData><any>null);
-    private readonly _onStart$ = new Observable(<IUserData><any>null);
-    private readonly _onDestroy$ = new Observable(<IUserData><any>null);
-    private readonly _onSetUserData$ = new Observable(<IUserData><any>null);
+    private readonly _onStop$ = new Observable(<IUserData><any>0);
+    private readonly _onStart$ = new Observable(<IUserData><any>0);
+    private readonly _onDestroy$ = new Observable(<IUserData><any>0);
+    private readonly _onSetUserData$ = new Observable(<IUserData><any>0);
     private readonly _userData: IUserData = {};
 
     protected constructor(canvas: HTMLCanvasElement) {
