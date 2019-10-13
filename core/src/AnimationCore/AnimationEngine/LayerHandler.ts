@@ -283,9 +283,7 @@ export class LayerHandler {
 
     public setFramesDelay(delay: number) {
         for (let i = 0; i < this.framePool.playedFrames.length; i++) {
-            this.framePool.originalFrames[i].delay = delay;
-            this.framePool.reverseFrames[i].delay = delay;
+            this.setDelayToFrame(i, delay);
         }
-        this.framePool.playedFrames = this.framePool.originalFrames;
     }
 }
