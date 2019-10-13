@@ -1,3 +1,5 @@
+import {ITextHandler, textHandler} from "./TextHandler";
+
 export type IPoint = {
     x: number;
     y: number;
@@ -45,6 +47,7 @@ export class LayerHandler {
         originalFrames: []
     };
     private _isCustomStroke = false;
+    private _text = textHandler;
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -55,6 +58,11 @@ export class LayerHandler {
         }
         this.savedCanvas = this.canvas;
         this.savedContext = this.context;
+    }
+
+    get text(): ITextHandler {
+        this._text.context = this.context;
+        return this._text;
     }
 
     public clear(): void {

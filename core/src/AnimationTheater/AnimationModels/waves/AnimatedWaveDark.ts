@@ -1,5 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler";
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/LayerHandler";
 
 
 export class AnimatedWaveDark extends AbstractFramedShape {

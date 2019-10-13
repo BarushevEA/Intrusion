@@ -1,4 +1,4 @@
-import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler";
+import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler/LayerHandler";
 import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {Observable, ISubscriptionLike} from "../../CustomeLibraries/Observable";
