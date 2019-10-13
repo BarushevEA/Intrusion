@@ -1,14 +1,14 @@
-import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../AnimationCore/AnimationEngine/LayerHandler";
+import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler";
 
 
-export class AnimatedWaveDark extends AbstractFramedShape {
+export class AnimatedWave extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 130, 1300);
     }
 
     protected setFramesName(): void {
-        this.setFramePoolName('AnimatedWaveDark');
+        this.setFramePoolName('AnimatedWave');
     }
 
     protected initShape(): void {
@@ -23,7 +23,7 @@ export class AnimatedWaveDark extends AbstractFramedShape {
             this.isCustomStoke = true;
             this.setColors(
                 '',
-                'rgba(0,71,95,0.9)');
+                'rgba(0,109,146,1)');
             this.setLineWidth(130);
             this.drawPolygon(points);
             this.isCustomStoke = false;

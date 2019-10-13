@@ -2,6 +2,7 @@ import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {SimpleHuman} from "../AnimationModels/humans/SimpleHuman";
 import {CombinedRectangle} from "../AnimationModels/rectangles/CombinedRectangle";
+import {Flower} from "../AnimationModels/flowers/BaseFlower";
 
 export class SergeyScene extends AbstractScene {
 
@@ -19,6 +20,12 @@ export class SergeyScene extends AbstractScene {
             anotherHuman.elementX = Math.round(Math.random() * 600);
             anotherHuman.elementY = Math.round(Math.random() * 600);
             this.setActor(anotherHuman);
+        }
+        for (let i = 0; i < 50; i++) {
+            const flower = new Flower(this.generalLayer);
+            flower.elementX = Math.round(Math.random() * 1000);
+            flower.elementY = Math.round(Math.random() * 150 + 200);
+            this.setActor(flower);
         }
 
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;

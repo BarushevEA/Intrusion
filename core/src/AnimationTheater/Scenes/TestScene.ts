@@ -8,8 +8,8 @@ import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/AnimatedRectangleLightGreen";
-import {AnimatedWave} from "../AnimationModels/AnimatedWave";
-import {AnimatedWaveDark} from "../AnimationModels/AnimatedWaveDark";
+import {AnimatedWave} from "../AnimationModels/waves/AnimatedWave";
+import {AnimatedWaveDark} from "../AnimationModels/waves/AnimatedWaveDark";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
