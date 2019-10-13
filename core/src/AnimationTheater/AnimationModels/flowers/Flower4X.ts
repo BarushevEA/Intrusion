@@ -1,17 +1,17 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IPoint} from "../../../../../first_step_of_project/src/Screen";
 
-export class Flower extends AbstractFramedShape {
+export class Flower4X extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 35, 20);
     }
 
     protected setFramesName(): void {
-        this.setFramePoolName('Flower');
+        this.setFramePoolName('Flower4X');
     }
 
     protected initShape(): void {
-        const sizeMultiplier = 1;
+        const sizeMultiplier = 4;
         this.elementWidth *= sizeMultiplier;
         this.elementHeight *= sizeMultiplier;
 
