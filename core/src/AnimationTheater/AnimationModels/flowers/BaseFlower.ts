@@ -11,6 +11,7 @@ export class Flower extends AbstractFramedShape {
     }
 
     protected initShape(): void {
+        const sizeMultiplier = 1;
         const stem: IPoint[] = [
             {x: 4, y: 35},
             {x: 4, y: 33},
@@ -51,6 +52,13 @@ export class Flower extends AbstractFramedShape {
             {x: 2, y: 10},
             {x: 3, y: 15},
         ];
+
+        multiply(stem);
+        multiply(leaf);
+        multiply(petal1);
+        multiply(petal2);
+        multiply(petal3);
+
         this.setLineWidth(1);
         this.createFrame(0);
         this.isCustomStoke = true;
@@ -65,5 +73,12 @@ export class Flower extends AbstractFramedShape {
         this.drawPolygon(petal1);
         this.drawPolygon(petal2);
         this.drawPolygon(petal3);
+
+        function multiply(arr: IPoint[]) {
+            arr.forEach(element => {
+                element.x *= sizeMultiplier;
+                element.y *= sizeMultiplier;
+            });
+        }
     }
 }
