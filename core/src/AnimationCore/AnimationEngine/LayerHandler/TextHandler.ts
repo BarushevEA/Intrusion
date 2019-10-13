@@ -52,10 +52,6 @@ class TextHandler implements ITextHandler {
     public x: number = 0;
     public y: number = 0;
 
-    constructor() {
-        this.setToDefault();
-    }
-
     public setToDefault(): void {
         this._options = {...this._defaultOptions};
         this._context.font = '10px sans-serif';

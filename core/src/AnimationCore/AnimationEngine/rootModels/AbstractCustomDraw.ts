@@ -110,7 +110,12 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     get framePool(): IFramePool {
-        return AbstractCustomDraw._savedFramePool[this.framePoolName];
+        const framePool = this.layerHandler.getFramePool();
+        if (framePool && framePool.playedFrames && framePool.playedFrames.length) {
+            return framePool;
+        } else {
+            return AbstractCustomDraw._savedFramePool[this.framePoolName];
+        }
     }
 
     public setPosition(x: number, y: number): void {

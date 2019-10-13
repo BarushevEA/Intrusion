@@ -66,7 +66,7 @@ export class LayerHandler {
     }
 
     public clear(): void {
-        this.canvas.width = this.canvas.width;
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     public startDrawing(): void {
@@ -232,7 +232,7 @@ export class LayerHandler {
     }
 
     getFramePool(): IFramePool {
-        return {...this.framePool};
+        return this.framePool;
     }
 
     setFramePool(pool: IFramePool): void {
