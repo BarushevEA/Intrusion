@@ -10,6 +10,7 @@ import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedR
 import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 import {AnimatedWave} from "../AnimationModels/waves/AnimatedWave";
 import {AnimatedWaveDark} from "../AnimationModels/waves/AnimatedWaveDark";
+import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -17,6 +18,15 @@ export class TestScene extends AbstractScene {
     }
 
     protected createScene(): void {
+        const buttonExit = new ButtonExit(this.generalLayer);
+        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
+        buttonExit.elementY = 5;
+
+        this.userData = {
+            test: 123,
+            status: 'Ok'
+        };
+
         const hexagon = new HexagonGreed(this.generalLayer);
         this.setActor(hexagon);
         const wave = new AnimatedWave(this.generalLayer);
@@ -128,6 +138,9 @@ export class TestScene extends AbstractScene {
             }));
         });
 
+        this.setActor(wave2);
+        this.setActor(buttonExit);
+
         this.collect(
             arr[59].isMouseClick$.subscribe(() => {
                 recMoveStart();
@@ -145,13 +158,10 @@ export class TestScene extends AbstractScene {
             arr[55].isMouseClick$.subscribe(() => {
                 this.exit();
             }),
+            buttonExit.isMouseClick$.subscribe(() => {
+                this.userData.test++;
+                this.exit();
+            })
         );
-
-        this.setActor(wave2);
-
-        this.userData = {
-            test: 123,
-            status: 'Ok'
-        }
     }
 }

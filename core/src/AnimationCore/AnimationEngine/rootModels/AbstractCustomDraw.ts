@@ -2,6 +2,7 @@ import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler/L
 import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {Observable, ISubscriptionLike} from "../../CustomeLibraries/Observable";
+import {ITextHandler} from "../LayerHandler/TextHandler";
 
 //TODO frame pool technology need to use for lot of entities of class
 
@@ -31,16 +32,17 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
-    private isIgnoreEvents = false;
+    public isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new LayerHandler(this.generalLayer);
-        this.subscribers.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
-        this.subscribers.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
-        this.subscribers.push(AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
+        this.collect(
+            mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
+            mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
+            AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
     disableEvents() {
@@ -177,6 +179,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.layerHandler.resetStopFrame();
     }
 
+    public setStopFrame(index: number) {
+        this.layerHandler.setStopFrame(index);
+    }
+
     public setAnimationReverse() {
         this.layerHandler.setReverseToPlay();
     }
@@ -256,6 +262,12 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         return AbstractCustomDraw.tickCount$;
     }
 
+    public collect(...subscribers: ISubscriptionLike[]) {
+        for (let i = 0; i < subscribers.length; i++) {
+            this.subscribers.push(subscribers[i]);
+        }
+    }
+
     destroy() {
         for (let i = 0; i < this.subscribers.length; i++) {
             const subscriber = this.subscribers.pop();
@@ -276,6 +288,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     public setFramesDelay(delay: number) {
         this.layerHandler.setFramesDelay(delay);
+    }
+
+    get text(): ITextHandler {
+        return this.layerHandler.text;
     }
 }
 

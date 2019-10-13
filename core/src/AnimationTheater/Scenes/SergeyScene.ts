@@ -1,8 +1,8 @@
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
-import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {CombinedRectangle} from "../AnimationModels/rectangles/CombinedRectangle";
 import {Flower} from "../AnimationModels/flowers/BaseFlower";
 import {Flower4X} from "../AnimationModels/flowers/Flower4X";
+import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
 
 export class SergeyScene extends AbstractScene {
 
@@ -11,7 +11,10 @@ export class SergeyScene extends AbstractScene {
     }
 
     protected createScene(): void {
-        const rectangle = new AnimatedRectangleLightRed(this.generalLayer);
+        const buttonExit = new ButtonExit(this.generalLayer);
+        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
+        buttonExit.elementY = 5;
+
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const bigFlower = new Flower4X(this.generalLayer);
 
@@ -23,25 +26,26 @@ export class SergeyScene extends AbstractScene {
         }
 
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
+        combinedRectangle.elementY= this.generalLayer.height - combinedRectangle.elementHeight;
 
         let isFirst = true;
         this.collect(
             this.onStart$.subscribe(() => {
                 if (isFirst) {
-                    this.setActor(rectangle);
                     this.setActor(combinedRectangle);
                     this.setActor(bigFlower);
+                    this.setActor(buttonExit);
                     isFirst = false;
                 }
             }),
             this.onSetUserData$.subscribe(() => {
                 console.log(this.userData);
             }),
-            rectangle.isMouseClick$.subscribe(() => {
-                this.exit();
-            }),
             combinedRectangle.isMouseClick$.subscribe(() => {
                 combinedRectangle.nextRectangle();
+            }),
+            buttonExit.isMouseClick$.subscribe(() => {
+                this.exit();
             })
         );
     }

@@ -64,6 +64,7 @@ export abstract class AbstractScene implements IScene {
     }
 
     protected setActor(actor: AbstractCustomDraw): void {
+        actor.disableEvents();
         this.actors.push(actor);
         this.renderController.setDrawElement(actor);
     }
@@ -79,9 +80,11 @@ export abstract class AbstractScene implements IScene {
     public renderStart(isBackgroundLayerPresent: boolean): void {
         this.renderController.renderStart(isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
-        this.actors.forEach(actor => {
-            actor.enableEvents();
-        });
+        setTimeout(() => {
+            this.actors.forEach(actor => {
+                actor.enableEvents();
+            });
+        },300);
     }
 
     public renderStop(): void {
