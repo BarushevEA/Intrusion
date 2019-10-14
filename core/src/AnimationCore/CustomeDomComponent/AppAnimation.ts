@@ -41,13 +41,17 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     setMouseLeftDown(event: MouseEvent) {
-        this.convertOuterCoordinates(event, mouseLeftDownPosition);
-        mouseLeftDown$.next(mouseLeftDownPosition);
+        if (event.button === 0) {
+            this.convertOuterCoordinates(event, mouseLeftDownPosition);
+            mouseLeftDown$.next(mouseLeftDownPosition);
+        }
     }
 
     setMouseLeftUp(event: MouseEvent) {
-        this.convertOuterCoordinates(event, mouseLeftUpPosition);
-        mouseLeftUp$.next(mouseLeftUpPosition);
+        if (event.button === 0) {
+            this.convertOuterCoordinates(event, mouseLeftUpPosition);
+            mouseLeftUp$.next(mouseLeftUpPosition);
+        }
     }
 
     setMouseMoveLocation(event: MouseEvent): void {

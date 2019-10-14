@@ -1,5 +1,5 @@
 import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler/LayerHandler";
-import {mouseClickPosition$, mouseMovePosition$} from "../../Store/EventStore";
+import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {Observable, ISubscriptionLike} from "../../CustomeLibraries/Observable";
 import {ITextHandler} from "../LayerHandler/TextHandler";
@@ -32,6 +32,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
+    public isMouseLeftClick$ = new Observable(<boolean>false);
     public isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
@@ -42,6 +43,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.collect(
             mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
             mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
+            mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
+            mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
             AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
@@ -84,6 +87,26 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
         if (isOver) {
             this.isMouseClick$.next(isOver);
+        }
+    }
+
+    private leftMouseDown(position: IMousePosition) {
+        this.mouseLeftClick(position, true);
+    }
+
+    private leftMouseUp(position: IMousePosition) {
+        this.mouseLeftClick(position, false);
+    }
+
+    private mouseLeftClick(position: IMousePosition, isDown: boolean) {
+        if (this.isIgnoreEvents) {
+            return;
+        }
+
+        let isOver = this.checkOverPosition(position);
+
+        if (isOver) {
+            this.isMouseLeftClick$.next(isDown);
         }
     }
 
