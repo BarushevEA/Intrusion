@@ -16,7 +16,6 @@ export abstract class AbstractButtonWithText extends AbstractCustomDraw {
     protected abstract getButton(): AbstractButton;
 
     private init(text: string) {
-        this.emptyButton = this.getButton();
         this.setSize(this.emptyButton.elementHeight, this.emptyButton.elementWidth);
         this.setVirtualLayer(this.textLayerName);
         this.setColors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');

@@ -157,25 +157,22 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonStop);
 
         this.collect(
-            arr[59].isMouseClick$.subscribe(() => {
-                recMoveStart();
-            }),
-            arr[58].isMouseClick$.subscribe(() => {
-                this.destroySubscriber(move);
-                move = <any>0;
-            }),
-            arr[57].isMouseClick$.subscribe(() => {
-                this.renderStop();
-            }),
-            arr[56].isMouseClick$.subscribe(() => {
-                this.renderStart(true);
-            }),
-            arr[55].isMouseClick$.subscribe(() => {
-                this.exit();
-            }),
             buttonExit.isMouseClick$.subscribe(() => {
                 this.userData.test++;
                 this.exit();
+            }),
+            buttonMove.isMouseClick$.subscribe(() => {
+                recMoveStart();
+            }),
+            buttonStop.isMouseClick$.subscribe(() => {
+                this.destroySubscriber(move);
+                move = <any>0;
+            }),
+            buttonPlay.isMouseClick$.subscribe(() => {
+                this.renderStart(true);
+            }),
+            buttonPause.isMouseClick$.subscribe(() => {
+                this.renderStop();
             })
         );
     }
