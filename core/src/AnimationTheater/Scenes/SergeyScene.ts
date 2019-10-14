@@ -3,6 +3,7 @@ import {CombinedRectangle} from "../AnimationModels/rectangles/CombinedRectangle
 import {Flower} from "../AnimationModels/flowers/BaseFlower";
 import {Flower4X} from "../AnimationModels/flowers/Flower4X";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
+import {ButtonEmptyGray} from "../AnimationModels/Buttons/ButtonEmptyGray";
 
 export class SergeyScene extends AbstractScene {
 
@@ -12,11 +13,11 @@ export class SergeyScene extends AbstractScene {
 
     protected createScene(): void {
         const buttonExit = new ButtonExit(this.generalLayer);
+        const buttonText = new ButtonEmptyGray(this.generalLayer);
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const bigFlower = new Flower4X(this.generalLayer);
 
-        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
-        buttonExit.elementY = 5;
+        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
         combinedRectangle.elementY = this.generalLayer.height - combinedRectangle.elementHeight;
 
@@ -40,6 +41,7 @@ export class SergeyScene extends AbstractScene {
         }
         this.setActor(combinedRectangle);
         this.setActor(bigFlower);
+        this.setActor(buttonText);
         this.setActor(buttonExit);
     }
 }

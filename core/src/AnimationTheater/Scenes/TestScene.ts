@@ -19,8 +19,7 @@ export class TestScene extends AbstractScene {
 
     protected createScene(): void {
         const buttonExit = new ButtonExit(this.generalLayer);
-        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
-        buttonExit.elementY = 5;
+        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
 
         this.userData = {
             test: 123,
