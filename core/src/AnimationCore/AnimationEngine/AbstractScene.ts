@@ -21,15 +21,23 @@ export abstract class AbstractScene implements IScene {
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
     private readonly _onStart$ = new Observable(<IUserData><any>0);
+    private readonly _onStartOnce$ = new Observable(<IUserData><any>0);
     private readonly _onDestroy$ = new Observable(<IUserData><any>0);
     private readonly _onSetUserData$ = new Observable(<IUserData><any>0);
     private readonly _userData: IUserData = {};
+    private isFirstStart = true;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
-        this.createScene();
+        this.run();
+    }
+
+    run() {
+        this.collect(
+            this._onStartOnce$.subscribe(this.createScene.bind(this))
+        );
     }
 
     set userData(data: IUserData) {
@@ -53,6 +61,10 @@ export abstract class AbstractScene implements IScene {
 
     get onExit$(): Observable<IUserData> {
         return this._onExit$;
+    }
+
+    get onStartOnce$(): Observable<IUserData> {
+        return this._onStartOnce$;
     }
 
     get onStart$(): Observable<IUserData> {
@@ -80,11 +92,15 @@ export abstract class AbstractScene implements IScene {
     public renderStart(isBackgroundLayerPresent: boolean): void {
         this.renderController.renderStart(isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
+        if (this.isFirstStart) {
+            this._onStartOnce$.next({...this._userData});
+            this.isFirstStart = false;
+        }
         setTimeout(() => {
             this.actors.forEach(actor => {
                 actor.enableEvents();
             });
-        },300);
+        }, 300);
     }
 
     public renderStop(): void {

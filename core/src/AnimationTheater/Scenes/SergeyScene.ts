@@ -12,32 +12,15 @@ export class SergeyScene extends AbstractScene {
 
     protected createScene(): void {
         const buttonExit = new ButtonExit(this.generalLayer);
-        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
-        buttonExit.elementY = 5;
-
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const bigFlower = new Flower4X(this.generalLayer);
 
-        for (let i = 0; i < 50; i++) {
-            const flower = new Flower(this.generalLayer);
-            flower.elementX = Math.round(Math.random() * 1000);
-            flower.elementY = Math.round(Math.random() * 150 + 200);
-            this.setActor(flower);
-        }
-
+        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth - 5;
+        buttonExit.elementY = 5;
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
-        combinedRectangle.elementY= this.generalLayer.height - combinedRectangle.elementHeight;
+        combinedRectangle.elementY = this.generalLayer.height - combinedRectangle.elementHeight;
 
-        let isFirst = true;
         this.collect(
-            this.onStart$.subscribe(() => {
-                if (isFirst) {
-                    this.setActor(combinedRectangle);
-                    this.setActor(bigFlower);
-                    this.setActor(buttonExit);
-                    isFirst = false;
-                }
-            }),
             this.onSetUserData$.subscribe(() => {
                 console.log(this.userData);
             }),
@@ -48,5 +31,15 @@ export class SergeyScene extends AbstractScene {
                 this.exit();
             })
         );
+
+        for (let i = 0; i < 50; i++) {
+            const flower = new Flower(this.generalLayer);
+            flower.elementX = Math.round(Math.random() * 1000);
+            flower.elementY = Math.round(Math.random() * 150 + 200);
+            this.setActor(flower);
+        }
+        this.setActor(combinedRectangle);
+        this.setActor(bigFlower);
+        this.setActor(buttonExit);
     }
 }
