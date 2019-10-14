@@ -6,6 +6,8 @@ export type ITextHandler = {
     fillText(text: string): void;
     strokeText(text: string): void;
     setToDefault(): void;
+    x: number;
+    y: number;
 }
 
 export enum EAlign {

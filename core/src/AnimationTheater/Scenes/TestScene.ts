@@ -11,6 +11,10 @@ import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/Animate
 import {AnimatedWave} from "../AnimationModels/waves/AnimatedWave";
 import {AnimatedWaveDark} from "../AnimationModels/waves/AnimatedWaveDark";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
+import {ButtonGreenWithText} from "../AnimationModels/Buttons/ButtonGreenWithText";
+import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
+import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText";
+import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -19,7 +23,15 @@ export class TestScene extends AbstractScene {
 
     protected createScene(): void {
         const buttonExit = new ButtonExit(this.generalLayer);
+        const buttonMove = new ButtonGreenWithText(this.generalLayer, 'Move');
+        const buttonStop = new ButtonRedWithText(this.generalLayer, 'Stop');
+        const buttonPlay = new ButtonBlueWithText(this.generalLayer, 'Play');
+        const buttonPause = new ButtonYellowWithText(this.generalLayer, 'Pause');
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
+        buttonPause.elementX = buttonPause.elementWidth;
+        buttonPlay.elementX = 0;
+        buttonMove.elementX = buttonMove.elementWidth * 2;
+        buttonStop.elementX = buttonStop.elementWidth * 3;
 
         this.userData = {
             test: 123,
@@ -139,6 +151,10 @@ export class TestScene extends AbstractScene {
 
         this.setActor(wave2);
         this.setActor(buttonExit);
+        this.setActor(buttonPause);
+        this.setActor(buttonPlay);
+        this.setActor(buttonMove);
+        this.setActor(buttonStop);
 
         this.collect(
             arr[59].isMouseClick$.subscribe(() => {
