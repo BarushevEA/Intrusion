@@ -15,6 +15,7 @@ import {ButtonGreenWithText} from "../AnimationModels/Buttons/ButtonGreenWithTex
 import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
 import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
+import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -27,11 +28,13 @@ export class TestScene extends AbstractScene {
         const buttonStop = new ButtonRedWithText(this.generalLayer, 'Stop');
         const buttonPlay = new ButtonBlueWithText(this.generalLayer, 'Play');
         const buttonPause = new ButtonYellowWithText(this.generalLayer, 'Pause');
+        const buttonInvisible = new ButtonGrayWithText(this.generalLayer, 'Invert');
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         buttonPause.elementX = buttonPause.elementWidth;
         buttonPlay.elementX = 0;
         buttonMove.elementX = buttonMove.elementWidth * 2;
         buttonStop.elementX = buttonStop.elementWidth * 3;
+        buttonInvisible.elementX = buttonInvisible.elementWidth * 5;
 
         this.userData = {
             test: 123,
@@ -106,7 +109,7 @@ export class TestScene extends AbstractScene {
 
         let isReverse = true;
 
-        setInterval(() => {
+        function toggleReverse() {
             if (isReverse) {
                 arr.forEach(el => {
                     el.setAnimationReverse();
@@ -117,7 +120,7 @@ export class TestScene extends AbstractScene {
                 });
             }
             isReverse = !isReverse;
-        }, 10000);
+        }
 
         this.setActor(wave3);
         this.setActor(wave);
@@ -139,6 +142,14 @@ export class TestScene extends AbstractScene {
             this.setActor(circle);
         }
 
+        this.setActor(wave2);
+        this.setActor(buttonExit);
+        this.setActor(buttonPause);
+        this.setActor(buttonPlay);
+        this.setActor(buttonMove);
+        this.setActor(buttonStop);
+        this.setActor(buttonInvisible);
+
         arr.forEach(el => {
             this.collect(el.isMouseOver$.subscribe(isOver => {
                 if (isOver) {
@@ -148,13 +159,6 @@ export class TestScene extends AbstractScene {
                 }
             }));
         });
-
-        this.setActor(wave2);
-        this.setActor(buttonExit);
-        this.setActor(buttonPause);
-        this.setActor(buttonPlay);
-        this.setActor(buttonMove);
-        this.setActor(buttonStop);
 
         this.collect(
             buttonExit.isMouseClick$.subscribe(() => {
@@ -173,6 +177,9 @@ export class TestScene extends AbstractScene {
             }),
             buttonPause.isMouseClick$.subscribe(() => {
                 this.renderStop();
+            }),
+            buttonInvisible.isMouseClick$.subscribe(() => {
+                toggleReverse();
             })
         );
     }
