@@ -8,6 +8,11 @@ export type IRenderController = {
     renderStop(): void;
     deleteDrawElement(element: ICustomDraw): void;
     destroyElements(): void;
+    setElementOnTop(element: ICustomDraw): void;
+    setElementZIndex(element: ICustomDraw, z_index: number): void;
+    sortElementsByZIndex(): void;
+    setElementsGroupOnTop(elements: ICustomDraw[]): void;
+    setElementsGroupByZIndex(elements: ICustomDraw[], z_index: number): void;
 }
 
 
@@ -25,6 +30,8 @@ export class RenderController implements IRenderController {
 
     public setDrawElement(element: ICustomDraw): void {
         this.elementsPool.push(element);
+        element.z_index = this.elementsPool.length - 1;
+        this.sortElementsByZIndex();
     }
 
     public renderStart(isBackgroundLayerPresent: boolean): void {
@@ -60,10 +67,52 @@ export class RenderController implements IRenderController {
         if (index === -1) {
             return;
         }
-        for (let i = index; i < this.elementsPool.length - 1; i++) {
-            this.elementsPool[i] = this.elementsPool[i + 1];
+        element.z_index = this.elementsPool[this.elementsPool.length - 1].z_index + 1;
+        this.sortElementsByZIndex();
+    }
+
+    public setElementZIndex(element: ICustomDraw, z_index: number): void {
+        element.z_index = z_index;
+        this.sortElementsByZIndex();
+    }
+
+    public setElementsGroupOnTop(elements: ICustomDraw[]): void {
+        for (let i = 0; i < elements.length; i++) {
+            const index = findElementOnArray(this.elementsPool, elements[i]);
+            if (index === -1) {
+                return;
+            }
         }
-        this.elementsPool[this.elementsPool.length - 1] = element;
+
+        const zIndex = this.elementsPool[this.elementsPool.length - 1].z_index + 1;
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].z_index = zIndex + i;
+        }
+        this.sortElementsByZIndex();
+    }
+
+    public setElementsGroupByZIndex(elements: ICustomDraw[], z_index: number): void {
+        for (let i = 0; i < elements.length; i++) {
+            const index = findElementOnArray(this.elementsPool, elements[i]);
+            if (index === -1) {
+                return;
+            }
+        }
+
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].z_index = z_index;
+        }
+        this.sortElementsByZIndex();
+    }
+
+    public sortElementsByZIndex(): void {
+        this.elementsPool.sort((a, b) => {
+            if (a.z_index > b.z_index) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
     }
 
     public destroyElements(): void {

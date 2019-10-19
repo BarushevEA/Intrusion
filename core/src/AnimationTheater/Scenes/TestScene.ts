@@ -180,6 +180,9 @@ export class TestScene extends AbstractScene {
             }),
             buttonInvisible.isMouseClick$.subscribe(() => {
                 toggleReverse();
+            }),
+            arr[arr.length - 1].isMouseClick$.subscribe(() => {
+                this.setActorOnTop(arr[arr.length - 1]);
             })
         );
     }

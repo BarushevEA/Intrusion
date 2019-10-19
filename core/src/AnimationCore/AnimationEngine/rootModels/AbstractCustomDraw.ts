@@ -7,6 +7,7 @@ import {ITextHandler} from "../LayerHandler/TextHandler";
 //TODO frame pool technology need to use for lot of entities of class
 
 export type ICustomDraw = {
+    z_index: number;
     renderFrame(): void;
     destroy(): void;
 }
@@ -15,6 +16,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
     private static mousePosition: IMousePosition = <any>0;
     public static tickCount$ = new Observable(<boolean>false);
+    private _z_index = 0;
 
     public static tickCount() {
         requestAnimationFrame(AbstractCustomDraw.tickCount);
@@ -315,6 +317,14 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     get text(): ITextHandler {
         return this.layerHandler.text;
+    }
+
+    get z_index(): number {
+        return this._z_index;
+    }
+
+    set z_index(value: number) {
+        this._z_index = value;
     }
 }
 

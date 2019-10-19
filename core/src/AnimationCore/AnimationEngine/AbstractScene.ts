@@ -1,5 +1,5 @@
 import {IRenderController, RenderController} from "./RenderController";
-import {AbstractCustomDraw} from "./rootModels/AbstractCustomDraw";
+import {AbstractCustomDraw, ICustomDraw} from "./rootModels/AbstractCustomDraw";
 import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
 
 export type IScene = {
@@ -79,6 +79,26 @@ export abstract class AbstractScene implements IScene {
         actor.disableEvents();
         this.actors.push(actor);
         this.renderController.setDrawElement(actor);
+    }
+
+    protected setActorOnTop(actor: AbstractCustomDraw): void {
+        this.renderController.setElementOnTop(actor);
+    }
+
+    protected setActorZIndex(actor: AbstractCustomDraw, z_index: number): void {
+        this.renderController.setElementZIndex(actor, z_index);
+    }
+
+    protected setActorsGroupOnTop(actors: ICustomDraw[]): void {
+        this.renderController.setElementsGroupOnTop(actors);
+    }
+
+    protected setActorsGroupByZIndex(actors: ICustomDraw[], z_index: number): void {
+        this.renderController.setElementsGroupByZIndex(actors, z_index);
+    }
+
+    protected sortActorsByZIndex() {
+        this.renderController.sortElementsByZIndex();
     }
 
     public collect(...subscribers: ISubscriptionLike[]) {

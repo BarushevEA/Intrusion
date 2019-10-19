@@ -5,6 +5,6 @@
 // TODO 3.2) Add events to animation models (mouse key up and key down)
 // TODO 4) Create effective background animation (move on left, right and t.e. via virtual canvases and custom map of dimensions)
 // DONE TODO 5) Create combined group component (created test example)
-// TODO 6) Need to add svg image handler
+// TODO 6) Need to add svg or Base64 image handler
 // TODO 7) Add drug and drop behavior
 // TODO 7.1) Add to render controller move actor z-index
