@@ -1,6 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/LayerHandler";
-
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 export class AnimatedWave extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
@@ -20,13 +19,13 @@ export class AnimatedWave extends AbstractFramedShape {
 
         for (let i = 0; i < Math.trunc(points.length / 4); i++) {
             this.createFrame(2);
-            this.isCustomStoke = true;
-            this.setColors(
+            this.shape.isCustomStroke = true;
+            this.shape.setColors(
                 '',
                 'rgba(0,109,146,1)');
-            this.setLineWidth(130);
-            this.drawPolygon(points);
-            this.isCustomStoke = false;
+            this.shape.setLineWidth(130);
+            this.shape.drawPolygon(points);
+            this.shape.isCustomStroke = false;
 
             const y0 = points[0].y;
             for (let j = 0; j < points.length - 1; j++) {

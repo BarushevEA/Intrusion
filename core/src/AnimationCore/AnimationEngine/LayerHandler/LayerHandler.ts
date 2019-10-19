@@ -1,9 +1,5 @@
 import {ITextHandler, textHandler} from "./TextHandler";
-
-export type IPoint = {
-    x: number;
-    y: number;
-};
+import {IShapeHandler, shapeHandler} from "./ShapeHandler";
 
 export type IDimensions = {
     elementX: number;
@@ -31,8 +27,6 @@ export type IFramePool = {
     originalFrames: IFrame[];
 }
 
-export type IPolygon = IPoint[];
-
 export class LayerHandler {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
@@ -46,8 +40,8 @@ export class LayerHandler {
         reverseFrames: [],
         originalFrames: []
     };
-    private _isCustomStroke = false;
     private _text = textHandler;
+    private _shape = shapeHandler;
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -65,63 +59,13 @@ export class LayerHandler {
         return this._text;
     }
 
+    get shape(): IShapeHandler {
+        this._shape.context = this.context;
+        return this._shape;
+    }
+
     public clear(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    public startDrawing(): void {
-        this.context.beginPath();
-    }
-
-    public stopDrawing(): void {
-        this.context.closePath();
-        if (!this._isCustomStroke) {
-            this.context.fill();
-            this.context.stroke();
-        }
-    }
-
-    public drawCircle(x: number, y: number, radius: number): void {
-        this.context.arc(x, y, radius, 0, 2 * Math.PI);
-    }
-
-    public setColors(backgroundColor: string, borderColor: string): void {
-        this.context.fillStyle = backgroundColor;
-        this.context.strokeStyle = borderColor;
-    }
-
-    public setLineWidth(width?: number) {
-        if (width) {
-            this.context.lineWidth = width;
-        }
-    }
-
-    public drawSimpleCircle(x: number, y: number, radius: number): void {
-        this.startDrawing();
-        this.drawCircle(x, y, radius);
-        this.stopDrawing();
-    }
-
-    public drawRectangle(x: number, y: number, width: number, height: number): void {
-        this.startDrawing();
-        this.context.rect(x, y, width, height);
-        this.stopDrawing();
-    }
-
-    public drawPolygon(polygon: IPolygon): void {
-        this.startDrawing();
-        if (!polygon.length) {
-            return;
-        }
-        this.context.moveTo(polygon[0].x, polygon[0].y);
-        for (let i = 1; i < polygon.length; i++) {
-            const node = polygon[i];
-            this.context.lineTo(node.x, node.y);
-        }
-        if (this._isCustomStroke) {
-            this.context.stroke();
-        }
-        this.stopDrawing();
     }
 
     public restorePreviousLayer(): void {
@@ -279,14 +223,6 @@ export class LayerHandler {
         if (index >= 0 && index < this.framePool.playedFrames.length) {
             this.framePool.showedFrame = index;
         }
-    }
-
-    get isCustomStroke(): boolean {
-        return this._isCustomStroke;
-    }
-
-    set isCustomStroke(value: boolean) {
-        this._isCustomStroke = value;
     }
 
     public setFramesDelay(delay: number) {

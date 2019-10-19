@@ -14,11 +14,11 @@ export class AnimatedRectangleLightRed extends AbstractFramedShape {
 
         for (let i = 0; i < 50; i += 4) {
             this.createFrame(0);
-            this.setColors(
+            this.shape.setColors(
                 'rgba(93,0,0,0.8)',
                 'rgba(0,0,0,0.7)');
-            this.setLineWidth(10);
-            this.drawRectangle(this.elementWidth / 2 - i, this.elementWidth / 2 - i, i * 2, i * 2);
+            this.shape.setLineWidth(10);
+            this.shape.drawRectangle(this.elementWidth / 2 - i, this.elementWidth / 2 - i, i * 2, i * 2);
         }
         this.setLastFrameToStop();
     }

@@ -17,28 +17,28 @@ export class SnakeSpiral extends AbstractFramedShape {
                 radius++;
                 if (radius === 190) {
                     radius = 250;
-                    this.setColors(
+                    this.shape.setColors(
                         '#580954',
                         '#825000'
                     );
                 } else {
-                    this.setColors(
+                    this.shape.setColors(
                         '#B49632',
                         '#825000'
                     );
                 }
-                this.setLineWidth(2);
-                this.drawSimpleCircle(
+                this.shape.setLineWidth(2);
+                this.shape.drawSimpleCircle(
                     Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i),
                     Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i),
                     Math.round(radius / 10));
                 if (radius === 250) {
-                    this.setColors('#B49632', '#B49632');
+                    this.shape.setColors('#B49632', '#B49632');
                     const x = Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i);
                     const y = Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i);
-                    this.drawSimpleCircle(x - 10, y - 5, Math.round(3));
-                    this.drawSimpleCircle(x + 10, y - 5, Math.round(3));
-                    this.drawPolygon([
+                    this.shape.drawSimpleCircle(x - 10, y - 5, Math.round(3));
+                    this.shape.drawSimpleCircle(x + 10, y - 5, Math.round(3));
+                    this.shape.drawPolygon([
                         {x: x - 10, y: y + 8},
                         {x: x - 8, y: y + 10},
                         {x: x - 3, y: y + 12},

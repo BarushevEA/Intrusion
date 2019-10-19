@@ -1,8 +1,9 @@
-import {LayerHandler, IDimensions, IFramePool, IPolygon} from "../LayerHandler/LayerHandler";
+import {IDimensions, IFramePool, LayerHandler} from "../LayerHandler/LayerHandler";
 import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
-import {Observable, ISubscriptionLike} from "../../CustomeLibraries/Observable";
+import {ISubscriptionLike, Observable} from "../../CustomeLibraries/Observable";
 import {ITextHandler} from "../LayerHandler/TextHandler";
+import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 
 //TODO frame pool technology need to use for lot of entities of class
 
@@ -245,33 +246,6 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.layerHandler.setOriginalToPlay();
     }
 
-    protected setLineWidth(width: number) {
-        this.layerHandler.setLineWidth(width);
-    }
-
-    protected setColors(backgroundColor: string,
-                        borderColor: string): void {
-        this.layerHandler.setColors(
-            backgroundColor,
-            borderColor
-        );
-    }
-
-    protected drawSimpleCircle(x: number, y: number, radius: number): void {
-        this.layerHandler.drawSimpleCircle(x, y, radius);
-    }
-
-    protected drawPolygon(polygon: IPolygon): void {
-        this.layerHandler.drawPolygon(polygon);
-    }
-
-    protected drawRectangle(x: number,
-                            y: number,
-                            width: number,
-                            height: number): void {
-        this.layerHandler.drawRectangle(x, y, width, height);
-    }
-
     setVirtualLayer(name: string): HTMLCanvasElement {
         return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
     }
@@ -332,20 +306,16 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.subscribers.length = 0;
     }
 
-    get isCustomStoke(): boolean {
-        return this.layerHandler.isCustomStroke;
-    }
-
-    set isCustomStoke(value: boolean) {
-        this.layerHandler.isCustomStroke = value;
-    }
-
     public setFramesDelay(delay: number) {
         this.layerHandler.setFramesDelay(delay);
     }
 
     get text(): ITextHandler {
         return this.layerHandler.text;
+    }
+
+    get shape(): IShapeHandler {
+        return this.layerHandler.shape;
     }
 
     get z_index(): number {
