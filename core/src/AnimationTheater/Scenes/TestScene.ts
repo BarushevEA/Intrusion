@@ -151,13 +151,24 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonInvisible);
 
         arr.forEach(el => {
-            this.collect(el.isMouseOver$.subscribe(isOver => {
-                if (isOver) {
-                    el.setAnimationReverse();
-                } else {
+            this.collect(
+                el.isMouseOver$.subscribe(isOver => {
+                    if (isOver) {
+                        el.setAnimationReverse();
+                    } else {
+                        el.setAnimationOriginal();
+                    }
+                }),
+                el.isMouseLeftDrag$.subscribe(() => {
+                    el.saveZIndex();
+                    this.setActorOnTop(el);
                     el.setAnimationOriginal();
-                }
-            }));
+                }),
+                el.isMouseLeftDrop$.subscribe(() => {
+                    el.restoreZIndex();
+                    this.sortActorsByZIndex();
+                })
+            );
         });
 
         this.collect(
@@ -180,9 +191,6 @@ export class TestScene extends AbstractScene {
             }),
             buttonInvisible.isMouseClick$.subscribe(() => {
                 toggleReverse();
-            }),
-            arr[arr.length - 1].isMouseClick$.subscribe(() => {
-                this.setActorOnTop(arr[arr.length - 1]);
             })
         );
     }

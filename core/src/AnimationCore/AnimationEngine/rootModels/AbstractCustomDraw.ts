@@ -17,6 +17,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private static mousePosition: IMousePosition = <any>0;
     public static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
+    private _z_index_memory = 0;
 
     public static tickCount() {
         requestAnimationFrame(AbstractCustomDraw.tickCount);
@@ -30,11 +31,16 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private _elementY = 0;
     private _elementWidth = 0;
     private _elementHeight = 0;
+    private _isLeftMouseCatch = false;
+    private leftMouseCatchTimeIndex = -1;
+    private leftMouseCatchTime = 300;
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
     public isMouseLeftClick$ = new Observable(<boolean>false);
+    public isMouseLeftDrag$ = new Observable(<any>0);
+    public isMouseLeftDrop$ = new Observable(<any>0);
     public isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
@@ -47,7 +53,9 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
             mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
             mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
-            AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this)));
+            this.isMouseLeftClick$.subscribe(this.tryLeftMuseCatch.bind(this)),
+            AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this))
+        );
     }
 
     disableEvents() {
@@ -100,6 +108,25 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this.mouseLeftClick(position, false);
     }
 
+    private tryLeftMuseCatch(isDown: boolean): void {
+        if (this.leftMouseCatchTimeIndex !== -1) {
+            clearTimeout(this.leftMouseCatchTimeIndex);
+            this.leftMouseCatchTimeIndex = -1;
+            if (!isDown && this._isLeftMouseCatch) {
+                this.isMouseLeftDrop$.next(0);
+                this._isLeftMouseCatch = false;
+            }
+            return;
+        }
+        if (!isDown) {
+            return;
+        }
+        this.leftMouseCatchTimeIndex = setTimeout(() => {
+            this.isMouseLeftDrag$.next(0);
+            this._isLeftMouseCatch = true;
+        }, this.leftMouseCatchTime);
+    }
+
     private mouseLeftClick(position: IMousePosition, isDown: boolean) {
         if (this.isIgnoreEvents) {
             return;
@@ -109,6 +136,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
         if (isOver) {
             this.isMouseLeftClick$.next(isDown);
+        } else {
+            this.tryLeftMuseCatch(isOver);
         }
     }
 
@@ -325,6 +354,18 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     set z_index(value: number) {
         this._z_index = value;
+    }
+
+    get isLeftMouseCatch(): boolean {
+        return this._isLeftMouseCatch;
+    }
+
+    public saveZIndex() {
+        this._z_index_memory = this._z_index;
+    }
+
+    public restoreZIndex() {
+        this._z_index = this._z_index_memory;
     }
 }
 
