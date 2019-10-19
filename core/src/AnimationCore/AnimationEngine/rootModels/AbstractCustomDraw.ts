@@ -14,7 +14,7 @@ export type ICustomDraw = {
 
 export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
-    private static mousePosition: IMousePosition = <any>0;
+    private static _mousePosition: IMousePosition = <any>0;
     public static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
@@ -74,7 +74,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
-            AbstractCustomDraw.mousePosition = position;
+            AbstractCustomDraw._mousePosition = position;
             this.isMouseOver = isOver;
             this.isMouseOver$.next(isOver);
         }
@@ -85,7 +85,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             return;
         }
 
-        this.mouseOver(AbstractCustomDraw.mousePosition);
+        this.mouseOver(AbstractCustomDraw._mousePosition);
     }
 
     private mouseClick(position: IMousePosition) {
@@ -366,6 +366,10 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
 
     public restoreZIndex() {
         this._z_index = this._z_index_memory;
+    }
+
+    static get mousePosition(): IMousePosition {
+        return this._mousePosition;
     }
 }
 

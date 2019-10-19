@@ -16,6 +16,7 @@ import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
 import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
+import {ISubscriptionLike} from "../../AnimationCore/CustomeLibraries/Observable";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -150,6 +151,7 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonStop);
         this.setActor(buttonInvisible);
 
+        let rectBehavior: ISubscriptionLike = <any>0;
         arr.forEach(el => {
             this.collect(
                 el.isMouseOver$.subscribe(isOver => {
@@ -160,13 +162,36 @@ export class TestScene extends AbstractScene {
                     }
                 }),
                 el.isMouseLeftDrag$.subscribe(() => {
+                    const elements = arr.filter(item => item.isLeftMouseCatch);
+
+                    if (elements[0]) {
+                        let zIndex = elements[0].z_index;
+                        for (let i = 0; i < elements.length; i++) {
+                            const element = elements[i];
+                            if (zIndex < element.z_index) {
+                                zIndex = element.z_index;
+                            }
+                        }
+                        if (el.z_index !== zIndex) {
+                            return;
+                        }
+                    }
+
                     el.saveZIndex();
                     this.setActorOnTop(el);
                     el.setAnimationOriginal();
+                    rectBehavior = AbstractCustomDraw.tickCount$.subscribe(() => {
+                        el.elementX = AbstractCustomDraw.mousePosition.x - Math.round(el.elementWidth / 2);
+                        el.elementY = AbstractCustomDraw.mousePosition.y - Math.round(el.elementHeight / 2);
+                        el.setAnimationReverse();
+                    });
+                    this.collect(rectBehavior);
                 }),
                 el.isMouseLeftDrop$.subscribe(() => {
-                    el.restoreZIndex();
-                    this.sortActorsByZIndex();
+                    this.setActorZIndex(el, arr[arr.length - 1].z_index + 1);
+                    if (rectBehavior) {
+                        this.destroySubscriber(rectBehavior);
+                    }
                 })
             );
         });
