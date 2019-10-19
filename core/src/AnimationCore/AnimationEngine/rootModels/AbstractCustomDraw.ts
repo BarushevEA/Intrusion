@@ -33,7 +33,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     private _elementHeight = 0;
     private _isLeftMouseCatch = false;
     private leftMouseCatchTimeIndex = -1;
-    private leftMouseCatchTime = 300;
+    private leftMouseCatchTime = 200;
     private readonly subscribers: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
@@ -113,8 +113,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             clearTimeout(this.leftMouseCatchTimeIndex);
             this.leftMouseCatchTimeIndex = -1;
             if (!isDown && this._isLeftMouseCatch) {
-                this.isMouseLeftDrop$.next(0);
                 this._isLeftMouseCatch = false;
+                this.isMouseLeftDrop$.next(0);
             }
             return;
         }
@@ -122,8 +122,8 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             return;
         }
         this.leftMouseCatchTimeIndex = setTimeout(() => {
-            this.isMouseLeftDrag$.next(0);
             this._isLeftMouseCatch = true;
+            this.isMouseLeftDrag$.next(0);
         }, this.leftMouseCatchTime);
     }
 

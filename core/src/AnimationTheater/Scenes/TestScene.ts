@@ -151,7 +151,7 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonStop);
         this.setActor(buttonInvisible);
 
-        let rectBehavior: ISubscriptionLike = <any>0;
+        let rectBehavior: ISubscriptionLike[] = [];
         arr.forEach(el => {
             this.collect(
                 el.isMouseOver$.subscribe(isOver => {
@@ -162,35 +162,44 @@ export class TestScene extends AbstractScene {
                     }
                 }),
                 el.isMouseLeftDrag$.subscribe(() => {
-                    const elements = arr.filter(item => item.isLeftMouseCatch);
+                    const elements = arr.filter(item => item.isMouseOver$.getValue());
 
-                    if (elements[0]) {
-                        let zIndex = elements[0].z_index;
-                        for (let i = 0; i < elements.length; i++) {
-                            const element = elements[i];
-                            if (zIndex < element.z_index) {
-                                zIndex = element.z_index;
-                            }
+                    if (!elements.length) {
+                        return;
+                    }
+
+                    let zIndex = elements[0].z_index;
+                    for (let i = 0; i < elements.length; i++) {
+                        const element = elements[i];
+                        if (zIndex < element.z_index) {
+                            zIndex = element.z_index;
                         }
-                        if (el.z_index !== zIndex) {
-                            return;
-                        }
+                    }
+
+                    if (el.z_index < zIndex) {
+                        return;
                     }
 
                     el.saveZIndex();
                     this.setActorOnTop(el);
                     el.setAnimationOriginal();
-                    rectBehavior = AbstractCustomDraw.tickCount$.subscribe(() => {
+                    const bh = AbstractCustomDraw.tickCount$.subscribe(() => {
                         el.elementX = AbstractCustomDraw.mousePosition.x - Math.round(el.elementWidth / 2);
                         el.elementY = AbstractCustomDraw.mousePosition.y - Math.round(el.elementHeight / 2);
                         el.setAnimationReverse();
                     });
-                    this.collect(rectBehavior);
+                    rectBehavior.push(bh);
+                    rectBehavior.forEach(rectBh => {
+                        this.collect(rectBh);
+                    });
                 }),
                 el.isMouseLeftDrop$.subscribe(() => {
-                    this.setActorZIndex(el, arr[arr.length - 1].z_index + 1);
-                    if (rectBehavior) {
-                        this.destroySubscriber(rectBehavior);
+                    if (rectBehavior.length) {
+                        rectBehavior.forEach(rectBh => {
+                            this.collect(rectBh);
+                            this.destroySubscriber(rectBh);
+                        });
+                        rectBehavior = [];
                     }
                 })
             );
