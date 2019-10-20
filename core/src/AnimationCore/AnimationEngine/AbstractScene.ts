@@ -153,7 +153,6 @@ export abstract class AbstractScene implements IScene {
                 this.destroySubscriber(rectBh);
             });
             this.movedBehaviors = [];
-            console.log('onMovedActorDrop', drop.options);
             if (drop.options) {
                 if (drop.options.callbackOnDrop) {
                     drop.options.callbackOnDrop();
@@ -215,6 +214,7 @@ export abstract class AbstractScene implements IScene {
                     drag.actor.elementY =
                         AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
                 }
+
                 if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
                     drag.actor.elementX = AbstractCustomDraw.mousePosition.x - dx;
                     drag.actor.elementY = AbstractCustomDraw.mousePosition.y - dy;
