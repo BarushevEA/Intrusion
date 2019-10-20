@@ -1,4 +1,4 @@
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene, IDragDropOptions} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
@@ -16,7 +16,6 @@ import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
 import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
-import {ISubscriptionLike} from "../../AnimationCore/CustomeLibraries/Observable";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -151,8 +150,12 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonStop);
         this.setActor(buttonInvisible);
 
-        let rectBehavior: ISubscriptionLike[] = [];
+        const movedOptions: IDragDropOptions = {};
+
         arr.forEach(el => {
+            movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
+            this.moveOnMouseDrag(el, movedOptions);
+
             this.collect(
                 el.isMouseOver$.subscribe(isOver => {
                     if (isOver) {
@@ -160,49 +163,7 @@ export class TestScene extends AbstractScene {
                     } else {
                         el.setAnimationOriginal();
                     }
-                }),
-                el.isMouseLeftDrag$.subscribe(() => {
-                    const elements = arr.filter(item => item.isMouseOver$.getValue());
-
-                    if (!elements.length) {
-                        return;
-                    }
-
-                    let zIndex = elements[0].z_index;
-                    for (let i = 0; i < elements.length; i++) {
-                        const element = elements[i];
-                        if (zIndex < element.z_index) {
-                            zIndex = element.z_index;
-                        }
-                    }
-
-                    if (el.z_index < zIndex) {
-                        return;
-                    }
-
-                    el.saveZIndex();
-                    this.setActorOnTop(el);
-                    el.setAnimationOriginal();
-                    const bh = AbstractCustomDraw.tickCount$.subscribe(() => {
-                        el.elementX = AbstractCustomDraw.mousePosition.x - Math.round(el.elementWidth / 2);
-                        el.elementY = AbstractCustomDraw.mousePosition.y - Math.round(el.elementHeight / 2);
-                        el.setAnimationReverse();
-                    });
-                    rectBehavior.push(bh);
-                    rectBehavior.forEach(rectBh => {
-                        this.collect(rectBh);
-                    });
-                }),
-                el.isMouseLeftDrop$.subscribe(() => {
-                    if (rectBehavior.length) {
-                        rectBehavior.forEach(rectBh => {
-                            this.collect(rectBh);
-                            this.destroySubscriber(rectBh);
-                        });
-                        rectBehavior = [];
-                    }
-                })
-            );
+                }));
         });
 
         this.collect(

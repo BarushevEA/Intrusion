@@ -43,5 +43,7 @@ export class SergeyScene extends AbstractScene {
         this.setActor(bigFlower);
         this.setActor(buttonEmptyGray);
         this.setActor(buttonExit);
+
+        this.moveOnMouseDrag(bigFlower);
     }
 }
