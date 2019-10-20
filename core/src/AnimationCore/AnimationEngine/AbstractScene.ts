@@ -200,35 +200,39 @@ export abstract class AbstractScene implements IScene {
 
         this.movedBehaviors.push(
             AbstractCustomDraw.tickCount$.subscribe(() => {
-                if (!drag.options) {
-                    drag.actor.elementX =
-                        AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
-                    drag.actor.elementY =
-                        AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
-                    return;
-                }
-
-                if (drag.options.mouseCatch === E_MouseCatch.BY_CENTER) {
-                    drag.actor.elementX =
-                        AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
-                    drag.actor.elementY =
-                        AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
-                }
-
-                if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
-                    drag.actor.elementX = AbstractCustomDraw.mousePosition.x - dx;
-                    drag.actor.elementY = AbstractCustomDraw.mousePosition.y - dy;
-                }
-
-                if (drag.options.callbackOnMOve) {
-                    drag.options.callbackOnMOve();
-                }
+                this.handleDragOptions(drag, dx, dy);
             })
         );
 
         for (let i = 0; i < this.movedBehaviors.length; i++) {
             const behavior = this.movedBehaviors[i];
             this.collect(behavior);
+        }
+    }
+
+    private handleDragOptions(drag: IDragActor, dx: number, dy: number) {
+        if (!drag.options) {
+            drag.actor.elementX =
+                AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
+            drag.actor.elementY =
+                AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+            return;
+        }
+
+        if (drag.options.mouseCatch === E_MouseCatch.BY_CENTER) {
+            drag.actor.elementX =
+                AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
+            drag.actor.elementY =
+                AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+        }
+
+        if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
+            drag.actor.elementX = AbstractCustomDraw.mousePosition.x - dx;
+            drag.actor.elementY = AbstractCustomDraw.mousePosition.y - dy;
+        }
+
+        if (drag.options.callbackOnMOve) {
+            drag.options.callbackOnMOve();
         }
     }
 
