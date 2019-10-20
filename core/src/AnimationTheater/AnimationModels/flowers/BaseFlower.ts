@@ -1,5 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../../../../first_step_of_project/src/Screen";
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 export class Flower extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
