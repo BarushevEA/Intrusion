@@ -16,6 +16,7 @@ import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
 import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
+import {Heart} from "../AnimationModels/Heart";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -29,6 +30,8 @@ export class TestScene extends AbstractScene {
         const buttonPlay = new ButtonBlueWithText(this.generalLayer, 'Play');
         const buttonPause = new ButtonYellowWithText(this.generalLayer, 'Pause');
         const buttonInvisible = new ButtonGrayWithText(this.generalLayer, 'Invert');
+        const heart = new Heart(this.generalLayer);
+        heart.elementX = this.generalLayer.width - buttonExit.elementWidth - heart.elementWidth;
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         buttonPause.elementX = buttonPause.elementWidth;
         buttonPlay.elementX = 0;
@@ -60,7 +63,13 @@ export class TestScene extends AbstractScene {
         wave2.setShowedFrame(43);
         wave3.setShowedFrame(56);
 
-        const arr: AbstractCustomDraw[] = [];
+        const draws: AbstractCustomDraw[] = [];
+        for (let i = 0; i < 3; i++) {
+            const newHeart = new Heart(this.generalLayer);
+            newHeart.elementX = Math.round(Math.random() * this.generalLayer.width / 2);
+            newHeart.elementY = Math.round(Math.random() * this.generalLayer.height / 2);
+            draws.push(newHeart);
+        }
         for (let k = 0; k < 6; k++) {
             for (let i = 0; i < 10; i++) {
                 let rectangle0;
@@ -81,7 +90,7 @@ export class TestScene extends AbstractScene {
                 }
                 rectangle0.elementX = i * 100 - 50;
                 rectangle0.elementY = k * 100;
-                arr.push(rectangle0);
+                draws.push(rectangle0);
             }
         }
 
@@ -97,7 +106,7 @@ export class TestScene extends AbstractScene {
         };
 
         const recMove = () => {
-            arr.forEach(el => {
+            draws.forEach(el => {
                 el.elementX += dx;
             });
             counter--;
@@ -111,11 +120,11 @@ export class TestScene extends AbstractScene {
 
         function toggleReverse() {
             if (isReverse) {
-                arr.forEach(el => {
+                draws.forEach(el => {
                     el.setAnimationReverse();
                 });
             } else {
-                arr.forEach(el => {
+                draws.forEach(el => {
                     el.setAnimationOriginal();
                 });
             }
@@ -125,7 +134,7 @@ export class TestScene extends AbstractScene {
         this.setActor(wave3);
         this.setActor(wave);
 
-        arr.forEach(el => {
+        draws.forEach(el => {
             this.setActor(el)
         });
 
@@ -148,14 +157,17 @@ export class TestScene extends AbstractScene {
         this.setActor(buttonPlay);
         this.setActor(buttonMove);
         this.setActor(buttonStop);
+        this.setActor(heart);
         this.setActor(buttonInvisible);
+
+        this.moveOnMouseDrag(heart);
 
         const movedOptions: IDragDropOptions = {};
 
-        arr.forEach(el => {
+        draws.forEach(el => {
             movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
-            this.moveOnMouseDrag(el, movedOptions);
 
+            this.moveOnMouseDrag(el, movedOptions);
             this.collect(
                 el.isMouseOver$.subscribe(isOver => {
                     if (isOver) {

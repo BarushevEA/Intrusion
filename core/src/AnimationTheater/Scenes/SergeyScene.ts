@@ -4,6 +4,7 @@ import {Flower} from "../AnimationModels/flowers/BaseFlower";
 import {Flower4X} from "../AnimationModels/flowers/Flower4X";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
 import {ButtonEmptyGray} from "../AnimationModels/Buttons/Empty/ButtonEmptyGray";
+import {Heart} from "../AnimationModels/Heart";
 
 export class SergeyScene extends AbstractScene {
 
@@ -16,6 +17,8 @@ export class SergeyScene extends AbstractScene {
         const buttonEmptyGray = new ButtonEmptyGray(this.generalLayer);
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const bigFlower = new Flower4X(this.generalLayer);
+        const heart = new Heart(this.generalLayer);
+        heart.elementY = this.generalLayer.height - heart.elementHeight;
 
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
@@ -43,7 +46,9 @@ export class SergeyScene extends AbstractScene {
         this.setActor(bigFlower);
         this.setActor(buttonEmptyGray);
         this.setActor(buttonExit);
+        this.setActor(heart);
 
         this.moveOnMouseDrag(bigFlower);
+        this.moveOnMouseDrag(heart);
     }
 }
