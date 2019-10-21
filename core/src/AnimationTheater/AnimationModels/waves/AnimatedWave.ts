@@ -21,7 +21,15 @@ export class AnimatedWave extends AbstractFramedShape {
             this.createFrame(2);
             this.shape
                 .setCustomStroke(true)
-                .setColors('', 'rgba(0,109,146,1)')
+
+                .setLinearGradient()
+                .setGradientDirectionPoints(0, 0, 0, 150)
+                .addColorStop(0, 'rgba(0,109,146,1)')
+                .addColorStop(0.4, 'rgba(0,109,146,1)')
+                .addColorStop(0.7, 'rgba(0,109,146,0.5)')
+                .addColorStop(1, 'rgba(0,0,0,0)')
+                .stopExecution(true)
+
                 .setLineWidth(130)
                 .drawPolygon(points)
                 .setCustomStroke(false);

@@ -26,8 +26,16 @@ export class Heart extends AbstractFramedShape {
 
     getHeart(sizeMultiplier = 1) {
         this.shape
-            .setLineWidth(4)
+            .setLineWidth(1)
             .setColors('rgb(255,115,133)', 'rgb(146,10,16)')
+
+            .setLinearGradient()
+            .setGradientDirectionPoints(0, 0, 100, 135 / sizeMultiplier)
+            .addColorStop(0, 'rgba(255,115,133,1)')
+            .addColorStop(0.5, 'rgba(146,10,16,1)')
+            .addColorStop(1, 'rgba(0,0,0,0)')
+            .stopExecution()
+
             .drawAdvancedPolygon()
             .startPoint(75 / sizeMultiplier, 40 / sizeMultiplier)
             .bezierCurveTo(75 / sizeMultiplier, 37 / sizeMultiplier, 70 / sizeMultiplier, 25 / sizeMultiplier, 50 / sizeMultiplier, 25 / sizeMultiplier)
@@ -36,7 +44,7 @@ export class Heart extends AbstractFramedShape {
             .bezierCurveTo(110 / sizeMultiplier, 102 / sizeMultiplier, 130 / sizeMultiplier, 80 / sizeMultiplier, 130 / sizeMultiplier, 62.5 / sizeMultiplier)
             .bezierCurveTo(130 / sizeMultiplier, 62.5 / sizeMultiplier, 130 / sizeMultiplier, 25 / sizeMultiplier, 100 / sizeMultiplier, 25 / sizeMultiplier)
             .bezierCurveTo(85 / sizeMultiplier, 25 / sizeMultiplier, 75 / sizeMultiplier, 37 / sizeMultiplier, 75 / sizeMultiplier, 40 / sizeMultiplier)
-            .stopPolygon()
+            .stopExecution()
             .stopDrawing();
     }
 }

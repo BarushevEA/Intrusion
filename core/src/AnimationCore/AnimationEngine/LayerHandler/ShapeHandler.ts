@@ -3,8 +3,11 @@ export type IPoint = {
     y: number;
 };
 export type IPolygon = IPoint[];
-export type IAdvancedPolygon = {
-    stopPolygon(): IShapeHandler;
+type IDrawStop = { stopExecution(isReverse?: boolean): IShapeHandler; };
+type IAdvanced = IDrawStop;
+type ILinear = IDrawStop;
+type IRadial = IDrawStop;
+export type IAdvancedPolygon = IAdvanced & {
     startPoint(x: number, y: number): IAdvancedPolygon;
     lineTo(x: number, y: number): IAdvancedPolygon;
     quadraticCurveTo(controlPointX: number,
@@ -17,6 +20,14 @@ export type IAdvancedPolygon = {
                   controlPoint2Y: number,
                   x: number,
                   y: number): IAdvancedPolygon;
+};
+export type ILinearGradient = ILinear & {
+    setGradientDirectionPoints(x0: number, y0: number, x1: number, y1: number): ILinearGradient;
+    addColorStop(value: number, color: string): ILinearGradient;
+};
+export type IRadialGradient = IRadial & {
+    setGradientDirectionPoints(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): IRadialGradient;
+    addColorStop(value: number, color: string): IRadialGradient;
 };
 export type IShapeHandler = {
     context: CanvasRenderingContext2D;
@@ -33,6 +44,8 @@ export type IShapeHandler = {
     line(x1: number, y1: number, x2: number, y2: number): IShapeHandler;
     arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler;
     drawAdvancedPolygon(): IAdvancedPolygon;
+    setLinearGradient(): ILinearGradient;
+    setRadialGradient(): IRadialGradient;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -145,6 +158,14 @@ class ShapeHandler implements IShapeHandler {
         return new AdvancedPolygon(this.handleStopDrawing.bind(this), this._context, this);
     }
 
+    public setLinearGradient(): ILinearGradient {
+        return new LinearGradient(this.handleStopDrawing.bind(this), this._context, this);
+    };
+
+    public setRadialGradient(): IRadialGradient {
+        return new RadialGradient(this.handleStopDrawing.bind(this), this._context, this);
+    };
+
     private handleStopDrawing() {
         if (this._isCustomStroke) {
             this.context.stroke();
@@ -153,24 +174,94 @@ class ShapeHandler implements IShapeHandler {
     }
 }
 
-class AdvancedPolygon implements IAdvancedPolygon {
-    private readonly _stopDrawing: (isFinishOperation?: boolean) => void;
-    private readonly context: CanvasRenderingContext2D;
-    private readonly polygonParent: IShapeHandler;
+class ShapeChild implements IDrawStop {
+    protected readonly _stopDrawing: (isFinishOperation?: boolean) => void;
+    protected readonly context: CanvasRenderingContext2D;
+    protected readonly parent: IShapeHandler;
 
     constructor(stopDrawing: (isFinishOperation?: boolean) => void,
                 context: CanvasRenderingContext2D,
-                polygonParent: IShapeHandler) {
+                parent: IShapeHandler) {
         this._stopDrawing = stopDrawing;
         this.context = context;
-        this.polygonParent = polygonParent;
+        this.parent = parent;
     }
 
-    public stopPolygon(): IShapeHandler {
+    public stopExecution(): IShapeHandler {
         this._stopDrawing(false);
-        return this.polygonParent;
+        return this.parent;
+    }
+}
+
+class LinearGradient extends ShapeChild implements ILinearGradient {
+    private gradient: CanvasGradient;
+
+    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
+                context: CanvasRenderingContext2D,
+                parent: IShapeHandler) {
+        super(stopDrawing, context, parent);
+        this.gradient = context.createLinearGradient(0, 0, 10, 10);
     }
 
+    stopExecution(isReverse = false): IShapeHandler {
+        if (isReverse) {
+            this.context.strokeStyle = this.gradient;
+        } else {
+            this.context.fillStyle = this.gradient;
+        }
+        return super.stopExecution();
+    }
+
+    addColorStop(value: number, color: string): ILinearGradient {
+        this.gradient.addColorStop(value, color);
+        return this;
+    };
+
+    setGradientDirectionPoints(x0: number,
+                               y0: number,
+                               x1: number,
+                               y1: number): ILinearGradient {
+        this.gradient = this.context.createLinearGradient(x0, y0, x1, y1);
+        return this;
+    };
+}
+
+class RadialGradient extends ShapeChild implements IRadialGradient {
+    private gradient: CanvasGradient;
+
+    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
+                context: CanvasRenderingContext2D,
+                parent: IShapeHandler) {
+        super(stopDrawing, context, parent);
+        this.gradient = context.createRadialGradient(0, 0, 10, 10, 10, 20);
+    }
+
+    stopExecution(isReverse = false): IShapeHandler {
+        if (isReverse) {
+            this.context.strokeStyle = this.gradient;
+        } else {
+            this.context.fillStyle = this.gradient;
+        }
+        return super.stopExecution();
+    }
+
+    addColorStop(value: number, color: string): IRadialGradient {
+        this.gradient.addColorStop(value, color);
+        return this;
+    };
+
+    setGradientDirectionPoints(x0: number,
+                               y0: number,
+                               r0: number,
+                               x1: number,
+                               y1: number,
+                               r1: number): IRadialGradient {
+        this.gradient = this.context.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        return this;
+    };
+}
+
+class AdvancedPolygon extends ShapeChild implements IAdvancedPolygon {
     public startPoint(x: number, y: number): AdvancedPolygon {
         this.context.moveTo(x, y);
         return this;
