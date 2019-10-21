@@ -4,7 +4,7 @@ export type IPoint = {
 };
 export type IPolygon = IPoint[];
 export type IAdvancedPolygon = {
-    stopDrawing(): void;
+    stopPolygon(): IShapeHandler;
     startPoint(x: number, y: number): IAdvancedPolygon;
     lineTo(x: number, y: number): IAdvancedPolygon;
     quadraticCurveTo(controlPointX: number,
@@ -24,7 +24,7 @@ export type IShapeHandler = {
     setColors(backgroundColor: string, borderColor: string): IShapeHandler;
     setLineWidth(width?: number): IShapeHandler;
     startDrawing(): IShapeHandler;
-    stopDrawing(): void;
+    stopDrawing(isFinishOperation?: boolean): void;
     drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler;
     drawRectangle(x: number, y: number, width: number, height: number): IShapeHandler;
     drawPolygon(polygon: IPolygon): IShapeHandler;
@@ -60,7 +60,10 @@ class ShapeHandler implements IShapeHandler {
         return this;
     }
 
-    public stopDrawing(): void {
+    public stopDrawing(isFinishOperation = true): void {
+        if (isFinishOperation) {
+            return;
+        }
         this.context.closePath();
         if (!this._isCustomStroke) {
             this.context.fill();
@@ -142,28 +145,33 @@ class ShapeHandler implements IShapeHandler {
 
     public drawAdvancedPolygon(): IAdvancedPolygon {
         this.startDrawing();
-        return new AdvancedPolygon(this.handleStopDrawing.bind(this), this._context);
+        return new AdvancedPolygon(this.handleStopDrawing.bind(this), this._context, this);
     }
 
     private handleStopDrawing() {
         if (this._isCustomStroke) {
             this.context.stroke();
         }
-        this.stopDrawing();
+        this.stopDrawing(false);
     }
 }
 
 class AdvancedPolygon implements IAdvancedPolygon {
-    private readonly _stopDrawing: () => void;
+    private readonly _stopDrawing: (isFinishOperation?: boolean) => void;
     private readonly context: CanvasRenderingContext2D;
+    private readonly polygonParent: IShapeHandler;
 
-    constructor(stopDrawing: () => void, context: CanvasRenderingContext2D) {
+    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
+                context: CanvasRenderingContext2D,
+                polygonParent: IShapeHandler) {
         this._stopDrawing = stopDrawing;
         this.context = context;
+        this.polygonParent = polygonParent;
     }
 
-    public stopDrawing(): void {
-        this._stopDrawing();
+    public stopPolygon(): IShapeHandler {
+        this._stopDrawing(false);
+        return this.polygonParent;
     }
 
     public startPoint(x: number, y: number): AdvancedPolygon {
