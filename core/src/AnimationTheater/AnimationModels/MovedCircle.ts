@@ -26,11 +26,12 @@ export class MovedCircle extends AbstractCustomDraw {
             this.radius * 2 + this.lineWidth);
 
         this.setVirtualLayer(this.bottomLayerName);
-        this.shape.setLineWidth(this.lineWidth);
-        this.shape.setColors(
-            `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
-            `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
-        this.shape.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
+        this.shape
+            .setLineWidth(this.lineWidth)
+            .setColors(
+                `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
+                `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`)
+            .drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.restorePreviousLayer();
     }
 

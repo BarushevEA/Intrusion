@@ -6,7 +6,6 @@ import {AnimatedRectangleLightGreen} from "./AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightGray} from "./AnimatedRectangleLightGray";
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
-
 export class CombinedRectangle extends AbstractCustomDraw {
     private readonly blue: AbstractFramedShape;
     private readonly yellow: AbstractFramedShape;

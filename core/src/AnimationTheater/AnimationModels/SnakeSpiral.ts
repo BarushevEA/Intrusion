@@ -27,25 +27,27 @@ export class SnakeSpiral extends AbstractFramedShape {
                         '#825000'
                     );
                 }
-                this.shape.setLineWidth(2);
-                this.shape.drawSimpleCircle(
-                    Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i),
-                    Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i),
-                    Math.round(radius / 10));
+                this.shape
+                    .setLineWidth(2)
+                    .drawSimpleCircle(
+                        Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i),
+                        Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i),
+                        Math.round(radius / 10));
                 if (radius === 250) {
-                    this.shape.setColors('#B49632', '#B49632');
                     const x = Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i);
                     const y = Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i);
-                    this.shape.drawSimpleCircle(x - 10, y - 5, Math.round(3));
-                    this.shape.drawSimpleCircle(x + 10, y - 5, Math.round(3));
-                    this.shape.drawPolygon([
-                        {x: x - 10, y: y + 8},
-                        {x: x - 8, y: y + 10},
-                        {x: x - 3, y: y + 12},
-                        {x: x + 3, y: y + 12},
-                        {x: x + 8, y: y + 10},
-                        {x: x + 10, y: y + 8}
-                    ])
+                    this.shape
+                        .setColors('#B49632', '#B49632')
+                        .drawSimpleCircle(x - 10, y - 5, Math.round(3))
+                        .drawSimpleCircle(x + 10, y - 5, Math.round(3))
+                        .drawPolygon([
+                            {x: x - 10, y: y + 8},
+                            {x: x - 8, y: y + 10},
+                            {x: x - 3, y: y + 12},
+                            {x: x + 3, y: y + 12},
+                            {x: x + 8, y: y + 10},
+                            {x: x + 10, y: y + 8}
+                        ])
                 }
             }
         }

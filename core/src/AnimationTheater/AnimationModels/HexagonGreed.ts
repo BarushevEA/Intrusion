@@ -50,20 +50,23 @@ export class HexagonGreed extends AbstractCustomDraw {
         let modRadius = this.radius * this.multiplier;
 
         this.setVirtualLayer(this.bottomLayerName);
-        this.shape.setLineWidth(11);
-        this.shape.setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
+        this.shape
+            .setLineWidth(11)
+            .setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(centerLayerName);
-        this.shape.setLineWidth(3);
-        this.shape.setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
+        this.shape
+            .setLineWidth(3)
+            .setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(topLayerName);
-        this.shape.setLineWidth(3);
-        this.shape.setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
+        this.shape
+            .setLineWidth(3)
+            .setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
