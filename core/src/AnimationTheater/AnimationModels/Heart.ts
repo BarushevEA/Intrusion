@@ -37,6 +37,6 @@ export class Heart extends AbstractFramedShape {
             .bezierCurveTo(130 / sizeMultiplier, 62.5 / sizeMultiplier, 130 / sizeMultiplier, 25 / sizeMultiplier, 100 / sizeMultiplier, 25 / sizeMultiplier)
             .bezierCurveTo(85 / sizeMultiplier, 25 / sizeMultiplier, 75 / sizeMultiplier, 37 / sizeMultiplier, 75 / sizeMultiplier, 40 / sizeMultiplier)
             .stopPolygon()
-            .startDrawing();
+            .stopDrawing();
     }
 }
