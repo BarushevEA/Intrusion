@@ -54,4 +54,17 @@ export abstract class AbstractButton extends AbstractFramedShape {
         this.setShowedFrame(2);
         this.setStopFrame(2);
     }
+
+    protected drawRectangle(bgColor: string,
+                            bdColor: string,
+                            lnWidth: number,
+                            x: number,
+                            y: number,
+                            width: number,
+                            height: number): void {
+        this.shape
+            .setColors(bgColor, bdColor)
+            .setLineWidth(lnWidth)
+            .drawRectangle(x, y, width, height);
+    }
 }
