@@ -19,13 +19,12 @@ export class AnimatedWave extends AbstractFramedShape {
 
         for (let i = 0; i < Math.trunc(points.length / 4); i++) {
             this.createFrame(2);
-            this.shape.isCustomStroke = true;
-            this.shape.setColors(
-                '',
-                'rgba(0,109,146,1)');
-            this.shape.setLineWidth(130);
-            this.shape.drawPolygon(points);
-            this.shape.isCustomStroke = false;
+            this.shape
+                .setCustomStroke(true)
+                .setColors('', 'rgba(0,109,146,1)')
+                .setLineWidth(130)
+                .drawPolygon(points)
+                .setCustomStroke(false);
 
             const y0 = points[0].y;
             for (let j = 0; j < points.length - 1; j++) {

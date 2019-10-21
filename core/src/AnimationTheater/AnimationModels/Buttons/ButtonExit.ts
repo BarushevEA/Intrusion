@@ -41,32 +41,32 @@ export class ButtonExit extends AbstractButton {
     }
 
     private drawBigCross(): void {
-        this.shape.isCustomStroke = true;
         this.shape
+            .setCustomStroke(true)
             .setColors('', 'rgb(200,200,200)')
             .setLineWidth(5)
             .drawPolygon([{x: 14, y: 14}, {x: 36, y: 36}])
-            .drawPolygon([{x: 14, y: 36}, {x: 36, y: 14}]);
-        this.shape.isCustomStroke = false;
+            .drawPolygon([{x: 14, y: 36}, {x: 36, y: 14}])
+            .setCustomStroke(false);
     }
 
     private drawSmallCross(): void {
-        this.shape.isCustomStroke = true;
         this.shape
+            .setCustomStroke(true)
             .setColors('', 'rgb(157,157,157)')
             .setLineWidth(5)
             .drawPolygon([{x: 15, y: 15}, {x: 35, y: 35}])
-            .drawPolygon([{x: 15, y: 35}, {x: 35, y: 15}]);
-        this.shape.isCustomStroke = false;
+            .drawPolygon([{x: 15, y: 35}, {x: 35, y: 15}])
+            .setCustomStroke(false);
     };
 
     private drawClickCross(): void {
-        this.shape.isCustomStroke = true;
         this.shape
+            .setCustomStroke(true)
             .setColors('', 'rgb(255,0,0)')
             .setLineWidth(5)
             .drawPolygon([{x: 15, y: 15}, {x: 35, y: 35}])
-            .drawPolygon([{x: 15, y: 35}, {x: 35, y: 15}]);
-        this.shape.isCustomStroke = false;
+            .drawPolygon([{x: 15, y: 35}, {x: 35, y: 15}])
+            .setCustomStroke(false);
     };
 }

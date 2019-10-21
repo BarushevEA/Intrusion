@@ -20,7 +20,7 @@ export type IAdvancedPolygon = {
 };
 export type IShapeHandler = {
     context: CanvasRenderingContext2D;
-    isCustomStroke: boolean;
+    setCustomStroke(isCustom: boolean): IShapeHandler;
     setColors(backgroundColor: string, borderColor: string): IShapeHandler;
     setLineWidth(width?: number): IShapeHandler;
     startDrawing(): IShapeHandler;
@@ -47,12 +47,9 @@ class ShapeHandler implements IShapeHandler {
         return this._context;
     }
 
-    get isCustomStroke(): boolean {
-        return this._isCustomStroke;
-    }
-
-    set isCustomStroke(value: boolean) {
-        this._isCustomStroke = value;
+    setCustomStroke(isCustom: boolean): IShapeHandler {
+        this._isCustomStroke = isCustom;
+        return this;
     }
 
     public startDrawing(): IShapeHandler {
