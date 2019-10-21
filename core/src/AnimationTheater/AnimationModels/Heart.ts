@@ -25,9 +25,10 @@ export class Heart extends AbstractFramedShape {
     }
 
     getHeart(sizeMultiplier = 1) {
-        this.shape.setLineWidth(4);
-        this.shape.setColors('rgb(255,115,133)', 'rgb(146,10,16)');
-        this.shape.drawAdvancedPolygon()
+        this.shape
+            .setLineWidth(4)
+            .setColors('rgb(255,115,133)', 'rgb(146,10,16)')
+            .drawAdvancedPolygon()
             .startPoint(75 / sizeMultiplier, 40 / sizeMultiplier)
             .bezierCurveTo(75 / sizeMultiplier, 37 / sizeMultiplier, 70 / sizeMultiplier, 25 / sizeMultiplier, 50 / sizeMultiplier, 25 / sizeMultiplier)
             .bezierCurveTo(20 / sizeMultiplier, 25 / sizeMultiplier, 20 / sizeMultiplier, 62.5 / sizeMultiplier, 20 / sizeMultiplier, 62.5 / sizeMultiplier)

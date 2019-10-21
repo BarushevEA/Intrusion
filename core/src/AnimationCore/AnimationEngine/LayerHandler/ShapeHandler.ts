@@ -21,17 +21,17 @@ export type IAdvancedPolygon = {
 export type IShapeHandler = {
     context: CanvasRenderingContext2D;
     isCustomStroke: boolean;
-    setColors(backgroundColor: string, borderColor: string): void;
-    setLineWidth(width?: number): void;
-    startDrawing(): void;
+    setColors(backgroundColor: string, borderColor: string): IShapeHandler;
+    setLineWidth(width?: number): IShapeHandler;
+    startDrawing(): IShapeHandler;
     stopDrawing(): void;
-    drawSimpleCircle(x: number, y: number, radius: number): void;
-    drawRectangle(x: number, y: number, width: number, height: number): void;
-    drawPolygon(polygon: IPolygon): void;
-    moveTo(x: number, y: number): void;
-    lineTo(x: number, y: number): void;
-    line(x1: number, y1: number, x2: number, y2: number): void;
-    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
+    drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler;
+    drawRectangle(x: number, y: number, width: number, height: number): IShapeHandler;
+    drawPolygon(polygon: IPolygon): IShapeHandler;
+    moveTo(x: number, y: number): IShapeHandler;
+    lineTo(x: number, y: number): IShapeHandler;
+    line(x1: number, y1: number, x2: number, y2: number): IShapeHandler;
+    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler;
     drawAdvancedPolygon(): IAdvancedPolygon;
 }
 
@@ -55,8 +55,9 @@ class ShapeHandler implements IShapeHandler {
         this._isCustomStroke = value;
     }
 
-    public startDrawing(): void {
+    public startDrawing(): IShapeHandler {
         this.context.beginPath();
+        return this;
     }
 
     public stopDrawing(): void {
@@ -67,60 +68,68 @@ class ShapeHandler implements IShapeHandler {
         }
     }
 
-    public setColors(backgroundColor: string, borderColor: string): void {
+    public setColors(backgroundColor: string, borderColor: string): IShapeHandler {
         this.context.fillStyle = backgroundColor;
         this.context.strokeStyle = borderColor;
+        return this;
     }
 
-    public setLineWidth(width?: number): void {
+    public setLineWidth(width?: number): IShapeHandler {
         if (width) {
             this.context.lineWidth = width;
         }
+        return this;
     }
 
-    public moveTo(x: number, y: number): void {
+    public moveTo(x: number, y: number): IShapeHandler {
         this.context.moveTo(x, y);
+        return this;
     };
 
-    public lineTo(x: number, y: number): void {
+    public lineTo(x: number, y: number): IShapeHandler {
         this.startDrawing();
         this.context.lineTo(x, y);
         this.handleStopDrawing();
+        return this;
     };
 
-    public line(x1: number, y1: number, x2: number, y2: number): void {
+    public line(x1: number, y1: number, x2: number, y2: number): IShapeHandler {
         this.startDrawing();
         this.context.moveTo(x1, y1);
         this.context.lineTo(x2, y2);
         this.handleStopDrawing();
+        return this;
     };
 
     private drawCircle(x: number, y: number, radius: number): void {
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
     }
 
-    public drawSimpleCircle(x: number, y: number, radius: number): void {
+    public drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler {
         this.startDrawing();
         this.drawCircle(x, y, radius);
         this.handleStopDrawing();
+        return this;
     }
 
-    public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void {
+    public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler {
         this.startDrawing();
         this.context.arcTo(x1, y1, x2, y2, radius);
         this.handleStopDrawing();
+        return this;
     };
 
-    public drawRectangle(x: number, y: number, width: number, height: number): void {
+    public drawRectangle(x: number, y: number, width: number, height: number): IShapeHandler {
         this.startDrawing();
         this.context.rect(x, y, width, height);
         this.handleStopDrawing();
+        return this;
     }
 
-    public drawPolygon(polygon: IPolygon): void {
+    public drawPolygon(polygon: IPolygon): IShapeHandler {
         this.startDrawing();
         if (!polygon.length) {
-            return;
+            return this;
         }
         this.context.moveTo(polygon[0].x, polygon[0].y);
         for (let i = 1; i < polygon.length; i++) {
@@ -128,6 +137,7 @@ class ShapeHandler implements IShapeHandler {
             this.context.lineTo(node.x, node.y);
         }
         this.handleStopDrawing();
+        return this;
     }
 
     public drawAdvancedPolygon(): IAdvancedPolygon {
