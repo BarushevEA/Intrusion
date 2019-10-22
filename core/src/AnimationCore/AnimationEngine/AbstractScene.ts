@@ -126,6 +126,18 @@ export abstract class AbstractScene implements IScene {
         this.renderController.sortActorsByZIndex();
     }
 
+    protected setActiveLayer(name: string): void {
+        this.renderController.setActiveLayer(name);
+    }
+
+    protected setLayerOnTop(name: string): void {
+        this.renderController.setLayerOnTop(name);
+    }
+
+    protected setLayerOnIndex(layerName: string, index: number): void {
+        this.renderController.setLayerOnIndex(layerName, index);
+    }
+
     public collect(...subscribers: ISubscriptionLike[]) {
         for (let i = 0; i < subscribers.length; i++) {
             this.collector.push(subscribers[i]);

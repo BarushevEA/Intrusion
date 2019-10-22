@@ -9,7 +9,7 @@ import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 
 export type IActor = {
     z_index: number;
-    layer_index: number;
+    layer_name: string;
     saveLayerIndex(): void;
     restoreLayerIndex(): void;
     renderFrame(): void;
@@ -22,8 +22,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     public static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
-    private _layer_index = 0;
-    private _layer_index_memory = 0;
+    private _layer_name = '';
+    private _layer_name_memory = '';
 
     public static tickCount() {
         requestAnimationFrame(AbstractActor.tickCount);
@@ -331,12 +331,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._z_index = value;
     }
 
-    get layer_index(): number {
-        return this._layer_index;
+    get layer_name(): string {
+        return this._layer_name;
     }
 
-    set layer_index(value: number) {
-        this._layer_index = value;
+    set layer_name(value: string) {
+        this._layer_name = value;
     }
 
     get isLeftMouseCatch(): boolean {
@@ -348,7 +348,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public saveLayerIndex(): void {
-        this._layer_index_memory = this._layer_index;
+        this._layer_name_memory = this._layer_name;
     }
 
     public restoreZIndex(): void {
@@ -356,7 +356,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public restoreLayerIndex(): void {
-        this._layer_index = this._layer_index_memory;
+        this._layer_name = this._layer_name_memory;
     }
 
     static get mousePosition(): IMousePosition {

@@ -13,13 +13,13 @@ export type IRenderController = {
     sortActorsByZIndex(): void;
     setActorGroupOnTop(elements: IActor[]): void;
     setActorsGroupByZIndex(elements: IActor[], z_index: number): void;
-    setActiveLayer(index: number): void;
-    setLayerOnTop(index: number): void;
-    setLayerOnIndex(layerIndex: number, index: number): void;
+    setActiveLayer(name: string): void;
+    setLayerOnTop(name: string): void;
+    setLayerOnIndex(layerName: string, index: number): void;
 }
 
 export type IActorsPool = IActor[];
-export type ILayerPool = { [key: number]: IActorsPool };
+export type ILayerPool = { [key: string]: IActorsPool };
 
 export class RenderController implements IRenderController {
     private canvas: HTMLCanvasElement = <any>0;
@@ -27,9 +27,9 @@ export class RenderController implements IRenderController {
     private animFrameIndex = -1;
     private context: CanvasRenderingContext2D = <any>0;
     private isBackgroundLayerPresent = false;
-    private currentLayerIndex = 0;
+    private currentLayerIndex = '0';
     private layers: ILayerPool = {0: this.currentPool};
-    private layersIndexes = [this.currentLayerIndex];
+    private layersNames = [this.currentLayerIndex+''];
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
@@ -38,68 +38,63 @@ export class RenderController implements IRenderController {
 
     public setActor(actor: IActor): void {
         this.currentPool.push(actor);
-        actor.layer_index = this.currentLayerIndex;
+        actor.layer_name = this.currentLayerIndex;
         actor.z_index = this.currentPool.length - 1;
         this.sortActorsByZIndex();
     }
 
-    public setActiveLayer(index: number): void {
-        if (this.layers[index]) {
-            this.currentPool = this.layers[index];
+    public setActiveLayer(name: string): void {
+        if (this.layers[name]) {
+            this.currentPool = this.layers[name];
         } else {
-            this.layers[index] = [];
-            this.currentPool = this.layers[index];
-            this.currentLayerIndex = index;
-            this.layersIndexes = <number[]><any>Object.keys(this.layers).forEach((key, index, arr) => {
-                (<any>arr[index]) = +key;
-            });
-            // this.layersIndexes.sort((a, b) => {
-            //     return a > b ? 1 : -1;
-            // });
+            this.layers[name] = [];
+            this.currentPool = this.layers[name];
+            this.currentLayerIndex = name;
+            this.layersNames = Object.keys(this.layers);
         }
     }
 
-    setLayerOnTop(index: number): void {
-        if (!this.layers[index]) {
+    public setLayerOnTop(name: string): void {
+        if (!this.layers[name]) {
             return;
         }
         const tmp = [];
-        for (let i = 0; i < this.layersIndexes.length; i++) {
-            const layersIndex = this.layersIndexes[i];
-            if (layersIndex != index) {
-                tmp.push(layersIndex);
+        for (let i = 0; i < this.layersNames.length; i++) {
+            const layersName = this.layersNames[i];
+            if (layersName != name) {
+                tmp.push(layersName);
             }
         }
-        this.layersIndexes = tmp;
-        this.layersIndexes.push(index);
+        this.layersNames = tmp;
+        this.layersNames.push(name);
     }
 
-    setLayerOnIndex(layerIndex: number, index: number): void {
+    setLayerOnIndex(layerName: string, index: number): void {
         if (!this.layers[index]) {
             return;
         }
         const tmp = [];
-        for (let i = 0; i < this.layersIndexes.length; i++) {
-            const layersIndex = this.layersIndexes[i];
+        for (let i = 0; i < this.layersNames.length; i++) {
+            const name = this.layersNames[i];
             if (index !== i) {
-                if (layerIndex !== layersIndex) {
-                    tmp.push(layersIndex);
+                if (layerName !== name) {
+                    tmp.push(name);
                 }
             } else {
-                tmp.push(layerIndex);
-                if (layerIndex !== layersIndex) {
-                    tmp.push(layersIndex);
+                tmp.push(layerName);
+                if (layerName !== name) {
+                    tmp.push(name);
                 }
             }
         }
-        this.layersIndexes = tmp;
+        this.layersNames = tmp;
     }
 
     private setCurrentPoolFromActor(actor: IActor): boolean {
         let isSet = false;
-        if (this.layers[actor.layer_index]) {
-            this.currentLayerIndex = actor.layer_index;
-            this.currentPool = this.layers[actor.layer_index];
+        if (this.layers[actor.layer_name]) {
+            this.currentLayerIndex = actor.layer_name;
+            this.currentPool = this.layers[actor.layer_name];
             isSet = true;
         }
         return isSet;
@@ -117,10 +112,10 @@ export class RenderController implements IRenderController {
         if (!this.isBackgroundLayerPresent) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-        for (let i = 0; i < this.layersIndexes.length; i++) {
-            const layersIndex = this.layersIndexes[i];
+        for (let i = 0; i < this.layersNames.length; i++) {
+            const layerName = this.layersNames[i];
             for (let i = 0; i < this.currentPool.length; i++) {
-                this.layers[layersIndex][i].renderFrame();
+                this.layers[layerName][i].renderFrame();
             }
         }
     }
@@ -137,7 +132,7 @@ export class RenderController implements IRenderController {
         this.currentPool = this.currentPool.filter(element => {
             return element !== actor;
         });
-        this.layers[actor.layer_index] = this.currentPool;
+        this.layers[actor.layer_name] = this.currentPool;
     }
 
     public setActorOnTop(actor: IActor) {
@@ -202,19 +197,19 @@ export class RenderController implements IRenderController {
 
     public destroyActors(): void {
         this.renderStop();
-        for (let k = 0; k < this.layersIndexes.length; k++) {
-            this.currentPool = this.layers[this.layersIndexes[k]];
+        for (let k = 0; k < this.layersNames.length; k++) {
+            this.currentPool = this.layers[this.layersNames[k]];
             for (let i = 0; i < this.currentPool.length; i++) {
                 const element = this.currentPool.pop();
                 if (element) {
                     element.destroy();
                 }
             }
-            delete this.layers[this.layersIndexes[k]];
+            delete this.layers[this.layersNames[k]];
         }
-        this.layersIndexes.length = 0;
+        this.layersNames.length = 0;
         this.currentPool.length = 0;
-        this.layersIndexes = <any>0;
+        this.layersNames = <any>0;
         this.currentPool = <any>0;
     }
 }
