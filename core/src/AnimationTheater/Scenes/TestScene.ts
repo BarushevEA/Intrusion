@@ -46,6 +46,8 @@ export class TestScene extends AbstractScene {
 
         const hexagon = new HexagonGreed(this.generalLayer);
         this.setActor(hexagon);
+        this.setActiveLayer('middle');
+
         const wave = new AnimatedWave(this.generalLayer);
         const wave1 = new AnimatedWaveDark(this.generalLayer);
         const wave2 = new AnimatedWave(this.generalLayer);

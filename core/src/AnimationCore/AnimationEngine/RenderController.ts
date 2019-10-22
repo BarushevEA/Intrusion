@@ -27,9 +27,9 @@ export class RenderController implements IRenderController {
     private animFrameIndex = -1;
     private context: CanvasRenderingContext2D = <any>0;
     private isBackgroundLayerPresent = false;
-    private currentLayerIndex = '0';
-    private layers: ILayerPool = {0: this.currentPool};
-    private layersNames = [this.currentLayerIndex + ''];
+    private currentLayerName = 'background';
+    private layers: ILayerPool = {[this.currentLayerName]: this.currentPool};
+    private layersNames = [this.currentLayerName + ''];
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
@@ -38,7 +38,7 @@ export class RenderController implements IRenderController {
 
     public setActor(actor: IActor): void {
         this.currentPool.push(actor);
-        actor.layer_name = this.currentLayerIndex;
+        actor.layer_name = this.currentLayerName;
         actor.z_index = this.currentPool.length - 1;
         this.sortActorsByZIndex();
     }
@@ -49,7 +49,7 @@ export class RenderController implements IRenderController {
         } else {
             this.layers[name] = [];
             this.currentPool = this.layers[name];
-            this.currentLayerIndex = name;
+            this.currentLayerName = name;
             this.layersNames = Object.keys(this.layers);
         }
     }
@@ -93,7 +93,7 @@ export class RenderController implements IRenderController {
     private setCurrentPoolFromActor(actor: IActor): boolean {
         let isSet = false;
         if (this.layers[actor.layer_name]) {
-            this.currentLayerIndex = actor.layer_name;
+            this.currentLayerName = actor.layer_name;
             this.currentPool = this.layers[actor.layer_name];
             isSet = true;
         }
