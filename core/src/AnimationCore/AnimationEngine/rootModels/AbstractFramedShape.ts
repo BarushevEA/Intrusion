@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractActor} from "./AbstractActor";
 
 /**
  * WARNING !!!
@@ -6,7 +6,7 @@ import {AbstractCustomDraw} from "./AbstractCustomDraw";
  * Create empty frame with this.createEmptyFrame();
  **/
 
-export abstract class AbstractFramedShape extends AbstractCustomDraw {
+export abstract class AbstractFramedShape extends AbstractActor {
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         super(canvas, height, width);
         this.init();

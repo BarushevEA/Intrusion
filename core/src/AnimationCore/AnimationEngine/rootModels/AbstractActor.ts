@@ -7,22 +7,27 @@ import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 
 //TODO frame pool technology need to use for lot of entities of class
 
-export type ICustomDraw = {
+export type IActor = {
     z_index: number;
+    layer_index: number;
+    saveLayerIndex(): void;
+    restoreLayerIndex(): void;
     renderFrame(): void;
     destroy(): void;
 }
 
-export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
+export abstract class AbstractActor implements IActor, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
     private static _mousePosition: IMousePosition = <any>0;
     public static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
+    private _layer_index = 0;
+    private _layer_index_memory = 0;
 
     public static tickCount() {
-        requestAnimationFrame(AbstractCustomDraw.tickCount);
-        AbstractCustomDraw.tickCount$.next(true);
+        requestAnimationFrame(AbstractActor.tickCount);
+        AbstractActor.tickCount$.next(true);
     }
 
     protected framePoolName: string = '';
@@ -55,7 +60,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
             mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
             this.isMouseLeftClick$.subscribe(this.tryLeftMuseCatch.bind(this)),
-            AbstractCustomDraw.tickCount$.subscribe(this.checkMouseOver.bind(this))
+            AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this))
         );
     }
 
@@ -75,7 +80,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
-            AbstractCustomDraw._mousePosition = position;
+            AbstractActor._mousePosition = position;
             this.isMouseOver = isOver;
             this.isMouseOver$.next(isOver);
         }
@@ -86,7 +91,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
             return;
         }
 
-        this.mouseOver(AbstractCustomDraw._mousePosition);
+        this.mouseOver(AbstractActor._mousePosition);
     }
 
     private mouseClick(position: IMousePosition) {
@@ -163,7 +168,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     set framePool(pool: IFramePool) {
-        AbstractCustomDraw._savedFramePool[this.framePoolName] = pool;
+        AbstractActor._savedFramePool[this.framePoolName] = pool;
     }
 
     get framePool(): IFramePool {
@@ -171,7 +176,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         if (framePool && framePool.playedFrames && framePool.playedFrames.length) {
             return framePool;
         } else {
-            return AbstractCustomDraw._savedFramePool[this.framePoolName];
+            return AbstractActor._savedFramePool[this.framePoolName];
         }
     }
 
@@ -287,7 +292,7 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 
     get tickCounter$() {
-        return AbstractCustomDraw.tickCount$;
+        return AbstractActor.tickCount$;
     }
 
     public collect(...subscribers: ISubscriptionLike[]) {
@@ -326,16 +331,32 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
         this._z_index = value;
     }
 
+    get layer_index(): number {
+        return this._layer_index;
+    }
+
+    set layer_index(value: number) {
+        this._layer_index = value;
+    }
+
     get isLeftMouseCatch(): boolean {
         return this._isLeftMouseCatch;
     }
 
-    public saveZIndex() {
+    public saveZIndex(): void {
         this._z_index_memory = this._z_index;
     }
 
-    public restoreZIndex() {
+    public saveLayerIndex(): void {
+        this._layer_index_memory = this._layer_index;
+    }
+
+    public restoreZIndex(): void {
         this._z_index = this._z_index_memory;
+    }
+
+    public restoreLayerIndex(): void {
+        this._layer_index = this._layer_index_memory;
     }
 
     static get mousePosition(): IMousePosition {
@@ -343,4 +364,4 @@ export abstract class AbstractCustomDraw implements ICustomDraw, IDimensions {
     }
 }
 
-AbstractCustomDraw.tickCount();
+AbstractActor.tickCount();

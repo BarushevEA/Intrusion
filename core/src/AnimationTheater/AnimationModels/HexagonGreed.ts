@@ -1,9 +1,9 @@
-import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 const startDelta = 1000;
 
-export class HexagonGreed extends AbstractCustomDraw {
+export class HexagonGreed extends AbstractActor {
     x = 0;
     y = 0;
     dx = 1;

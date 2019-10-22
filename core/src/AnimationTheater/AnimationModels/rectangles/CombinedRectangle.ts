@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {AnimatedRectangleLightCyan} from "./AnimatedRectangleLightCyan";
 import {AnimatedRectangleLightYellow} from "./AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "./AnimatedRectangleLightRed";
@@ -6,7 +6,7 @@ import {AnimatedRectangleLightGreen} from "./AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightGray} from "./AnimatedRectangleLightGray";
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
-export class CombinedRectangle extends AbstractCustomDraw {
+export class CombinedRectangle extends AbstractActor {
     private readonly blue: AbstractFramedShape;
     private readonly yellow: AbstractFramedShape;
     private readonly red: AbstractFramedShape;

@@ -1,10 +1,10 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractActor} from "./AbstractActor";
 import {AbstractFramedShape} from "./AbstractFramedShape";
 import {EAlign} from "../LayerHandler/TextHandler";
 import {AbstractButton} from "./AbstractButton";
 
 
-export abstract class AbstractButtonWithText extends AbstractCustomDraw {
+export abstract class AbstractButtonWithText extends AbstractActor {
     private emptyButton: AbstractFramedShape = this.getButton();
     private textLayerName = 'text';
 

@@ -4,7 +4,7 @@ import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
 import {AnimatedRectangleLightGray} from "../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/AnimatedRectangleLightCyan";
-import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {AnimatedRectangleLightYellow} from "../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {AnimatedRectangleLightGreen} from "../AnimationModels/rectangles/AnimatedRectangleLightGreen";
@@ -63,7 +63,7 @@ export class TestScene extends AbstractScene {
         wave2.setShowedFrame(43);
         wave3.setShowedFrame(56);
 
-        const draws: AbstractCustomDraw[] = [];
+        const draws: AbstractActor[] = [];
         for (let i = 0; i < 3; i++) {
             const newHeart = new Heart(this.generalLayer);
             newHeart.elementX = Math.round(Math.random() * this.generalLayer.width / 2);
@@ -100,7 +100,7 @@ export class TestScene extends AbstractScene {
 
         const recMoveStart = () => {
             if (!move) {
-                move = AbstractCustomDraw.tickCount$.subscribe(recMove.bind(this));
+                move = AbstractActor.tickCount$.subscribe(recMove.bind(this));
                 this.collect(move);
             }
         };

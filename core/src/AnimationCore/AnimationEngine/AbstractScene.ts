@@ -1,5 +1,5 @@
 import {IRenderController, RenderController} from "./RenderController";
-import {AbstractCustomDraw, ICustomDraw} from "./rootModels/AbstractCustomDraw";
+import {AbstractActor, IActor} from "./rootModels/AbstractActor";
 import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
 
 export type IScene = {
@@ -32,14 +32,14 @@ export type IDragDropOptions = {
 };
 
 export type IDragActor = {
-    actor: AbstractCustomDraw;
+    actor: AbstractActor;
     options?: IDragDropOptions;
 };
 
 export abstract class AbstractScene implements IScene {
     protected renderController: IRenderController;
     protected generalLayer: HTMLCanvasElement;
-    protected actors: AbstractCustomDraw[] = [];
+    protected actors: AbstractActor[] = [];
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
@@ -100,30 +100,30 @@ export abstract class AbstractScene implements IScene {
         return this._onDestroy$;
     }
 
-    protected setActor(actor: AbstractCustomDraw): void {
+    protected setActor(actor: AbstractActor): void {
         actor.disableEvents();
         this.actors.push(actor);
-        this.renderController.setDrawElement(actor);
+        this.renderController.setActor(actor);
     }
 
-    protected setActorOnTop(actor: AbstractCustomDraw): void {
-        this.renderController.setElementOnTop(actor);
+    protected setActorOnTop(actor: AbstractActor): void {
+        this.renderController.setActorOnTop(actor);
     }
 
-    protected setActorZIndex(actor: AbstractCustomDraw, z_index: number): void {
-        this.renderController.setElementZIndex(actor, z_index);
+    protected setActorZIndex(actor: AbstractActor, z_index: number): void {
+        this.renderController.setActorZIndex(actor, z_index);
     }
 
-    protected setActorsGroupOnTop(actors: ICustomDraw[]): void {
-        this.renderController.setElementsGroupOnTop(actors);
+    protected setActorsGroupOnTop(actors: IActor[]): void {
+        this.renderController.setActorGroupOnTop(actors);
     }
 
-    protected setActorsGroupByZIndex(actors: ICustomDraw[], z_index: number): void {
-        this.renderController.setElementsGroupByZIndex(actors, z_index);
+    protected setActorsGroupByZIndex(actors: IActor[], z_index: number): void {
+        this.renderController.setActorsGroupByZIndex(actors, z_index);
     }
 
     protected sortActorsByZIndex() {
-        this.renderController.sortElementsByZIndex();
+        this.renderController.sortActorsByZIndex();
     }
 
     public collect(...subscribers: ISubscriptionLike[]) {
@@ -134,7 +134,7 @@ export abstract class AbstractScene implements IScene {
 
     protected abstract createScene(): void;
 
-    protected moveOnMouseDrag(actor: AbstractCustomDraw, options?: IDragDropOptions) {
+    protected moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(
@@ -195,11 +195,11 @@ export abstract class AbstractScene implements IScene {
             drag.options.callbackOnDrag();
         }
 
-        const dx = AbstractCustomDraw.mousePosition.x - drag.actor.elementX;
-        const dy = AbstractCustomDraw.mousePosition.y - drag.actor.elementY;
+        const dx = AbstractActor.mousePosition.x - drag.actor.elementX;
+        const dy = AbstractActor.mousePosition.y - drag.actor.elementY;
 
         this.movedBehaviors.push(
-            AbstractCustomDraw.tickCount$.subscribe(() => {
+            AbstractActor.tickCount$.subscribe(() => {
                 this.handleDragOptions(drag, dx, dy);
             })
         );
@@ -213,22 +213,22 @@ export abstract class AbstractScene implements IScene {
     private handleDragOptions(drag: IDragActor, dx: number, dy: number) {
         if (!drag.options) {
             drag.actor.elementX =
-                AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
+                AbstractActor.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
             drag.actor.elementY =
-                AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+                AbstractActor.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
             return;
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_CENTER) {
             drag.actor.elementX =
-                AbstractCustomDraw.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
+                AbstractActor.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
             drag.actor.elementY =
-                AbstractCustomDraw.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+                AbstractActor.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
-            drag.actor.elementX = AbstractCustomDraw.mousePosition.x - dx;
-            drag.actor.elementY = AbstractCustomDraw.mousePosition.y - dy;
+            drag.actor.elementX = AbstractActor.mousePosition.x - dx;
+            drag.actor.elementY = AbstractActor.mousePosition.y - dy;
         }
 
         if (drag.options.callbackOnMOve) {
@@ -273,9 +273,13 @@ export abstract class AbstractScene implements IScene {
         }
         this.collector.length = 0;
         this.collector = <any>0;
-        this.renderController.destroyElements();
+        this.renderController.destroyActors();
         for (let i = 0; i < this.actors.length; i++) {
-            this.actors.pop();
+            let actor = this.actors.pop();
+            if (actor) {
+                actor.destroy();
+            }
+            actor = <any>0;
         }
         this.actors = <any>0;
     }
@@ -293,10 +297,10 @@ export abstract class AbstractScene implements IScene {
 }
 
 class Drag implements IDragActor {
-    public actor: AbstractCustomDraw;
+    public actor: AbstractActor;
     public options: IDragDropOptions;
 
-    constructor(actor: AbstractCustomDraw, options?: IDragDropOptions) {
+    constructor(actor: AbstractActor, options?: IDragDropOptions) {
         this.actor = actor;
         this.options = this.getDefaultOptions();
         if (!options) {

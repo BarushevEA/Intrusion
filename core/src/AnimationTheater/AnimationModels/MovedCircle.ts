@@ -1,6 +1,6 @@
-import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 
-export class MovedCircle extends AbstractCustomDraw {
+export class MovedCircle extends AbstractActor {
     maxStep = 7;
     dx = this.randomize(this.maxStep) + 1;
     dy = this.randomize(this.maxStep) + 1;
