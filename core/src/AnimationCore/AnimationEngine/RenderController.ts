@@ -39,7 +39,6 @@ export class RenderController implements IRenderController {
     public setActor(actor: IActor): void {
         this.currentPool.push(actor);
         actor.layer_name = this.currentLayerName;
-        actor.z_index = this.currentPool.length - 1;
         this.sortActorsByZIndex();
     }
 
@@ -191,6 +190,9 @@ export class RenderController implements IRenderController {
 
     public sortActorsByZIndex(): void {
         this.currentPool.sort((a, b) => {
+            if (a.z_index === b.z_index) {
+                return 0;
+            }
             return a.z_index > b.z_index ? 1 : -1;
         });
     }
