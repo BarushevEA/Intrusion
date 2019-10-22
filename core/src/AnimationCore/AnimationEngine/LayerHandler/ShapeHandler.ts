@@ -4,10 +4,7 @@ export type IPoint = {
 };
 export type IPolygon = IPoint[];
 type IDrawStop = { stopExecution(isReverse?: boolean): IShapeHandler; };
-type IAdvanced = IDrawStop;
-type ILinear = IDrawStop;
-type IRadial = IDrawStop;
-export type IAdvancedPolygon = IAdvanced & {
+type IAdvanced = {
     startPoint(x: number, y: number): IAdvancedPolygon;
     lineTo(x: number, y: number): IAdvancedPolygon;
     quadraticCurveTo(controlPointX: number,
@@ -21,14 +18,17 @@ export type IAdvancedPolygon = IAdvanced & {
                   x: number,
                   y: number): IAdvancedPolygon;
 };
-export type ILinearGradient = ILinear & {
+type ILinear = {
     setGradientDirectionPoints(x0: number, y0: number, x1: number, y1: number): ILinearGradient;
     addColorStop(value: number, color: string): ILinearGradient;
 };
-export type IRadialGradient = IRadial & {
+type IRadial = {
     setGradientDirectionPoints(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): IRadialGradient;
     addColorStop(value: number, color: string): IRadialGradient;
 };
+export type IAdvancedPolygon = IAdvanced & IDrawStop;
+export type ILinearGradient = ILinear & IDrawStop;
+export type IRadialGradient = IRadial & IDrawStop;
 export type IShapeHandler = {
     context: CanvasRenderingContext2D;
     setCustomStroke(isCustom: boolean): IShapeHandler;
