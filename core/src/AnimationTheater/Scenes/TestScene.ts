@@ -152,14 +152,7 @@ export class TestScene extends AbstractScene {
         }
 
         this.setActor(wave2);
-        this.setActor(buttonExit);
-        this.setActor(buttonPause);
-        this.setActor(buttonPlay);
-        this.setActor(buttonMove);
-        this.setActor(buttonStop);
         this.setActor(heart);
-        this.setActor(buttonInvisible);
-
         this.moveOnMouseDrag(heart);
 
         const movedOptions: IDragDropOptions = {};
@@ -200,5 +193,13 @@ export class TestScene extends AbstractScene {
                 toggleReverse();
             })
         );
+
+        this.setActiveLayer('buttons');
+        this.setActor(buttonExit);
+        this.setActor(buttonPause);
+        this.setActor(buttonPlay);
+        this.setActor(buttonMove);
+        this.setActor(buttonStop);
+        this.setActor(buttonInvisible);
     }
 }

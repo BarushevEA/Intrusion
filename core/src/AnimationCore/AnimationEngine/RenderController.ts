@@ -29,7 +29,7 @@ export class RenderController implements IRenderController {
     private isBackgroundLayerPresent = false;
     private currentLayerIndex = '0';
     private layers: ILayerPool = {0: this.currentPool};
-    private layersNames = [this.currentLayerIndex+''];
+    private layersNames = [this.currentLayerIndex + ''];
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
@@ -112,9 +112,9 @@ export class RenderController implements IRenderController {
         if (!this.isBackgroundLayerPresent) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-        for (let i = 0; i < this.layersNames.length; i++) {
-            const layerName = this.layersNames[i];
-            for (let i = 0; i < this.currentPool.length; i++) {
+        for (let k = 0; k < this.layersNames.length; k++) {
+            const layerName = this.layersNames[k];
+            for (let i = 0; i < this.layers[layerName].length; i++) {
                 this.layers[layerName][i].renderFrame();
             }
         }
