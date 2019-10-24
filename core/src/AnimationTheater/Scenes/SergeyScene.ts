@@ -1,10 +1,9 @@
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {CombinedRectangle} from "../AnimationModels/rectangles/CombinedRectangle";
-import {Flower} from "../AnimationModels/flowers/BaseFlower";
-import {Flower4X} from "../AnimationModels/flowers/Flower4X";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
-import {ButtonEmptyGray} from "../AnimationModels/Buttons/Empty/ButtonEmptyGray";
 import {Heart} from "../AnimationModels/Heart";
+import {BrickWall} from "../AnimationModels/briks/BrickWall";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 
 export class SergeyScene extends AbstractScene {
 
@@ -14,9 +13,7 @@ export class SergeyScene extends AbstractScene {
 
     protected createScene(): void {
         const buttonExit = new ButtonExit(this.generalLayer);
-        const buttonEmptyGray = new ButtonEmptyGray(this.generalLayer);
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
-        const bigFlower = new Flower4X(this.generalLayer);
         const heart = new Heart(this.generalLayer);
         heart.elementY = this.generalLayer.height - heart.elementHeight;
 
@@ -36,19 +33,39 @@ export class SergeyScene extends AbstractScene {
             })
         );
 
-        for (let i = 0; i < 50; i++) {
-            const flower = new Flower(this.generalLayer);
-            flower.elementX = Math.round(Math.random() * 1000);
-            flower.elementY = Math.round(Math.random() * 150 + 200);
-            this.setActor(flower);
+        let brickNumber = 100;
+        let brickCounter = brickNumber;
+
+        for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 13; j++) {
+                const brickWall = new BrickWall(this.generalLayer);
+                brickWall.elementX = brickWall.elementWidth * j;
+                brickWall.elementY = brickWall.elementHeight * i;
+                this.setActor(brickWall);
+                this.collect(
+                    AbstractActor.tickCount$.subscribe(() => {
+                        brickWall.elementX--;
+                        if (brickCounter <= 0) {
+                            brickWall.elementX += brickNumber + 1;
+                        }
+                    })
+                );
+            }
         }
+
+        this.collect(AbstractActor.tickCount$.subscribe(() => {
+            if (brickCounter <= 0) {
+                brickCounter = brickNumber;
+            } else {
+                brickCounter--;
+            }
+        }));
+
         this.setActor(combinedRectangle);
-        this.setActor(bigFlower);
-        this.setActor(buttonEmptyGray);
         this.setActor(buttonExit);
         this.setActor(heart);
 
-        this.moveOnMouseDrag(bigFlower);
         this.moveOnMouseDrag(heart);
+        this.moveOnMouseDrag(combinedRectangle);
     }
 }
