@@ -68,8 +68,8 @@ export class RenderController implements IRenderController {
         this.layersNames.push(name);
     }
 
-    setLayerOnIndex(layerName: string, index: number): void {
-        if (!this.layers[index]) {
+    public setLayerOnIndex(layerName: string, index: number): void {
+        if (!this.layers[layerName]) {
             return;
         }
         const tmp = [];
