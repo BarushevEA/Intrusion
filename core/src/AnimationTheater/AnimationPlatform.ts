@@ -14,7 +14,7 @@ export class AnimationPlatform extends AbstractPlatform {
         const sceneTest = new TestScene(this.canvas);
         const sceneSerge = new SergeScene(this.canvas);
         const sceneBackground = new TestBackground(this.canvas);
-        menu.renderStart(false);
+        menu.renderStart(true);
         menu.onExit$.subscribe((data) => {
             console.log(data);
             if (data.nextScene) {
@@ -32,13 +32,13 @@ export class AnimationPlatform extends AbstractPlatform {
             }
         });
         sceneTest.onExit$.subscribe(() => {
-            menu.renderStart(false);
+            menu.renderStart(true);
         });
         sceneSerge.onExit$.subscribe(() => {
-            menu.renderStart(false);
+            menu.renderStart(true);
         });
         sceneBackground.onExit$.subscribe(() => {
-            menu.renderStart(false);
+            menu.renderStart(true);
         });
     }
 }

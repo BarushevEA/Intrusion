@@ -10,8 +10,8 @@ export class BrickWall extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        for (let i = 0; i < 80; i += 1) {
-            this.createFrame(2);
+        for (let i = 30; i < 80; i += 1) {
+            this.createFrame(5);
             this.shape
                 .setColors(`rgba(${i},${i / 1.8},0,1)`, 'rgba(0,0,0,0)')
                 .drawRectangle(0, 0, 100, 100);
@@ -19,8 +19,8 @@ export class BrickWall extends AbstractFramedShape {
             this.drawBrick(-50, 0);
             this.drawBrick(0, 50);
         }
-        for (let i = 80; i > 0; i -= 1) {
-            this.createFrame(1);
+        for (let i = 80; i > 30; i -= 1) {
+            this.createFrame(10);
             this.shape
                 .setColors(`rgba(${i},${i / 1.8},0,1)`, 'rgba(0,0,0,0)')
                 .drawRectangle(0, 0, 100, 100);

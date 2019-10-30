@@ -148,7 +148,7 @@ export class TestScene extends AbstractScene {
 
         const snakeSpiral = new SnakeSpiral(this.generalLayer);
         this.setActor(snakeSpiral);
-        
+
         this.setActor(wave2);
         this.setActor(heart);
         this.moveOnMouseDrag(heart);
