@@ -5,6 +5,7 @@ import {Heart} from "../AnimationModels/Heart";
 import {BrickWall} from "../AnimationModels/briks/BrickWall";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {E_Scene} from "../AnimationPlatform";
+import {ISubscriptionLike} from "../../AnimationCore/CustomeLibraries/Observable";
 
 export class SergeScene extends AbstractScene {
 
@@ -17,11 +18,56 @@ export class SergeScene extends AbstractScene {
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const heart = new Heart(this.generalLayer);
         heart.elementY = this.generalLayer.height - heart.elementHeight;
-        let isStopMove = false;
 
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
         combinedRectangle.elementY = this.generalLayer.height - combinedRectangle.elementHeight;
+
+        let brickNumber = 100;
+        let brickCounter = brickNumber;
+        let bricks: { actor: AbstractActor, x: number, y: number }[] = [];
+        let bricksSubscriber: ISubscriptionLike = <any>0;
+
+        for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 13; j++) {
+                const brickWall = new BrickWall(this.generalLayer);
+                brickWall.elementX = brickWall.elementWidth * j;
+                brickWall.elementY = brickWall.elementHeight * i;
+                this.setActor(brickWall);
+                bricks.push({actor: brickWall, x: brickWall.elementX, y: brickWall.elementY});
+            }
+        }
+
+        const move = () => {
+            const speed = 5;
+            brickNumber = bricks[0].actor.elementWidth;
+            brickNumber /= speed;
+            brickCounter = brickNumber;
+            bricksSubscriber = AbstractActor.tickCount$.subscribe(() => {
+                for (let i = 0; i < bricks.length; i++) {
+                    const brick = bricks[i].actor;
+                    brick.elementX -= speed;
+                    if (brickCounter <= 1) {
+                        brick.elementX = bricks[i].x;
+                    }
+                }
+                if (brickCounter <= 1) {
+                    brickCounter = brickNumber;
+                } else {
+                    brickCounter--;
+                }
+            });
+        };
+
+        const stopMove = () => {
+            this.destroySubscriber(bricksSubscriber);
+            for (let i = 0; i < bricks.length; i++) {
+                const brick = bricks[i].actor;
+                brick.elementX = bricks[i].x;
+                brick.elementY = bricks[i].y;
+            }
+            brickCounter = brickNumber;
+        };
 
         this.collect(
             this.onSetUserData$.subscribe(() => {
@@ -35,46 +81,16 @@ export class SergeScene extends AbstractScene {
                 this.exit();
             }),
             this.onStart$.subscribe(() => {
-                isStopMove = false;
+                move();
+                this.collect(bricksSubscriber);
             }),
             this.onStop$.subscribe(() => {
-                isStopMove = true;
+                stopMove();
             }),
             this.onExit$.subscribe(() => {
-                isStopMove = true;
+                stopMove();
             })
         );
-
-        let brickNumber = 100;
-        let brickCounter = brickNumber;
-
-        for (let i = 0; i < 6; i++) {
-            for (let j = 0; j < 13; j++) {
-                const brickWall = new BrickWall(this.generalLayer);
-                brickWall.elementX = brickWall.elementWidth * j;
-                brickWall.elementY = brickWall.elementHeight * i;
-                this.setActor(brickWall);
-                this.collect(
-                    AbstractActor.tickCount$.subscribe(() => {
-                        if (isStopMove) {
-                            return;
-                        }
-                        brickWall.elementX--;
-                        if (brickCounter <= 0) {
-                            brickWall.elementX += brickNumber + 1;
-                        }
-                    }),
-                );
-            }
-        }
-
-        this.collect(AbstractActor.tickCount$.subscribe(() => {
-            if (brickCounter <= 0) {
-                brickCounter = brickNumber;
-            } else {
-                brickCounter--;
-            }
-        }));
 
         this.setActor(combinedRectangle);
         this.setActor(buttonExit);
