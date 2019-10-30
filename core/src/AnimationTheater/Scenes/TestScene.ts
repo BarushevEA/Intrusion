@@ -1,7 +1,6 @@
 import {AbstractScene, IDragDropOptions} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {HexagonGreed} from "../AnimationModels/HexagonGreed";
 import {SnakeSpiral} from "../AnimationModels/SnakeSpiral";
-import {MovedCircle} from "../AnimationModels/MovedCircle";
 import {AnimatedRectangleLightGray} from "../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {AnimatedRectangleLightCyan} from "../AnimationModels/rectangles/AnimatedRectangleLightCyan";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
@@ -149,15 +148,7 @@ export class TestScene extends AbstractScene {
 
         const snakeSpiral = new SnakeSpiral(this.generalLayer);
         this.setActor(snakeSpiral);
-
-        for (let i = 0; i < 50; i++) {
-            const circle = new MovedCircle(this.generalLayer);
-            this.collect(circle.isMouseOver$.subscribe(() => {
-                circle.moreSpeed();
-            }));
-            this.setActor(circle);
-        }
-
+        
         this.setActor(wave2);
         this.setActor(heart);
         this.moveOnMouseDrag(heart);
