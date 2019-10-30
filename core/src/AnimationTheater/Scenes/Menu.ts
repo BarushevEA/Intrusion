@@ -87,7 +87,7 @@ function handleBackgrounds(scene: AbstractScene): void {
 
 function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 50; i++) {
         const circle = new MovedCircle(scene.generalLayer);
         scene.collect(circle.isMouseOver$.subscribe(() => {
             circle.moreSpeed();
@@ -105,15 +105,15 @@ function handleButtons(scene: AbstractScene): void {
     const buttonQuit = new ButtonRedWithText(scene.generalLayer, 'QUIT');
 
     buttonExit.elementX = scene.generalLayer.width - buttonExit.elementWidth;
-    buttonTest.elementY = 10;
-    buttonSerge.elementY = buttonTest.elementHeight + 10;
-    buttonBackground.elementY = buttonTest.elementHeight * 2 + 10;
-    buttonQuit.elementY = buttonTest.elementHeight * 3 + 10;
+    buttonTest.elementY = 20;
+    buttonSerge.elementY = buttonTest.elementHeight + 25;
+    buttonBackground.elementY = buttonTest.elementHeight * 2 + 30;
+    buttonQuit.elementY = buttonTest.elementHeight * 3 + 35;
 
-    buttonTest.elementX = 10;
-    buttonSerge.elementX = 10;
-    buttonBackground.elementX = 10;
-    buttonQuit.elementX = 10;
+    buttonTest.elementX = 20;
+    buttonSerge.elementX = 20;
+    buttonBackground.elementX = 20;
+    buttonQuit.elementX = 20;
 
     scene.setActor(buttonExit);
     scene.setActor(buttonTest);
