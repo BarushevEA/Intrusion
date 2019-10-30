@@ -37,9 +37,9 @@ export type IDragActor = {
 };
 
 export abstract class AbstractScene implements IScene {
-    protected renderController: IRenderController;
-    protected generalLayer: HTMLCanvasElement;
-    protected actors: AbstractActor[] = [];
+    public renderController: IRenderController;
+    public generalLayer: HTMLCanvasElement;
+    public actors: AbstractActor[] = [];
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
@@ -100,41 +100,41 @@ export abstract class AbstractScene implements IScene {
         return this._onDestroy$;
     }
 
-    protected setActor(actor: AbstractActor): void {
+    public setActor(actor: AbstractActor): void {
         actor.disableEvents();
         this.actors.push(actor);
         this.renderController.setActor(actor);
     }
 
-    protected setActorOnTop(actor: AbstractActor): void {
+    public setActorOnTop(actor: AbstractActor): void {
         this.renderController.setActorOnTop(actor);
     }
 
-    protected setActorZIndex(actor: AbstractActor, z_index: number): void {
+    public setActorZIndex(actor: AbstractActor, z_index: number): void {
         this.renderController.setActorZIndex(actor, z_index);
     }
 
-    protected setActorsGroupOnTop(actors: IActor[]): void {
+    public setActorsGroupOnTop(actors: IActor[]): void {
         this.renderController.setActorGroupOnTop(actors);
     }
 
-    protected setActorsGroupByZIndex(actors: IActor[], z_index: number): void {
+    public setActorsGroupByZIndex(actors: IActor[], z_index: number): void {
         this.renderController.setActorsGroupByZIndex(actors, z_index);
     }
 
-    protected sortActorsByZIndex() {
+    public sortActorsByZIndex() {
         this.renderController.sortActorsByZIndex();
     }
 
-    protected setActiveLayer(name: string): void {
+    public setActiveLayer(name: string): void {
         this.renderController.setActiveLayer(name);
     }
 
-    protected setLayerOnTop(name: string): void {
+    public setLayerOnTop(name: string): void {
         this.renderController.setLayerOnTop(name);
     }
 
-    protected setLayerOnIndex(layerName: string, index: number): void {
+    public setLayerOnIndex(layerName: string, index: number): void {
         this.renderController.setLayerOnIndex(layerName, index);
     }
 
@@ -146,7 +146,7 @@ export abstract class AbstractScene implements IScene {
 
     protected abstract createScene(): void;
 
-    protected moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
+    public moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(
