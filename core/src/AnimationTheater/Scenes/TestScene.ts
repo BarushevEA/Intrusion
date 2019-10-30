@@ -38,6 +38,7 @@ export class TestScene extends AbstractScene {
         buttonMove.elementX = buttonMove.elementWidth * 2;
         buttonStop.elementX = buttonStop.elementWidth * 3;
         buttonInvisible.elementX = buttonInvisible.elementWidth * 5;
+        let isStopMove = false;
 
         this.userData = {
             test: 123,
@@ -108,6 +109,9 @@ export class TestScene extends AbstractScene {
         };
 
         const recMove = () => {
+            if (isStopMove) {
+                return;
+            }
             draws.forEach(el => {
                 el.elementX += dx;
             });
@@ -193,6 +197,12 @@ export class TestScene extends AbstractScene {
             }),
             buttonInvisible.isMouseClick$.subscribe(() => {
                 toggleReverse();
+            }),
+            this.onStart$.subscribe(() => {
+                isStopMove = false;
+            }),
+            this.onStop$.subscribe(() => {
+                isStopMove = true;
             })
         );
 

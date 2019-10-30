@@ -16,6 +16,7 @@ export class SergeyScene extends AbstractScene {
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const heart = new Heart(this.generalLayer);
         heart.elementY = this.generalLayer.height - heart.elementHeight;
+        let isStopMove = false;
 
         buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
         combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
@@ -30,6 +31,12 @@ export class SergeyScene extends AbstractScene {
             }),
             buttonExit.isMouseClick$.subscribe(() => {
                 this.exit();
+            }),
+            this.onStart$.subscribe(() => {
+                isStopMove = false;
+            }),
+            this.onStop$.subscribe(() => {
+                isStopMove = true;
             })
         );
 
@@ -44,6 +51,10 @@ export class SergeyScene extends AbstractScene {
                 this.setActor(brickWall);
                 this.collect(
                     AbstractActor.tickCount$.subscribe(() => {
+                        if (isStopMove) {
+                            return;
+                        }
+                        console.log('move', brickCounter);
                         brickWall.elementX--;
                         if (brickCounter <= 0) {
                             brickWall.elementX += brickNumber + 1;
