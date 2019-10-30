@@ -2,7 +2,7 @@ import {AbstractButton} from "../../../../AnimationCore/AnimationEngine/rootMode
 
 export class ButtonEmptyYellow extends AbstractButton {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, '', 50, 100);
+        super(canvas, '', 50, 150);
     }
 
     protected setFramesName(): void {

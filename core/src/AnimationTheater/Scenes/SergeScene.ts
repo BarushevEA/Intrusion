@@ -4,8 +4,9 @@ import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
 import {Heart} from "../AnimationModels/Heart";
 import {BrickWall} from "../AnimationModels/briks/BrickWall";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {E_Scene} from "../AnimationPlatform";
 
-export class SergeyScene extends AbstractScene {
+export class SergeScene extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
@@ -30,12 +31,16 @@ export class SergeyScene extends AbstractScene {
                 combinedRectangle.nextRectangle();
             }),
             buttonExit.isMouseClick$.subscribe(() => {
+                this.userData.nextScene = E_Scene.MENU;
                 this.exit();
             }),
             this.onStart$.subscribe(() => {
                 isStopMove = false;
             }),
             this.onStop$.subscribe(() => {
+                isStopMove = true;
+            }),
+            this.onExit$.subscribe(() => {
                 isStopMove = true;
             })
         );
@@ -54,12 +59,11 @@ export class SergeyScene extends AbstractScene {
                         if (isStopMove) {
                             return;
                         }
-                        console.log('move', brickCounter);
                         brickWall.elementX--;
                         if (brickCounter <= 0) {
                             brickWall.elementX += brickNumber + 1;
                         }
-                    })
+                    }),
                 );
             }
         }

@@ -17,6 +17,7 @@ import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText"
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
 import {Heart} from "../AnimationModels/Heart";
+import {E_Scene} from "../AnimationPlatform";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -179,7 +180,7 @@ export class TestScene extends AbstractScene {
 
         this.collect(
             buttonExit.isMouseClick$.subscribe(() => {
-                this.userData.test++;
+                this.userData.nextScene = E_Scene.MENU;
                 this.exit();
             }),
             buttonMove.isMouseClick$.subscribe(() => {
@@ -201,7 +202,7 @@ export class TestScene extends AbstractScene {
             this.onStart$.subscribe(() => {
                 isStopMove = false;
             }),
-            this.onStop$.subscribe(() => {
+            this.onExit$.subscribe(() => {
                 isStopMove = true;
             })
         );

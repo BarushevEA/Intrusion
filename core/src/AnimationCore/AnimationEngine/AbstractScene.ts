@@ -10,6 +10,7 @@ export type IScene = {
 }
 
 export type IUserData = {
+    nextScene?: string;
     [key: string]: any;
 }
 
@@ -250,11 +251,11 @@ export abstract class AbstractScene implements IScene {
 
     public renderStart(isBackgroundLayerPresent: boolean): void {
         this.renderController.renderStart(isBackgroundLayerPresent);
-        this._onStart$.next({...this._userData});
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         }
+        this._onStart$.next({...this._userData});
         setTimeout(() => {
             this.actors.forEach(actor => {
                 actor.enableEvents();
