@@ -34,6 +34,7 @@ export type IShapeHandler = {
     setCustomStroke(isCustom: boolean): IShapeHandler;
     setColors(backgroundColor: string, borderColor: string): IShapeHandler;
     setLineWidth(width?: number): IShapeHandler;
+    setLineDash(segments: number[]): IShapeHandler;
     startDrawing(): IShapeHandler;
     stopDrawing(isFinishOperation?: boolean): void;
     drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler;
@@ -90,6 +91,13 @@ class ShapeHandler implements IShapeHandler {
     public setLineWidth(width?: number): IShapeHandler {
         if (width) {
             this.context.lineWidth = width;
+        }
+        return this;
+    }
+
+    setLineDash(segments: number[]): IShapeHandler {
+        if (segments && segments.length > 1) {
+            this.context.setLineDash(segments);
         }
         return this;
     }
