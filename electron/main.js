@@ -7,8 +7,8 @@ let win;
 function createWindow() {
     // Создаём окно браузера.
     win = new BrowserWindow({
-        width: 1280,
-        height: 680,
+        width: 1226,
+        height: 670,
         resizable: false,
         webPreferences: {
             nodeIntegration: true
