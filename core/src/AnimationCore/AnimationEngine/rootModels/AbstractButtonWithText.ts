@@ -18,8 +18,8 @@ export abstract class AbstractButtonWithText extends AbstractActor {
     private init(text: string) {
         this.setSize(this.emptyButton.elementHeight, this.emptyButton.elementWidth);
         this.setVirtualLayer(this.textLayerName);
-        this.shape.setColors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');
-        this.shape.setLineWidth(5);
+        this.shape.colors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');
+        this.shape.lineWidth(5);
         this.text.x = 15;
         this.text.y = 35;
         this.text.options = {

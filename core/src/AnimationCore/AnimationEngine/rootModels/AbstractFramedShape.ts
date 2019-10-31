@@ -46,10 +46,10 @@ export abstract class AbstractFramedShape extends AbstractActor {
 
     protected createEmptyFrame(): void {
         this.createFrame(0);
-        this.shape.setColors(
+        this.shape.colors(
             'rgba(0,0,0,0)',
             'rgba(0,0,0,0)');
-        this.shape.drawRectangle(0, 0,
+        this.shape.rectangle(0, 0,
             this.generalLayer.width,
             this.generalLayer.height);
     }

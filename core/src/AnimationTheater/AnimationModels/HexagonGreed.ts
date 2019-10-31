@@ -51,22 +51,22 @@ export class HexagonGreed extends AbstractActor {
 
         this.setVirtualLayer(this.bottomLayerName);
         this.shape
-            .setLineWidth(11)
-            .setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
+            .lineWidth(11)
+            .colors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(centerLayerName);
         this.shape
-            .setLineWidth(3)
-            .setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
+            .lineWidth(3)
+            .colors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(topLayerName);
         this.shape
-            .setLineWidth(3)
-            .setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
+            .lineWidth(3)
+            .colors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
@@ -85,7 +85,7 @@ export class HexagonGreed extends AbstractActor {
                     deltaX = modRadius;
                 }
                 let modifiedHexagon: IPolygon = this.getModified(hexagon, j * modDX + deltaX, i * modDY);
-                this.shape.drawPolygon(modifiedHexagon);
+                this.shape.polygon(modifiedHexagon);
             }
         }
     }

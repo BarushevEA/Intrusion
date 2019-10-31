@@ -20,9 +20,9 @@ export class AnimatedWaveDark extends AbstractFramedShape {
         for (let i = 0; i < Math.trunc(points.length / 4); i++) {
             this.createFrame(2);
             this.shape
-                .setCustomStroke(true)
+                .customStroke(true)
 
-                .setLinearGradient()
+                .linearGradient()
                 .setGradientDirectionPoints(0, 0, 0, 150)
                 .addColorStop(0, 'rgba(0,71,95,1)')
                 .addColorStop(0.4, 'rgba(0,71,95,1)')
@@ -30,9 +30,9 @@ export class AnimatedWaveDark extends AbstractFramedShape {
                 .addColorStop(1, 'rgba(0,0,0,0)')
                 .stopExecution(true)
 
-                .setLineWidth(130)
-                .drawPolygon(points)
-                .setCustomStroke(false);
+                .lineWidth(130)
+                .polygon(points)
+                .customStroke(false);
 
             const y0 = points[0].y;
             for (let j = 0; j < points.length - 1; j++) {

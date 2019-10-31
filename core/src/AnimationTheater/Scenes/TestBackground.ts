@@ -1,5 +1,6 @@
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
+import {DynamicBackground} from "../AnimationModels/DynamicBackground";
 
 enum ELayers {
     BACKGROUND = 'BACKGROUND',
@@ -22,6 +23,8 @@ export class TestBackground extends AbstractScene {
 
 function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
+    const background = new DynamicBackground(scene.generalLayer);
+    scene.setActor(background);
 }
 
 function handleMiddle(scene: AbstractScene): void {

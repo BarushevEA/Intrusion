@@ -64,17 +64,17 @@ export class Flower4X extends AbstractFramedShape {
 
         this.createFrame(0);
         this.shape
-            .setLineWidth(1)
-            .setCustomStroke(true)
-            .setColors('', 'rgb(0,255,0)')
-            .drawPolygon(stem)
-            .setCustomStroke(false)
-            .setColors('rgb(0,255,0)', 'rgba(0,0,0,0.5)')
-            .drawPolygon(leaf)
-            .setColors('rgb(255,0,100)', 'rgb(50,0,5)')
-            .drawPolygon(petal1)
-            .drawPolygon(petal2)
-            .drawPolygon(petal3);
+            .lineWidth(1)
+            .customStroke(true)
+            .colors('', 'rgb(0,255,0)')
+            .polygon(stem)
+            .customStroke(false)
+            .colors('rgb(0,255,0)', 'rgba(0,0,0,0.5)')
+            .polygon(leaf)
+            .colors('rgb(255,0,100)', 'rgb(50,0,5)')
+            .polygon(petal1)
+            .polygon(petal2)
+            .polygon(petal3);
 
         function multiply(arr: IPoint[]) {
             arr.forEach(element => {

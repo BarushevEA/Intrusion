@@ -63,17 +63,17 @@ export class Flower extends AbstractFramedShape {
         multiply(petal3);
 
         this.createFrame(0);
-        this.shape.setCustomStroke(true)
-            .setColors('', 'rgb(0,255,0)')
-            .setLineWidth(1)
-            .drawPolygon(stem)
-            .setCustomStroke(false)
-            .setColors('rgb(0,255,0)', 'rgba(0,0,0,0.5)')
-            .drawPolygon(leaf)
-            .setColors('rgb(255,0,100)', 'rgb(50,0,5)')
-            .drawPolygon(petal1)
-            .drawPolygon(petal2)
-            .drawPolygon(petal3);
+        this.shape.customStroke(true)
+            .colors('', 'rgb(0,255,0)')
+            .lineWidth(1)
+            .polygon(stem)
+            .customStroke(false)
+            .colors('rgb(0,255,0)', 'rgba(0,0,0,0.5)')
+            .polygon(leaf)
+            .colors('rgb(255,0,100)', 'rgb(50,0,5)')
+            .polygon(petal1)
+            .polygon(petal2)
+            .polygon(petal3);
 
         function multiply(arr: IPoint[]) {
             arr.forEach(element => {

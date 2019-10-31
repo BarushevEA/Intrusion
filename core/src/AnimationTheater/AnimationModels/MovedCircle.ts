@@ -27,11 +27,11 @@ export class MovedCircle extends AbstractActor {
 
         this.setVirtualLayer(this.bottomLayerName);
         this.shape
-            .setLineWidth(this.lineWidth)
-            .setColors(
+            .lineWidth(this.lineWidth)
+            .colors(
                 `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
                 `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`)
-            .drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
+            .circle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.restorePreviousLayer();
     }
 

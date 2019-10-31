@@ -31,22 +31,22 @@ export type ILinearGradient = ILinear & IDrawStop;
 export type IRadialGradient = IRadial & IDrawStop;
 export type IShapeHandler = {
     context: CanvasRenderingContext2D;
-    setCustomStroke(isCustom: boolean): IShapeHandler;
-    setColors(backgroundColor: string, borderColor: string): IShapeHandler;
-    setLineWidth(width?: number): IShapeHandler;
-    setLineDash(segments: number[]): IShapeHandler;
+    customStroke(isCustom: boolean): IShapeHandler;
+    colors(backgroundColor: string, borderColor: string): IShapeHandler;
+    lineWidth(width?: number): IShapeHandler;
+    lineDash(segments: number[]): IShapeHandler;
     startDrawing(): IShapeHandler;
     stopDrawing(isFinishOperation?: boolean): void;
-    drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler;
-    drawRectangle(x: number, y: number, width: number, height: number): IShapeHandler;
-    drawPolygon(polygon: IPolygon): IShapeHandler;
+    circle(x: number, y: number, radius: number): IShapeHandler;
+    rectangle(x: number, y: number, width: number, height: number): IShapeHandler;
+    polygon(polygon: IPolygon): IShapeHandler;
     moveTo(x: number, y: number): IShapeHandler;
     lineTo(x: number, y: number): IShapeHandler;
     line(x1: number, y1: number, x2: number, y2: number): IShapeHandler;
     arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler;
-    drawAdvancedPolygon(): IAdvancedPolygon;
-    setLinearGradient(): ILinearGradient;
-    setRadialGradient(): IRadialGradient;
+    advancedPolygon(): IAdvancedPolygon;
+    linearGradient(): ILinearGradient;
+    radialGradient(): IRadialGradient;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -61,7 +61,7 @@ class ShapeHandler implements IShapeHandler {
         return this._context;
     }
 
-    setCustomStroke(isCustom: boolean): IShapeHandler {
+    public customStroke(isCustom: boolean): IShapeHandler {
         this._isCustomStroke = isCustom;
         return this;
     }
@@ -82,20 +82,20 @@ class ShapeHandler implements IShapeHandler {
         }
     }
 
-    public setColors(backgroundColor: string, borderColor: string): IShapeHandler {
+    public colors(backgroundColor: string, borderColor: string): IShapeHandler {
         this.context.fillStyle = backgroundColor;
         this.context.strokeStyle = borderColor;
         return this;
     }
 
-    public setLineWidth(width?: number): IShapeHandler {
+    public lineWidth(width?: number): IShapeHandler {
         if (width) {
             this.context.lineWidth = width;
         }
         return this;
     }
 
-    setLineDash(segments: number[]): IShapeHandler {
+    public lineDash(segments: number[]): IShapeHandler {
         if (segments && segments.length > 1) {
             this.context.setLineDash(segments);
         }
@@ -126,7 +126,7 @@ class ShapeHandler implements IShapeHandler {
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
     }
 
-    public drawSimpleCircle(x: number, y: number, radius: number): IShapeHandler {
+    public circle(x: number, y: number, radius: number): IShapeHandler {
         this.startDrawing();
         this.drawCircle(x, y, radius);
         this.handleStopDrawing();
@@ -140,14 +140,14 @@ class ShapeHandler implements IShapeHandler {
         return this;
     };
 
-    public drawRectangle(x: number, y: number, width: number, height: number): IShapeHandler {
+    public rectangle(x: number, y: number, width: number, height: number): IShapeHandler {
         this.startDrawing();
         this.context.rect(x, y, width, height);
         this.handleStopDrawing();
         return this;
     }
 
-    public drawPolygon(polygon: IPolygon): IShapeHandler {
+    public polygon(polygon: IPolygon): IShapeHandler {
         this.startDrawing();
         if (!polygon.length) {
             return this;
@@ -161,16 +161,16 @@ class ShapeHandler implements IShapeHandler {
         return this;
     }
 
-    public drawAdvancedPolygon(): IAdvancedPolygon {
+    public advancedPolygon(): IAdvancedPolygon {
         this.startDrawing();
         return new AdvancedPolygon(this.handleStopDrawing.bind(this), this._context, this);
     }
 
-    public setLinearGradient(): ILinearGradient {
+    public linearGradient(): ILinearGradient {
         return new LinearGradient(this.handleStopDrawing.bind(this), this._context, this);
     };
 
-    public setRadialGradient(): IRadialGradient {
+    public radialGradient(): IRadialGradient {
         return new RadialGradient(this.handleStopDrawing.bind(this), this._context, this);
     };
 
