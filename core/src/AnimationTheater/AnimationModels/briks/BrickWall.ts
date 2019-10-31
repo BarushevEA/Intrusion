@@ -46,6 +46,24 @@ export class BrickWall extends AbstractFramedShape {
             this.drawBrick(-50, 0);
             this.drawBrick(0, 50);
         }
+        for (let i = 0; i < 80; i += 1) {
+            this.createFrame(2);
+            this.shape
+                .setColors(`rgba(0,${i},${i / 1.8},1)`, 'rgba(0,0,0,0)')
+                .drawRectangle(0, 0, 100, 100);
+            this.drawBrick(50, 0);
+            this.drawBrick(-50, 0);
+            this.drawBrick(0, 50);
+        }
+        for (let i = 80; i > 0; i -= 1) {
+            this.createFrame(5);
+            this.shape
+                .setColors(`rgba(0,${i},${i / 1.8},1)`, 'rgba(0,0,0,0)')
+                .drawRectangle(0, 0, 100, 100);
+            this.drawBrick(50, 0);
+            this.drawBrick(-50, 0);
+            this.drawBrick(0, 50);
+        }
     }
 
     drawBrick(x: number, y: number) {
