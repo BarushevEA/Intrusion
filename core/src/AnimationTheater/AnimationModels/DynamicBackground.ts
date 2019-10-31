@@ -1,5 +1,6 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {GreenTriangle} from "./GreenTriangle";
+import {GreenRectangle} from "./GreenRectangle";
 
 enum ELayer {
     WORK = 'WORK',
@@ -62,5 +63,9 @@ function getWork($: AbstractActor) {
     triangle.elementX = 500;
     triangle.elementY = 300;
     triangle.renderFrame();
+    const rectangle = new GreenRectangle(layer);
+    rectangle.elementX = 500;
+    rectangle.elementY = 400;
+    rectangle.renderFrame();
     $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
 }
