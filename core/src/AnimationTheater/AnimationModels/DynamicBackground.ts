@@ -1,4 +1,5 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {GreenTriangle} from "./GreenTriangle";
 
 enum ELayer {
     WORK = 'WORK',
@@ -56,11 +57,10 @@ function getGreed($: AbstractActor): void {
 }
 
 function getWork($: AbstractActor) {
-    $.setVirtualLayer(ELayer.WORK);
-    $.shape
-        .colors('rgba(0,250,0,0.1)', 'rgba(0,250,0,0.5)')
-        .lineWidth(5)
-        .circle($.elementWidth - 300, $.elementHeight / 2, 200);
-    $.restorePreviousLayer();
+    const layer = $.setVirtualLayer(ELayer.WORK);
+    const triangle = new GreenTriangle(layer);
+    triangle.elementX = 500;
+    triangle.elementY = 300;
+    triangle.renderFrame();
     $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
 }
