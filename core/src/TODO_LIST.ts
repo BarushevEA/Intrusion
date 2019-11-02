@@ -3,6 +3,7 @@
 // DONE TODO 3) Add events to animation models (mouse over, click)
 // DONE TODO 3.1) create effective observable un subscribe
 // DONE TODO 3.2) Add events to animation models (mouse key up and key down)
+// TODO 3.3) Handle events - right mouse click
 // TODO 4) Create effective background animation (move on left, right and t.e. via virtual canvases and custom map of dimensions)
 // DONE TODO 5) Create combined group component (created test example)
 // TODO 6) Need to add svg or Base64 image handler
