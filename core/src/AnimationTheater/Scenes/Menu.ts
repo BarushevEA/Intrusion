@@ -63,7 +63,7 @@ function handleBackgrounds(scene: AbstractScene): void {
         });
     };
     const stopMove = () => {
-        scene.destroySubscriber(bricksSubscriber);
+        scene.unsubscribe(bricksSubscriber);
         for (let i = 0; i < bricks.length; i++) {
             const brick = bricks[i].actor;
             brick.xPos = bricks[i].x;

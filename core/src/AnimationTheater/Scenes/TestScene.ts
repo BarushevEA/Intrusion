@@ -178,7 +178,7 @@ export class TestScene extends AbstractScene {
                 recMoveStart();
             }),
             buttonStop.isMouseClick$.subscribe(() => {
-                this.destroySubscriber(move);
+                this.unsubscribe(move);
                 move = <any>0;
             }),
             buttonPlay.isMouseClick$.subscribe(() => {

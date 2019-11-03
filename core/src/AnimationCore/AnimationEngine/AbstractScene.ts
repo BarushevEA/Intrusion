@@ -52,6 +52,7 @@ export abstract class AbstractScene implements IScene {
     private isFirstStart = true;
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
+    private destroySubscriberCounter = 0;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -163,7 +164,7 @@ export abstract class AbstractScene implements IScene {
     private onMovedActorDrop(drop: IDragActor): void {
         if (this.movedBehaviors.length) {
             this.movedBehaviors.forEach(rectBh => {
-                this.destroySubscriber(rectBh);
+                this.unsubscribe(rectBh);
             });
             this.movedBehaviors = [];
             if (drop.options) {
@@ -297,14 +298,30 @@ export abstract class AbstractScene implements IScene {
         this.actors = <any>0;
     }
 
-    public destroySubscriber(subscriber: ISubscriptionLike) {
+    public unsubscribe(subscriber: ISubscriptionLike) {
         for (let i = 0; i < this.collector.length; i++) {
             const savedSubscriber = this.collector[i];
             if (savedSubscriber && savedSubscriber === subscriber) {
                 savedSubscriber.unsubscribe();
                 this.collector[i] = <any>0;
+                this.destroySubscriberCounter++;
                 break;
             }
+        }
+
+        this.clearCollector();
+    }
+
+    private clearCollector() {
+        if (this.destroySubscriberCounter > 1000 && this.collector.length) {
+            const tmp: ISubscriptionLike[] = [];
+            for (let i = 0; i < this.collector.length; i++) {
+                const subscriber = this.collector[i];
+                if (subscriber) {
+                    tmp.push(subscriber);
+                }
+            }
+            this.collector = tmp;
         }
     }
 }

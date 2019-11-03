@@ -40,7 +40,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isLeftMouseCatch = false;
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 200;
-    private readonly subscribers: ISubscriptionLike[] = [];
+    private subscribers: ISubscriptionLike[] = [];
     private readonly mouseEvents$: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
@@ -48,6 +48,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     public isMouseLeftClick$ = new Observable(<boolean>false);
     public isMouseLeftDrag$ = new Observable(<any>0);
     public isMouseLeftDrop$ = new Observable(<any>0);
+    private destroySubscriberCounter = 0;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -293,7 +294,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    destroy() {
+    public destroy() {
         for (let i = 0; i < this.subscribers.length; i++) {
             const subscriber = this.subscribers.pop();
             if (subscriber) {
@@ -302,6 +303,33 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
         this.subscribers.length = 0;
         this.disableEvents();
+    }
+
+    public unsubscribe(subscriber: ISubscriptionLike) {
+        for (let i = 0; i < this.subscribers.length; i++) {
+            const savedSubscriber = this.subscribers[i];
+            if (savedSubscriber && savedSubscriber === subscriber) {
+                savedSubscriber.unsubscribe();
+                this.subscribers[i] = <any>0;
+                this.destroySubscriberCounter++;
+                break;
+            }
+        }
+
+        this.clearCollector();
+    }
+
+    private clearCollector() {
+        if (this.destroySubscriberCounter > 1000 && this.subscribers.length) {
+            const tmp: ISubscriptionLike[] = [];
+            for (let i = 0; i < this.subscribers.length; i++) {
+                const subscriber = this.subscribers[i];
+                if (subscriber) {
+                    tmp.push(subscriber);
+                }
+            }
+            this.subscribers = tmp;
+        }
     }
 
     public setFramesDelay(delay: number) {
