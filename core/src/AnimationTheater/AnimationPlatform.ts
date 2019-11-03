@@ -4,16 +4,17 @@ import {TestScene} from "./Scenes/TestScene";
 import {SergeScene} from "./Scenes/SergeScene";
 import {TestBackground} from "./Scenes/TestBackground";
 
-export class AnimationPlatform extends AbstractPlatform {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+class AnimationPlatform extends AbstractPlatform {
+
+    constructor() {
+        super();
     }
 
     execute(): void {
-        const menu = new Menu(this.canvas);
-        const sceneTest = new TestScene(this.canvas);
-        const sceneSerge = new SergeScene(this.canvas);
-        const sceneBackground = new TestBackground(this.canvas);
+        const menu = this.createScene(Menu);
+        const sceneTest = this.createScene(TestScene);
+        const sceneSerge = this.createScene(SergeScene);
+        const sceneBackground = this.createScene(TestBackground);
         menu.renderStart(true);
         menu.onExit$.subscribe((data) => {
             console.log(data);
@@ -49,3 +50,5 @@ export enum E_Scene {
     SERGE = 'SERGE',
     BACKGROUND = 'BACKGROUND'
 }
+
+export const platform = new AnimationPlatform();

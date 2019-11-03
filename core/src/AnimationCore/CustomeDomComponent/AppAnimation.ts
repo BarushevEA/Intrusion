@@ -1,7 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
 import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../Store/EventStore";
-import {AnimationPlatform} from "../../AnimationTheater/AnimationPlatform";
+import {platform} from "../../AnimationTheater/AnimationPlatform";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -121,7 +121,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private renderCanvas() {
-        const platform = new AnimationPlatform(this.customCanvas);
+        platform.setCanvas(this.customCanvas);
         platform.execute();
     }
 
