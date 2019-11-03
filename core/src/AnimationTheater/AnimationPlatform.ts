@@ -9,7 +9,7 @@ export class AnimationPlatform extends AbstractPlatform {
         super(canvas);
     }
 
-    create(): void {
+    execute(): void {
         const menu = new Menu(this.canvas);
         const sceneTest = new TestScene(this.canvas);
         const sceneSerge = new SergeScene(this.canvas);

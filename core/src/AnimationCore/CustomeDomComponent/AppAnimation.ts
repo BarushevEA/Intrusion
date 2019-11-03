@@ -122,7 +122,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
 
     private renderCanvas() {
         const platform = new AnimationPlatform(this.customCanvas);
-        platform.create();
+        platform.execute();
     }
 
     private setCanvasSize() {

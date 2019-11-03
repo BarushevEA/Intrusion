@@ -5,7 +5,7 @@ export abstract class AbstractPlatform {
         this._canvas = canvas;
     }
 
-    public abstract create(): void;
+    public abstract execute(): void;
 
     get canvas(): HTMLCanvasElement {
         return this._canvas;
