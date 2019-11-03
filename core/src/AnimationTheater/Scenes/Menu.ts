@@ -36,23 +36,23 @@ function handleBackgrounds(scene: AbstractScene): void {
     for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 13; j++) {
             const brickWall = new BrickWall(scene.generalLayer);
-            brickWall.elementX = brickWall.elementWidth * j;
-            brickWall.elementY = brickWall.elementHeight * i;
+            brickWall.xPos = brickWall.width * j;
+            brickWall.yPos = brickWall.height * i;
             scene.setActor(brickWall);
-            bricks.push({actor: brickWall, x: brickWall.elementX, y: brickWall.elementY});
+            bricks.push({actor: brickWall, x: brickWall.xPos, y: brickWall.yPos});
         }
     }
     const move = () => {
         const speed = 5;
-        brickNumber = bricks[0].actor.elementWidth;
+        brickNumber = bricks[0].actor.width;
         brickNumber /= speed;
         brickCounter = brickNumber;
         bricksSubscriber = AbstractActor.tickCount$.subscribe(() => {
             for (let i = 0; i < bricks.length; i++) {
                 const brick = bricks[i].actor;
-                brick.elementX -= speed;
+                brick.xPos -= speed;
                 if (brickCounter <= 1) {
-                    brick.elementX = bricks[i].x;
+                    brick.xPos = bricks[i].x;
                 }
             }
             if (brickCounter <= 1) {
@@ -66,8 +66,8 @@ function handleBackgrounds(scene: AbstractScene): void {
         scene.destroySubscriber(bricksSubscriber);
         for (let i = 0; i < bricks.length; i++) {
             const brick = bricks[i].actor;
-            brick.elementX = bricks[i].x;
-            brick.elementY = bricks[i].y;
+            brick.xPos = bricks[i].x;
+            brick.yPos = bricks[i].y;
         }
         brickCounter = brickNumber;
     };
@@ -104,16 +104,16 @@ function handleButtons(scene: AbstractScene): void {
     const buttonBackground = new ButtonYellowWithText(scene.generalLayer, E_Scene.BACKGROUND);
     const buttonQuit = new ButtonRedWithText(scene.generalLayer, 'QUIT');
 
-    buttonExit.elementX = scene.generalLayer.width - buttonExit.elementWidth;
-    buttonTest.elementY = 20;
-    buttonSerge.elementY = buttonTest.elementHeight + 25;
-    buttonBackground.elementY = buttonTest.elementHeight * 2 + 30;
-    buttonQuit.elementY = buttonTest.elementHeight * 3 + 35;
+    buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
+    buttonTest.yPos = 20;
+    buttonSerge.yPos = buttonTest.height + 25;
+    buttonBackground.yPos = buttonTest.height * 2 + 30;
+    buttonQuit.yPos = buttonTest.height * 3 + 35;
 
-    buttonTest.elementX = 20;
-    buttonSerge.elementX = 20;
-    buttonBackground.elementX = 20;
-    buttonQuit.elementX = 20;
+    buttonTest.xPos = 20;
+    buttonSerge.xPos = 20;
+    buttonBackground.xPos = 20;
+    buttonQuit.xPos = 20;
 
     scene.setActor(buttonExit);
     scene.setActor(buttonTest);

@@ -23,6 +23,6 @@ export class ButtonEmptyBlue extends AbstractButton {
     }
 
     private drawCustomRectangle(bgColor: string, bdColor: string, lnWidth = 5): void {
-        this.drawRectangle(bgColor, bdColor, lnWidth, 5, 5, this.elementWidth - 5, this.elementHeight - 5);
+        this.drawRectangle(bgColor, bdColor, lnWidth, 5, 5, this.width - 5, this.height - 5);
     }
 }

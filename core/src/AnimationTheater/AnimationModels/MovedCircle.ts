@@ -36,16 +36,16 @@ export class MovedCircle extends AbstractActor {
     }
 
     renderFrame(): void {
-        if (this.elementX <= 0) {
+        if (this.xPos <= 0) {
             this.dx = this.randomize(this.maxStep);
         }
-        if (this.elementX >= this.generalLayer.width - this.radiusCalc) {
+        if (this.xPos >= this.generalLayer.width - this.radiusCalc) {
             this.dx = -1 * this.randomize(this.maxStep);
         }
-        if (this.elementY <= 0) {
+        if (this.yPos <= 0) {
             this.dy = this.randomize(this.maxStep);
         }
-        if (this.elementY >= this.generalLayer.height - this.radiusCalc) {
+        if (this.yPos >= this.generalLayer.height - this.radiusCalc) {
             this.dy = -1 * this.randomize(this.maxStep);
         }
 
@@ -60,9 +60,9 @@ export class MovedCircle extends AbstractActor {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.drawVirtualOnGeneral(this.bottomLayerName, this.elementX, this.elementY);
-        this.elementX += this.dx;
-        this.elementY += this.dy;
+        this.drawVirtualOnGeneral(this.bottomLayerName, this.xPos, this.yPos);
+        this.xPos += this.dx;
+        this.yPos += this.dy;
         this.throttlingCounter--;
     }
 }

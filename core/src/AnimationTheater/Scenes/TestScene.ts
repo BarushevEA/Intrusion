@@ -31,13 +31,13 @@ export class TestScene extends AbstractScene {
         const buttonPause = new ButtonYellowWithText(this.generalLayer, 'Pause');
         const buttonInvisible = new ButtonGrayWithText(this.generalLayer, 'Invert');
         const heart = new Heart(this.generalLayer);
-        heart.elementX = this.generalLayer.width - buttonExit.elementWidth - heart.elementWidth;
-        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
-        buttonPause.elementX = buttonPause.elementWidth;
-        buttonPlay.elementX = 0;
-        buttonMove.elementX = buttonMove.elementWidth * 2;
-        buttonStop.elementX = buttonStop.elementWidth * 3;
-        buttonInvisible.elementX = buttonInvisible.elementWidth * 5;
+        heart.xPos = this.generalLayer.width - buttonExit.width - heart.width;
+        buttonExit.xPos = this.generalLayer.width - buttonExit.width;
+        buttonPause.xPos = buttonPause.width;
+        buttonPlay.xPos = 0;
+        buttonMove.xPos = buttonMove.width * 2;
+        buttonStop.xPos = buttonStop.width * 3;
+        buttonInvisible.xPos = buttonInvisible.width * 5;
         let isStopMove = false;
 
         this.userData = {
@@ -53,10 +53,10 @@ export class TestScene extends AbstractScene {
         const wave1 = new AnimatedWaveDark(this.generalLayer);
         const wave2 = new AnimatedWave(this.generalLayer);
         const wave3 = new AnimatedWaveDark(this.generalLayer);
-        wave1.elementY = 470;
-        wave2.elementY = 485;
-        wave.elementY = 500;
-        wave3.elementY = 515;
+        wave1.yPos = 470;
+        wave2.yPos = 485;
+        wave.yPos = 500;
+        wave3.yPos = 515;
         wave1.setFramesDelay(0);
         wave2.setFramesDelay(1);
         wave.setFramesDelay(2);
@@ -69,8 +69,8 @@ export class TestScene extends AbstractScene {
         const draws: AbstractActor[] = [];
         for (let i = 0; i < 3; i++) {
             const newHeart = new Heart(this.generalLayer);
-            newHeart.elementX = Math.round(Math.random() * this.generalLayer.width / 2);
-            newHeart.elementY = Math.round(Math.random() * this.generalLayer.height / 2);
+            newHeart.xPos = Math.round(Math.random() * this.generalLayer.width / 2);
+            newHeart.yPos = Math.round(Math.random() * this.generalLayer.height / 2);
             draws.push(newHeart);
         }
         for (let k = 0; k < 6; k++) {
@@ -91,8 +91,8 @@ export class TestScene extends AbstractScene {
                         }
                     }
                 }
-                rectangle0.elementX = i * 100 - 50;
-                rectangle0.elementY = k * 100;
+                rectangle0.xPos = i * 100 - 50;
+                rectangle0.yPos = k * 100;
                 draws.push(rectangle0);
             }
         }
@@ -113,7 +113,7 @@ export class TestScene extends AbstractScene {
                 return;
             }
             draws.forEach(el => {
-                el.elementX += dx;
+                el.xPos += dx;
             });
             counter--;
             if (counter < 1) {

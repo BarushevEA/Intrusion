@@ -23,7 +23,7 @@ export class CombinedRectangle extends AbstractActor {
         this.rectangles.push(this.red = <AbstractFramedShape>new AnimatedRectangleLightRed(canvas));
         this.rectangles.push(this.green = <AbstractFramedShape>new AnimatedRectangleLightGreen(canvas));
         this.rectangles.push(this.gray = <AbstractFramedShape>new AnimatedRectangleLightGray(canvas));
-        this.setSize(this.gray.elementHeight, this.gray.elementWidth);
+        this.setSize(this.gray.height, this.gray.width);
         this.currentShape = this.gray;
     }
 
@@ -57,8 +57,8 @@ export class CombinedRectangle extends AbstractActor {
     }
 
     renderFrame(): void {
-        this.currentShape.elementX = this.elementX;
-        this.currentShape.elementY = this.elementY;
+        this.currentShape.xPos = this.xPos;
+        this.currentShape.yPos = this.yPos;
         this.currentShape.renderFrame();
     }
 }

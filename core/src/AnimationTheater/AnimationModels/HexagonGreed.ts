@@ -117,8 +117,8 @@ export class HexagonGreed extends AbstractActor {
 
         this.drawVirtualOnGeneral(
             this.bottomLayerName,
-            +this.bound + this.x + this.radius * this.multiplier + this.elementX,
-            +this.bound + this.y + this.radius * this.multiplier + this.elementY,
+            +this.bound + this.x + this.radius * this.multiplier + this.xPos,
+            +this.bound + this.y + this.radius * this.multiplier + this.yPos,
             this.generalLayer.width,
             this.generalLayer.height,
             0,

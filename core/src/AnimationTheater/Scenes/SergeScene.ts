@@ -14,11 +14,11 @@ export class SergeScene extends AbstractScene {
         const buttonExit = new ButtonExit(this.generalLayer);
         const combinedRectangle = new CombinedRectangle(this.generalLayer);
         const heart = new Heart(this.generalLayer);
-        heart.elementY = this.generalLayer.height - heart.elementHeight;
+        heart.yPos = this.generalLayer.height - heart.height;
 
-        buttonExit.elementX = this.generalLayer.width - buttonExit.elementWidth;
-        combinedRectangle.elementX = this.generalLayer.width - combinedRectangle.elementWidth;
-        combinedRectangle.elementY = this.generalLayer.height - combinedRectangle.elementHeight;
+        buttonExit.xPos = this.generalLayer.width - buttonExit.width;
+        combinedRectangle.xPos = this.generalLayer.width - combinedRectangle.width;
+        combinedRectangle.yPos = this.generalLayer.height - combinedRectangle.height;
 
         this.collect(
             this.onSetUserData$.subscribe(() => {

@@ -208,8 +208,8 @@ export abstract class AbstractScene implements IScene {
             drag.options.callbackOnDrag();
         }
 
-        const dx = AbstractActor.mousePosition.x - drag.actor.elementX;
-        const dy = AbstractActor.mousePosition.y - drag.actor.elementY;
+        const dx = AbstractActor.mousePosition.x - drag.actor.xPos;
+        const dy = AbstractActor.mousePosition.y - drag.actor.yPos;
 
         this.movedBehaviors.push(
             AbstractActor.tickCount$.subscribe(() => {
@@ -225,23 +225,23 @@ export abstract class AbstractScene implements IScene {
 
     private handleDragOptions(drag: IDragActor, dx: number, dy: number) {
         if (!drag.options) {
-            drag.actor.elementX =
-                AbstractActor.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
-            drag.actor.elementY =
-                AbstractActor.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+            drag.actor.xPos =
+                AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
+            drag.actor.yPos =
+                AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
             return;
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_CENTER) {
-            drag.actor.elementX =
-                AbstractActor.mousePosition.x - Math.round(drag.actor.elementWidth / 2);
-            drag.actor.elementY =
-                AbstractActor.mousePosition.y - Math.round(drag.actor.elementHeight / 2);
+            drag.actor.xPos =
+                AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
+            drag.actor.yPos =
+                AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
-            drag.actor.elementX = AbstractActor.mousePosition.x - dx;
-            drag.actor.elementY = AbstractActor.mousePosition.y - dy;
+            drag.actor.xPos = AbstractActor.mousePosition.x - dx;
+            drag.actor.yPos = AbstractActor.mousePosition.y - dy;
         }
 
         if (drag.options.callbackOnMOve) {

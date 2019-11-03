@@ -34,7 +34,7 @@ function handleMiddle(scene: AbstractScene): void {
 function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
     const buttonExit = new ButtonExit(scene.generalLayer);
-    buttonExit.elementX = scene.generalLayer.width - buttonExit.elementWidth;
+    buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     scene.setActor(buttonExit);
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {

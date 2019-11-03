@@ -33,7 +33,7 @@ export abstract class AbstractFramedShape extends AbstractActor {
     protected abstract initShape(): void;
 
     protected createFrame(delay: number) {
-        this.layerHandler.createFrame(this.elementHeight, this.elementWidth, delay);
+        this.layerHandler.createFrame(this.height, this.width, delay);
     }
 
     public setLastFrameToStop() {
@@ -55,6 +55,6 @@ export abstract class AbstractFramedShape extends AbstractActor {
     }
 
     renderFrame(): void {
-        this.layerHandler.drawFrame(this.elementX, this.elementY);
+        this.layerHandler.drawFrame(this.xPos, this.yPos);
     }
 }

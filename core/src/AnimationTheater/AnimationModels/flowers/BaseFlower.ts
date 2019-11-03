@@ -12,8 +12,8 @@ export class Flower extends AbstractFramedShape {
 
     protected initShape(): void {
         const sizeMultiplier = 1;
-        this.elementWidth *= sizeMultiplier;
-        this.elementHeight *= sizeMultiplier;
+        this.width *= sizeMultiplier;
+        this.height *= sizeMultiplier;
 
         const stem: IPoint[] = [
             {x: 4, y: 35},

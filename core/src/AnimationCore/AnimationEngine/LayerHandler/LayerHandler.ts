@@ -2,10 +2,10 @@ import {ITextHandler, textHandler} from "./TextHandler";
 import {IShapeHandler, shapeHandler} from "./ShapeHandler";
 
 export type IDimensions = {
-    elementX: number;
-    elementY: number;
-    elementWidth: number;
-    elementHeight: number;
+    xPos: number;
+    yPos: number;
+    width: number;
+    height: number;
 }
 
 export type IVirtualCanvasesPool = {

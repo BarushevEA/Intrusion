@@ -9,7 +9,7 @@ import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 
 export type IActor = {
     z_index: number;
-    layer_name: string;
+    layerName: string;
     saveLayerIndex(): void;
     restoreLayerIndex(): void;
     renderFrame(): void;
@@ -22,7 +22,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     public static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
-    private _layer_name = '';
+    private _layerName = '';
     private _layer_name_memory = '';
 
     public static tickCount() {
@@ -59,16 +59,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
             mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
             mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
             mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
-            this.isMouseLeftClick$.subscribe(this.tryLeftMuseCatch.bind(this)),
+            this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this))
         );
     }
 
-    disableEvents() {
+    public disableEvents() {
         this.isIgnoreEvents = true;
     }
 
-    enableEvents() {
+    public enableEvents() {
         this.isIgnoreEvents = false;
     }
 
@@ -107,14 +107,23 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private leftMouseDown(position: IMousePosition) {
+        if (this.isIgnoreEvents) {
+            return;
+        }
         this.mouseLeftClick(position, true);
     }
 
     private leftMouseUp(position: IMousePosition) {
+        if (this.isIgnoreEvents) {
+            return;
+        }
         this.mouseLeftClick(position, false);
     }
 
-    private tryLeftMuseCatch(isDown: boolean): void {
+    private tryLeftMouseCatch(isDown: boolean): void {
+        if (this.isIgnoreEvents) {
+            return;
+        }
         if (this.leftMouseCatchTimeIndex !== -1) {
             clearTimeout(this.leftMouseCatchTimeIndex);
             this.leftMouseCatchTimeIndex = -1;
@@ -143,7 +152,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         if (isOver) {
             this.isMouseLeftClick$.next(isDown);
         } else {
-            this.tryLeftMuseCatch(isOver);
+            this.tryLeftMouseCatch(isOver);
         }
     }
 
@@ -192,10 +201,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public getDimensions(): IDimensions {
         return {
-            elementX: this._elementX,
-            elementY: this._elementY,
-            elementHeight: this._elementHeight,
-            elementWidth: this._elementWidth
+            xPos: this._elementX,
+            yPos: this._elementY,
+            height: this._elementHeight,
+            width: this._elementWidth
         }
     }
 
@@ -203,35 +212,35 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return Math.round(Math.random() * num)
     }
 
-    get elementX(): number {
+    get xPos(): number {
         return this._elementX;
     }
 
-    set elementX(value: number) {
+    set xPos(value: number) {
         this._elementX = value;
     }
 
-    get elementY(): number {
+    get yPos(): number {
         return this._elementY;
     }
 
-    set elementY(value: number) {
+    set yPos(value: number) {
         this._elementY = value;
     }
 
-    get elementWidth(): number {
+    get width(): number {
         return this._elementWidth;
     }
 
-    set elementWidth(value: number) {
+    set width(value: number) {
         this._elementWidth = value;
     }
 
-    get elementHeight(): number {
+    get height(): number {
         return this._elementHeight;
     }
 
-    set elementHeight(value: number) {
+    set height(value: number) {
         this._elementHeight = value;
     }
 
@@ -331,12 +340,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._z_index = value;
     }
 
-    get layer_name(): string {
-        return this._layer_name;
+    get layerName(): string {
+        return this._layerName;
     }
 
-    set layer_name(value: string) {
-        this._layer_name = value;
+    set layerName(value: string) {
+        this._layerName = value;
     }
 
     get isLeftMouseCatch(): boolean {
@@ -348,7 +357,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public saveLayerIndex(): void {
-        this._layer_name_memory = this._layer_name;
+        this._layer_name_memory = this._layerName;
     }
 
     public restoreZIndex(): void {
@@ -356,7 +365,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public restoreLayerIndex(): void {
-        this._layer_name = this._layer_name_memory;
+        this._layerName = this._layer_name_memory;
     }
 
     static get mousePosition(): IMousePosition {

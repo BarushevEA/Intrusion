@@ -16,7 +16,7 @@ export abstract class AbstractButtonWithText extends AbstractActor {
     protected abstract getButton(): AbstractButton;
 
     private init(text: string) {
-        this.setSize(this.emptyButton.elementHeight, this.emptyButton.elementWidth);
+        this.setSize(this.emptyButton.height, this.emptyButton.width);
         this.setVirtualLayer(this.textLayerName);
         this.shape.colors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');
         this.shape.lineWidth(5);
@@ -35,9 +35,9 @@ export abstract class AbstractButtonWithText extends AbstractActor {
     }
 
     renderFrame(): void {
-        this.emptyButton.elementX = this.elementX;
-        this.emptyButton.elementY = this.elementY;
+        this.emptyButton.xPos = this.xPos;
+        this.emptyButton.yPos = this.yPos;
         this.emptyButton.renderFrame();
-        this.drawVirtualOnGeneral(this.textLayerName, this.elementX, this.elementY);
+        this.drawVirtualOnGeneral(this.textLayerName, this.xPos, this.yPos);
     }
 }

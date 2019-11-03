@@ -38,7 +38,7 @@ export class RenderController implements IRenderController {
 
     public setActor(actor: IActor): void {
         this.currentPool.push(actor);
-        actor.layer_name = this.currentLayerName;
+        actor.layerName = this.currentLayerName;
         this.sortActorsByZIndex();
     }
 
@@ -91,9 +91,9 @@ export class RenderController implements IRenderController {
 
     private setCurrentPoolFromActor(actor: IActor): boolean {
         let isSet = false;
-        if (this.layers[actor.layer_name]) {
-            this.currentLayerName = actor.layer_name;
-            this.currentPool = this.layers[actor.layer_name];
+        if (this.layers[actor.layerName]) {
+            this.currentLayerName = actor.layerName;
+            this.currentPool = this.layers[actor.layerName];
             isSet = true;
         }
         return isSet;
@@ -131,7 +131,7 @@ export class RenderController implements IRenderController {
         this.currentPool = this.currentPool.filter(element => {
             return element !== actor;
         });
-        this.layers[actor.layer_name] = this.currentPool;
+        this.layers[actor.layerName] = this.currentPool;
     }
 
     public setActorOnTop(actor: IActor) {

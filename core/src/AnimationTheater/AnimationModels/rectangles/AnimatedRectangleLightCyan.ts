@@ -16,8 +16,8 @@ export class AnimatedRectangleLightCyan extends AbstractFramedShape {
             this.shape
                 .colors('rgba(0,82,114,0.8)', 'rgba(0,0,0,0.7)')
                 .lineWidth(10)
-                .rectangle(this.elementWidth / 2 - i,
-                    this.elementWidth / 2 - i, i * 2, i * 2);
+                .rectangle(this.width / 2 - i,
+                    this.width / 2 - i, i * 2, i * 2);
         }
         this.setLastFrameToStop();
     }

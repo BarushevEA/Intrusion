@@ -17,7 +17,7 @@ export class GreenTriangle extends AbstractActor {
     }
 
     renderFrame() {
-        this.drawVirtualOnGeneral(ELayer.WORK, this.elementX, this.elementY);
+        this.drawVirtualOnGeneral(ELayer.WORK, this.xPos, this.yPos);
     }
 }
 

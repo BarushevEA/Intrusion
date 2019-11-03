@@ -35,11 +35,11 @@ function getGreed($: AbstractActor): void {
         .colors('', 'rgba(0,250,0,0.1)')
         .lineWidth(1)
         .lineDash([5, 15]);
-    for (let i = 0; i < $.elementWidth; i += 100) {
-        $.shape.line(i, 0, i, $.elementHeight);
+    for (let i = 0; i < $.width; i += 100) {
+        $.shape.line(i, 0, i, $.height);
     }
-    for (let i = 0; i < $.elementHeight; i += 100) {
-        $.shape.line(0, i, $.elementWidth, i);
+    for (let i = 0; i < $.height; i += 100) {
+        $.shape.line(0, i, $.width, i);
     }
     $.shape
         .colors('', 'rgba(0,250,0,0.5)')
@@ -48,9 +48,9 @@ function getGreed($: AbstractActor): void {
         .customStroke(true)
         .polygon([
             {x: 0, y: 0},
-            {x: $.elementWidth, y: 0},
-            {x: $.elementWidth, y: $.elementHeight},
-            {x: 0, y: $.elementHeight},
+            {x: $.width, y: 0},
+            {x: $.width, y: $.height},
+            {x: 0, y: $.height},
             {x: 0, y: 0},
         ])
         .customStroke(false);
@@ -60,12 +60,12 @@ function getGreed($: AbstractActor): void {
 function getWork($: AbstractActor) {
     const layer = $.setVirtualLayer(ELayer.WORK);
     const triangle = new GreenTriangle(layer);
-    triangle.elementX = 500;
-    triangle.elementY = 300;
+    triangle.xPos = 500;
+    triangle.yPos = 300;
     triangle.renderFrame();
     const rectangle = new GreenRectangle(layer);
-    rectangle.elementX = 500;
-    rectangle.elementY = 400;
+    rectangle.xPos = 500;
+    rectangle.yPos = 400;
     rectangle.renderFrame();
     $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
 }
