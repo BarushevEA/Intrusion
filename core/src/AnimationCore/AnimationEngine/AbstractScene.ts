@@ -3,8 +3,8 @@ import {AbstractActor, IActor} from "./rootModels/AbstractActor";
 import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
 
 export type IScene = {
-    renderStart(isBackgroundLayerPresent: boolean): void;
-    renderStop(): void;
+    start(isBackgroundLayerPresent: boolean): void;
+    stop(): void;
     exit(): void;
     destroy(): void;
 }
@@ -249,7 +249,7 @@ export abstract class AbstractScene implements IScene {
         }
     }
 
-    public renderStart(isBackgroundLayerPresent: boolean): void {
+    public start(isBackgroundLayerPresent: boolean): void {
         this.renderController.renderStart(isBackgroundLayerPresent);
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
@@ -263,13 +263,13 @@ export abstract class AbstractScene implements IScene {
         }, 300);
     }
 
-    public renderStop(): void {
+    public stop(): void {
         this.renderController.renderStop();
         this._onStop$.next({...this._userData});
     }
 
     public exit() {
-        this.renderStop();
+        this.stop();
         this.actors.forEach(actor => {
             actor.disableEvents();
         });

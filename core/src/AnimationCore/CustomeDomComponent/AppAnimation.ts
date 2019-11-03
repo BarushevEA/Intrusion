@@ -1,7 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
 import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../Store/EventStore";
-import {platform} from "../../AnimationTheater/AnimationPlatform";
+import {platform} from "../AnimationEngine/AnimationPlatform";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;

@@ -1,12 +1,12 @@
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
-import {E_Scene} from "../AnimationPlatform";
 import {ButtonRedWithText} from "../AnimationModels/Buttons/ButtonRedWithText";
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ISubscriptionLike} from "../../AnimationCore/CustomeLibraries/Observable";
 import {BrickWall} from "../AnimationModels/briks/BrickWall";
 import {MovedCircle} from "../AnimationModels/MovedCircle";
+import {E_Scene} from "../Scenario/types";
 
 enum ELayers {
     BACKGROUND = 'BACKGROUND',

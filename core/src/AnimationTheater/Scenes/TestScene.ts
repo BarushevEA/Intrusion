@@ -16,7 +16,7 @@ import {ButtonBlueWithText} from "../AnimationModels/Buttons/ButtonBlueWithText"
 import {ButtonYellowWithText} from "../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../AnimationModels/Buttons/ButtonGrayWithText";
 import {Heart} from "../AnimationModels/Heart";
-import {E_Scene} from "../AnimationPlatform";
+import {E_Scene} from "../Scenario/types";
 
 export class TestScene extends AbstractScene {
     constructor(canvas: HTMLCanvasElement) {
@@ -182,10 +182,10 @@ export class TestScene extends AbstractScene {
                 move = <any>0;
             }),
             buttonPlay.isMouseClick$.subscribe(() => {
-                this.renderStart(true);
+                this.start(true);
             }),
             buttonPause.isMouseClick$.subscribe(() => {
-                this.renderStop();
+                this.stop();
             }),
             buttonInvisible.isMouseClick$.subscribe(() => {
                 toggleReverse();
