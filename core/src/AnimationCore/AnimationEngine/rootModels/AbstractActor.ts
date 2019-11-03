@@ -41,42 +41,46 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 200;
     private readonly subscribers: ISubscriptionLike[] = [];
+    private readonly mouseEvents$: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
     public isMouseLeftClick$ = new Observable(<boolean>false);
     public isMouseLeftDrag$ = new Observable(<any>0);
     public isMouseLeftDrop$ = new Observable(<any>0);
-    public isIgnoreEvents = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new LayerHandler(this.generalLayer);
-        this.collect(
-            mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
-            mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
-            mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
-            mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
-            this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
-            AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this))
-        );
+        this.enableEvents();
+    }
+
+    private initEvents() {
+        if (this.mouseEvents$.length) {
+            return;
+        }
+        this.mouseEvents$.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
+        this.mouseEvents$.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
+        this.mouseEvents$.push(mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)));
+        this.mouseEvents$.push(mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)));
+        this.mouseEvents$.push(this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
+        this.mouseEvents$.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
     public disableEvents() {
-        this.isIgnoreEvents = true;
+        for (let i = 0; i < this.mouseEvents$.length; i++) {
+            this.mouseEvents$[i].unsubscribe();
+        }
+        this.mouseEvents$.length = 0;
     }
 
     public enableEvents() {
-        this.isIgnoreEvents = false;
+        this.initEvents();
     }
 
     private mouseOver(position: IMousePosition) {
-        if (this.isIgnoreEvents) {
-            return;
-        }
-
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
@@ -87,18 +91,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private checkMouseOver() {
-        if (this.isIgnoreEvents) {
-            return;
-        }
-
         this.mouseOver(AbstractActor._mousePosition);
     }
 
     private mouseClick(position: IMousePosition) {
-        if (this.isIgnoreEvents) {
-            return;
-        }
-
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
@@ -107,23 +103,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private leftMouseDown(position: IMousePosition) {
-        if (this.isIgnoreEvents) {
-            return;
-        }
         this.mouseLeftClick(position, true);
     }
 
     private leftMouseUp(position: IMousePosition) {
-        if (this.isIgnoreEvents) {
-            return;
-        }
         this.mouseLeftClick(position, false);
     }
 
     private tryLeftMouseCatch(isDown: boolean): void {
-        if (this.isIgnoreEvents) {
-            return;
-        }
         if (this.leftMouseCatchTimeIndex !== -1) {
             clearTimeout(this.leftMouseCatchTimeIndex);
             this.leftMouseCatchTimeIndex = -1;
@@ -143,10 +130,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private mouseLeftClick(position: IMousePosition, isDown: boolean) {
-        if (this.isIgnoreEvents) {
-            return;
-        }
-
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
@@ -318,6 +301,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             }
         }
         this.subscribers.length = 0;
+        this.disableEvents();
     }
 
     public setFramesDelay(delay: number) {
