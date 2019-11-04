@@ -11,8 +11,8 @@ let menu: AbstractScene = <any>0,
     sceneSerge: AbstractScene = <any>0,
     sceneBackground: AbstractScene = <any>0;
 
-export function runApplicationScenario($: AbstractPlatform) {
-    initScenes($);
+export function runApplicationScenario(platform: AbstractPlatform) {
+    initScenes(platform);
     initEvents();
     runEnterPoint();
 }
@@ -21,11 +21,11 @@ function runEnterPoint(): void {
     menu.start(true);
 }
 
-function initScenes($: AbstractPlatform): void {
-    menu = $.createScene(Menu);
-    sceneTest = $.createScene(TestScene);
-    sceneSerge = $.createScene(SergeScene);
-    sceneBackground = $.createScene(TestBackground);
+function initScenes(platform: AbstractPlatform): void {
+    menu = platform.createScene(Menu);
+    sceneTest = platform.createScene(TestScene);
+    sceneSerge = platform.createScene(SergeScene);
+    sceneBackground = platform.createScene(TestBackground);
 }
 
 function initEvents(): void {
