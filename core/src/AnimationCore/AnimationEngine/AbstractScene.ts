@@ -102,10 +102,13 @@ export abstract class AbstractScene implements IScene {
         return this._onDestroy$;
     }
 
-    public setActor(actor: AbstractActor): void {
-        actor.disableEvents();
-        this.actors.push(actor);
-        this.renderController.setActor(actor);
+    public setActors(...actors: AbstractActor[]): void {
+        for (let i = 0; i < actors.length; i++) {
+            const actor = actors[i];
+            actor.disableEvents();
+            this.actors.push(actor);
+            this.renderController.setActor(actor);
+        }
     }
 
     public setActorOnTop(actor: AbstractActor): void {

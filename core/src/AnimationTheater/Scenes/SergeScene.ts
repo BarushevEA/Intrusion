@@ -33,9 +33,9 @@ export class SergeScene extends AbstractScene {
             })
         );
 
-        this.setActor(combinedRectangle);
-        this.setActor(buttonExit);
-        this.setActor(heart);
+        this.setActors(combinedRectangle);
+        this.setActors(buttonExit);
+        this.setActors(heart);
 
         this.moveOnMouseDrag(heart);
         this.moveOnMouseDrag(combinedRectangle);

@@ -24,7 +24,7 @@ export class TestBackground extends AbstractScene {
 function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
     const background = new DynamicBackground(scene.generalLayer);
-    scene.setActor(background);
+    scene.setActors(background);
 }
 
 function handleMiddle(scene: AbstractScene): void {
@@ -35,7 +35,7 @@ function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
     const buttonExit = new ButtonExit(scene.generalLayer);
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
-    scene.setActor(buttonExit);
+    scene.setActors(buttonExit);
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.test++;

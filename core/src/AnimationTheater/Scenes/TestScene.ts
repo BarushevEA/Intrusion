@@ -46,7 +46,7 @@ export class TestScene extends AbstractScene {
         };
 
         const hexagon = new HexagonGreed(this.generalLayer);
-        this.setActor(hexagon);
+        this.setActors(hexagon);
         this.setActiveLayer('middle');
 
         const wave = new AnimatedWave(this.generalLayer);
@@ -137,20 +137,20 @@ export class TestScene extends AbstractScene {
             isReverse = !isReverse;
         }
 
-        this.setActor(wave3);
-        this.setActor(wave);
+        this.setActors(wave3);
+        this.setActors(wave);
 
         draws.forEach(el => {
-            this.setActor(el)
+            this.setActors(el)
         });
 
-        this.setActor(wave1);
+        this.setActors(wave1);
 
         const snakeSpiral = new SnakeSpiral(this.generalLayer);
-        this.setActor(snakeSpiral);
+        this.setActors(snakeSpiral);
 
-        this.setActor(wave2);
-        this.setActor(heart);
+        this.setActors(wave2);
+        this.setActors(heart);
         this.moveOnMouseDrag(heart);
 
         const movedOptions: IDragDropOptions = {};
@@ -199,11 +199,11 @@ export class TestScene extends AbstractScene {
         );
 
         this.setActiveLayer('buttons');
-        this.setActor(buttonExit);
-        this.setActor(buttonPause);
-        this.setActor(buttonPlay);
-        this.setActor(buttonMove);
-        this.setActor(buttonStop);
-        this.setActor(buttonInvisible);
+        this.setActors(buttonExit);
+        this.setActors(buttonPause);
+        this.setActors(buttonPlay);
+        this.setActors(buttonMove);
+        this.setActors(buttonStop);
+        this.setActors(buttonInvisible);
     }
 }

@@ -1,5 +1,5 @@
 import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/AbstractPlatform";
-import {Menu} from "../Scenes/Menu";
+import {Menu} from "../Scenes/Menu/Menu";
 import {TestScene} from "../Scenes/TestScene";
 import {SergeScene} from "../Scenes/SergeScene";
 import {TestBackground} from "../Scenes/TestBackground";
