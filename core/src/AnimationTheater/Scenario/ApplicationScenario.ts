@@ -4,7 +4,7 @@ import {TestScene} from "../Scenes/TestScene";
 import {SergeScene} from "../Scenes/SergeScene";
 import {TestBackground} from "../Scenes/TestBackground";
 import {E_Scene} from "./types";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene, IUserData} from "../../AnimationCore/AnimationEngine/AbstractScene";
 
 let menu: AbstractScene = <any>0,
     sceneTest: AbstractScene = <any>0,
@@ -29,7 +29,7 @@ function initScenes($: AbstractPlatform): void {
 }
 
 function initEvents(): void {
-    menu.onExit$.subscribe((data) => {
+    menu.onExit$.subscribe((data: IUserData) => {
         console.log(data);
         if (data.nextScene) {
             switch (data.nextScene) {
