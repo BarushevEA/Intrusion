@@ -2,7 +2,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScen
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ISubscriptionLike} from "../../../AnimationCore/CustomeLibraries/Observable";
 import {BrickWall} from "../../AnimationModels/briks/BrickWall";
-import {ELayers} from "./Menu";
+import {ELayers} from "../scenesEnvironment";
 
 let brickNumber = 0,
     brickCounter = brickNumber,

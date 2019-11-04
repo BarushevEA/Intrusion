@@ -3,12 +3,6 @@ import {handleBackgrounds} from "./menuBackground";
 import {handleMiddle} from "./menuMiddle";
 import {handleButtons} from "./menuButtons";
 
-export enum ELayers {
-    BACKGROUND = 'BACKGROUND',
-    MIDDLE = 'MIDDLE',
-    TOP = 'TOP',
-}
-
 export class Menu extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {

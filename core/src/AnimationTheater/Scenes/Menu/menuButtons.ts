@@ -3,8 +3,8 @@ import {ButtonExit} from "../../AnimationModels/Buttons/ButtonExit";
 import {ButtonYellowWithText} from "../../AnimationModels/Buttons/ButtonYellowWithText";
 import {E_Scene} from "../../Scenario/types";
 import {ButtonRedWithText} from "../../AnimationModels/Buttons/ButtonRedWithText";
-import {ELayers} from "./Menu";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {ELayers} from "../scenesEnvironment";
 
 let buttonExit: AbstractActor = <any>0,
     buttonTest: AbstractActor = <any>0,
