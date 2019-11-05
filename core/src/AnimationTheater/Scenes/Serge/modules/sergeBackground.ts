@@ -1,5 +1,5 @@
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../scenesEnvironment";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {ELayers} from "../../scenesEnvironment";
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);

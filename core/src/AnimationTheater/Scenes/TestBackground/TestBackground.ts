@@ -1,7 +1,7 @@
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {handleBackgrounds} from "./background";
-import {handleMiddle} from "./middle";
-import {handleButtons} from "./buttons";
+import {handleBackgrounds} from "./modules/background";
+import {handleMiddle} from "./modules/middle";
+import {handleButtons} from "./modules/buttons";
 
 export class TestBackground extends AbstractScene {
 

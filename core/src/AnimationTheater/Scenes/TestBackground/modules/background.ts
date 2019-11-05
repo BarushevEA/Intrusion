@@ -1,6 +1,6 @@
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../scenesEnvironment";
-import {DynamicBackground} from "../../AnimationModels/DynamicBackground";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {ELayers} from "../../scenesEnvironment";
+import {DynamicBackground} from "../../../AnimationModels/DynamicBackground";
 
 let background: DynamicBackground = <any>0;
 

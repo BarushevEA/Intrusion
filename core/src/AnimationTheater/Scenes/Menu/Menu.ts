@@ -1,7 +1,7 @@
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {handleBackgrounds} from "./menuBackground";
-import {handleMiddle} from "./menuMiddle";
-import {handleButtons} from "./menuButtons";
+import {handleBackgrounds} from "./modules/menuBackground";
+import {handleMiddle} from "./modules/menuMiddle";
+import {handleButtons} from "./modules/menuButtons";
 
 export class Menu extends AbstractScene {
 

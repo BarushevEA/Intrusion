@@ -1,7 +1,7 @@
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../scenesEnvironment";
-import {CombinedRectangle} from "../../AnimationModels/rectangles/CombinedRectangle";
-import {Heart} from "../../AnimationModels/Heart";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {ELayers} from "../../scenesEnvironment";
+import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
+import {Heart} from "../../../AnimationModels/Heart";
 
 let combinedRectangle = <any>0;
 let heart = <any>0;
