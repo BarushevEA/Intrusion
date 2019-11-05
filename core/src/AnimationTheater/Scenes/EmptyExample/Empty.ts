@@ -1,7 +1,7 @@
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {handleBackgrounds} from "../Menu/menuBackground";
-import {handleMiddle} from "../Menu/menuMiddle";
-import {handleButtons} from "../Menu/menuButtons";
+import {handleBackgrounds} from "./emptyBackground";
+import {handleMiddle} from "./emptyMiddle";
+import {handleButtons} from "./emptyButtons";
 
 export class Empty extends AbstractScene {
 
@@ -13,5 +13,10 @@ export class Empty extends AbstractScene {
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);
+        sceneEvents(this);
     }
+}
+
+function sceneEvents(scene: AbstractScene) {
+    scene.collect();
 }
