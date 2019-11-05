@@ -61,7 +61,7 @@ export abstract class AbstractScene implements IScene {
         this.run();
     }
 
-    run() {
+    private run(): void {
         this.collect(
             this._onStartOnce$.subscribe(this.createScene.bind(this))
         );

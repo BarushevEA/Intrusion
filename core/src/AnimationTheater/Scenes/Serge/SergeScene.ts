@@ -1,8 +1,8 @@
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/AbstractScene";
-import {CombinedRectangle} from "../AnimationModels/rectangles/CombinedRectangle";
-import {ButtonExit} from "../AnimationModels/Buttons/ButtonExit";
-import {Heart} from "../AnimationModels/Heart";
-import {E_Scene} from "../Scenario/types";
+import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
+import {CombinedRectangle} from "../../AnimationModels/rectangles/CombinedRectangle";
+import {ButtonExit} from "../../AnimationModels/Buttons/ButtonExit";
+import {Heart} from "../../AnimationModels/Heart";
+import {E_Scene} from "../../Scenario/types";
 
 export class SergeScene extends AbstractScene {
 
