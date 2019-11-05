@@ -10,3 +10,4 @@
 // DONE TODO 7) Add drug and drop behavior
 // DONE TODO 7.1) Add to render controller move actor z-index
 // TODO 8) Simplify create, use and develop scenarios
+// TODO 9) Upgrade destroy behavior (have to clean all)
