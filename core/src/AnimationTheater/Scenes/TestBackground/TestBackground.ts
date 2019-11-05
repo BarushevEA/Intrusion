@@ -1,9 +1,9 @@
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
-import {handleBackgrounds} from "./modules/background";
-import {handleMiddle} from "./modules/middle";
-import {handleButtons} from "./modules/buttons";
+import {handleBackgrounds} from "./background";
+import {handleMiddle} from "./middle";
+import {handleButtons} from "./buttons";
 
-export class Empty extends AbstractScene {
+export class TestBackground extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas);
