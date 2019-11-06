@@ -10,6 +10,7 @@ function createWindow() {
         width: 1226,
         height: 670,
         resizable: false,
+        show: false,
         webPreferences: {
             nodeIntegration: true
         }
@@ -27,7 +28,13 @@ function createWindow() {
         // в массиве, если ваше приложение поддерживает несколько окон в это время,
         // тогда вы должны удалить соответствующий элемент.
         win = null
-    })
+    });
+
+    win.webContents.once('did-finish-load', function () {
+        setTimeout(() => {
+            win.show();
+        }, 1000);
+    });
 }
 
 // Этот метод будет вызываться, когда Electron закончит
