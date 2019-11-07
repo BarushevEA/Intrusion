@@ -11,6 +11,7 @@ function createWindow() {
         height: 670,
         resizable: false,
         show: false,
+        backgroundColor: 'black',
         webPreferences: {
             nodeIntegration: true
         }
