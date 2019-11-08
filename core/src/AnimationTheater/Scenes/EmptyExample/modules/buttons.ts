@@ -3,8 +3,12 @@ import {ELayers} from "../../scenesEnvironment";
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
@@ -12,5 +16,9 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect();
+    scene.collect(
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
 }
