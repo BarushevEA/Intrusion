@@ -6,16 +6,25 @@ import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithT
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ELayers} from "../../scenesEnvironment";
 
-let buttonExit: AbstractActor = <any>0,
-    buttonTest: AbstractActor = <any>0,
-    buttonSerge: AbstractActor = <any>0,
-    buttonBackground: AbstractActor = <any>0,
-    buttonQuit: AbstractActor = <any>0;
+let buttonExit: AbstractActor,
+    buttonTest: AbstractActor,
+    buttonSerge: AbstractActor,
+    buttonBackground: AbstractActor,
+    buttonQuit: AbstractActor;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    buttonExit = <any>0;
+    buttonTest = <any>0;
+    buttonSerge = <any>0;
+    buttonBackground = <any>0;
+    buttonQuit = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -65,5 +74,8 @@ function initActions(scene: AbstractScene) {
         buttonQuit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
     );
 }

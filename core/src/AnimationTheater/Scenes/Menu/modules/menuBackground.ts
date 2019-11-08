@@ -4,15 +4,23 @@ import {ISubscriptionLike} from "../../../../AnimationCore/CustomeLibraries/Obse
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {ELayers} from "../../scenesEnvironment";
 
-let brickNumber = 0,
-    brickCounter = brickNumber,
-    bricks: { actor: AbstractActor, x: number, y: number }[] = [],
-    bricksSubscriber: ISubscriptionLike = <any>0;
+let brickNumber: number,
+    brickCounter: number,
+    bricks: { actor: AbstractActor, x: number, y: number }[],
+    bricksSubscriber: ISubscriptionLike;
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    brickNumber = 0;
+    brickCounter = brickNumber;
+    bricks = [];
+    bricksSubscriber = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -38,6 +46,9 @@ function initActions(scene: AbstractScene) {
         }),
         scene.onExit$.subscribe(() => {
             stopMove(scene);
+        }),
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
         })
     );
 }
