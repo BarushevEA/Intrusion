@@ -5,7 +5,7 @@ export type ISubscribe = {
 }
 
 export type IUnSubscribe = {
-    unSubscribe(index: number): void;
+    unSubscribe(index: string): void;
 }
 
 export type ISetObservableValue = {
@@ -20,11 +20,19 @@ export type ISubscriptionLike = {
     unsubscribe(): void;
 };
 
+export type ISubscribeCounter = {
+    getNumberOfSubscribers(): number;
+};
+
+export type IObserver<T> = ISetObservableValue & ISubscribe & IUnSubscribe & ISubscribeCounter & {
+    getValue(): T;
+};
+
 class SubscriberLike implements ISubscriptionLike {
     private readonly observable: IUnSubscribe;
-    private readonly index: number;
+    private readonly index: string;
 
-    constructor(callback: IUnSubscribe, index: number) {
+    constructor(callback: IUnSubscribe, index: string) {
         this.observable = callback;
         this.index = index;
     }
@@ -34,14 +42,13 @@ class SubscriberLike implements ISubscriptionLike {
     }
 }
 
-export type IObserver<T> = ISetObservableValue & ISubscribe & IUnSubscribe & {
-    getValue(): T;
-};
-
 export class Observable<T> implements IObserver<T> {
     private _value: T;
     private listeners: IListeners = {};
     private indexCounter = -1;
+    private indexFlexible = 'abcdefghijklmnopqrstuvwxyz$_!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    private flexibleCounter = 0;
+    private keys: string[] = <any>0;
 
     constructor(value: T) {
         this._value = value;
@@ -49,16 +56,15 @@ export class Observable<T> implements IObserver<T> {
 
     next(value: T): void {
         this._value = value;
-        Object.keys(this.listeners).forEach(key => {
-            if (this.listeners[key]) {
-                this.listeners[key](this._value);
-            }
-        });
+        for (let i = 0; i < this.keys.length; i++) {
+            this.listeners[this.keys[i]](value);
+        }
     }
 
-    unSubscribe(index: number): void {
+    unSubscribe(index: string): void {
         if (this.listeners.hasOwnProperty(index)) {
             delete this.listeners[index];
+            this.keys = Object.keys(this.listeners);
         } else {
             console.warn(`Unsubscribe index ${index} is not valid`);
         }
@@ -68,9 +74,20 @@ export class Observable<T> implements IObserver<T> {
         return this._value;
     }
 
+    getNumberOfSubscribers(): number {
+        return this.keys.length;
+    }
+
     subscribe(callback: ICallback): ISubscriptionLike {
         this.indexCounter++;
-        this.listeners[this.indexCounter] = callback;
-        return new SubscriberLike(this, this.indexCounter);
+        let index = this.indexFlexible[this.flexibleCounter];
+        if (this.indexCounter >= Number.MAX_SAFE_INTEGER - 1) {
+            this.indexCounter = 0;
+            this.flexibleCounter++;
+        }
+        index += this.indexCounter;
+        this.listeners[index] = callback;
+        this.keys = Object.keys(this.listeners);
+        return new SubscriberLike(this, index);
     }
 }
