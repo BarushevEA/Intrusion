@@ -13,7 +13,7 @@ let menu: AbstractScene = <any>0,
 
 export function runApplicationScenario(platform: AbstractPlatform) {
     initScenes(platform);
-    initEvents();
+    initEvents(platform);
     runEnterPoint();
 }
 
@@ -23,18 +23,21 @@ function runEnterPoint(): void {
 
 function initScenes(platform: AbstractPlatform): void {
     menu = platform.createScene(Menu);
-    sceneTest = platform.createScene(TestScene);
     sceneSerge = platform.createScene(SergeScene);
     sceneBackground = platform.createScene(TestBackground);
 }
 
-function initEvents(): void {
+function initEvents(platform: AbstractPlatform): void {
     menu.onExit$.subscribe((data: IUserData) => {
         console.log(data);
         if (data.nextScene) {
             switch (data.nextScene) {
                 case E_Scene.TEST:
+                    sceneTest = platform.createScene(TestScene);
                     sceneTest.start(true);
+                    sceneTest.onDestroy$.subscribe(() => {
+                        menu.start(true);
+                    });
                     break;
                 case E_Scene.SERGE:
                     sceneSerge.start(false);
@@ -44,9 +47,6 @@ function initEvents(): void {
                     break;
             }
         }
-    });
-    sceneTest.onExit$.subscribe(() => {
-        menu.start(true);
     });
     sceneSerge.onExit$.subscribe(() => {
         menu.start(true);

@@ -62,7 +62,7 @@ function initActions(scene: AbstractScene) {
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.MENU;
-            scene.exit();
+            scene.destroy();
         }),
         buttonMove.isMouseClick$.subscribe(() => {
             isStopMove.value = false;

@@ -36,6 +36,9 @@ export function handleMiddle(scene: AbstractScene): void {
 }
 
 function clearVariables() {
+    isStopMove.value = true;
+    move.value = <any>0;
+
     isReverse = true;
     counter = 100;
     dx = 3;
