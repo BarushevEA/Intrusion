@@ -2,12 +2,17 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractS
 import {ELayers} from "../../scenesEnvironment";
 import {DynamicBackground} from "../../../AnimationModels/DynamicBackground";
 
-let background: DynamicBackground = <any>0;
+let background: DynamicBackground;
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    background = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -16,5 +21,9 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect();
+    scene.collect(
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
 }

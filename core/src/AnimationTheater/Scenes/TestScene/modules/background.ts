@@ -1,14 +1,18 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 import {HexagonGreed} from "../../../AnimationModels/HexagonGreed";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 
-let hexagon: AbstractActor;
+let hexagon: HexagonGreed;
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    hexagon = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -19,11 +23,7 @@ function initActors(scene: AbstractScene) {
 function initActions(scene: AbstractScene) {
     scene.collect(
         scene.onDestroy$.subscribe(() => {
-            clear();
+            clearVariables();
         })
     );
-}
-
-function clear() {
-    hexagon = <any>0;
 }

@@ -2,9 +2,13 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractS
 import {ELayers} from "../../scenesEnvironment";
 
 export function handleMiddle(scene: AbstractScene): void {
-    scene.setActiveLayer(ELayers.MIDDLE);
+    scene.setActiveLayer(ELayers.BACKGROUND);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
@@ -12,5 +16,9 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect();
+    scene.collect(
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
 }

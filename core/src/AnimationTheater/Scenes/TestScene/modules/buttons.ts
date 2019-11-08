@@ -10,17 +10,27 @@ import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModel
 import {E_Scene} from "../../../Scenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
 
-let buttonExit: AbstractActor = <any>0;
-let buttonMove: AbstractActor = <any>0;
-let buttonStop: AbstractActor = <any>0;
-let buttonPlay: AbstractActor = <any>0;
-let buttonPause: AbstractActor = <any>0;
-let buttonInvisible: AbstractActor = <any>0;
+let buttonExit: AbstractActor;
+let buttonMove: AbstractActor;
+let buttonStop: AbstractActor;
+let buttonPlay: AbstractActor;
+let buttonPause: AbstractActor;
+let buttonInvisible: AbstractActor;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    buttonExit = <any>0;
+    buttonMove = <any>0;
+    buttonStop = <any>0;
+    buttonPlay = <any>0;
+    buttonPause = <any>0;
+    buttonInvisible = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -71,6 +81,9 @@ function initActions(scene: AbstractScene) {
         }),
         buttonInvisible.isMouseClick$.subscribe(() => {
             toggleReverse();
+        }),
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
         })
     );
 }

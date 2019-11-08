@@ -16,22 +16,37 @@ import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
 
-let isReverse = true;
-let counter = 100;
-let dx = 3;
+let isReverse: boolean;
+let counter: number;
+let dx: number;
 
-let heart: AbstractActor = <any>0;
-const draws: AbstractActor[] = [];
-let wave: AbstractFramedShape = <any>0;
-let wave1: AbstractFramedShape = <any>0;
-let wave2: AbstractFramedShape = <any>0;
-let wave3: AbstractFramedShape = <any>0;
-let snakeSpiral: AbstractFramedShape = <any>0;
+let heart: AbstractActor;
+let actorGroup: AbstractActor[];
+let wave: AbstractFramedShape;
+let wave1: AbstractFramedShape;
+let wave2: AbstractFramedShape;
+let wave3: AbstractFramedShape;
+let snakeSpiral: AbstractFramedShape;
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    isReverse = true;
+    counter = 100;
+    dx = 3;
+
+    heart = <any>0;
+    actorGroup = [];
+    wave = <any>0;
+    wave1 = <any>0;
+    wave2 = <any>0;
+    wave3 = <any>0;
+    snakeSpiral = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -61,7 +76,7 @@ function initActors(scene: AbstractScene) {
         const newHeart = new Heart(scene.generalLayer);
         newHeart.xPos = Math.round(Math.random() * scene.generalLayer.width / 2);
         newHeart.yPos = Math.round(Math.random() * scene.generalLayer.height / 2);
-        draws.push(newHeart);
+        actorGroup.push(newHeart);
     }
 
     for (let k = 0; k < 6; k++) {
@@ -84,11 +99,11 @@ function initActors(scene: AbstractScene) {
             }
             rectangle0.xPos = i * 100 - 50;
             rectangle0.yPos = k * 100;
-            draws.push(rectangle0);
+            actorGroup.push(rectangle0);
         }
     }
 
-    draws.forEach(el => {
+    actorGroup.forEach(el => {
         scene.setActors(el)
     });
 
@@ -106,7 +121,7 @@ function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
     const movedOptions: IDragDropOptions = {};
 
-    draws.forEach(el => {
+    actorGroup.forEach(el => {
         movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
 
         scene.moveOnMouseDrag(el, movedOptions);
@@ -119,13 +134,19 @@ function initActions(scene: AbstractScene) {
                 }
             }));
     });
+
+    scene.collect(
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
 }
 
 const recMove = () => {
     if (isStopMove.value) {
         return;
     }
-    draws.forEach(el => {
+    actorGroup.forEach(el => {
         el.xPos += dx;
     });
     counter--;
@@ -137,18 +158,20 @@ const recMove = () => {
 
 export function recMoveStart(scene: AbstractScene) {
     if (!move.value) {
-        move.value = AbstractActor.tickCount$.subscribe(recMove.bind(scene));
+        move.value = AbstractActor
+            .tickCount$
+            .subscribe(recMove.bind(scene));
         scene.collect(move.value);
     }
 }
 
 export function toggleReverse() {
     if (isReverse) {
-        draws.forEach(el => {
+        actorGroup.forEach(el => {
             el.setAnimationReverse();
         });
     } else {
-        draws.forEach(el => {
+        actorGroup.forEach(el => {
             el.setAnimationOriginal();
         });
     }

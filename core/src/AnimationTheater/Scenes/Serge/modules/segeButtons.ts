@@ -4,12 +4,17 @@ import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {E_Scene} from "../../../Scenario/types";
 
-let buttonExit: AbstractActor = <any>0;
+let buttonExit: AbstractActor;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
+    clearVariables();
     initActors(scene);
     initActions(scene);
+}
+
+function clearVariables() {
+    buttonExit = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
@@ -19,8 +24,13 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect(buttonExit.isMouseClick$.subscribe(() => {
-        scene.userData.nextScene = E_Scene.MENU;
-        scene.exit();
-    }));
+    scene.collect(
+        buttonExit.isMouseClick$.subscribe(() => {
+            scene.userData.nextScene = E_Scene.MENU;
+            scene.exit();
+        }),
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
 }
