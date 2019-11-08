@@ -19,7 +19,7 @@ const rules: { [key: string]: string } = {};
 class CssClassConverter implements IClassConverter {
     convertCustomClassToString(customClass: ICustomClass): string {
         if (customClass &&
-            customClass.rule &&
+            customClass.name &&
             customClass.rule) {
             const className = customClass.name.trim();
             let rule: string;
