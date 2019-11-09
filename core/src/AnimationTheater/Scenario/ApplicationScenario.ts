@@ -5,6 +5,7 @@ import {E_Scene} from "./types";
 import {AbstractScene, IUserData} from "../../AnimationCore/AnimationEngine/AbstractScene";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 
 let menu: AbstractScene = <any>0,
     sceneTest: AbstractScene = <any>0,
@@ -29,15 +30,19 @@ function initScenes(platform: AbstractPlatform): void {
 
 function initEvents(platform: AbstractPlatform): void {
     menu.onExit$.subscribe((data: IUserData) => {
-        console.log(data);
         if (data.nextScene) {
             switch (data.nextScene) {
                 case E_Scene.TEST:
+                    console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
                     sceneTest = platform.createScene(TestScene);
-                    sceneTest.start(true);
+                    sceneTest.onStart$.subscribe(() => {
+                        console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
+                    });
                     sceneTest.onDestroy$.subscribe(() => {
+                        // console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
                         menu.start(true);
                     });
+                    sceneTest.start(true);
                     break;
                 case E_Scene.SERGE:
                     sceneSerge.start(false);

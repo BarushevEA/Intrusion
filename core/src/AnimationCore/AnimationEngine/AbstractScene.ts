@@ -166,8 +166,8 @@ export abstract class AbstractScene implements IScene {
 
     private onMovedActorDrop(drop: IDragActor): void {
         if (this.movedBehaviors.length) {
-            this.movedBehaviors.forEach(rectBh => {
-                this.unsubscribe(rectBh);
+            this.movedBehaviors.forEach(subscriber => {
+                this.unsubscribe(subscriber);
             });
             this.movedBehaviors = [];
             if (drop.options) {
@@ -254,12 +254,12 @@ export abstract class AbstractScene implements IScene {
     }
 
     public start(isBackgroundLayerPresent: boolean): void {
-        this.renderController.renderStart(isBackgroundLayerPresent);
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         }
         this._onStart$.next({...this._userData});
+        this.renderController.renderStart(isBackgroundLayerPresent);
         setTimeout(() => {
             this.actors.forEach(actor => {
                 actor.enableEvents();
@@ -281,24 +281,29 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroy(): void {
+        console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
         this._onDestroy$.next({...this._userData});
         for (let i = 0; i < this.collector.length; i++) {
-            const subscriber = this.collector.pop();
+            const subscriber = this.collector[i];
             if (subscriber) {
                 subscriber.unsubscribe();
             }
         }
+        this.movedBehaviors.length = 0;
+        this.movedBehaviors = <any>0;
         this.collector.length = 0;
         this.collector = <any>0;
         this.renderController.destroyActors();
         for (let i = 0; i < this.actors.length; i++) {
-            let actor = this.actors.pop();
+            let actor = this.actors[i];
             if (actor) {
                 actor.destroy();
             }
             actor = <any>0;
         }
+        this.actors.length = 0;
         this.actors = <any>0;
+        console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

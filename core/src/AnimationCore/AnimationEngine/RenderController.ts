@@ -205,15 +205,15 @@ export class RenderController implements IRenderController {
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];
             for (let i = 0; i < this.currentPool.length; i++) {
-                const element = this.currentPool.pop();
+                const element = this.currentPool[i];
                 if (element) {
                     element.destroy();
                 }
             }
+            this.currentPool.length = 0;
             delete this.layers[this.layersNames[k]];
         }
         this.layersNames.length = 0;
-        this.currentPool.length = 0;
         this.layersNames = <any>0;
         this.currentPool = <any>0;
     }

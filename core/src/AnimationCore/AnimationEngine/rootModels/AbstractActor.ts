@@ -41,7 +41,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 200;
     private subscribers: ISubscriptionLike[] = [];
-    private readonly mouseEvents$: ISubscriptionLike[] = [];
+    private readonly mouseEvents: ISubscriptionLike[] = [];
     private isMouseOver = false;
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
@@ -59,22 +59,22 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private initEvents() {
-        if (this.mouseEvents$.length) {
+        if (this.mouseEvents.length) {
             return;
         }
-        this.mouseEvents$.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
-        this.mouseEvents$.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
-        this.mouseEvents$.push(mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)));
-        this.mouseEvents$.push(mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)));
-        this.mouseEvents$.push(this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
-        this.mouseEvents$.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
+        this.mouseEvents.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
+        this.mouseEvents.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
+        this.mouseEvents.push(mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)));
+        this.mouseEvents.push(mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)));
+        this.mouseEvents.push(this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
+        this.mouseEvents.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
     public disableEvents() {
-        for (let i = 0; i < this.mouseEvents$.length; i++) {
-            this.mouseEvents$[i].unsubscribe();
+        for (let i = 0; i < this.mouseEvents.length; i++) {
+            this.mouseEvents[i].unsubscribe();
         }
-        this.mouseEvents$.length = 0;
+        this.mouseEvents.length = 0;
     }
 
     public enableEvents() {
@@ -296,7 +296,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public destroy() {
         for (let i = 0; i < this.subscribers.length; i++) {
-            const subscriber = this.subscribers.pop();
+            const subscriber = this.subscribers[i];
             if (subscriber) {
                 subscriber.unsubscribe();
             }
