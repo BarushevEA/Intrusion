@@ -281,7 +281,6 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroy(): void {
-        console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
         this._onDestroy$.next({...this._userData});
         for (let i = 0; i < this.collector.length; i++) {
             const subscriber = this.collector[i];
@@ -303,7 +302,6 @@ export abstract class AbstractScene implements IScene {
         }
         this.actors.length = 0;
         this.actors = <any>0;
-        console.log('AbstractActor.tickCount$.getNumberOfSubscribers() =', AbstractActor.tickCount$.getNumberOfSubscribers());
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

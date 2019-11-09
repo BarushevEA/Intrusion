@@ -38,7 +38,7 @@ function initActors(scene: AbstractScene) {
 function initActions(scene: AbstractScene) {
     scene.collect(
         scene.onStart$.subscribe(() => {
-            startMove();
+            startMove(scene);
             scene.collect(bricksSubscriber);
         }),
         scene.onStop$.subscribe(() => {
@@ -53,12 +53,12 @@ function initActions(scene: AbstractScene) {
     );
 }
 
-const startMove = () => {
+const startMove = (scene: AbstractScene) => {
     const speed = 5;
     brickNumber = bricks[0].actor.width;
     brickNumber /= speed;
     brickCounter = brickNumber;
-    bricksSubscriber = AbstractActor.tickCount$.subscribe(() => {
+    scene.collect(bricksSubscriber = AbstractActor.tickCount$.subscribe(() => {
         for (let i = 0; i < bricks.length; i++) {
             const brick = bricks[i].actor;
             brick.xPos -= speed;
@@ -71,7 +71,7 @@ const startMove = () => {
         } else {
             brickCounter--;
         }
-    });
+    }));
 };
 
 const stopMove = (scene: AbstractScene) => {
