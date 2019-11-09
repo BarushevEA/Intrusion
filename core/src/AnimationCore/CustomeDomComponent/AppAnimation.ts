@@ -1,6 +1,12 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../CustomeLibraries/initOuterVariables";
-import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../Store/EventStore";
+import {
+    mouseClickPosition$,
+    mouseLeftDown$,
+    mouseLeftUp$,
+    mouseMovePosition$,
+    mouseRightDown$, mouseRightUp$
+} from "../Store/EventStore";
 import {platform} from "../AnimationEngine/AnimationPlatform";
 
 export type IAppAnimation = {
@@ -18,8 +24,8 @@ export type IMousePosition = {
 
 export const mouseMovePosition: IMousePosition = {x: 0, y: 0};
 export const mouseClickPosition: IMousePosition = {x: 0, y: 0};
-export const mouseLeftDownPosition: IMousePosition = {x: 0, y: 0};
-export const mouseLeftUpPosition: IMousePosition = {x: 0, y: 0};
+export const mouseDownPosition: IMousePosition = {x: 0, y: 0};
+export const mouseUpPosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
     customCanvas: HTMLCanvasElement;
@@ -35,22 +41,34 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customStyle = document.createElement('style');
         this.customInit(shadow);
         this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
-        this.customCanvas.addEventListener('mousedown', this.setMouseLeftDown.bind(this));
-        this.customCanvas.addEventListener('mouseup', this.setMouseLeftUp.bind(this));
+        this.customCanvas.addEventListener('mousedown', this.setMouseDown.bind(this));
+        this.customCanvas.addEventListener('mouseup', this.setMouseUp.bind(this));
         this.customCanvas.addEventListener('click', this.setMouseClickLocation.bind(this));
     }
 
-    setMouseLeftDown(event: MouseEvent) {
-        if (event.button === 0) {
-            this.convertOuterCoordinates(event, mouseLeftDownPosition);
-            mouseLeftDown$.next(mouseLeftDownPosition);
+    setMouseDown(event: MouseEvent) {
+        switch (event.button) {
+            case 0:
+                this.convertOuterCoordinates(event, mouseDownPosition);
+                mouseLeftDown$.next(mouseDownPosition);
+                break;
+            case 2:
+                this.convertOuterCoordinates(event, mouseDownPosition);
+                mouseRightDown$.next(mouseDownPosition);
+                break;
         }
     }
 
-    setMouseLeftUp(event: MouseEvent) {
-        if (event.button === 0) {
-            this.convertOuterCoordinates(event, mouseLeftUpPosition);
-            mouseLeftUp$.next(mouseLeftUpPosition);
+    setMouseUp(event: MouseEvent) {
+        switch (event.button) {
+            case 0:
+                this.convertOuterCoordinates(event, mouseUpPosition);
+                mouseLeftUp$.next(mouseUpPosition);
+                break;
+            case 2:
+                this.convertOuterCoordinates(event, mouseUpPosition);
+                mouseRightUp$.next(mouseUpPosition);
+                break;
         }
     }
 
