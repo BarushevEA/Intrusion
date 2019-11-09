@@ -55,4 +55,18 @@ function initEvents(platform: AbstractPlatform): void {
     sceneBackground.onExit$.subscribe(() => {
         menu.start(true);
     });
+    menu.onDestroy$.subscribe(() => {
+        if (sceneTest) {
+            sceneTest.destroy();
+        }
+        if (sceneSerge) {
+            sceneSerge.destroy();
+        }
+        if (sceneBackground) {
+            sceneBackground.destroy();
+        }
+        sceneTest = <any>0;
+        sceneSerge = <any>0;
+        sceneBackground = <any>0;
+    });
 }

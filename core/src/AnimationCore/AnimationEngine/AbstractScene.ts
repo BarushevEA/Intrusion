@@ -282,13 +282,10 @@ export abstract class AbstractScene implements IScene {
 
     public destroy(): void {
         this._onDestroy$.next({...this._userData});
-        for (let i = 0; i < this.collector.length; i++) {
-            const subscriber = this.collector[i];
-            if (subscriber) {
-                subscriber.unsubscribe();
-            }
+        console.log(this.renderController.destroyActors);
+        if (this.renderController && this.renderController.destroyActors) {
+            this.renderController.destroyActors();
         }
-        this.renderController.destroyActors();
         for (let i = 0; i < this.actors.length; i++) {
             let actor = this.actors[i];
             if (actor) {
@@ -296,30 +293,44 @@ export abstract class AbstractScene implements IScene {
             }
             actor = <any>0;
         }
+        for (let i = 0; i < this.collector.length; i++) {
+            const subscriber = this.collector[i];
+            if (subscriber) {
+                subscriber.unsubscribe();
+            }
+        }
         const keys = Object.keys(this._userData);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             delete this._userData[key];
         }
 
-        this.movedBehaviors.length = <any>0;
+        if (this.movedBehaviors) {
+            this.movedBehaviors.length = <any>0;
+        }
         this.movedBehaviors = <any>0;
-        this.collector.length = <any>0;
+        if (this.collector) {
+            this.collector.length = <any>0;
+        }
         this.collector = <any>0;
-        this.actors.length = <any>0;
+        if (this.actors) {
+            this.actors.length = <any>0;
+        }
         this.actors = <any>0;
         this.renderController = <any>0;
         this.generalLayer = <any>0;
         this.isFirstStart = <any>0;
-        this.movedOnDrag.length = <any>0;
+        if (this.movedOnDrag) {
+            this.movedOnDrag.length = <any>0;
+        }
         this.movedOnDrag = <any>0;
         this.destroySubscriberCounter = <any>0;
         this._onStop$.destroy();
         this._onExit$.destroy();
         this._onStart$.destroy();
         this._onStartOnce$.destroy();
-        this._onDestroy$.destroy();
         this._onSetUserData$.destroy();
+        this._onDestroy$.destroy();
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {
