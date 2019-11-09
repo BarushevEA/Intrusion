@@ -141,6 +141,18 @@ function initActions(scene: AbstractScene) {
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
+        }),
+        heart.isMouseRightClick$.subscribe((isDown) => {
+            if (isDown) {
+                const newHeart = new Heart(scene.generalLayer);
+                newHeart.xPos = heart.xPos;
+                newHeart.yPos = heart.yPos;
+                scene.setActors(newHeart);
+                newHeart.enableEvents();
+                setTimeout(() => {
+                    scene.moveOnMouseDrag(newHeart);
+                }, 300);
+            }
         })
     );
 }

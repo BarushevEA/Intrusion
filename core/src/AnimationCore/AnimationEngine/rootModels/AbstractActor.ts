@@ -1,5 +1,11 @@
 import {IDimensions, IFramePool, LayerHandler} from "../LayerHandler/LayerHandler";
-import {mouseClickPosition$, mouseLeftDown$, mouseLeftUp$, mouseMovePosition$} from "../../Store/EventStore";
+import {
+    mouseClickPosition$,
+    mouseLeftDown$,
+    mouseLeftUp$,
+    mouseMovePosition$,
+    mouseRightDown$, mouseRightUp$
+} from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {ISubscriptionLike, Observable} from "../../CustomeLibraries/Observable";
 import {ITextHandler} from "../LayerHandler/TextHandler";
@@ -46,6 +52,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     public isMouseOver$ = new Observable(<boolean>false);
     public isMouseClick$ = new Observable(<boolean>false);
     public isMouseLeftClick$ = new Observable(<boolean>false);
+    public isMouseRightClick$ = new Observable(<boolean>false);
     public isMouseLeftDrag$ = new Observable(<any>0);
     public isMouseLeftDrop$ = new Observable(<any>0);
     private destroySubscriberCounter = 0;
@@ -66,6 +73,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
         this.mouseEvents.push(mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)));
         this.mouseEvents.push(mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)));
+        this.mouseEvents.push(mouseRightDown$.subscribe(this.rightMouseDown.bind(this)));
+        this.mouseEvents.push(mouseRightUp$.subscribe(this.rightMouseUp.bind(this)));
         this.mouseEvents.push(this.isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
         this.mouseEvents.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
@@ -111,6 +120,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseLeftClick(position, false);
     }
 
+    private rightMouseDown(position: IMousePosition) {
+        this.mouseRightClick(position, true);
+    }
+
+    private rightMouseUp(position: IMousePosition) {
+        this.mouseRightClick(position, false);
+    }
+
     private tryLeftMouseCatch(isDown: boolean): void {
         if (this.leftMouseCatchTimeIndex !== -1) {
             clearTimeout(this.leftMouseCatchTimeIndex);
@@ -135,6 +152,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
         if (isOver) {
             this.isMouseLeftClick$.next(isDown);
+        } else {
+            this.tryLeftMouseCatch(isOver);
+        }
+    }
+
+    private mouseRightClick(position: IMousePosition, isDown: boolean) {
+        let isOver = this.checkOverPosition(position);
+
+        if (isOver) {
+            this.isMouseRightClick$.next(isDown);
         } else {
             this.tryLeftMouseCatch(isOver);
         }
@@ -326,6 +353,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
         if (this.isMouseLeftClick$.destroy) {
             this.isMouseLeftClick$.destroy();
+        }
+        if (this.isMouseRightClick$.destroy) {
+            this.isMouseRightClick$.destroy();
         }
         if (this.isMouseLeftDrag$.destroy) {
             this.isMouseLeftDrag$.destroy();

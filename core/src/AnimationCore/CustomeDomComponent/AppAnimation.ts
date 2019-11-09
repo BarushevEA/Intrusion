@@ -40,6 +40,10 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customCanvas = document.createElement('canvas');
         this.customStyle = document.createElement('style');
         this.customInit(shadow);
+        this.addListeners();
+    }
+
+    private addListeners() {
         this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
         this.customCanvas.addEventListener('mousedown', this.setMouseDown.bind(this));
         this.customCanvas.addEventListener('mouseup', this.setMouseUp.bind(this));
