@@ -66,8 +66,6 @@ export class Observable<T> implements IObserver<T> {
         if (this.listeners.hasOwnProperty(index)) {
             delete this.listeners[index];
             this.keys = Object.keys(this.listeners);
-        } else {
-            console.warn(`Unsubscribe index ${index} is not valid`);
         }
     }
 

@@ -303,6 +303,42 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
         this.subscribers.length = 0;
         this.disableEvents();
+        this._z_index = <any>0;
+        this._z_index_memory = <any>0;
+        this._layerName = <any>0;
+        this._layer_name_memory = <any>0;
+        this.framePoolName = <any>0;
+        this.generalLayer = <any>0;
+        this.layerHandler = <any>0;
+        this._elementX = <any>0;
+        this._elementY = <any>0;
+        this._elementWidth = <any>0;
+        this._elementHeight = <any>0;
+        this._isLeftMouseCatch = <any>0;
+        this.leftMouseCatchTimeIndex = <any>0;
+        this.leftMouseCatchTime = <any>0;
+        this.isMouseOver = <any>0;
+        if (this.isMouseOver$.destroy) {
+            this.isMouseOver$.destroy();
+        }
+        if (this.isMouseClick$.destroy) {
+            this.isMouseClick$.destroy();
+        }
+        if (this.isMouseLeftClick$.destroy) {
+            this.isMouseLeftClick$.destroy();
+        }
+        if (this.isMouseLeftDrag$.destroy) {
+            this.isMouseLeftDrag$.destroy();
+        }
+        if (this.isMouseLeftDrop$.destroy) {
+            this.isMouseLeftDrop$.destroy();
+        }
+        this.isMouseOver$ = <any>0;
+        this.isMouseClick$ = <any>0;
+        this.isMouseLeftClick$ = <any>0;
+        this.isMouseLeftDrag$ = <any>0;
+        this.isMouseLeftDrop$ = <any>0;
+        this.destroySubscriberCounter = <any>0;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

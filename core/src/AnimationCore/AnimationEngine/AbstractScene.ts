@@ -282,7 +282,6 @@ export abstract class AbstractScene implements IScene {
 
     public destroy(): void {
         this._onDestroy$.next({...this._userData});
-        console.log(this.renderController.destroyActors);
         if (this.renderController && this.renderController.destroyActors) {
             this.renderController.destroyActors();
         }
