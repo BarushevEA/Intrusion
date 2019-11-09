@@ -6,6 +6,7 @@ export type ISubscribe = {
 
 export type IUnSubscribe = {
     unSubscribe(index: string): void;
+    destroy(): void;
 }
 
 export type ISetObservableValue = {
@@ -68,6 +69,20 @@ export class Observable<T> implements IObserver<T> {
         } else {
             console.warn(`Unsubscribe index ${index} is not valid`);
         }
+    }
+
+    destroy(): void {
+        this._value = <any>0;
+        const length = this.keys.length;
+        for (let i = 0; i < length; i++) {
+            const key = this.keys[i];
+            this.unSubscribe(key);
+        }
+        this.keys = <any>0;
+        this.listeners = <any>0;
+        this.indexCounter = <any>0;
+        this.indexFlexible = <any>0;
+        this.flexibleCounter = <any>0;
     }
 
     getValue(): T {

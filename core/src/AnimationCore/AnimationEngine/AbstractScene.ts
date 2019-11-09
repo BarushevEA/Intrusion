@@ -288,10 +288,6 @@ export abstract class AbstractScene implements IScene {
                 subscriber.unsubscribe();
             }
         }
-        this.movedBehaviors.length = 0;
-        this.movedBehaviors = <any>0;
-        this.collector.length = 0;
-        this.collector = <any>0;
         this.renderController.destroyActors();
         for (let i = 0; i < this.actors.length; i++) {
             let actor = this.actors[i];
@@ -300,8 +296,30 @@ export abstract class AbstractScene implements IScene {
             }
             actor = <any>0;
         }
-        this.actors.length = 0;
+        const keys = Object.keys(this._userData);
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            delete this._userData[key];
+        }
+
+        this.movedBehaviors.length = <any>0;
+        this.movedBehaviors = <any>0;
+        this.collector.length = <any>0;
+        this.collector = <any>0;
+        this.actors.length = <any>0;
         this.actors = <any>0;
+        this.renderController = <any>0;
+        this.generalLayer = <any>0;
+        this.isFirstStart = <any>0;
+        this.movedOnDrag.length = <any>0;
+        this.movedOnDrag = <any>0;
+        this.destroySubscriberCounter = <any>0;
+        this._onStop$.destroy();
+        this._onExit$.destroy();
+        this._onStart$.destroy();
+        this._onStartOnce$.destroy();
+        this._onDestroy$.destroy();
+        this._onSetUserData$.destroy();
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {
