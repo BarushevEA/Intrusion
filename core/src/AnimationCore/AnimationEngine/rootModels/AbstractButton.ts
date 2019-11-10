@@ -6,6 +6,7 @@ export abstract class AbstractButton extends AbstractFramedShape {
     protected constructor(canvas: HTMLCanvasElement, text: string, height: number, width: number) {
         super(canvas, height, width);
         this.buttonText = text;
+        this.enableEvents();
         this.collect(
             this.isMouseOver$.subscribe(isOver => {
                 if (isOver) {

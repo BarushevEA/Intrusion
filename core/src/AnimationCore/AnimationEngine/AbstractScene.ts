@@ -105,7 +105,6 @@ export abstract class AbstractScene implements IScene {
     public setActors(...actors: AbstractActor[]): void {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            actor.disableEvents();
             this.actors.push(actor);
             this.renderController.setActor(actor);
         }
@@ -266,12 +265,12 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         }
-        this.renderController.renderStart(isBackgroundLayerPresent);
-        this._onStart$.next({...this._userData});
         setTimeout(() => {
             this.actors.forEach(actor => {
                 actor.enableEvents();
             });
+            this.renderController.renderStart(isBackgroundLayerPresent);
+            this._onStart$.next({...this._userData});
         }, 300);
     }
 

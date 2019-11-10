@@ -62,7 +62,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new LayerHandler(this.generalLayer);
-        this.enableEvents();
     }
 
     private initEvents() {
