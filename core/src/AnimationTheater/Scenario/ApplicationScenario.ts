@@ -41,6 +41,9 @@ function initEvents(platform: AbstractPlatform): void {
                     sceneTest.start(true);
                     break;
                 case E_Scene.SERGE:
+                    sceneSerge.onStart$.subscribe(() => {
+                        sceneSerge.setHalfSpeed();
+                    });
                     sceneSerge.start(false);
                     break;
                 case E_Scene.BACKGROUND:

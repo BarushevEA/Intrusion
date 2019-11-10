@@ -111,6 +111,14 @@ export abstract class AbstractScene implements IScene {
         }
     }
 
+    public setHalfSpeed(): void {
+        this.renderController.setHalfSpeed();
+    }
+
+    public setFullSpeed(): void {
+        this.renderController.setFullSpeed();
+    }
+
     public setActorOnTop(actor: AbstractActor): void {
         this.renderController.setActorOnTop(actor);
     }
@@ -258,8 +266,8 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         }
-        this._onStart$.next({...this._userData});
         this.renderController.renderStart(isBackgroundLayerPresent);
+        this._onStart$.next({...this._userData});
         setTimeout(() => {
             this.actors.forEach(actor => {
                 actor.enableEvents();
