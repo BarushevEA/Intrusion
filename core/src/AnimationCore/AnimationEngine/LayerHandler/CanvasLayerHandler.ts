@@ -66,7 +66,7 @@ export class CanvasLayerHandler {
         this.context = this.savedContext;
     }
 
-    setVirtualLayer(name: string, height: number, width: number): HTMLCanvasElement {
+    public setVirtualLayer(name: string, height: number, width: number): HTMLCanvasElement {
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
@@ -75,7 +75,7 @@ export class CanvasLayerHandler {
         return this.canvas;
     }
 
-    drawVirtualOnGeneral(sourceName: string,
+    public drawVirtualOnGeneral(sourceName: string,
                          x: number,
                          y: number,
                          width = -1,
@@ -98,17 +98,17 @@ export class CanvasLayerHandler {
         }
     }
 
-    drawVirtualOnVirtual(targetName: string,
+    public drawVirtualOnVirtual(targetName: string,
                          sourceName: string,
                          x: number, y: number): void {
         this.virtualPool[targetName].context.drawImage(this.virtualPool[sourceName].canvas, x, y);
     }
 
-    deleteVirtual(targetName: string): void {
+    public deleteVirtual(targetName: string): void {
         delete this.virtualPool[targetName];
     }
 
-    createFrame(height: number, width: number, delay = 0): void {
+    public createFrame(height: number, width: number, delay = 0): void {
         this.canvas = document.createElement('canvas');
         this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
         this.canvas.height = height;
@@ -116,7 +116,7 @@ export class CanvasLayerHandler {
         this.framePool.playedFrames.push({delay: delay, counter: delay, frame: this.canvas});
     }
 
-    getFrame(): HTMLCanvasElement {
+    public getFrame(): HTMLCanvasElement {
         const frame = this.framePool.playedFrames[this.framePool.showedFrame];
         if (frame.isStopFrame) {
             return frame.frame;
@@ -173,11 +173,11 @@ export class CanvasLayerHandler {
         this.savedContext.drawImage(this.getFrame(), x, y);
     }
 
-    getFramePool(): IFramePool {
+    public getFramePool(): IFramePool {
         return this.framePool;
     }
 
-    setFramePool(pool: IFramePool): void {
+    public setFramePool(pool: IFramePool): void {
         for (let i = 0; i < pool.originalFrames.length; i++) {
             this.framePool.originalFrames.push({...pool.originalFrames[i]});
             this.framePool.reverseFrames.push({...pool.reverseFrames[i]});
@@ -185,7 +185,7 @@ export class CanvasLayerHandler {
         this.framePool.playedFrames = this.framePool.originalFrames;
     }
 
-    setDelayToFrame(index: number, delay: number) {
+    public setDelayToFrame(index: number, delay: number) {
         if (index > 0 && index < this.framePool.playedFrames.length) {
             const element = this.framePool.playedFrames[index];
             element.delay = delay;
@@ -193,13 +193,13 @@ export class CanvasLayerHandler {
         }
     }
 
-    setOriginal(): void {
+    public setOriginal(): void {
         this.framePool.playedFrames.forEach(frame => {
             this.framePool.originalFrames.push(frame);
         });
     }
 
-    setReverse(): void {
+    public setReverse(): void {
         const lastIndex = this.framePool.playedFrames.length - 1;
         for (let i = 0; i < this.framePool.playedFrames.length; i++) {
             const frame = {...this.framePool.playedFrames[lastIndex - i]};
@@ -207,17 +207,17 @@ export class CanvasLayerHandler {
         }
     }
 
-    setReverseToPlay() {
+    public setReverseToPlay() {
         this.framePool.playedFrames = this.framePool.reverseFrames;
         this.framePool.showedFrame = this.framePool.startFrame;
     }
 
-    setOriginalToPlay() {
+    public setOriginalToPlay() {
         this.framePool.playedFrames = this.framePool.originalFrames;
         this.framePool.showedFrame = this.framePool.startFrame;
     }
 
-    setShowedFrame(index: number) {
+    public setShowedFrame(index: number) {
         if (index >= 0 && index < this.framePool.playedFrames.length) {
             this.framePool.showedFrame = index;
         }
