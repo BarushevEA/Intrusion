@@ -135,13 +135,13 @@ export class RenderController implements IRenderController {
     };
 
     private drawLayers() {
-        this._tickCount$.next(true);
         for (let k = 0; k < this.layersNames.length; k++) {
             const layerName = this.layersNames[k];
             for (let i = 0; i < this.layers[layerName].length; i++) {
                 this.layers[layerName][i].renderFrame();
             }
         }
+        this._tickCount$.next(true);
     }
 
     runFullSpeedWithBackground(): void {
