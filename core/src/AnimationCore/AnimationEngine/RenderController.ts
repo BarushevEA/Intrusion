@@ -1,5 +1,6 @@
 import {IActor} from "./rootModels/AbstractActor";
 import {findElementOnArray} from "../CustomeLibraries/FunctionLibs";
+import {ISubscriber, Observable} from "../CustomeLibraries/Observable";
 
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
@@ -18,6 +19,7 @@ export type IRenderController = {
     setLayerOnIndex(layerName: string, index: number): void;
     setFullSpeed(): void;
     setHalfSpeed(): void;
+    tickCount$: ISubscriber<boolean>;
 }
 
 export type IActorsPool = IActor[];
@@ -34,6 +36,11 @@ export class RenderController implements IRenderController {
     private layersNames = [this.currentLayerName + ''];
     private delay = 1;
     private delayCounter = 0;
+    private _tickCount$ = new Observable(<boolean>false);
+
+    get tickCount$(): ISubscriber<boolean> {
+        return this._tickCount$;
+    }
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
@@ -127,8 +134,8 @@ export class RenderController implements IRenderController {
         this.runHalfSpeed();
     };
 
-    runFullSpeedWithBackground(): void {
-        this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
+    private drawLayers() {
+        this._tickCount$.next(true);
         for (let k = 0; k < this.layersNames.length; k++) {
             const layerName = this.layersNames[k];
             for (let i = 0; i < this.layers[layerName].length; i++) {
@@ -137,15 +144,15 @@ export class RenderController implements IRenderController {
         }
     }
 
+    runFullSpeedWithBackground(): void {
+        this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
+        this.drawLayers();
+    }
+
     runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        for (let k = 0; k < this.layersNames.length; k++) {
-            const layerName = this.layersNames[k];
-            for (let i = 0; i < this.layers[layerName].length; i++) {
-                this.layers[layerName][i].renderFrame();
-            }
-        }
+        this.drawLayers();
     }
 
     private runHalfSpeed(): void {
@@ -158,12 +165,7 @@ export class RenderController implements IRenderController {
         if (!this.isBackgroundLayerPresent) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
-        for (let k = 0; k < this.layersNames.length; k++) {
-            const layerName = this.layersNames[k];
-            for (let i = 0; i < this.layers[layerName].length; i++) {
-                this.layers[layerName][i].renderFrame();
-            }
-        }
+        this.drawLayers();
     }
 
     public renderStop() {
@@ -260,5 +262,9 @@ export class RenderController implements IRenderController {
         this.layersNames.length = 0;
         this.layersNames = <any>0;
         this.currentPool = <any>0;
+        this._tickCount$.destroy();
+        if (this._tickCount$) {
+            this._tickCount$ = <any>0;
+        }
     }
 }
