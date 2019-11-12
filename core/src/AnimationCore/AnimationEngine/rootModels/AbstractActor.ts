@@ -1,10 +1,11 @@
-import {IDimensions, IFramePool, CanvasLayerHandler} from "../LayerHandler/CanvasLayerHandler";
+import {CanvasLayerHandler, IFramePool} from "../LayerHandler/CanvasLayerHandler";
 import {
     mouseClickPosition$,
     mouseLeftDown$,
     mouseLeftUp$,
     mouseMovePosition$,
-    mouseRightDown$, mouseRightUp$
+    mouseRightDown$,
+    mouseRightUp$
 } from "../../Store/EventStore";
 import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../CustomeLibraries/Observable";
@@ -12,6 +13,13 @@ import {ITextHandler} from "../LayerHandler/TextHandler";
 import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 
 //TODO frame pool technology need to use for lot of entities of class
+
+export type IDimensions = {
+    xPos: number;
+    yPos: number;
+    width: number;
+    height: number;
+}
 
 export type IActor = {
     z_index: number;

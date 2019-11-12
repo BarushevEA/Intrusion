@@ -1,13 +1,6 @@
 import {ITextHandler, textHandler} from "./TextHandler";
 import {IShapeHandler, shapeHandler} from "./ShapeHandler";
 
-export type IDimensions = {
-    xPos: number;
-    yPos: number;
-    width: number;
-    height: number;
-}
-
 export type IVirtualCanvasesPool = {
     [key: string]: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D };
 };
