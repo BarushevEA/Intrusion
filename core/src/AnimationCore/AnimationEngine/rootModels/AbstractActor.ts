@@ -25,7 +25,7 @@ export type IActor = {
 export abstract class AbstractActor implements IActor, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
     private static _mousePosition: IMousePosition = <any>0;
-    public static tickCount$ = new Observable(<boolean>false);
+    private static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
     private _layerName = '';
@@ -308,10 +308,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
             yD,
             widthD,
             heightD);
-    }
-
-    get tickCounter$() {
-        return AbstractActor.tickCount$;
     }
 
     public collect(...subscribers: ISubscriptionLike[]) {
