@@ -1,6 +1,6 @@
 import {IRenderController, RenderController} from "./RenderController";
 import {AbstractActor, IActor} from "./rootModels/AbstractActor";
-import {Observable, ISubscriptionLike} from "../CustomeLibraries/Observable";
+import {Observable, ISubscriptionLike, ISubscriber} from "../CustomeLibraries/Observable";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -71,10 +71,10 @@ export abstract class AbstractScene implements IScene {
         Object.keys(data).forEach(key => {
             this._userData[key] = data[key];
         });
-        this.onSetUserData$.next(this._userData);
+        this._onSetUserData$.next(this._userData);
     }
 
-    get onSetUserData$(): Observable<IUserData> {
+    get onSetUserData$(): ISubscriber<IUserData> {
         return this._onSetUserData$;
     }
 
@@ -82,23 +82,23 @@ export abstract class AbstractScene implements IScene {
         return this._userData;
     }
 
-    get onStop$(): Observable<IUserData> {
+    get onStop$(): ISubscriber<IUserData> {
         return this._onStop$;
     }
 
-    get onExit$(): Observable<IUserData> {
+    get onExit$(): ISubscriber<IUserData> {
         return this._onExit$;
     }
 
-    get onStartOnce$(): Observable<IUserData> {
+    get onStartOnce$(): ISubscriber<IUserData> {
         return this._onStartOnce$;
     }
 
-    get onStart$(): Observable<IUserData> {
+    get onStart$(): ISubscriber<IUserData> {
         return this._onStart$;
     }
 
-    get onDestroy$(): Observable<IUserData> {
+    get onDestroy$(): ISubscriber<IUserData> {
         return this._onDestroy$;
     }
 

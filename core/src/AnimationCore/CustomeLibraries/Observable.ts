@@ -25,9 +25,15 @@ export type ISubscribeCounter = {
     getNumberOfSubscribers(): number;
 };
 
-export type IObserver<T> = ISetObservableValue & ISubscribe & IUnSubscribe & ISubscribeCounter & {
-    getValue(): T;
-};
+export type ISubscriber<T> =
+    { getValue(): T; } &
+    ISubscribe;
+
+export type IObserver<T> =
+    ISetObservableValue &
+    ISubscriber<T> &
+    IUnSubscribe &
+    ISubscribeCounter;
 
 class SubscriberLike implements ISubscriptionLike {
     private readonly observable: IUnSubscribe;
