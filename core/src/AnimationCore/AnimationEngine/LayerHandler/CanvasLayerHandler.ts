@@ -27,7 +27,7 @@ export type IFramePool = {
     originalFrames: IFrame[];
 }
 
-export class LayerHandler {
+export class CanvasLayerHandler {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private readonly savedCanvas: HTMLCanvasElement;
@@ -92,7 +92,12 @@ export class LayerHandler {
                          widthD = -1,
                          heightD = -1
     ): void {
-        if (width > -1 && height > -1 && xD > -1 && yD > -1 && widthD > -1 && heightD > -1) {
+        if (width > -1 &&
+            height > -1 &&
+            xD > -1 &&
+            yD > -1 &&
+            widthD > -1 &&
+            heightD > -1) {
             this.savedContext.drawImage(this.virtualPool[sourceName].canvas,
                 x, y, width, height, xD, yD, widthD, heightD);
         } else {

@@ -1,4 +1,4 @@
-import {IDimensions, IFramePool, LayerHandler} from "../LayerHandler/LayerHandler";
+import {IDimensions, IFramePool, CanvasLayerHandler} from "../LayerHandler/CanvasLayerHandler";
 import {
     mouseClickPosition$,
     mouseLeftDown$,
@@ -38,7 +38,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     protected framePoolName: string = '';
     protected generalLayer: HTMLCanvasElement;
-    protected layerHandler: LayerHandler;
+    protected layerHandler: CanvasLayerHandler;
     private _elementX = 0;
     private _elementY = 0;
     private _elementWidth = 0;
@@ -61,7 +61,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementHeight = height;
         this._elementWidth = width;
         this.generalLayer = canvas;
-        this.layerHandler = new LayerHandler(this.generalLayer);
+        this.layerHandler = new CanvasLayerHandler(this.generalLayer);
     }
 
     private initEvents(): void {
