@@ -64,7 +64,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler = new LayerHandler(this.generalLayer);
     }
 
-    private initEvents() {
+    private initEvents(): void {
         if (this.mouseEvents.length) {
             return;
         }
@@ -78,18 +78,18 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
     }
 
-    public disableEvents() {
+    public disableEvents(): void {
         for (let i = 0; i < this.mouseEvents.length; i++) {
             this.mouseEvents[i].unsubscribe();
         }
         this.mouseEvents.length = 0;
     }
 
-    public enableEvents() {
+    public enableEvents(): void {
         this.initEvents();
     }
 
-    private mouseOver(position: IMousePosition) {
+    private mouseOver(position: IMousePosition): void {
         let isOver = this.checkOverPosition(position);
 
         if (isOver != this.isMouseOver) {
@@ -99,11 +99,11 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    private checkMouseOver() {
+    private checkMouseOver(): void {
         this.mouseOver(AbstractActor._mousePosition);
     }
 
-    private mouseClick(position: IMousePosition) {
+    private mouseClick(position: IMousePosition): void {
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
@@ -111,19 +111,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    private leftMouseDown(position: IMousePosition) {
+    private leftMouseDown(position: IMousePosition): void {
         this.mouseLeftClick(position, true);
     }
 
-    private leftMouseUp(position: IMousePosition) {
+    private leftMouseUp(position: IMousePosition): void {
         this.mouseLeftClick(position, false);
     }
 
-    private rightMouseDown(position: IMousePosition) {
+    private rightMouseDown(position: IMousePosition): void {
         this.mouseRightClick(position, true);
     }
 
-    private rightMouseUp(position: IMousePosition) {
+    private rightMouseUp(position: IMousePosition): void {
         this.mouseRightClick(position, false);
     }
 
@@ -254,49 +254,49 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementHeight = value;
     }
 
-    public resetStopFrame() {
+    public resetStopFrame(): void {
         this.layerHandler.resetStopFrame();
     }
 
-    public setStopFrame(index: number) {
+    public setStopFrame(index: number): void {
         this.layerHandler.setStopFrame(index);
     }
 
-    public setAnimationReverse() {
+    public setAnimationReverse(): void {
         this.layerHandler.setReverseToPlay();
     }
 
-    public setAnimationOriginal() {
+    public setAnimationOriginal(): void {
         this.layerHandler.setOriginalToPlay();
     }
 
-    setVirtualLayer(name: string): HTMLCanvasElement {
+    public setVirtualLayer(name: string): HTMLCanvasElement {
         return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
     }
 
-    restorePreviousLayer() {
+    public restorePreviousLayer() {
         this.layerHandler.restorePreviousLayer();
     }
 
-    deleteVirtual(targetName: string): void {
+    public deleteVirtual(targetName: string): void {
         this.layerHandler.deleteVirtual(targetName);
     }
 
-    drawVirtualOnVirtual(targetName: string,
-                         sourceName: string,
-                         x: number, y: number): void {
+    public drawVirtualOnVirtual(targetName: string,
+                                sourceName: string,
+                                x: number, y: number): void {
         this.layerHandler.drawVirtualOnVirtual(targetName, sourceName, x, y);
     }
 
-    drawVirtualOnGeneral(sourceName: string,
-                         x: number,
-                         y: number,
-                         width?: number,
-                         height?: number,
-                         xD?: number,
-                         yD?: number,
-                         widthD?: number,
-                         heightD?: number
+    public drawVirtualOnGeneral(sourceName: string,
+                                x: number,
+                                y: number,
+                                width?: number,
+                                height?: number,
+                                xD?: number,
+                                yD?: number,
+                                widthD?: number,
+                                heightD?: number
     ): void {
         this.layerHandler.drawVirtualOnGeneral(
             sourceName,
@@ -316,7 +316,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    public destroy() {
+    public destroy(): void {
         for (let i = 0; i < this.subscribers.length; i++) {
             const subscriber = this.subscribers[i];
             if (subscriber) {
@@ -366,7 +366,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.destroySubscriberCounter = <any>0;
     }
 
-    public unsubscribe(subscriber: ISubscriptionLike) {
+    public unsubscribe(subscriber: ISubscriptionLike): void {
         for (let i = 0; i < this.subscribers.length; i++) {
             const savedSubscriber = this.subscribers[i];
             if (savedSubscriber && savedSubscriber === subscriber) {
