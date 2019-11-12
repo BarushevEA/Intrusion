@@ -58,7 +58,7 @@ const startMove = (scene: AbstractScene) => {
     brickNumber = bricks[0].actor.width;
     brickNumber /= speed;
     brickCounter = brickNumber;
-    scene.collect(bricksSubscriber = AbstractActor.tickCount$.subscribe(() => {
+    scene.collect(bricksSubscriber = scene.tickCount$.subscribe(() => {
         for (let i = 0; i < bricks.length; i++) {
             const brick = bricks[i].actor;
             brick.xPos -= speed;

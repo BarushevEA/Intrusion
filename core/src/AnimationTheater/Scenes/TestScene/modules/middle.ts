@@ -173,7 +173,7 @@ const recMove = () => {
 
 export function recMoveStart(scene: AbstractScene) {
     if (!move.value) {
-        move.value = AbstractActor.tickCount$
+        move.value = scene.tickCount$
             .subscribe(recMove.bind(scene));
         scene.collect(move.value);
     }

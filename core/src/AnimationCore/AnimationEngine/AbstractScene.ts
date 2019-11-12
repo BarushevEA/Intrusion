@@ -61,6 +61,10 @@ export abstract class AbstractScene implements IScene {
         this.run();
     }
 
+    get tickCount$(): ISubscriber<boolean> {
+        return this.renderController.tickCount$;
+    };
+
     private run(): void {
         this.collect(
             this._onStartOnce$.subscribe(this.createScene.bind(this))
@@ -223,7 +227,7 @@ export abstract class AbstractScene implements IScene {
         const dy = AbstractActor.mousePosition.y - drag.actor.yPos;
 
         this.movedBehaviors.push(
-            AbstractActor.tickCount$.subscribe(() => {
+            this.tickCount$.subscribe(() => {
                 this.handleDragOptions(drag, dx, dy);
             })
         );
