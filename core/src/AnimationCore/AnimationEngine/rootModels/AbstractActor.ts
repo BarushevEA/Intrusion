@@ -16,10 +16,32 @@ import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 export type IActor = {
     z_index: number;
     layerName: string;
+    xPos: number;
+    yPos: number;
+    width: number;
+    height: number;
+    isLeftMouseCatch: boolean;
+    isMouseClick$: ISubscriber<boolean>;
+    isMouseLeftDrop$: ISubscriber<any>;
+    isMouseLeftDrag$: ISubscriber<any>;
+    isMouseRightClick$: ISubscriber<boolean>;
+    isMouseLeftClick$: ISubscriber<boolean>;
+    isMouseOver$: ISubscriber<boolean>;
+    unsubscribe(subscriber: ISubscriptionLike): void;
+    collect(...subscribers: ISubscriptionLike[]): void;
+    setAnimationOriginal(): void;
+    setAnimationReverse(): void;
+    setStopFrame(index: number): void;
+    resetStopFrame(): void;
+    saveZIndex(): void;
+    restoreZIndex(): void;
     saveLayerIndex(): void;
     restoreLayerIndex(): void;
     renderFrame(): void;
     destroy(): void;
+    enableEvents(): void;
+    disableEvents(): void;
+    getDimensions(): IDimensions;
 }
 
 export abstract class AbstractActor implements IActor, IDimensions {
@@ -310,7 +332,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             heightD);
     }
 
-    public collect(...subscribers: ISubscriptionLike[]) {
+    public collect(...subscribers: ISubscriptionLike[]): void {
         for (let i = 0; i < subscribers.length; i++) {
             this.subscribers.push(subscribers[i]);
         }
@@ -380,7 +402,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.clearCollector();
     }
 
-    private clearCollector() {
+    private clearCollector(): void {
         if (this.destroySubscriberCounter > 1000 && this.subscribers.length) {
             const tmp: ISubscriptionLike[] = [];
             for (let i = 0; i < this.subscribers.length; i++) {
@@ -393,7 +415,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    public setFramesDelay(delay: number) {
+    public setFramesDelay(delay: number): void {
         this.layerHandler.setFramesDelay(delay);
     }
 
