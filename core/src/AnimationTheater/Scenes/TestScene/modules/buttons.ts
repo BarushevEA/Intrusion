@@ -16,6 +16,8 @@ let buttonStop: AbstractActor;
 let buttonPlay: AbstractActor;
 let buttonPause: AbstractActor;
 let buttonInvisible: AbstractActor;
+let buttonToggleSpeed: AbstractActor;
+let isHalfSpeed = false;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
@@ -39,14 +41,16 @@ function initActors(scene: AbstractScene) {
     buttonStop = new ButtonRedWithText(scene.generalLayer, 'Stop');
     buttonPlay = new ButtonBlueWithText(scene.generalLayer, 'Play');
     buttonPause = new ButtonYellowWithText(scene.generalLayer, 'Pause');
-
     buttonInvisible = new ButtonGrayWithText(scene.generalLayer, 'Invert');
+    buttonToggleSpeed = new ButtonGrayWithText(scene.generalLayer, 'Speed');
+
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     buttonPause.xPos = buttonPause.width;
     buttonPlay.xPos = 0;
     buttonMove.xPos = buttonMove.width * 2;
     buttonStop.xPos = buttonStop.width * 3;
     buttonInvisible.xPos = buttonInvisible.width * 5;
+    buttonToggleSpeed.xPos = buttonToggleSpeed.width * 6;
 
     scene.setActors(
         buttonExit,
@@ -54,7 +58,8 @@ function initActors(scene: AbstractScene) {
         buttonStop,
         buttonPlay,
         buttonPause,
-        buttonInvisible
+        buttonInvisible,
+        buttonToggleSpeed
     );
 }
 
@@ -81,6 +86,14 @@ function initActions(scene: AbstractScene) {
         }),
         buttonInvisible.isMouseClick$.subscribe(() => {
             toggleReverse();
+        }),
+        buttonToggleSpeed.isMouseClick$.subscribe(() => {
+            isHalfSpeed = !isHalfSpeed;
+            if (isHalfSpeed) {
+                scene.setHalfSpeed();
+            } else {
+                scene.setFullSpeed();
+            }
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
