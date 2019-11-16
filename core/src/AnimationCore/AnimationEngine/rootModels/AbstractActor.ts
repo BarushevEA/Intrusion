@@ -7,8 +7,8 @@ import {
     mouseRightDown$,
     mouseRightUp$
 } from "../../Store/EventStore";
-import {IMousePosition} from "../../CustomeDomComponent/AppAnimation";
-import {ISubscriber, ISubscriptionLike, Observable} from "../../CustomeLibraries/Observable";
+import {IMousePosition} from "../../DomComponent/AppAnimation";
+import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ITextHandler} from "../LayerHandler/TextHandler";
 import {IShapeHandler} from "../LayerHandler/ShapeHandler";
 

@@ -1,5 +1,5 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
-import {IController} from "../CustomeLibraries/initOuterVariables";
+import {IController} from "../Libraries/initOuterVariables";
 import {
     mouseClickPosition$,
     mouseLeftDown$,

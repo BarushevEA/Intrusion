@@ -1,2 +1,2 @@
-import "./AnimationCore/CustomeLibraries/initOuterVariables"
-import "./AnimationCore/CustomeDomComponent/AppAnimation"
+import "./AnimationCore/Libraries/initOuterVariables"
+import "./AnimationCore/DomComponent/AppAnimation"

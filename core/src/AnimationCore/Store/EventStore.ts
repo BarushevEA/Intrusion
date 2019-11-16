@@ -1,5 +1,5 @@
-import {Observable} from "../CustomeLibraries/Observable";
-import {IMousePosition} from "../CustomeDomComponent/AppAnimation";
+import {Observable} from "../Libraries/Observable";
+import {IMousePosition} from "../DomComponent/AppAnimation";
 
 export const mouseMovePosition$ = new Observable(<IMousePosition>{x: 0, y: 0});
 export const mouseClickPosition$ = new Observable(<IMousePosition>{x: 0, y: 0});

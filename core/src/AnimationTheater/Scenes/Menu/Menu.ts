@@ -2,6 +2,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScen
 import {handleBackgrounds} from "./modules/menuBackground";
 import {handleMiddle} from "./modules/menuMiddle";
 import {handleButtons} from "./modules/menuButtons";
+import {handleCursor} from "./modules/cursor";
 
 export class Menu extends AbstractScene {
 
@@ -13,5 +14,6 @@ export class Menu extends AbstractScene {
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);
+        handleCursor(this);
     }
 }

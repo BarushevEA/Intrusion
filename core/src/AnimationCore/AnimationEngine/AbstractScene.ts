@@ -1,6 +1,7 @@
 import {IRenderController, RenderController} from "./RenderController";
 import {AbstractActor, IActor} from "./rootModels/AbstractActor";
-import {Observable, ISubscriptionLike, ISubscriber} from "../CustomeLibraries/Observable";
+import {ISubscriber, ISubscriptionLike, Observable} from "../Libraries/Observable";
+import {Cursor} from "../../AnimationTheater/AnimationModels/Cursor/Cursor";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -38,6 +39,7 @@ export type IDragActor = {
 };
 
 export abstract class AbstractScene implements IScene {
+    public cursor: Cursor;
     public renderController: IRenderController;
     public generalLayer: HTMLCanvasElement;
     public actors: AbstractActor[] = [];
@@ -58,6 +60,7 @@ export abstract class AbstractScene implements IScene {
         this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
+        this.cursor = new Cursor(canvas);
         this.run();
     }
 
