@@ -1,4 +1,4 @@
-import {IAppAnimation} from "../CustomeDomComponent/AppAnimation";
+import {IAppAnimation} from "../DomComponent/AppAnimation";
 
 export type IController = {
     add(element: IAppAnimation): void;
