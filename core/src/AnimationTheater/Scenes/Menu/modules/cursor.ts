@@ -1,5 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
+import {mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
+import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 
 export function handleCursor(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.CURSOR);
@@ -20,5 +22,9 @@ function initActions(scene: AbstractScene) {
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
+        mouseMovePosition$.subscribe((position: IMousePosition) => {
+            scene.cursor.xPos = position.x;
+            scene.cursor.yPos = position.y;
+        })
     );
 }
