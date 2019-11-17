@@ -35,6 +35,7 @@ export type IActor = {
     isMouseRightClick$: ISubscriber<boolean>;
     isMouseLeftClick$: ISubscriber<boolean>;
     isMouseOver$: ISubscriber<boolean>;
+    isMouseOver: boolean;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
     setAnimationOriginal(): void;
@@ -78,7 +79,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private leftMouseCatchTime = 200;
     private subscribers: ISubscriptionLike[] = [];
     private readonly mouseEvents: ISubscriptionLike[] = [];
-    private isMouseOver = false;
+    public isMouseOver = false;
     private _isMouseOver$ = new Observable(<boolean>false);
     private _isMouseClick$ = new Observable(<boolean>false);
     private _isMouseLeftClick$ = new Observable(<boolean>false);

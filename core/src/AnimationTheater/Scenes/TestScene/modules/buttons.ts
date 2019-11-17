@@ -9,7 +9,7 @@ import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWit
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {E_Scene} from "../../../Scenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {cursorPointerDefaultChange} from "./cursor";
 
 let buttonExit: AbstractActor;
 let buttonMove: AbstractActor;
@@ -65,53 +65,46 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    function cursorTypePointerToggle(isOver: boolean) {
-        if (isOver) {
-            scene.cursor.setType(ECursor.POINTER);
-        } else {
-            scene.cursor.setType(ECursor.DEFAULT);
-        }
-    }
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.MENU;
             scene.destroy();
         }),
-        buttonExit.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonExit.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonExit);
         }),
         buttonMove.isMouseClick$.subscribe(() => {
             isStopMove.value = false;
             recMoveStart(scene);
         }),
-        buttonMove.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonMove.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonMove);
         }),
         buttonStop.isMouseClick$.subscribe(() => {
             scene.unsubscribe(move.value);
             move.value = <any>0;
             isStopMove.value = true;
         }),
-        buttonStop.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonStop.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonStop);
         }),
         buttonPlay.isMouseClick$.subscribe(() => {
             scene.start(true);
         }),
-        buttonPlay.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonPlay.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonPlay);
         }),
         buttonPause.isMouseClick$.subscribe(() => {
             scene.stop();
         }),
-        buttonPause.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonPause.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonPause);
         }),
         buttonInvisible.isMouseClick$.subscribe(() => {
             toggleReverse();
         }),
-        buttonInvisible.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonInvisible.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonInvisible);
         }),
         buttonToggleSpeed.isMouseClick$.subscribe(() => {
             isHalfSpeed = !isHalfSpeed;
@@ -121,8 +114,8 @@ function initActions(scene: AbstractScene) {
                 scene.setFullSpeed();
             }
         }),
-        buttonToggleSpeed.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonToggleSpeed.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonToggleSpeed);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();

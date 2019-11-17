@@ -4,6 +4,9 @@ import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Stor
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+
+let mouseOverQueue: IActor[];
 
 export function initCursor(scene: AbstractScene) {
     scene.cursor = new Cursor(scene.generalLayer);
@@ -20,10 +23,12 @@ export function handleCursor(scene: AbstractScene): void {
 }
 
 function clearVariables() {
+    mouseOverQueue = <any>0;
     defaultCursor$.next(true);
 }
 
 function initActors(scene: AbstractScene) {
+    mouseOverQueue = [];
     scene.setActors(scene.cursor);
 }
 
@@ -44,4 +49,37 @@ function initActions(scene: AbstractScene) {
             scene.cursor.yPos = position.y;
         })
     );
+}
+
+export function cursorPointerDefaultChange(scene: AbstractScene, actor: IActor) {
+    if (!scene.cursor) {
+        return;
+    }
+    if ((scene.cursor.type !== ECursor.POINTER) &&
+        (scene.cursor.type !== ECursor.DEFAULT)) {
+        return;
+    }
+    if (getIsMouseOver(actor)) {
+        scene.cursor.setType(ECursor.POINTER);
+    } else {
+        scene.cursor.setType(ECursor.DEFAULT);
+    }
+}
+
+function getIsMouseOver(actor: IActor): boolean {
+    let isOver = false;
+    mouseOverQueue.push(actor);
+    if (mouseOverQueue.length > 4) {
+        for (let i = 1; i < mouseOverQueue.length; i++) {
+            mouseOverQueue[i - 1] = mouseOverQueue[i];
+        }
+        mouseOverQueue.length = 4;
+    }
+    for (let i = 0; i < mouseOverQueue.length; i++) {
+        if (mouseOverQueue[i].isMouseOver) {
+            isOver = true;
+            break;
+        }
+    }
+    return isOver;
 }

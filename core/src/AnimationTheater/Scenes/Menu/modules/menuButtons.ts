@@ -5,7 +5,7 @@ import {E_Scene} from "../../../Scenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ELayers} from "../../scenesEnvironment";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {cursorPointerDefaultChange} from "./cursor";
 
 let buttonExit: AbstractActor,
     buttonTest: AbstractActor,
@@ -56,47 +56,40 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    function cursorTypePointerToggle(isOver: boolean) {
-        if (isOver) {
-            scene.cursor.setType(ECursor.POINTER);
-        } else {
-            scene.cursor.setType(ECursor.DEFAULT);
-        }
-    }
 
     scene.collect(
         buttonTest.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.TEST;
             scene.exit();
         }),
-        buttonTest.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonTest.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonTest);
         }),
         buttonSerge.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.SERGE;
             scene.exit();
         }),
-        buttonSerge.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonSerge.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonSerge);
         }),
         buttonBackground.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.BACKGROUND;
             scene.exit();
         }),
-        buttonBackground.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonBackground.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonBackground);
         }),
         buttonExit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
-        buttonExit.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonExit.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonExit);
         }),
         buttonQuit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
-        buttonQuit.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(isOver);
+        buttonQuit.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonQuit);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();

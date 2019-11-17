@@ -13,6 +13,7 @@ import {AnimatedWaveDark} from "../../../AnimationModels/waves/AnimatedWaveDark"
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {cursorPointerDefaultChange} from "./cursor";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -121,23 +122,6 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-let isMouseOver = false;
-
-function cursorTypePointerToggle(scene: AbstractScene, isOver: boolean) {
-    if (isOver === isMouseOver) {
-        return;
-    }
-    isMouseOver = isOver;
-    if (scene.cursor.type === ECursor.CATCH) {
-        return;
-    }
-    if (isOver) {
-        scene.cursor.setType(ECursor.POINTER);
-    } else {
-        scene.cursor.setType(ECursor.DEFAULT);
-    }
-}
-
 function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
     const movedOptions: IDragDropOptions = {};
@@ -148,7 +132,7 @@ function initActions(scene: AbstractScene) {
         scene.moveOnMouseDrag(el, movedOptions);
         scene.collect(
             el.isMouseOver$.subscribe(isOver => {
-                cursorTypePointerToggle(scene, isOver);
+                cursorPointerDefaultChange(scene, el);
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
@@ -168,8 +152,8 @@ function initActions(scene: AbstractScene) {
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
-        heart.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypePointerToggle(scene, isOver);
+        heart.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, heart);
         }),
         heart.isMouseLeftDrag$.subscribe(() => {
             scene.cursor.setType(ECursor.CATCH);
@@ -187,8 +171,8 @@ function initActions(scene: AbstractScene) {
                 setTimeout(() => {
                     scene.moveOnMouseDrag(newHeart);
                     scene.collect(
-                        newHeart.isMouseOver$.subscribe((isOver: boolean) => {
-                            cursorTypePointerToggle(scene, isOver);
+                        newHeart.isMouseOver$.subscribe(() => {
+                            cursorPointerDefaultChange(scene, newHeart);
                         }),
                         newHeart.isMouseLeftDrag$.subscribe(() => {
                             scene.cursor.setType(ECursor.CATCH);
