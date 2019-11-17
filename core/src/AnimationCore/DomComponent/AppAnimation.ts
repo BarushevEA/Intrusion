@@ -40,6 +40,23 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.addListeners();
     }
 
+    private customInit(): void {
+        const shadow = this.attachShadow({mode: 'open'});
+        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
+
+        this.customWrapper = document.createElement('div');
+        this.customCanvas = document.createElement('canvas');
+        this.customStyle = document.createElement('style');
+
+        AppAnimation.fillCssPool(this.cssPool);
+        cssConverter.addClassPool(this.cssPool);
+        this.customStyle.textContent = cssConverter.getRules();
+        shadow.appendChild(this.customStyle);
+        this.customWrapper.setAttribute('class', 'wrapper wrapper__green');
+        shadow.appendChild(this.customWrapper);
+        this.customWrapper.appendChild(this.customCanvas);
+    }
+
     private addListeners() {
         this.customCanvas.addEventListener('mousemove', this.setMouseMoveLocation.bind(this));
         this.customCanvas.addEventListener('mousedown', this.setMouseDown.bind(this));
@@ -88,24 +105,6 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         coordinates.x = (event.clientX - this.customCanvas.offsetLeft);
         coordinates.y = (event.clientY - this.customCanvas.offsetTop);
     }
-
-    private customInit(): void {
-        const shadow = this.attachShadow({mode: 'open'});
-        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
-
-        this.customWrapper = document.createElement('div');
-        this.customCanvas = document.createElement('canvas');
-        this.customStyle = document.createElement('style');
-
-        AppAnimation.fillCssPool(this.cssPool);
-        cssConverter.addClassPool(this.cssPool);
-        this.customStyle.textContent = cssConverter.getRules();
-        shadow.appendChild(this.customStyle);
-        this.customWrapper.setAttribute('class', 'wrapper wrapper__green');
-        shadow.appendChild(this.customWrapper);
-        this.customWrapper.appendChild(this.customCanvas);
-    }
-
 
     addCustomEventResizeCustomWrapperListener(callback: () => void) {
         let wrapperWidth = 0;
