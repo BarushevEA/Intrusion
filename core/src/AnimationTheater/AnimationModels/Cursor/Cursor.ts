@@ -1,5 +1,6 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {ECursor, ICursor} from "../../../AnimationCore/AnimationEngine/rootModels/Types";
+
 const bdColor = 'rgb(0,195,15)';
 const bgColor = 'rgb(0,114,9)';
 
@@ -64,13 +65,13 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     };
 
     protected createCatch(): void {
-        // cross
+        // aim
         this.shape
             .colors(bgColor, bdColor)
             .lineWidth(2)
             .customStroke(true)
-            .line(4, 0, 4, 8)
-            .line(8, 4, 0, 4)
+            .line(0, 0, 8, 0)
+            .line(0, 0, 0, 8)
             .customStroke(false);
         // hand
         this.shape
@@ -82,8 +83,8 @@ export class Cursor extends AbstractFramedShape implements ICursor {
             .quadraticCurveTo(21, 16, 24, 20)
             .quadraticCurveTo(27, 16, 30, 20)
             .quadraticCurveTo(33, 16, 36, 20)
-            .lineTo(36, 32)
-            .quadraticCurveTo(36, 36, 32, 36)
+            .lineTo(36, 26)
+            .quadraticCurveTo(36, 36, 26, 36)
             .lineTo(16, 36)
             .quadraticCurveTo(12, 36, 12, 32)
             .stopExecution();
@@ -93,9 +94,9 @@ export class Cursor extends AbstractFramedShape implements ICursor {
             .lineWidth(2)
             .advancedPolygon()
             .startPoint(8, 26)
-            .quadraticCurveTo(8, 22, 12, 24)
+            .quadraticCurveTo(8, 20, 12, 24)
             .lineTo(12, 32)
-            .quadraticCurveTo(8, 32, 8, 28)
+            .quadraticCurveTo(8, 30, 8, 28)
             .stopExecution();
     };
 
