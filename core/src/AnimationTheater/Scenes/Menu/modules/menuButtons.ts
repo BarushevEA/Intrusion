@@ -5,6 +5,7 @@ import {E_Scene} from "../../../Scenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ELayers} from "../../scenesEnvironment";
+import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 let buttonExit: AbstractActor,
     buttonTest: AbstractActor,
@@ -55,24 +56,47 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    function cursorTypeChange(isOver: boolean) {
+        if (isOver) {
+            scene.cursor.setType(ECursor.POINTER);
+        } else {
+            scene.cursor.setType(ECursor.DEFAULT);
+        }
+    }
+
     scene.collect(
         buttonTest.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.TEST;
             scene.exit();
         }),
+        buttonTest.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypeChange(isOver);
+        }),
         buttonSerge.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.SERGE;
             scene.exit();
+        }),
+        buttonSerge.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypeChange(isOver);
         }),
         buttonBackground.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.BACKGROUND;
             scene.exit();
         }),
+        buttonBackground.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypeChange(isOver);
+        }),
         buttonExit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
+        buttonExit.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypeChange(isOver);
+        }),
         buttonQuit.isMouseClick$.subscribe(() => {
             scene.destroy();
+        }),
+        buttonQuit.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypeChange(isOver);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();

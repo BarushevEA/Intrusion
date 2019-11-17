@@ -38,6 +38,21 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     };
 
     protected createPointer(): void {
+        this.shape
+            .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
+            .lineWidth(4)
+            .advancedPolygon()
+            .startPoint(4, 6)
+            .quadraticCurveTo(7,4,10,6)
+            .lineTo(10,18)
+            .quadraticCurveTo(13,16,16,18)
+            .quadraticCurveTo(19,16,22,18)
+            .quadraticCurveTo(25,16,28,20)
+            .lineTo(28,32)
+            .quadraticCurveTo(28,36,24,36)
+            .lineTo(8,36)
+            .quadraticCurveTo(4,36,4,32)
+            .stopExecution();
     };
 
     protected createCatch(): void {
@@ -66,12 +81,12 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     }
 
     private setCatchFrame() {
-        this.setShowedFrame(1);
-        this.setStopFrame(1);
+        this.setShowedFrame(2);
+        this.setStopFrame(2);
     }
 
     private setPointerFrame() {
-        this.setShowedFrame(2);
-        this.setStopFrame(2);
+        this.setShowedFrame(1);
+        this.setStopFrame(1);
     }
 }
