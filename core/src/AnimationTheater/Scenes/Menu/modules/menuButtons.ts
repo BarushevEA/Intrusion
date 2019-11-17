@@ -56,7 +56,7 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    function cursorTypeChange(isOver: boolean) {
+    function cursorTypePointerToggle(isOver: boolean) {
         if (isOver) {
             scene.cursor.setType(ECursor.POINTER);
         } else {
@@ -70,33 +70,33 @@ function initActions(scene: AbstractScene) {
             scene.exit();
         }),
         buttonTest.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypeChange(isOver);
+            cursorTypePointerToggle(isOver);
         }),
         buttonSerge.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.SERGE;
             scene.exit();
         }),
         buttonSerge.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypeChange(isOver);
+            cursorTypePointerToggle(isOver);
         }),
         buttonBackground.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.BACKGROUND;
             scene.exit();
         }),
         buttonBackground.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypeChange(isOver);
+            cursorTypePointerToggle(isOver);
         }),
         buttonExit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
         buttonExit.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypeChange(isOver);
+            cursorTypePointerToggle(isOver);
         }),
         buttonQuit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
         buttonQuit.isMouseOver$.subscribe((isOver: boolean) => {
-            cursorTypeChange(isOver);
+            cursorTypePointerToggle(isOver);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();

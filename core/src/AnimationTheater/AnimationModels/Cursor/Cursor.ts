@@ -25,7 +25,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     protected createDefault(): void {
         this.shape
             .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
-            .lineWidth(4)
+            .lineWidth(2)
             .advancedPolygon()
             .startPoint(4, 4)
             .lineTo(36, 16)
@@ -39,14 +39,14 @@ export class Cursor extends AbstractFramedShape implements ICursor {
 
     protected createPointer(): void {
         this.shape
-            .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
-            .lineWidth(4)
+            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .lineWidth(2)
             .advancedPolygon()
             .startPoint(4, 6)
             .quadraticCurveTo(7,4,10,6)
-            .lineTo(10,18)
-            .quadraticCurveTo(13,16,16,18)
-            .quadraticCurveTo(19,16,22,18)
+            .lineTo(10,20)
+            .quadraticCurveTo(13,16,16,20)
+            .quadraticCurveTo(19,16,22,20)
             .quadraticCurveTo(25,16,28,20)
             .lineTo(28,32)
             .quadraticCurveTo(28,36,24,36)
@@ -56,6 +56,39 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     };
 
     protected createCatch(): void {
+        // cross
+        this.shape
+            .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
+            .lineWidth(2)
+            .customStroke(true)
+            .line(4,0,4,8)
+            .line(8,4,0,4)
+            .customStroke(false);
+        // hand
+        this.shape
+            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .lineWidth(2)
+            .advancedPolygon()
+            .startPoint(12,20)
+            .quadraticCurveTo(15,16,18,20)
+            .quadraticCurveTo(21,16,24,20)
+            .quadraticCurveTo(27,16,30,20)
+            .quadraticCurveTo(33,16,36,20)
+            .lineTo(36,32)
+            .quadraticCurveTo(36,36,32,36)
+            .lineTo(16,36)
+            .quadraticCurveTo(12,36,12,32)
+            .stopExecution();
+        // finger
+        this.shape
+            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .lineWidth(2)
+            .advancedPolygon()
+            .startPoint(8,26)
+            .quadraticCurveTo(8,22,12,24)
+            .lineTo(12,32)
+            .quadraticCurveTo(8,32,8,28)
+            .stopExecution();
     };
 
     setType(type: ECursor): void {
