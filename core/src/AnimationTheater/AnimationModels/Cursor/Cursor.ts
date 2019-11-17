@@ -1,5 +1,7 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {ECursor, ICursor} from "../../../AnimationCore/AnimationEngine/rootModels/Types";
+const bdColor = 'rgb(0,195,15)';
+const bgColor = 'rgb(0,114,9)';
 
 export class Cursor extends AbstractFramedShape implements ICursor {
     private _type: ECursor = ECursor.DEFAULT;
@@ -30,7 +32,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
 
     protected createDefault(): void {
         this.shape
-            .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
+            .colors(bgColor, bdColor)
             .lineWidth(2)
             .advancedPolygon()
             .startPoint(4, 4)
@@ -45,7 +47,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
 
     protected createPointer(): void {
         this.shape
-            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .colors(bgColor, bdColor)
             .lineWidth(2)
             .advancedPolygon()
             .startPoint(4, 6)
@@ -64,7 +66,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     protected createCatch(): void {
         // cross
         this.shape
-            .colors('rgba(0,114,9,0.3)', 'rgb(0,114,9)')
+            .colors(bgColor, bdColor)
             .lineWidth(2)
             .customStroke(true)
             .line(4, 0, 4, 8)
@@ -72,7 +74,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
             .customStroke(false);
         // hand
         this.shape
-            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .colors(bgColor, bdColor)
             .lineWidth(2)
             .advancedPolygon()
             .startPoint(12, 20)
@@ -87,7 +89,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
             .stopExecution();
         // finger
         this.shape
-            .colors('rgba(0,114,9,0.5)', 'rgb(0,114,9)')
+            .colors(bgColor, bdColor)
             .lineWidth(2)
             .advancedPolygon()
             .startPoint(8, 26)

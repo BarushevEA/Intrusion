@@ -12,6 +12,7 @@ import {AnimatedWave} from "../../../AnimationModels/waves/AnimatedWave";
 import {AnimatedWaveDark} from "../../../AnimationModels/waves/AnimatedWaveDark";
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
+import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -120,6 +121,23 @@ function initActors(scene: AbstractScene) {
     );
 }
 
+let isMouseOver = false;
+
+function cursorTypePointerToggle(scene: AbstractScene, isOver: boolean) {
+    if (isOver === isMouseOver) {
+        return;
+    }
+    isMouseOver = isOver;
+    if (scene.cursor.type === ECursor.CATCH) {
+        return;
+    }
+    if (isOver) {
+        scene.cursor.setType(ECursor.POINTER);
+    } else {
+        scene.cursor.setType(ECursor.DEFAULT);
+    }
+}
+
 function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
     const movedOptions: IDragDropOptions = {};
@@ -130,17 +148,34 @@ function initActions(scene: AbstractScene) {
         scene.moveOnMouseDrag(el, movedOptions);
         scene.collect(
             el.isMouseOver$.subscribe(isOver => {
+                cursorTypePointerToggle(scene, isOver);
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
                     el.setAnimationOriginal();
                 }
-            }));
+            }),
+            el.isMouseLeftDrag$.subscribe(() => {
+                scene.cursor.setType(ECursor.CATCH);
+            }),
+            el.isMouseLeftDrop$.subscribe(() => {
+                scene.cursor.setType(ECursor.POINTER);
+            }),
+        );
     });
 
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
+        }),
+        heart.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypePointerToggle(scene, isOver);
+        }),
+        heart.isMouseLeftDrag$.subscribe(() => {
+            scene.cursor.setType(ECursor.CATCH);
+        }),
+        heart.isMouseLeftDrop$.subscribe(() => {
+            scene.cursor.setType(ECursor.POINTER);
         }),
         heart.isMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
@@ -151,6 +186,17 @@ function initActions(scene: AbstractScene) {
                 newHeart.enableEvents();
                 setTimeout(() => {
                     scene.moveOnMouseDrag(newHeart);
+                    scene.collect(
+                        newHeart.isMouseOver$.subscribe((isOver: boolean) => {
+                            cursorTypePointerToggle(scene, isOver);
+                        }),
+                        newHeart.isMouseLeftDrag$.subscribe(() => {
+                            scene.cursor.setType(ECursor.CATCH);
+                        }),
+                        newHeart.isMouseLeftDrop$.subscribe(() => {
+                            scene.cursor.setType(ECursor.POINTER);
+                        }),
+                    );
                 }, 300);
             }
         })

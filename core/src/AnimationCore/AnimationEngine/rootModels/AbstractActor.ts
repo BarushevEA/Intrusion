@@ -122,11 +122,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private mouseOver(position: IMousePosition): void {
         let isOver = this.checkOverPosition(position);
 
-        if (isOver != this.isMouseOver) {
-            AbstractActor._mousePosition = position;
-            this.isMouseOver = isOver;
-            this._isMouseOver$.next(isOver);
+        if (isOver === this.isMouseOver) {
+            return;
         }
+
+        AbstractActor._mousePosition = position;
+        this.isMouseOver = isOver;
+        this._isMouseOver$.next(this.isMouseOver);
     }
 
     private checkMouseOver(): void {

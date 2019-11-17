@@ -2,6 +2,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScen
 import {handleBackgrounds} from "./modules/background";
 import {handleMiddle, move, recMoveStart} from "./modules/middle";
 import {handleButtons} from "./modules/buttons";
+import {handleCursor, initCursor} from "./modules/cursor";
 
 export const userData = {
     test: 123,
@@ -15,9 +16,11 @@ export class TestScene extends AbstractScene {
     }
 
     protected createScene(): void {
+        initCursor(this);
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);
+        handleCursor(this);
         sceneEvents(this);
     }
 }
