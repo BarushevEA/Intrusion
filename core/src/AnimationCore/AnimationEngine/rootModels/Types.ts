@@ -3,7 +3,8 @@ import {AbstractActor} from "./AbstractActor";
 export enum ECursor {
     DEFAULT = 'DEFAULT',
     POINTER = 'POINTER',
-    CATCH = 'CATCH'
+    CATCH = 'CATCH',
+    NONE = 'NONE'
 }
 
 export type ICursorType = ECursor | string;
