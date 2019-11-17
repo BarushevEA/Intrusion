@@ -2,8 +2,16 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractS
 import {ELayers} from "../../scenesEnvironment";
 import {mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
+import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
+
+export function initCursor(scene: AbstractScene) {
+    scene.cursor = new Cursor(scene.generalLayer);
+}
 
 export function handleCursor(scene: AbstractScene): void {
+    if (!scene.cursor) {
+        return;
+    }
     scene.setActiveLayer(ELayers.CURSOR);
     clearVariables();
     initActors(scene);

@@ -2,7 +2,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScen
 import {handleBackgrounds} from "./modules/background";
 import {handleMiddle} from "./modules/middle";
 import {handleButtons} from "./modules/buttons";
-import {handleCursor} from "./modules/cursor";
+import {handleCursor, initCursor} from "./modules/cursor";
 
 export class Empty extends AbstractScene {
 
@@ -11,6 +11,7 @@ export class Empty extends AbstractScene {
     }
 
     protected createScene(): void {
+        initCursor(this);
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);

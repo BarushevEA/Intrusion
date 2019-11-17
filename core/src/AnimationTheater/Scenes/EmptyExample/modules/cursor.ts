@@ -1,7 +1,15 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 
+export function initCursor(scene: AbstractScene) {
+    // If need to create cursor delete next line
+    scene = scene;
+}
+
 export function handleCursor(scene: AbstractScene): void {
+    if (!scene.cursor) {
+        return;
+    }
     scene.setActiveLayer(ELayers.CURSOR);
     clearVariables();
     initActors(scene);

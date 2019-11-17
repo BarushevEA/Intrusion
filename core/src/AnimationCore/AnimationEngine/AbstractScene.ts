@@ -1,7 +1,7 @@
 import {IRenderController, RenderController} from "./RenderController";
 import {AbstractActor, IActor} from "./rootModels/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../Libraries/Observable";
-import {Cursor} from "../../AnimationTheater/AnimationModels/Cursor/Cursor";
+import {ICursor, ICursorType} from "./rootModels/Types";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -39,10 +39,10 @@ export type IDragActor = {
 };
 
 export abstract class AbstractScene implements IScene {
-    public cursor: Cursor;
     public renderController: IRenderController;
     public generalLayer: HTMLCanvasElement;
     public actors: AbstractActor[] = [];
+    private _cursor: ICursor = <any>0;
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
@@ -60,8 +60,15 @@ export abstract class AbstractScene implements IScene {
         this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
-        this.cursor = new Cursor(canvas);
         this.run();
+    }
+
+    get cursor(): AbstractActor & { setType(type: ICursorType): void } {
+        return this._cursor;
+    }
+
+    set cursor(value: AbstractActor & { setType(type: ICursorType): void }) {
+        this._cursor = value;
     }
 
     get tickCount$(): ISubscriber<boolean> {
@@ -344,6 +351,7 @@ export abstract class AbstractScene implements IScene {
         this._onStartOnce$.destroy();
         this._onSetUserData$.destroy();
         this._onDestroy$.destroy();
+        this._cursor = <any>0;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

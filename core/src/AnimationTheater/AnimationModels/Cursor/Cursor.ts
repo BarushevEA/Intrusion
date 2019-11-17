@@ -1,5 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {ECursor, ICursor} from "./Types";
+import {ECursor, ICursor} from "../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 export class Cursor extends AbstractFramedShape implements ICursor {
     private type: ECursor = ECursor.DEFAULT;
