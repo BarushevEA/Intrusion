@@ -11,4 +11,5 @@
 // DONE TODO 7.1) Add to render controller move actor z-index
 // TODO 8) Simplify create, use and develop scenarios
 // DONE TODO 9) Upgrade destroy behavior (have to clean all)
-// TODO 10) Need to move tick counter from Abstract actor ro render controller
+// DONE TODO 10) Need to move tick counter from Abstract actor ro render controller
+// TODO 11) Need create a class to handle the cursor changes to "pointer" and "default"
