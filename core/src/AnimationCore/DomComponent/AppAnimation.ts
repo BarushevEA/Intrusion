@@ -1,6 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../Libraries/initOuterVariables";
 import {
+    defaultCursor$,
     mouseClickPosition$,
     mouseLeftDown$,
     mouseLeftUp$,
@@ -39,6 +40,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customWrapper = document.createElement('div');
         this.customCanvas = document.createElement('canvas');
         this.customStyle = document.createElement('style');
+        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
         this.customInit(shadow);
         this.addListeners();
     }
@@ -142,6 +144,22 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         }
     }
 
+    handleDefaultCursor(isDefault: boolean): void {
+        if (isDefault) {
+            this.defaultCursorShow();
+        } else {
+            this.defaultCursorHide();
+        }
+    }
+
+    defaultCursorHide(): void {
+        this.customWrapper.classList.add('wrapper__cursor-hide');
+    }
+
+    defaultCursorShow(): void {
+        this.customWrapper.classList.remove('wrapper__cursor-hide');
+    }
+
     private renderCanvas() {
         platform.setCanvas(this.customCanvas);
         platform.execute();
@@ -181,6 +199,12 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
                 position: 'fixed',
                 height: '100vh',
                 width: '100vw',
+            }
+        };
+        cssPool.wrapperCursorHide = {
+            name: 'wrapper__cursor-hide',
+            rule: {
+                cursor: 'none'
             }
         };
         cssPool.global = {

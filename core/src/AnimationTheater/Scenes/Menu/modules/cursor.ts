@@ -1,6 +1,6 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
-import {mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
+import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
 
@@ -19,6 +19,7 @@ export function handleCursor(scene: AbstractScene): void {
 }
 
 function clearVariables() {
+    defaultCursor$.next(true);
 }
 
 function initActors(scene: AbstractScene) {
@@ -27,6 +28,12 @@ function initActors(scene: AbstractScene) {
 
 function initActions(scene: AbstractScene) {
     scene.collect(
+        scene.onStart$.subscribe(() => {
+            defaultCursor$.next(false);
+        }),
+        scene.onStop$.subscribe(() => {
+            defaultCursor$.next(true);
+        }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
