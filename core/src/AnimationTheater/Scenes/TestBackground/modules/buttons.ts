@@ -1,6 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
+import {cursorPointerDefaultChange} from "./cursor";
 
 let buttonExit: ButtonExit;
 
@@ -26,6 +27,9 @@ function initActions(scene: AbstractScene) {
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.test++;
             scene.exit();
+        }),
+        buttonExit.isMouseOver$.subscribe(() => {
+            cursorPointerDefaultChange(scene, buttonExit);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
