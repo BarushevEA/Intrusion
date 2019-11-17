@@ -1,8 +1,8 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
+import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
 import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
-import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 export function initCursor(scene: AbstractScene) {

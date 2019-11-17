@@ -1,7 +1,7 @@
 import {IRenderController, RenderController} from "./RenderController";
 import {AbstractActor, IActor} from "./rootModels/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../Libraries/Observable";
-import {ICursor, ICursorType} from "./rootModels/Types";
+import {ICursor} from "./rootModels/Types";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -63,11 +63,11 @@ export abstract class AbstractScene implements IScene {
         this.run();
     }
 
-    get cursor(): AbstractActor & { setType(type: ICursorType): void } {
+    get cursor(): AbstractActor & ICursor {
         return this._cursor;
     }
 
-    set cursor(value: AbstractActor & { setType(type: ICursorType): void }) {
+    set cursor(value: AbstractActor & ICursor) {
         this._cursor = value;
     }
 

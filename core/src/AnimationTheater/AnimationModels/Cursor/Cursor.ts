@@ -2,7 +2,7 @@ import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootMo
 import {ECursor, ICursor} from "../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 export class Cursor extends AbstractFramedShape implements ICursor {
-    private type: ECursor = ECursor.DEFAULT;
+    private _type: ECursor = ECursor.DEFAULT;
 
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 40, 40);
@@ -10,6 +10,10 @@ export class Cursor extends AbstractFramedShape implements ICursor {
 
     protected setFramesName(): void {
         this.setFramePoolName('Cursor');
+    }
+
+    get type(): ECursor {
+        return this._type;
     }
 
     protected initShape(): void {
@@ -21,7 +25,7 @@ export class Cursor extends AbstractFramedShape implements ICursor {
         this.createCatch();
         this.createFrame(0);
         this.createNone();
-        this.setType(this.type);
+        this.setType(this._type);
     }
 
     protected createDefault(): void {
@@ -100,19 +104,19 @@ export class Cursor extends AbstractFramedShape implements ICursor {
     setType(type: ECursor): void {
         switch (type) {
             case ECursor.POINTER:
-                this.type = type;
+                this._type = type;
                 this.setPointerFrame();
                 break;
             case ECursor.CATCH:
-                this.type = type;
+                this._type = type;
                 this.setCatchFrame();
                 break;
             case ECursor.NONE:
-                this.type = type;
+                this._type = type;
                 this.setNoneFrame();
                 break;
             default:
-                this.type = ECursor.DEFAULT;
+                this._type = ECursor.DEFAULT;
                 this.setDefaultFrame();
                 break;
         }

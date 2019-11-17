@@ -3,6 +3,7 @@ import {ELayers} from "../../scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {E_Scene} from "../../../Scenario/types";
+import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 let buttonExit: AbstractActor;
 
@@ -24,10 +25,20 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    function cursorTypePointerToggle(isOver: boolean) {
+        if (isOver) {
+            scene.cursor.setType(ECursor.POINTER);
+        } else {
+            scene.cursor.setType(ECursor.DEFAULT);
+        }
+    }
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.MENU;
             scene.exit();
+        }),
+        buttonExit.isMouseOver$.subscribe((isOver: boolean) => {
+            cursorTypePointerToggle(isOver);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();

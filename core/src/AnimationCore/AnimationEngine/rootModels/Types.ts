@@ -12,5 +12,6 @@ export type ICursorType = ECursor | string;
 export type ICursor =
     AbstractActor &
     {
+        type: ICursorType;
         setType(type: ICursorType): void;
     };

@@ -2,6 +2,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScen
 import {handleButtons} from "./modules/segeButtons";
 import {handleMiddle} from "./modules/sergeMiddle";
 import {handleBackgrounds} from "./modules/sergeBackground";
+import {handleCursor, initCursor} from "./modules/cursor";
 
 export class SergeScene extends AbstractScene {
 
@@ -10,9 +11,11 @@ export class SergeScene extends AbstractScene {
     }
 
     protected createScene(): void {
+        initCursor(this);
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);
+        handleCursor(this);
         sceneEvents(this);
     }
 }
