@@ -24,7 +24,7 @@ export function handleCursor(scene: AbstractScene): void {
 
 function clearVariables() {
     mouseOverQueue = <any>0;
-    defaultCursor$.next(true);
+    defaultCursor$.next(false);
 }
 
 function initActors(scene: AbstractScene) {
@@ -39,7 +39,7 @@ function initActions(scene: AbstractScene) {
             scene.cursor.setType(ECursor.DEFAULT);
         }),
         scene.onStop$.subscribe(() => {
-            defaultCursor$.next(true);
+            defaultCursor$.next(false);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
