@@ -29,19 +29,14 @@ export const mouseDownPosition: IMousePosition = {x: 0, y: 0};
 export const mouseUpPosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
-    customCanvas: HTMLCanvasElement;
-    customWrapper: HTMLElement;
-    customStyle: HTMLStyleElement;
+    customCanvas: HTMLCanvasElement = <any>0;
+    customWrapper: HTMLElement = <any>0;
+    customStyle: HTMLStyleElement = <any>0;
     cssPool: ICssPool = {};
 
     constructor() {
         super();
-        const shadow = this.attachShadow({mode: 'open'});
-        this.customWrapper = document.createElement('div');
-        this.customCanvas = document.createElement('canvas');
-        this.customStyle = document.createElement('style');
-        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
-        this.customInit(shadow);
+        this.customInit();
         this.addListeners();
     }
 
@@ -94,7 +89,14 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         coordinates.y = (event.clientY - this.customCanvas.offsetTop);
     }
 
-    private customInit(shadow: ShadowRoot): void {
+    private customInit(): void {
+        const shadow = this.attachShadow({mode: 'open'});
+        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
+
+        this.customWrapper = document.createElement('div');
+        this.customCanvas = document.createElement('canvas');
+        this.customStyle = document.createElement('style');
+
         AppAnimation.fillCssPool(this.cssPool);
         cssConverter.addClassPool(this.cssPool);
         this.customStyle.textContent = cssConverter.getRules();
