@@ -187,9 +187,9 @@ export abstract class AbstractScene implements IScene {
 
     private onMovedActorDrop(drop: IDragActor): void {
         if (this.movedBehaviors.length) {
-            this.movedBehaviors.forEach(subscriber => {
-                this.unsubscribe(subscriber);
-            });
+            for (let i = 0; i < this.movedBehaviors.length; i++) {
+                this.unsubscribe(this.movedBehaviors[i]);
+            }
             this.movedBehaviors = [];
             if (drop.options) {
                 if (drop.options.callbackOnDrop) {
