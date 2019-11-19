@@ -13,7 +13,7 @@ import {AnimatedWaveDark} from "../../../AnimationModels/waves/AnimatedWaveDark"
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {cursorPointerDefaultChange} from "./cursor";
+import {cursorHandler} from "./cursor";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -132,7 +132,7 @@ function initActions(scene: AbstractScene) {
         scene.moveOnMouseDrag(el, movedOptions);
         scene.collect(
             el.isMouseOver$.subscribe(isOver => {
-                cursorPointerDefaultChange(scene, el);
+                cursorHandler.pointerOrDefaultChange(scene, el);
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
@@ -153,7 +153,7 @@ function initActions(scene: AbstractScene) {
             clearVariables();
         }),
         heart.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, heart);
+            cursorHandler.pointerOrDefaultChange(scene, heart);
         }),
         heart.isMouseLeftDrag$.subscribe(() => {
             scene.cursor.setType(ECursor.CATCH);
@@ -172,7 +172,7 @@ function initActions(scene: AbstractScene) {
                     scene.moveOnMouseDrag(newHeart);
                     scene.collect(
                         newHeart.isMouseOver$.subscribe(() => {
-                            cursorPointerDefaultChange(scene, newHeart);
+                            cursorHandler.pointerOrDefaultChange(scene, newHeart);
                         }),
                         newHeart.isMouseLeftDrag$.subscribe(() => {
                             scene.cursor.setType(ECursor.CATCH);

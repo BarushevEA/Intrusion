@@ -3,7 +3,7 @@ import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scen
 import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
 import {Heart} from "../../../AnimationModels/Heart";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {cursorPointerDefaultChange} from "./cursor";
+import {cursorHandler} from "./cursor";
 
 let combinedRectangle: CombinedRectangle,
     heart: Heart;
@@ -41,7 +41,7 @@ function initActions(scene: AbstractScene) {
             combinedRectangle.nextRectangle();
         }),
         heart.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, heart);
+            cursorHandler.pointerOrDefaultChange(scene, heart);
         }),
         heart.isMouseLeftDrag$.subscribe(() => {
             scene.cursor.setType(ECursor.CATCH);
@@ -50,7 +50,7 @@ function initActions(scene: AbstractScene) {
             scene.cursor.setType(ECursor.POINTER);
         }),
         combinedRectangle.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, combinedRectangle);
+            cursorHandler.pointerOrDefaultChange(scene, combinedRectangle);
         }),
         combinedRectangle.isMouseLeftDrag$.subscribe(() => {
             scene.cursor.setType(ECursor.CATCH);

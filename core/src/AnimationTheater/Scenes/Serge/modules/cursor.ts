@@ -4,9 +4,9 @@ import {Cursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Curso
 import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {CursorHandler} from "../../../../AnimationCore/Libraries/FunctionLibs";
 
-let mouseOverQueue: IActor[];
+export const cursorHandler = new CursorHandler();
 
 export function initCursor(scene: AbstractScene) {
     scene.cursor = new Cursor(scene.generalLayer);
@@ -23,12 +23,10 @@ export function handleCursor(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    mouseOverQueue = <any>0;
     defaultCursor$.next(false);
 }
 
 function initActors(scene: AbstractScene) {
-    mouseOverQueue = [];
     scene.setActors(scene.cursor);
 }
 
@@ -42,6 +40,7 @@ function initActions(scene: AbstractScene) {
             defaultCursor$.next(false);
         }),
         scene.onDestroy$.subscribe(() => {
+            cursorHandler.clear();
             clearVariables();
         }),
         mouseMovePosition$.subscribe((position: IMousePosition) => {
@@ -49,37 +48,4 @@ function initActions(scene: AbstractScene) {
             scene.cursor.yPos = position.y;
         })
     );
-}
-
-export function cursorPointerDefaultChange(scene: AbstractScene, actor: IActor) {
-    if (!scene.cursor) {
-        return;
-    }
-    if ((scene.cursor.type !== ECursor.POINTER) &&
-        (scene.cursor.type !== ECursor.DEFAULT)) {
-        return;
-    }
-    if (getIsMouseOver(actor)) {
-        scene.cursor.setType(ECursor.POINTER);
-    } else {
-        scene.cursor.setType(ECursor.DEFAULT);
-    }
-}
-
-function getIsMouseOver(actor: IActor): boolean {
-    let isOver = false;
-    mouseOverQueue.push(actor);
-    if (mouseOverQueue.length > 4) {
-        for (let i = 1; i < mouseOverQueue.length; i++) {
-            mouseOverQueue[i - 1] = mouseOverQueue[i];
-        }
-        mouseOverQueue.length = 4;
-    }
-    for (let i = 0; i < mouseOverQueue.length; i++) {
-        if (mouseOverQueue[i].isMouseOver) {
-            isOver = true;
-            break;
-        }
-    }
-    return isOver;
 }

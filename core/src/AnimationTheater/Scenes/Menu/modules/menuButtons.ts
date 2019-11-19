@@ -5,7 +5,7 @@ import {E_Scene} from "../../../AppScenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
-import {cursorPointerDefaultChange} from "./cursor";
+import {cursorHandler} from "./cursor";
 
 let buttonExit: AbstractActor,
     buttonTest: AbstractActor,
@@ -63,33 +63,33 @@ function initActions(scene: AbstractScene) {
             scene.exit();
         }),
         buttonTest.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, buttonTest);
+            cursorHandler.pointerOrDefaultChange(scene, buttonTest);
         }),
         buttonSerge.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.SERGE;
             scene.exit();
         }),
         buttonSerge.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, buttonSerge);
+            cursorHandler.pointerOrDefaultChange(scene, buttonSerge);
         }),
         buttonBackground.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = E_Scene.BACKGROUND;
             scene.exit();
         }),
         buttonBackground.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, buttonBackground);
+            cursorHandler.pointerOrDefaultChange(scene, buttonBackground);
         }),
         buttonExit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
         buttonExit.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, buttonExit);
+            cursorHandler.pointerOrDefaultChange(scene, buttonExit);
         }),
         buttonQuit.isMouseClick$.subscribe(() => {
             scene.destroy();
         }),
         buttonQuit.isMouseOver$.subscribe(() => {
-            cursorPointerDefaultChange(scene, buttonQuit);
+            cursorHandler.pointerOrDefaultChange(scene, buttonQuit);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
