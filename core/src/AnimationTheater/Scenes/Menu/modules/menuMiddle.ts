@@ -1,6 +1,6 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {MovedCircle} from "../../../AnimationModels/MovedCircle";
-import {ELayers} from "../../scenesEnvironment";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 let circles: MovedCircle[];
 

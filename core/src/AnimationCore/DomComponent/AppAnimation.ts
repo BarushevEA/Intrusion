@@ -8,7 +8,7 @@ import {
     mouseMovePosition$,
     mouseRightDown$, mouseRightUp$
 } from "../Store/EventStore";
-import {platform} from "../AnimationEngine/AnimationPlatform";
+import {platform} from "../AnimationEngine/rootScenes/AnimationPlatform";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;

@@ -1,8 +1,8 @@
-import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/AbstractPlatform";
+import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractPlatform";
 import {Menu} from "../Scenes/Menu/Menu";
 import {SergeScene} from "../Scenes/Serge/SergeScene";
 import {E_Scene} from "./types";
-import {AbstractScene, IUserData} from "../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene, IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
 

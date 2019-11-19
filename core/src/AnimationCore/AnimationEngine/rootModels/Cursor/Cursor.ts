@@ -1,5 +1,5 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {ECursor, ICursor} from "../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {AbstractFramedShape} from "../AbstractFramedShape";
+import {ECursor, ICursor} from "../Types";
 
 const bdColor = 'rgb(0,195,15)';
 const bgColor = 'rgb(0,114,9)';

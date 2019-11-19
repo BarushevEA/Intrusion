@@ -1,4 +1,4 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 
 export function handleBackgrounds(scene: AbstractScene): void {

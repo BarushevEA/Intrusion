@@ -1,5 +1,5 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonGreenWithText} from "../../../AnimationModels/Buttons/ButtonGreenWithText";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
@@ -7,7 +7,7 @@ import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWit
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
-import {E_Scene} from "../../../Scenario/types";
+import {E_Scene} from "../../../AppScenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
 import {cursorPointerDefaultChange} from "./cursor";
 

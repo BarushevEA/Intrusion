@@ -1,8 +1,8 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 
-export function handleMiddle(scene: AbstractScene): void {
-    scene.setActiveLayer(ELayers.MIDDLE);
+export function handleButtons(scene: AbstractScene): void {
+    scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
     initActions(scene);

@@ -1,5 +1,5 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
 import {Heart} from "../../../AnimationModels/Heart";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";

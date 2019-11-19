@@ -1,5 +1,5 @@
-import {AbstractScene, IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
+import {AbstractScene, IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {Heart} from "../../../AnimationModels/Heart";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";

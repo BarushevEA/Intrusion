@@ -1,8 +1,8 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
-import {E_Scene} from "../../../Scenario/types";
+import {E_Scene} from "../../../AppScenario/types";
 import {cursorPointerDefaultChange} from "./cursor";
 
 let buttonExit: AbstractActor;

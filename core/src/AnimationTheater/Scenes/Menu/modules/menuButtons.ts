@@ -1,10 +1,10 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
-import {E_Scene} from "../../../Scenario/types";
+import {E_Scene} from "../../../AppScenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
-import {ELayers} from "../../scenesEnvironment";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {cursorPointerDefaultChange} from "./cursor";
 
 let buttonExit: AbstractActor,

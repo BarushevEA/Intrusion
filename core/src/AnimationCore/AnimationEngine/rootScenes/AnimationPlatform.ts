@@ -1,5 +1,5 @@
 import {AbstractPlatform} from "./AbstractPlatform";
-import {runApplicationScenario} from "../../AnimationTheater/Scenario/ApplicationScenario";
+import {runApplicationScenario} from "../../../AnimationTheater/AppScenario/ApplicationScenario";
 
 class AnimationPlatform extends AbstractPlatform {
 

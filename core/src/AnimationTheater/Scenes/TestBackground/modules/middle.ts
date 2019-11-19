@@ -1,5 +1,5 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);

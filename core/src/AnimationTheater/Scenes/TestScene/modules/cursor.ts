@@ -1,6 +1,6 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
-import {ELayers} from "../../scenesEnvironment";
-import {Cursor} from "../../../AnimationModels/Cursor/Cursor";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {Cursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Cursor/Cursor";
 import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";

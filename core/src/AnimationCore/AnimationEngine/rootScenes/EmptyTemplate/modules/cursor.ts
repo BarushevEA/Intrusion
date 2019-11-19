@@ -1,9 +1,9 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
-import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
-import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {defaultCursor$, mouseMovePosition$} from "../../../../Store/EventStore";
+import {ECursor} from "../../../rootModels/Types";
+import {IMousePosition} from "../../../../DomComponent/AppAnimation";
+import {IActor} from "../../../rootModels/AbstractActor";
 
 let mouseOverQueue: IActor[];
 

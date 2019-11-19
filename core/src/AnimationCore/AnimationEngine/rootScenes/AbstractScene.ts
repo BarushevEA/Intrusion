@@ -1,7 +1,7 @@
-import {IRenderController, RenderController} from "./RenderController";
-import {AbstractActor, IActor} from "./rootModels/AbstractActor";
-import {ISubscriber, ISubscriptionLike, Observable} from "../Libraries/Observable";
-import {ICursor} from "./rootModels/Types";
+import {IRenderController, RenderController} from "../RenderController";
+import {AbstractActor, IActor} from "../rootModels/AbstractActor";
+import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
+import {ICursor} from "../rootModels/Types";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;

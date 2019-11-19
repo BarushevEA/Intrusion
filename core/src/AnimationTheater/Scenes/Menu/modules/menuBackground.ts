@@ -1,8 +1,8 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
-import {ELayers} from "../../scenesEnvironment";
+import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 let brickNumber: number,
     brickCounter: number,

@@ -1,4 +1,4 @@
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/AbstractScene";
+import {AbstractScene} from "../AbstractScene";
 import {handleBackgrounds} from "./modules/background";
 import {handleMiddle} from "./modules/middle";
 import {handleButtons} from "./modules/buttons";
