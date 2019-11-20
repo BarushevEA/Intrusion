@@ -189,6 +189,15 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         (<IController>(<any>window)['AppAnimationController']).add(this);
     }
 
+    disconnectedCallback() {
+        this.customCanvas.removeEventListener('mousemove', this.setMouseMoveLocation.bind(this));
+        this.customCanvas.removeEventListener('mousedown', this.setMouseDown.bind(this));
+        this.customCanvas.removeEventListener('mouseup', this.setMouseUp.bind(this));
+        this.customCanvas.removeEventListener('click', this.setMouseClickLocation.bind(this));
+        window.removeEventListener('keydown', this.setKeyDown.bind(this), true);
+        window.removeEventListener('keyup', this.setKeyUp.bind(this), true);
+    }
+
     setRedColor(): void {
         this.customWrapper.classList.replace('wrapper__green', 'wrapper__red');
     }
