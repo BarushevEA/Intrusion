@@ -6,7 +6,7 @@ import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Type
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 import {CursorHandler} from "../../../../AnimationCore/Libraries/FunctionLibs";
 
-export const cursorHandler = new CursorHandler();
+export let cursorHandler = <any>0;
 
 export function initCursor(scene: AbstractScene) {
     scene.cursor = new Cursor(scene.generalLayer);
@@ -23,10 +23,12 @@ export function handleCursor(scene: AbstractScene): void {
 }
 
 function clearVariables() {
+    cursorHandler = <any>0;
     defaultCursor$.next(false);
 }
 
 function initActors(scene: AbstractScene) {
+    cursorHandler = new CursorHandler();
     scene.setActors(scene.cursor);
 }
 
