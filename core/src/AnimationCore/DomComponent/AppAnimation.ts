@@ -2,13 +2,17 @@ import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../Libraries/initOuterVariables";
 import {
     defaultCursor$,
+    keyDownCode$,
+    keyUpCode$,
     mouseClickPosition$,
     mouseLeftDown$,
     mouseLeftUp$,
     mouseMovePosition$,
-    mouseRightDown$, mouseRightUp$
+    mouseRightDown$,
+    mouseRightUp$
 } from "../Store/EventStore";
 import {platform} from "../AnimationEngine/rootScenes/AnimationPlatform";
+import {IKeyCode} from "../Store/Types";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -29,6 +33,7 @@ export const mouseDownPosition: IMousePosition = {x: 0, y: 0};
 export const mouseUpPosition: IMousePosition = {x: 0, y: 0};
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
+    private keyPressedPool: IKeyCode[] = [];
     customCanvas: HTMLCanvasElement = <any>0;
     customWrapper: HTMLElement = <any>0;
     customStyle: HTMLStyleElement = <any>0;
@@ -62,6 +67,61 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         this.customCanvas.addEventListener('mousedown', this.setMouseDown.bind(this));
         this.customCanvas.addEventListener('mouseup', this.setMouseUp.bind(this));
         this.customCanvas.addEventListener('click', this.setMouseClickLocation.bind(this));
+        window.addEventListener('keydown', this.setKeyDown.bind(this), true);
+        window.addEventListener('keyup', this.setKeyUp.bind(this), true);
+    }
+
+    setKeyDown(event: IKeyCode) {
+        const keyCode: IKeyCode = <any>{};
+        keyCode.key = event.key;
+        keyCode.keyCode = event.keyCode;
+        for (let i = 0; i < this.keyPressedPool.length; i++) {
+            const key = this.keyPressedPool[i].key;
+            if (key === keyCode.key) {
+                return;
+            }
+        }
+        this.keyPressedPool.push(keyCode);
+
+        console.log(this.keyPressedPool.map(cd => cd.key));
+
+        keyDownCode$.next(keyCode);
+    }
+
+    setKeyUp(event: IKeyCode) {
+        const keyCode: IKeyCode = <any>{};
+        keyCode.key = event.key;
+        keyCode.keyCode = event.keyCode;
+
+        if (!this.deleteKey(keyCode)) {
+            return;
+        }
+
+        while (this.deleteKey(keyCode)) {
+        }
+
+        console.log(this.keyPressedPool.map(cd => cd.key));
+        keyUpCode$.next(keyCode);
+    }
+
+    deleteKey(keyCode: IKeyCode): boolean {
+        let i = 0;
+        let isFound = false;
+        for (; i < this.keyPressedPool.length; i++) {
+            const key = this.keyPressedPool[i].keyCode;
+            if (key === keyCode.keyCode) {
+                isFound = true;
+                break;
+            }
+        }
+        if (!isFound) {
+            return false;
+        }
+        for (; i < this.keyPressedPool.length - 1; i++) {
+            this.keyPressedPool[i] = this.keyPressedPool[i + 1];
+        }
+        this.keyPressedPool.length--;
+        return true;
     }
 
     setMouseDown(event: MouseEvent) {
