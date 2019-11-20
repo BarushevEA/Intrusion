@@ -1,7 +1,7 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../Libraries/initOuterVariables";
 import {
-    defaultCursor$,
+    defaultCursor$, globalSize$,
     keyDownCode$,
     keyUpCode$,
     mouseClickPosition$,
@@ -12,7 +12,7 @@ import {
     mouseRightUp$
 } from "../Store/EventStore";
 import {platform} from "../AnimationEngine/rootScenes/AnimationPlatform";
-import {IKeyCode} from "../Store/Types";
+import {IKeyCode, ISize} from "../Store/Types";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -166,7 +166,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         coordinates.y = (event.clientY - this.customCanvas.offsetTop);
     }
 
-    addCustomEventResizeCustomWrapperListener(callback: () => void) {
+    private addCustomEventResizeCustomWrapperListener() {
         let wrapperWidth = 0;
         let wrapperHeight = 0;
 
@@ -175,7 +175,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
             if (wrapperWidth != this.customWrapper.offsetWidth || wrapperHeight != this.customWrapper.offsetHeight) {
                 wrapperWidth = this.customWrapper.offsetWidth;
                 wrapperHeight = this.customWrapper.offsetHeight;
-                callback();
+                globalSize$.next({height: wrapperHeight, width: wrapperWidth});
             }
         };
 
@@ -183,8 +183,8 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     connectedCallback() {
-        this.setCanvasSize();
-        this.addCustomEventResizeCustomWrapperListener(this.setCanvasSize.bind(this));
+        globalSize$.subscribe(this.setCanvasSize.bind(this));
+        this.addCustomEventResizeCustomWrapperListener();
         this.renderCanvas();
         (<IController>(<any>window)['AppAnimationController']).add(this);
     }
@@ -235,9 +235,9 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         platform.execute();
     }
 
-    private setCanvasSize() {
-        this.customCanvas.setAttribute('height', '' + this.customWrapper.offsetHeight);
-        this.customCanvas.setAttribute('width', '' + this.customWrapper.offsetWidth);
+    private setCanvasSize(size: ISize) {
+        this.customCanvas.setAttribute('height', '' + size.height);
+        this.customCanvas.setAttribute('width', '' + size.width);
     }
 
     private static fillCssPool(cssPool: ICssPool) {

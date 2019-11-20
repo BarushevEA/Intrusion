@@ -4,3 +4,7 @@ export type  IKeyCode = {
     keyCode: IKeyNumber;
     key: IKey;
 };
+export type ISize = {
+    height: number;
+    width: number;
+};
