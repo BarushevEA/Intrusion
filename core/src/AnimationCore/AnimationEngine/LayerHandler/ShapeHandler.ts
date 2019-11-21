@@ -1,29 +1,31 @@
+import {x_pos, y_pos} from "../../Libraries/Types";
+
 export type IPoint = {
-    x: number;
-    y: number;
+    x: x_pos;
+    y: y_pos;
 };
 export type IPolygon = IPoint[];
 type IDrawStop = { stopExecution(isReverse?: boolean): IShapeHandler; };
 type IAdvanced = {
-    startPoint(x: number, y: number): IAdvancedPolygon;
-    lineTo(x: number, y: number): IAdvancedPolygon;
-    quadraticCurveTo(controlPointX: number,
-                     controlPointY: number,
-                     x: number,
-                     y: number): IAdvancedPolygon;
-    bezierCurveTo(controlPoint1X: number,
-                  controlPoint1Y: number,
-                  controlPoint2X: number,
-                  controlPoint2Y: number,
-                  x: number,
-                  y: number): IAdvancedPolygon;
+    startPoint(x: x_pos, y: y_pos): IAdvancedPolygon;
+    lineTo(x: x_pos, y: y_pos): IAdvancedPolygon;
+    quadraticCurveTo(controlX: x_pos,
+                     controlY: y_pos,
+                     x: x_pos,
+                     y: y_pos): IAdvancedPolygon;
+    bezierCurveTo(control1X: x_pos,
+                  control1Y: y_pos,
+                  control2X: x_pos,
+                  control2Y: y_pos,
+                  x: x_pos,
+                  y: y_pos): IAdvancedPolygon;
 };
 type ILinear = {
-    setGradientDirectionPoints(x0: number, y0: number, x1: number, y1: number): ILinearGradient;
+    setGradientDirectionPoints(x0: x_pos, y0: y_pos, x1: x_pos, y1: y_pos): ILinearGradient;
     addColorStop(value: number, color: string): ILinearGradient;
 };
 type IRadial = {
-    setGradientDirectionPoints(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): IRadialGradient;
+    setGradientDirectionPoints(x0: x_pos, y0: y_pos, r0: number, x1: x_pos, y1: y_pos, r1: number): IRadialGradient;
     addColorStop(value: number, color: string): IRadialGradient;
 };
 export type IAdvancedPolygon = IAdvanced & IDrawStop;
@@ -37,13 +39,13 @@ export type IShapeHandler = {
     lineDash(segments: number[]): IShapeHandler;
     startDrawing(): IShapeHandler;
     stopDrawing(isFinishOperation?: boolean): void;
-    circle(x: number, y: number, radius: number): IShapeHandler;
-    rectangle(x: number, y: number, width: number, height: number): IShapeHandler;
+    circle(x: x_pos, y: y_pos, radius: number): IShapeHandler;
+    rectangle(x: x_pos, y: y_pos, width: number, height: number): IShapeHandler;
     polygon(polygon: IPolygon): IShapeHandler;
-    moveTo(x: number, y: number): IShapeHandler;
-    lineTo(x: number, y: number): IShapeHandler;
-    line(x1: number, y1: number, x2: number, y2: number): IShapeHandler;
-    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler;
+    moveTo(x: x_pos, y: y_pos): IShapeHandler;
+    lineTo(x: x_pos, y: y_pos): IShapeHandler;
+    line(x1: x_pos, y1: y_pos, x2: x_pos, y2: x_pos): IShapeHandler;
+    arcTo(x1: x_pos, y1: y_pos, x2: x_pos, y2: y_pos, radius: number): IShapeHandler;
     advancedPolygon(): IAdvancedPolygon;
     linearGradient(): ILinearGradient;
     radialGradient(): IRadialGradient;
@@ -102,19 +104,19 @@ class ShapeHandler implements IShapeHandler {
         return this;
     }
 
-    public moveTo(x: number, y: number): IShapeHandler {
+    public moveTo(x: x_pos, y: y_pos): IShapeHandler {
         this.context.moveTo(x, y);
         return this;
     };
 
-    public lineTo(x: number, y: number): IShapeHandler {
+    public lineTo(x: x_pos, y: y_pos): IShapeHandler {
         this.startDrawing();
         this.context.lineTo(x, y);
         this.handleStopDrawing();
         return this;
     };
 
-    public line(x1: number, y1: number, x2: number, y2: number): IShapeHandler {
+    public line(x1: x_pos, y1: y_pos, x2: x_pos, y2: y_pos): IShapeHandler {
         this.startDrawing();
         this.context.moveTo(x1, y1);
         this.context.lineTo(x2, y2);
@@ -122,25 +124,25 @@ class ShapeHandler implements IShapeHandler {
         return this;
     };
 
-    private drawCircle(x: number, y: number, radius: number): void {
+    private drawCircle(x: x_pos, y: y_pos, radius: number): void {
         this.context.arc(x, y, radius, 0, 2 * Math.PI);
     }
 
-    public circle(x: number, y: number, radius: number): IShapeHandler {
+    public circle(x: x_pos, y: y_pos, radius: number): IShapeHandler {
         this.startDrawing();
         this.drawCircle(x, y, radius);
         this.handleStopDrawing();
         return this;
     }
 
-    public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): IShapeHandler {
+    public arcTo(x1: x_pos, y1: y_pos, x2: x_pos, y2: y_pos, radius: number): IShapeHandler {
         this.startDrawing();
         this.context.arcTo(x1, y1, x2, y2, radius);
         this.handleStopDrawing();
         return this;
     };
 
-    public rectangle(x: number, y: number, width: number, height: number): IShapeHandler {
+    public rectangle(x: x_pos, y: y_pos, width: number, height: number): IShapeHandler {
         this.startDrawing();
         this.context.rect(x, y, width, height);
         this.handleStopDrawing();
@@ -225,10 +227,10 @@ class LinearGradient extends ShapeChild implements ILinearGradient {
         return this;
     };
 
-    setGradientDirectionPoints(x0: number,
-                               y0: number,
-                               x1: number,
-                               y1: number): ILinearGradient {
+    setGradientDirectionPoints(x0: x_pos,
+                               y0: y_pos,
+                               x1: x_pos,
+                               y1: y_pos): ILinearGradient {
         this.gradient = this.context.createLinearGradient(x0, y0, x1, y1);
         return this;
     };
@@ -258,11 +260,11 @@ class RadialGradient extends ShapeChild implements IRadialGradient {
         return this;
     };
 
-    setGradientDirectionPoints(x0: number,
-                               y0: number,
+    setGradientDirectionPoints(x0: x_pos,
+                               y0: y_pos,
                                r0: number,
-                               x1: number,
-                               y1: number,
+                               x1: x_pos,
+                               y1: y_pos,
                                r1: number): IRadialGradient {
         this.gradient = this.context.createRadialGradient(x0, y0, r0, x1, y1, r1);
         return this;
@@ -270,38 +272,38 @@ class RadialGradient extends ShapeChild implements IRadialGradient {
 }
 
 class AdvancedPolygon extends ShapeChild implements IAdvancedPolygon {
-    public startPoint(x: number, y: number): AdvancedPolygon {
+    public startPoint(x: x_pos, y: y_pos): AdvancedPolygon {
         this.context.moveTo(x, y);
         return this;
     }
 
-    public lineTo(x: number, y: number): AdvancedPolygon {
+    public lineTo(x: x_pos, y: y_pos): AdvancedPolygon {
         this.context.lineTo(x, y);
         return this;
     }
 
-    public quadraticCurveTo(controlPointX: number,
-                            controlPointY: number,
-                            x: number,
-                            y: number): AdvancedPolygon {
+    public quadraticCurveTo(controlX: x_pos,
+                            controlY: y_pos,
+                            x: x_pos,
+                            y: y_pos): AdvancedPolygon {
         this.context.quadraticCurveTo(
-            controlPointX,
-            controlPointY,
+            controlX,
+            controlY,
             x, y);
         return this;
     }
 
-    public bezierCurveTo(controlPoint1X: number,
-                         controlPoint1Y: number,
-                         controlPoint2X: number,
-                         controlPoint2Y: number,
-                         x: number,
-                         y: number): AdvancedPolygon {
+    public bezierCurveTo(control1X: x_pos,
+                         control1Y: y_pos,
+                         control2X: x_pos,
+                         control2Y: y_pos,
+                         x: x_pos,
+                         y: y_pos): AdvancedPolygon {
         this.context.bezierCurveTo(
-            controlPoint1X,
-            controlPoint1Y,
-            controlPoint2X,
-            controlPoint2Y,
+            control1X,
+            control1Y,
+            control2X,
+            control2Y,
             x, y);
         return this;
     }

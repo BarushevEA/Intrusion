@@ -1,10 +1,12 @@
 import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
+import {IDegrees, IRadian, x_pos, y_pos} from "./Types";
+import {IPoint} from "../AnimationEngine/LayerHandler/ShapeHandler";
 
 export type ICoordinatesConverter = {
-    x(x: number): number;
-    y(y: number): number;
+    x(x: x_pos): x_pos;
+    y(y: y_pos): y_pos;
 }
 
 export function findElementOnArray(arr: any[], element: any): number {
@@ -19,6 +21,21 @@ export function findElementOnArray(arr: any[], element: any): number {
     return -1;
 }
 
+export function degreesToRadian(degrees: IDegrees): IRadian {
+    return (Math.PI / 180) * degrees;
+}
+
+export function getRectCenter(x1: x_pos, y1: y_pos, x2: x_pos, y2: y_pos): IPoint {
+    const result: IPoint = <any>{};
+    result.x = Math.trunc((x1 + x2) / 2);
+    result.y = Math.trunc((y1 + y2) / 2);
+    return result;
+}
+
+export function getRectangleCenter(x: x_pos, y: y_pos, height: number, weight: number): IPoint {
+    return getRectCenter(x, y, x + weight, y + height);
+}
+
 export class CoordinatesConverter implements ICoordinatesConverter {
     private readonly canvas: HTMLCanvasElement;
 
@@ -26,11 +43,11 @@ export class CoordinatesConverter implements ICoordinatesConverter {
         this.canvas = canvas;
     }
 
-    public x(x: number): number {
+    public x(x: x_pos): y_pos {
         return x;
     };
 
-    public y(y: number): number {
+    public y(y: y_pos): y_pos {
         return this.canvas.height - y;
     };
 }
