@@ -1,4 +1,4 @@
-import {x_pos, y_pos} from "../../Libraries/Types";
+import {IRadian, x_pos, y_pos} from "../../Libraries/Types";
 
 export type IPoint = {
     x: x_pos;
@@ -49,6 +49,9 @@ export type IShapeHandler = {
     advancedPolygon(): IAdvancedPolygon;
     linearGradient(): ILinearGradient;
     radialGradient(): IRadialGradient;
+    translate(x: x_pos, y: y_pos): IShapeHandler;
+    rotate(angle: IRadian): IShapeHandler;
+    scale(x: x_pos, y: y_pos): IShapeHandler;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -87,6 +90,21 @@ class ShapeHandler implements IShapeHandler {
     public colors(backgroundColor: string, borderColor: string): IShapeHandler {
         this.context.fillStyle = backgroundColor;
         this.context.strokeStyle = borderColor;
+        return this;
+    }
+
+    public translate(x: x_pos, y: y_pos): IShapeHandler {
+        this.context.translate(x, y);
+        return this;
+    }
+
+    public rotate(angle: IRadian): IShapeHandler {
+        this.context.rotate(angle);
+        return this;
+    }
+
+    scale(x: x_pos, y: y_pos): IShapeHandler {
+        this.context.scale(x, y);
         return this;
     }
 
