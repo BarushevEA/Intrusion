@@ -2,7 +2,7 @@ import {AbstractButton} from "../../../../AnimationCore/AnimationEngine/rootMode
 
 export class ButtonEmptyRed extends AbstractButton {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, '', 50, 100);
+        super(canvas, '', 50, 150);
     }
 
     protected setFramesName(): void {
@@ -10,32 +10,18 @@ export class ButtonEmptyRed extends AbstractButton {
     }
 
     protected createFrameMouseClick(): void {
-        this.drawClickRectangle();
+        this.drawCustomRectangle('rgb(77,0,0)', 'rgba(0,0,0,0.5)', 8);
     }
 
     protected createFrameMouseOverFalse(): void {
-        this.drawOverFalseRectangle();
+        this.drawCustomRectangle('rgb(105,0,0)', 'rgba(0,0,0,0.5)');
     }
 
     protected createFrameMouseOverTrue(): void {
-        this.drawOverTrueRectangle();
+        this.drawCustomRectangle('rgb(77,0,0)', 'rgba(0,0,0,0.5)');
     }
 
-    private drawOverTrueRectangle(): void {
-        this.shape.setColors('rgb(77,0,0)', 'rgba(0,0,0,0.5)');
-        this.shape.setLineWidth(5);
-        this.shape.drawRectangle(5, 5, this.elementWidth - 5, this.elementHeight - 5);
-    }
-
-    private drawClickRectangle(): void {
-        this.shape.setColors('rgb(77,0,0)', 'rgba(0,0,0,0.5)');
-        this.shape.setLineWidth(8);
-        this.shape.drawRectangle(5, 5, this.elementWidth - 5, this.elementHeight - 5);
-    }
-
-    private drawOverFalseRectangle(): void {
-        this.shape.setColors('rgb(105,0,0)', 'rgba(0,0,0,0.5)');
-        this.shape.setLineWidth(5);
-        this.shape.drawRectangle(5, 5, this.elementWidth - 5, this.elementHeight - 5);
+    private drawCustomRectangle(bgColor: string, bdColor: string, lnWidth = 5): void {
+        this.drawRectangle(bgColor, bdColor, lnWidth, 5, 5, this.width - 5, this.height - 5);
     }
 }

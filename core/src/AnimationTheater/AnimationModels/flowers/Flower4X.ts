@@ -1,5 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../../../../first_step_of_project/src/Screen";
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 export class Flower4X extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
@@ -12,8 +12,8 @@ export class Flower4X extends AbstractFramedShape {
 
     protected initShape(): void {
         const sizeMultiplier = 4;
-        this.elementWidth *= sizeMultiplier;
-        this.elementHeight *= sizeMultiplier;
+        this.width *= sizeMultiplier;
+        this.height *= sizeMultiplier;
 
         const stem: IPoint[] = [
             {x: 4, y: 35},
@@ -62,20 +62,19 @@ export class Flower4X extends AbstractFramedShape {
         multiply(petal2);
         multiply(petal3);
 
-        this.shape.setLineWidth(1);
         this.createFrame(0);
-        this.shape.isCustomStroke = true;
-        this.shape.setColors('', 'rgb(0,255,0)');
-        this.shape.drawPolygon(stem);
-        this.shape.isCustomStroke = false;
-
-        this.shape.setColors('rgb(0,255,0)', 'rgba(0,0,0,0.5)');
-        this.shape.drawPolygon(leaf);
-
-        this.shape.setColors('rgb(255,0,100)', 'rgb(50,0,5)');
-        this.shape.drawPolygon(petal1);
-        this.shape.drawPolygon(petal2);
-        this.shape.drawPolygon(petal3);
+        this.shape
+            .lineWidth(1)
+            .customStroke(true)
+            .colors('', 'rgb(0,255,0)')
+            .polygon(stem)
+            .customStroke(false)
+            .colors('rgb(0,255,0)', 'rgba(0,0,0,0.5)')
+            .polygon(leaf)
+            .colors('rgb(255,0,100)', 'rgb(50,0,5)')
+            .polygon(petal1)
+            .polygon(petal2)
+            .polygon(petal3);
 
         function multiply(arr: IPoint[]) {
             arr.forEach(element => {

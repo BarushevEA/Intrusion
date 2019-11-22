@@ -17,35 +17,37 @@ export class SnakeSpiral extends AbstractFramedShape {
                 radius++;
                 if (radius === 190) {
                     radius = 250;
-                    this.shape.setColors(
+                    this.shape.colors(
                         '#580954',
                         '#825000'
                     );
                 } else {
-                    this.shape.setColors(
+                    this.shape.colors(
                         '#B49632',
                         '#825000'
                     );
                 }
-                this.shape.setLineWidth(2);
-                this.shape.drawSimpleCircle(
-                    Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i),
-                    Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i),
-                    Math.round(radius / 10));
+                this.shape
+                    .lineWidth(2)
+                    .circle(
+                        Math.round(this.width / 2 + Math.cos(k) * Math.sin(i) * 10 * i),
+                        Math.round(this.height / 2 + Math.sin(k) * Math.cos(i) * 5 * i),
+                        Math.round(radius / 10));
                 if (radius === 250) {
-                    this.shape.setColors('#B49632', '#B49632');
-                    const x = Math.round(this.elementWidth / 2 + Math.cos(k) * Math.sin(i) * 10 * i);
-                    const y = Math.round(this.elementHeight / 2 + Math.sin(k) * Math.cos(i) * 5 * i);
-                    this.shape.drawSimpleCircle(x - 10, y - 5, Math.round(3));
-                    this.shape.drawSimpleCircle(x + 10, y - 5, Math.round(3));
-                    this.shape.drawPolygon([
-                        {x: x - 10, y: y + 8},
-                        {x: x - 8, y: y + 10},
-                        {x: x - 3, y: y + 12},
-                        {x: x + 3, y: y + 12},
-                        {x: x + 8, y: y + 10},
-                        {x: x + 10, y: y + 8}
-                    ])
+                    const x = Math.round(this.width / 2 + Math.cos(k) * Math.sin(i) * 10 * i);
+                    const y = Math.round(this.height / 2 + Math.sin(k) * Math.cos(i) * 5 * i);
+                    this.shape
+                        .colors('#B49632', '#B49632')
+                        .circle(x - 10, y - 5, Math.round(3))
+                        .circle(x + 10, y - 5, Math.round(3))
+                        .polygon([
+                            {x: x - 10, y: y + 8},
+                            {x: x - 8, y: y + 10},
+                            {x: x - 3, y: y + 12},
+                            {x: x + 3, y: y + 12},
+                            {x: x + 8, y: y + 10},
+                            {x: x + 10, y: y + 8}
+                        ])
                 }
             }
         }

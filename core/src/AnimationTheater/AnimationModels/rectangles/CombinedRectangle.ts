@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {AnimatedRectangleLightCyan} from "./AnimatedRectangleLightCyan";
 import {AnimatedRectangleLightYellow} from "./AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "./AnimatedRectangleLightRed";
@@ -6,8 +6,7 @@ import {AnimatedRectangleLightGreen} from "./AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightGray} from "./AnimatedRectangleLightGray";
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
-
-export class CombinedRectangle extends AbstractCustomDraw {
+export class CombinedRectangle extends AbstractActor {
     private readonly blue: AbstractFramedShape;
     private readonly yellow: AbstractFramedShape;
     private readonly red: AbstractFramedShape;
@@ -24,7 +23,7 @@ export class CombinedRectangle extends AbstractCustomDraw {
         this.rectangles.push(this.red = <AbstractFramedShape>new AnimatedRectangleLightRed(canvas));
         this.rectangles.push(this.green = <AbstractFramedShape>new AnimatedRectangleLightGreen(canvas));
         this.rectangles.push(this.gray = <AbstractFramedShape>new AnimatedRectangleLightGray(canvas));
-        this.setSize(this.gray.elementHeight, this.gray.elementWidth);
+        this.setSize(this.gray.height, this.gray.width);
         this.currentShape = this.gray;
     }
 
@@ -58,8 +57,8 @@ export class CombinedRectangle extends AbstractCustomDraw {
     }
 
     renderFrame(): void {
-        this.currentShape.elementX = this.elementX;
-        this.currentShape.elementY = this.elementY;
+        this.currentShape.xPos = this.xPos;
+        this.currentShape.yPos = this.yPos;
         this.currentShape.renderFrame();
     }
 }

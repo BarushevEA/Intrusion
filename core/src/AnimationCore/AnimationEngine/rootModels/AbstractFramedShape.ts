@@ -1,4 +1,4 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractActor} from "./AbstractActor";
 
 /**
  * WARNING !!!
@@ -6,7 +6,7 @@ import {AbstractCustomDraw} from "./AbstractCustomDraw";
  * Create empty frame with this.createEmptyFrame();
  **/
 
-export abstract class AbstractFramedShape extends AbstractCustomDraw {
+export abstract class AbstractFramedShape extends AbstractActor {
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         super(canvas, height, width);
         this.init();
@@ -33,7 +33,7 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
     protected abstract initShape(): void;
 
     protected createFrame(delay: number) {
-        this.layerHandler.createFrame(this.elementHeight, this.elementWidth, delay);
+        this.layerHandler.createFrame(this.height, this.width, delay);
     }
 
     public setLastFrameToStop() {
@@ -46,15 +46,15 @@ export abstract class AbstractFramedShape extends AbstractCustomDraw {
 
     protected createEmptyFrame(): void {
         this.createFrame(0);
-        this.shape.setColors(
+        this.shape.colors(
             'rgba(0,0,0,0)',
             'rgba(0,0,0,0)');
-        this.shape.drawRectangle(0, 0,
+        this.shape.rectangle(0, 0,
             this.generalLayer.width,
             this.generalLayer.height);
     }
 
     renderFrame(): void {
-        this.layerHandler.drawFrame(this.elementX, this.elementY);
+        this.layerHandler.drawFrame(this.xPos, this.yPos);
     }
 }

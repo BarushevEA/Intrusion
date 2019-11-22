@@ -1,10 +1,10 @@
-import {AbstractCustomDraw} from "./AbstractCustomDraw";
+import {AbstractActor} from "./AbstractActor";
 import {AbstractFramedShape} from "./AbstractFramedShape";
 import {EAlign} from "../LayerHandler/TextHandler";
 import {AbstractButton} from "./AbstractButton";
 
 
-export abstract class AbstractButtonWithText extends AbstractCustomDraw {
+export abstract class AbstractButtonWithText extends AbstractActor {
     private emptyButton: AbstractFramedShape = this.getButton();
     private textLayerName = 'text';
 
@@ -16,10 +16,10 @@ export abstract class AbstractButtonWithText extends AbstractCustomDraw {
     protected abstract getButton(): AbstractButton;
 
     private init(text: string) {
-        this.setSize(this.emptyButton.elementHeight, this.emptyButton.elementWidth);
+        this.setSize(this.emptyButton.height, this.emptyButton.width);
         this.setVirtualLayer(this.textLayerName);
-        this.shape.setColors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');
-        this.shape.setLineWidth(5);
+        this.shape.colors('rgba(202,202,202, 0.8)', 'rgba(0,0,0,0.5)');
+        this.shape.lineWidth(5);
         this.text.x = 15;
         this.text.y = 35;
         this.text.options = {
@@ -35,9 +35,9 @@ export abstract class AbstractButtonWithText extends AbstractCustomDraw {
     }
 
     renderFrame(): void {
-        this.emptyButton.elementX = this.elementX;
-        this.emptyButton.elementY = this.elementY;
+        this.emptyButton.xPos = this.xPos;
+        this.emptyButton.yPos = this.yPos;
         this.emptyButton.renderFrame();
-        this.drawVirtualOnGeneral(this.textLayerName, this.elementX, this.elementY);
+        this.drawVirtualOnGeneral(this.textLayerName, this.xPos, this.yPos);
     }
 }

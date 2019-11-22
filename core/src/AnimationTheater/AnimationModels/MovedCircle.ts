@@ -1,6 +1,6 @@
-import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 
-export class MovedCircle extends AbstractCustomDraw {
+export class MovedCircle extends AbstractActor {
     maxStep = 7;
     dx = this.randomize(this.maxStep) + 1;
     dy = this.randomize(this.maxStep) + 1;
@@ -26,25 +26,26 @@ export class MovedCircle extends AbstractCustomDraw {
             this.radius * 2 + this.lineWidth);
 
         this.setVirtualLayer(this.bottomLayerName);
-        this.shape.setLineWidth(this.lineWidth);
-        this.shape.setColors(
-            `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
-            `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`);
-        this.shape.drawSimpleCircle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
+        this.shape
+            .lineWidth(this.lineWidth)
+            .colors(
+                `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
+                `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`)
+            .circle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.restorePreviousLayer();
     }
 
     renderFrame(): void {
-        if (this.elementX <= 0) {
+        if (this.xPos <= 0) {
             this.dx = this.randomize(this.maxStep);
         }
-        if (this.elementX >= this.generalLayer.width - this.radiusCalc) {
+        if (this.xPos >= this.generalLayer.width - this.radiusCalc) {
             this.dx = -1 * this.randomize(this.maxStep);
         }
-        if (this.elementY <= 0) {
+        if (this.yPos <= 0) {
             this.dy = this.randomize(this.maxStep);
         }
-        if (this.elementY >= this.generalLayer.height - this.radiusCalc) {
+        if (this.yPos >= this.generalLayer.height - this.radiusCalc) {
             this.dy = -1 * this.randomize(this.maxStep);
         }
 
@@ -59,9 +60,9 @@ export class MovedCircle extends AbstractCustomDraw {
             this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
         }
 
-        this.drawVirtualOnGeneral(this.bottomLayerName, this.elementX, this.elementY);
-        this.elementX += this.dx;
-        this.elementY += this.dy;
+        this.drawVirtualOnGeneral(this.bottomLayerName, this.xPos, this.yPos);
+        this.xPos += this.dx;
+        this.yPos += this.dy;
         this.throttlingCounter--;
     }
 }

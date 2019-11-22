@@ -1,9 +1,9 @@
-import {AbstractCustomDraw} from "../../AnimationCore/AnimationEngine/rootModels/AbstractCustomDraw";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
 import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 const startDelta = 1000;
 
-export class HexagonGreed extends AbstractCustomDraw {
+export class HexagonGreed extends AbstractActor {
     x = 0;
     y = 0;
     dx = 1;
@@ -50,20 +50,23 @@ export class HexagonGreed extends AbstractCustomDraw {
         let modRadius = this.radius * this.multiplier;
 
         this.setVirtualLayer(this.bottomLayerName);
-        this.shape.setLineWidth(11);
-        this.shape.setColors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
+        this.shape
+            .lineWidth(11)
+            .colors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(centerLayerName);
-        this.shape.setLineWidth(3);
-        this.shape.setColors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
+        this.shape
+            .lineWidth(3)
+            .colors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
         this.setVirtualLayer(topLayerName);
-        this.shape.setLineWidth(3);
-        this.shape.setColors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
+        this.shape
+            .lineWidth(3)
+            .colors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
         this.restorePreviousLayer();
 
@@ -82,7 +85,7 @@ export class HexagonGreed extends AbstractCustomDraw {
                     deltaX = modRadius;
                 }
                 let modifiedHexagon: IPolygon = this.getModified(hexagon, j * modDX + deltaX, i * modDY);
-                this.shape.drawPolygon(modifiedHexagon);
+                this.shape.polygon(modifiedHexagon);
             }
         }
     }
@@ -114,8 +117,8 @@ export class HexagonGreed extends AbstractCustomDraw {
 
         this.drawVirtualOnGeneral(
             this.bottomLayerName,
-            +this.bound + this.x + this.radius * this.multiplier + this.elementX,
-            +this.bound + this.y + this.radius * this.multiplier + this.elementY,
+            +this.bound + this.x + this.radius * this.multiplier + this.xPos,
+            +this.bound + this.y + this.radius * this.multiplier + this.yPos,
             this.generalLayer.width,
             this.generalLayer.height,
             0,
