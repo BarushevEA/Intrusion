@@ -16,7 +16,7 @@ export type IPlugin = {
 }
 
 export type IPluginDock = {
-    addPlugin(plugin: IPlugin): void;
+    add(plugin: IPlugin): void;
     destroy(): void;
     destroyPluginName(name: string): void;
     destroyPlugin(plugin: IPlugin): void;

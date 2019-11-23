@@ -8,7 +8,7 @@ export class PluginDock<T> implements IPluginDock {
         this.root = root;
     }
 
-    addPlugin(plugin: IPlugin): void {
+    add(plugin: IPlugin): void {
         plugin.setRoot(this.root);
         this.pluginCase[plugin.getName()] = plugin;
     };

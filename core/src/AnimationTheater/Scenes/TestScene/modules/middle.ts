@@ -267,8 +267,8 @@ function initHeartMoveOnKeyPress(scene: AbstractScene) {
     const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
     const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
     const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
-    heart.pluginDock.addPlugin(moveHeartUp);
-    heart.pluginDock.addPlugin(moveHeartDown);
-    heart.pluginDock.addPlugin(moveHeartLeft);
-    heart.pluginDock.addPlugin(moveHeartRight);
+    heart.pluginDock.add(moveHeartUp);
+    heart.pluginDock.add(moveHeartDown);
+    heart.pluginDock.add(moveHeartLeft);
+    heart.pluginDock.add(moveHeartRight);
 }
