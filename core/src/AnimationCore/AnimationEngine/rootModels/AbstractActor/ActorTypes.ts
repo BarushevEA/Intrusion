@@ -8,6 +8,22 @@ export type IDimensions = {
     height: number;
 }
 
+export type IPlugin = {
+    readonly isDestroyed: boolean;
+    getName(): string;
+    destroy(): void;
+    setRoot(root: any): void;
+}
+
+export type IPluginDock = {
+    addPlugin(plugin: IPlugin): void;
+    destroy(): void;
+    destroyPluginName(name: string): void;
+    destroyPlugin(plugin: IPlugin): void;
+    getPlugin<T>(name: string): T;
+    getPluginList(): string[];
+}
+
 export type IActor = {
     z_index: number;
     layerName: string;
@@ -15,14 +31,15 @@ export type IActor = {
     yPos: y_pos;
     width: number;
     height: number;
-    isLeftMouseCatch: boolean;
-    isMouseClick$: ISubscriber<boolean>;
-    isMouseLeftDrop$: ISubscriber<any>;
-    isMouseLeftDrag$: ISubscriber<any>;
-    isMouseRightClick$: ISubscriber<boolean>;
-    isMouseLeftClick$: ISubscriber<boolean>;
-    isMouseOver$: ISubscriber<boolean>;
-    isMouseOver: boolean;
+    readonly isLeftMouseCatch: boolean;
+    readonly isMouseClick$: ISubscriber<boolean>;
+    readonly isMouseLeftDrop$: ISubscriber<any>;
+    readonly isMouseLeftDrag$: ISubscriber<any>;
+    readonly isMouseRightClick$: ISubscriber<boolean>;
+    readonly isMouseLeftClick$: ISubscriber<boolean>;
+    readonly isMouseOver$: ISubscriber<boolean>;
+    readonly isMouseOver: boolean;
+    readonly pluginDock: IPluginDock;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
     setAnimationOriginal(): void;

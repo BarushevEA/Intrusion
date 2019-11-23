@@ -11,7 +11,8 @@ import {IMousePosition} from "../../../DomComponent/AppAnimation";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
-import {IActor, IDimensions} from "./ActorTypes";
+import {IActor, IDimensions, IPluginDock} from "./ActorTypes";
+import {PluginDock} from "./ActorPluginDock";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -23,6 +24,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _z_index_memory = 0;
     private _layerName = '';
     private _layer_name_memory = '';
+    private _pluginDock: IPluginDock = <any>0;
 
     public static tickCount() {
         requestAnimationFrame(AbstractActor.tickCount);
@@ -55,6 +57,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
+        this._pluginDock = new PluginDock<IActor>(this);
     }
 
     private initEvents(): void {
@@ -249,6 +252,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementHeight = value;
     }
 
+    get pluginDock(): IPluginDock {
+        return this._pluginDock;
+    }
+
     public resetStopFrame(): void {
         this.layerHandler.resetStopFrame();
     }
@@ -359,6 +366,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
         this.destroySubscriberCounter = <any>0;
+        if (this._pluginDock) {
+            this._pluginDock.destroy();
+            this._pluginDock = <any>0;
+        }
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
