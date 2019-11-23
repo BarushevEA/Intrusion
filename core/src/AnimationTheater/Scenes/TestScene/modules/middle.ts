@@ -229,24 +229,16 @@ function initActions(scene: AbstractScene) {
         keyDownCode$.subscribe((code: IKeyCode) => {
             switch (code.key) {
                 case 'w':
-                    moveHeart.up = scene.tickCount$.subscribe(() => {
-                        heart.yPos -= 5;
-                    });
+                    moveHeart.up = scene.tickCount$.subscribe(() => heart.yPos -= 5);
                     break;
                 case 's':
-                    moveHeart.down = scene.tickCount$.subscribe(() => {
-                        heart.yPos += 5;
-                    });
+                    moveHeart.down = scene.tickCount$.subscribe(() => heart.yPos += 5);
                     break;
                 case 'a':
-                    moveHeart.left = scene.tickCount$.subscribe(() => {
-                        heart.xPos -= 5;
-                    });
+                    moveHeart.left = scene.tickCount$.subscribe(() => heart.xPos -= 5);
                     break;
                 case 'd':
-                    moveHeart.right = scene.tickCount$.subscribe(() => {
-                        heart.xPos += 5;
-                    });
+                    moveHeart.right = scene.tickCount$.subscribe(() => heart.xPos += 5);
                     break;
             }
         }),
