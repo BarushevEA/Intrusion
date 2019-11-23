@@ -4,7 +4,7 @@ import {AbstractScene} from "../rootScenes/AbstractScene";
 import {keyDownCode$, keyUpCode$} from "../../Store/EventStore";
 import {IKeyCode} from "../../Store/Types";
 
-export abstract class AbstractMoveOnKeyPress extends AbstractActorPlugin {
+export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
     private readonly key = 'Key';
     protected keyUp: ISubscriptionLike = <any>0;
     protected _step: number = 0;
