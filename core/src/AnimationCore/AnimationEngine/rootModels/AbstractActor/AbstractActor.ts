@@ -1,4 +1,4 @@
-import {CanvasLayerHandler, IFramePool} from "../LayerHandler/CanvasLayerHandler";
+import {CanvasLayerHandler, IFramePool} from "../../LayerHandler/CanvasLayerHandler";
 import {
     mouseClickPosition$,
     mouseLeftDown$,
@@ -6,11 +6,11 @@ import {
     mouseMovePosition$,
     mouseRightDown$,
     mouseRightUp$
-} from "../../Store/EventStore";
-import {IMousePosition} from "../../DomComponent/AppAnimation";
-import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
-import {ITextHandler} from "../LayerHandler/TextHandler";
-import {IShapeHandler} from "../LayerHandler/ShapeHandler";
+} from "../../../Store/EventStore";
+import {IMousePosition} from "../../../DomComponent/AppAnimation";
+import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
+import {ITextHandler} from "../../LayerHandler/TextHandler";
+import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
 
 //TODO frame pool technology need to use for lot of entities of class
 

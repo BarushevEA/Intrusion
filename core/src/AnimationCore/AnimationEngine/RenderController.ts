@@ -1,4 +1,4 @@
-import {IActor} from "./rootModels/AbstractActor";
+import {IActor} from "./rootModels/AbstractActor/AbstractActor";
 import {findElementOnArray} from "../Libraries/FunctionLibs";
 import {ISubscriber, Observable} from "../Libraries/Observable";
 

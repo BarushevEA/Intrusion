@@ -1,4 +1,4 @@
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AnimatedRectangleLightCyan} from "./AnimatedRectangleLightCyan";
 import {AnimatedRectangleLightYellow} from "./AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightRed} from "./AnimatedRectangleLightRed";

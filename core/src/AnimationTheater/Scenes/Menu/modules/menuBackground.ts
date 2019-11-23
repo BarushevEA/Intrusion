@@ -1,5 +1,5 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";

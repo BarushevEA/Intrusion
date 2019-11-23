@@ -1,4 +1,4 @@
-import {AbstractActor} from "./AbstractActor";
+import {AbstractActor} from "./AbstractActor/AbstractActor";
 import {AbstractFramedShape} from "./AbstractFramedShape";
 import {EAlign} from "../LayerHandler/TextHandler";
 import {AbstractButton} from "./AbstractButton";

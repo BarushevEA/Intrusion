@@ -1,4 +1,4 @@
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 
 enum ELayer {
     WORK = 'WORK',

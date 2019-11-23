@@ -1,5 +1,5 @@
 import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
-import {IActor} from "../AnimationEngine/rootModels/AbstractActor";
+import {IActor} from "../AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {IDegrees, IRadian, x_pos, y_pos} from "./Types";
 import {IPoint} from "../AnimationEngine/LayerHandler/ShapeHandler";

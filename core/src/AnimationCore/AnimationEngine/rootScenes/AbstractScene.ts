@@ -1,5 +1,5 @@
 import {IRenderController, RenderController} from "../RenderController";
-import {AbstractActor, IActor} from "../rootModels/AbstractActor";
+import {AbstractActor, IActor} from "../rootModels/AbstractActor/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ICursor} from "../rootModels/Types";
 

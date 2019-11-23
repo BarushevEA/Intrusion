@@ -1,4 +1,4 @@
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
 
 const startDelta = 1000;
