@@ -14,9 +14,17 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {cursorHandler} from "./cursor";
+import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
+import {IKeyCode} from "../../../../AnimationCore/Store/Types";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
+export const moveHeart = {
+    up: <ISubscriptionLike><any>0,
+    down: <ISubscriptionLike><any>0,
+    left: <ISubscriptionLike><any>0,
+    right: <ISubscriptionLike><any>0
+};
 
 let isReverse: boolean;
 let counter: number;
@@ -39,7 +47,26 @@ export function handleMiddle(scene: AbstractScene): void {
 
 function clearVariables() {
     isStopMove.value = true;
-    move.value = <any>0;
+    if (move.value) {
+        move.value.unsubscribe();
+        move.value = <any>0;
+    }
+    if (moveHeart.up) {
+        moveHeart.up.unsubscribe();
+        moveHeart.up = <any>0;
+    }
+    if (moveHeart.down) {
+        moveHeart.down.unsubscribe();
+        moveHeart.down = <any>0;
+    }
+    if (moveHeart.left) {
+        moveHeart.left.unsubscribe();
+        moveHeart.left = <any>0;
+    }
+    if (moveHeart.right) {
+        moveHeart.right.unsubscribe();
+        moveHeart.right = <any>0;
+    }
 
     isReverse = true;
     counter = 100;
@@ -124,6 +151,7 @@ function initActors(scene: AbstractScene) {
 
 function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
+    scene.moveOnMouseDrag(snakeSpiral);
     const movedOptions: IDragDropOptions = {};
 
     actorGroup.forEach(el => {
@@ -152,6 +180,15 @@ function initActions(scene: AbstractScene) {
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
+        snakeSpiral.isMouseOver$.subscribe(() => {
+            cursorHandler.pointerOrDefaultChange(scene, snakeSpiral);
+        }),
+        snakeSpiral.isMouseLeftDrag$.subscribe(() => {
+            scene.cursor.setType(ECursor.CATCH);
+        }),
+        snakeSpiral.isMouseLeftDrop$.subscribe(() => {
+            scene.cursor.setType(ECursor.POINTER);
+        }),
         heart.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, heart);
         }),
@@ -160,6 +197,58 @@ function initActions(scene: AbstractScene) {
         }),
         heart.isMouseLeftDrop$.subscribe(() => {
             scene.cursor.setType(ECursor.POINTER);
+        }),
+        keyUpCode$.subscribe((code: IKeyCode) => {
+            switch (code.key) {
+                case 'w':
+                    if (moveHeart.up) {
+                        moveHeart.up.unsubscribe();
+                        moveHeart.up = <any>0;
+                    }
+                    break;
+                case 's':
+                    if (moveHeart.down) {
+                        moveHeart.down.unsubscribe();
+                        moveHeart.down = <any>0;
+                    }
+                    break;
+                case 'a':
+                    if (moveHeart.left) {
+                        moveHeart.left.unsubscribe();
+                        moveHeart.left = <any>0;
+                    }
+                    break;
+                case 'd':
+                    if (moveHeart.right) {
+                        moveHeart.right.unsubscribe();
+                        moveHeart.right = <any>0;
+                    }
+                    break;
+            }
+        }),
+        keyDownCode$.subscribe((code: IKeyCode) => {
+            switch (code.key) {
+                case 'w':
+                    moveHeart.up = scene.tickCount$.subscribe(() => {
+                        heart.yPos -= 5;
+                    });
+                    break;
+                case 's':
+                    moveHeart.down = scene.tickCount$.subscribe(() => {
+                        heart.yPos += 5;
+                    });
+                    break;
+                case 'a':
+                    moveHeart.left = scene.tickCount$.subscribe(() => {
+                        heart.xPos -= 5;
+                    });
+                    break;
+                case 'd':
+                    moveHeart.right = scene.tickCount$.subscribe(() => {
+                        heart.xPos += 5;
+                    });
+                    break;
+            }
         }),
         heart.isMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
