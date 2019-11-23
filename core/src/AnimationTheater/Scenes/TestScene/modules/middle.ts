@@ -14,8 +14,10 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {cursorHandler} from "./cursor";
-import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
-import {IKeyCode} from "../../../../AnimationCore/Store/Types";
+import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveUpOnKeyPress";
+import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveDownOnKeyPress";
+import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveLeftOnKeyPress";
+import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveRightOnKeyPress";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -153,6 +155,7 @@ function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
     scene.moveOnMouseDrag(snakeSpiral);
     const movedOptions: IDragDropOptions = {};
+    initHeartMoveOnKeyPress(scene);
 
     actorGroup.forEach(el => {
         movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
@@ -197,50 +200,6 @@ function initActions(scene: AbstractScene) {
         }),
         heart.isMouseLeftDrop$.subscribe(() => {
             scene.cursor.setType(ECursor.POINTER);
-        }),
-        keyUpCode$.subscribe((code: IKeyCode) => {
-            switch (code.key) {
-                case 'w':
-                    if (moveHeart.up) {
-                        moveHeart.up.unsubscribe();
-                        moveHeart.up = <any>0;
-                    }
-                    break;
-                case 's':
-                    if (moveHeart.down) {
-                        moveHeart.down.unsubscribe();
-                        moveHeart.down = <any>0;
-                    }
-                    break;
-                case 'a':
-                    if (moveHeart.left) {
-                        moveHeart.left.unsubscribe();
-                        moveHeart.left = <any>0;
-                    }
-                    break;
-                case 'd':
-                    if (moveHeart.right) {
-                        moveHeart.right.unsubscribe();
-                        moveHeart.right = <any>0;
-                    }
-                    break;
-            }
-        }),
-        keyDownCode$.subscribe((code: IKeyCode) => {
-            switch (code.key) {
-                case 'w':
-                    moveHeart.up = scene.tickCount$.subscribe(() => heart.yPos -= 5);
-                    break;
-                case 's':
-                    moveHeart.down = scene.tickCount$.subscribe(() => heart.yPos += 5);
-                    break;
-                case 'a':
-                    moveHeart.left = scene.tickCount$.subscribe(() => heart.xPos -= 5);
-                    break;
-                case 'd':
-                    moveHeart.right = scene.tickCount$.subscribe(() => heart.xPos += 5);
-                    break;
-            }
         }),
         heart.isMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
@@ -301,4 +260,15 @@ export function toggleReverse() {
         });
     }
     isReverse = !isReverse;
+}
+
+function initHeartMoveOnKeyPress(scene: AbstractScene) {
+    const moveHeartUp = new MoveUpOnKeyPress(scene, 'w');
+    const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
+    const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
+    const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
+    heart.pluginDock.addPlugin(moveHeartUp);
+    heart.pluginDock.addPlugin(moveHeartDown);
+    heart.pluginDock.addPlugin(moveHeartLeft);
+    heart.pluginDock.addPlugin(moveHeartRight);
 }
