@@ -271,4 +271,24 @@ function initHeartMoveOnKeyPress(scene: AbstractScene) {
     heart.pluginDock.add(moveHeartDown);
     heart.pluginDock.add(moveHeartLeft);
     heart.pluginDock.add(moveHeartRight);
+    moveHeartUp.onKeyDown$.subscribe((step: number) => {
+        if (heart.yPos < step) {
+            heart.yPos = step;
+        }
+    });
+    moveHeartDown.onKeyDown$.subscribe((step: number) => {
+        if (heart.yPos > scene.generalLayer.height - heart.height - step) {
+            heart.yPos = scene.generalLayer.height - heart.height - step;
+        }
+    });
+    moveHeartLeft.onKeyDown$.subscribe((step: number) => {
+        if (heart.xPos < step) {
+            heart.xPos = step;
+        }
+    });
+    moveHeartRight.onKeyDown$.subscribe((step: number) => {
+        if (heart.xPos > scene.generalLayer.width - heart.width - step) {
+            heart.xPos = scene.generalLayer.width - heart.width - step;
+        }
+    });
 }

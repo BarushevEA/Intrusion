@@ -23,10 +23,12 @@ export class MoveDownOnKeyPress extends AbstractActorPlugin {
         this.scene.collect(
             keyDownCode$.subscribe((code: IKeyCode) => {
                     if (code.code === this.key && !this.keyUp) {
-                        this._onKeyDown$.next(this._step);
                         this.keyUp = this.scene
                             .tickCount$
-                            .subscribe(() => this.root.yPos += this._step);
+                            .subscribe(() => {
+                                this.root.yPos += this._step;
+                                this._onKeyDown$.next(this._step);
+                            });
                     }
                 }
             ),
