@@ -1,4 +1,4 @@
-import {CanvasLayerHandler, IFramePool} from "../LayerHandler/CanvasLayerHandler";
+import {CanvasLayerHandler, IFramePool} from "../../LayerHandler/CanvasLayerHandler";
 import {
     mouseClickPosition$,
     mouseLeftDown$,
@@ -6,52 +6,15 @@ import {
     mouseMovePosition$,
     mouseRightDown$,
     mouseRightUp$
-} from "../../Store/EventStore";
-import {IMousePosition} from "../../DomComponent/AppAnimation";
-import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
-import {ITextHandler} from "../LayerHandler/TextHandler";
-import {IShapeHandler} from "../LayerHandler/ShapeHandler";
+} from "../../../Store/EventStore";
+import {IMousePosition} from "../../../DomComponent/AppAnimation";
+import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
+import {ITextHandler} from "../../LayerHandler/TextHandler";
+import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
+import {IActor, IDimensions, IPluginDock} from "./ActorTypes";
+import {PluginDock} from "./ActorPluginDock";
 
-//TODO frame pool technology need to use for lot of entities of class
-
-export type IDimensions = {
-    xPos: number;
-    yPos: number;
-    width: number;
-    height: number;
-}
-
-export type IActor = {
-    z_index: number;
-    layerName: string;
-    xPos: number;
-    yPos: number;
-    width: number;
-    height: number;
-    isLeftMouseCatch: boolean;
-    isMouseClick$: ISubscriber<boolean>;
-    isMouseLeftDrop$: ISubscriber<any>;
-    isMouseLeftDrag$: ISubscriber<any>;
-    isMouseRightClick$: ISubscriber<boolean>;
-    isMouseLeftClick$: ISubscriber<boolean>;
-    isMouseOver$: ISubscriber<boolean>;
-    isMouseOver: boolean;
-    unsubscribe(subscriber: ISubscriptionLike): void;
-    collect(...subscribers: ISubscriptionLike[]): void;
-    setAnimationOriginal(): void;
-    setAnimationReverse(): void;
-    setStopFrame(index: number): void;
-    resetStopFrame(): void;
-    saveZIndex(): void;
-    restoreZIndex(): void;
-    saveLayerIndex(): void;
-    restoreLayerIndex(): void;
-    renderFrame(): void;
-    destroy(): void;
-    enableEvents(): void;
-    disableEvents(): void;
-    getDimensions(): IDimensions;
-}
+/** Frame pool technology need to use for lot of entities of class */
 
 export abstract class AbstractActor implements IActor, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
@@ -61,6 +24,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _z_index_memory = 0;
     private _layerName = '';
     private _layer_name_memory = '';
+    private _pluginDock: IPluginDock = <any>0;
 
     public static tickCount() {
         requestAnimationFrame(AbstractActor.tickCount);
@@ -93,6 +57,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
+        this._pluginDock = new PluginDock<IActor>(this);
     }
 
     private initEvents(): void {
@@ -287,6 +252,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._elementHeight = value;
     }
 
+    get pluginDock(): IPluginDock {
+        return this._pluginDock;
+    }
+
     public resetStopFrame(): void {
         this.layerHandler.resetStopFrame();
     }
@@ -397,6 +366,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
         this.destroySubscriberCounter = <any>0;
+        if (this._pluginDock) {
+            this._pluginDock.destroy();
+            this._pluginDock = <any>0;
+        }
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {

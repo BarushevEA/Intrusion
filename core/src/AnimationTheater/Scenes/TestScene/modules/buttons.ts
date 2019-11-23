@@ -6,7 +6,7 @@ import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithT
 import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
 import {cursorHandler} from "./cursor";

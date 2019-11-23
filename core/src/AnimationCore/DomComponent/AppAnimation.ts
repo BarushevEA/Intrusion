@@ -75,6 +75,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         const keyCode: IKeyCode = <any>{};
         keyCode.key = event.key;
         keyCode.keyCode = event.keyCode;
+        keyCode.code = event.code;
         
         for (let i = 0; i < this.keyPressedPool.length; i++) {
             const key = this.keyPressedPool[i].key;
@@ -91,6 +92,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         const keyCode: IKeyCode = <any>{};
         keyCode.key = event.key;
         keyCode.keyCode = event.keyCode;
+        keyCode.code = event.code;
 
         if (!this.deleteKey(keyCode)) {
             return;

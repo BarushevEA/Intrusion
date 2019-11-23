@@ -39,8 +39,8 @@ class SubscriberLike implements ISubscriptionLike {
     private readonly observable: IUnSubscribe;
     private readonly index: string;
 
-    constructor(callback: IUnSubscribe, index: string) {
-        this.observable = callback;
+    constructor(observable: IUnSubscribe, index: string) {
+        this.observable = observable;
         this.index = index;
     }
 

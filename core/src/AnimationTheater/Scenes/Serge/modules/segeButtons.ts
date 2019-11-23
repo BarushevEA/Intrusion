@@ -1,7 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
 import {cursorHandler} from "./cursor";
 

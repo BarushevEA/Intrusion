@@ -2,7 +2,7 @@ import {AbstractScene, IDragDropOptions} from "../../../../AnimationCore/Animati
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {Heart} from "../../../AnimationModels/Heart";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
@@ -14,9 +14,19 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {cursorHandler} from "./cursor";
+import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveUpOnKeyPress";
+import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveDownOnKeyPress";
+import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveLeftOnKeyPress";
+import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveRightOnKeyPress";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
+export const moveHeart = {
+    up: <ISubscriptionLike><any>0,
+    down: <ISubscriptionLike><any>0,
+    left: <ISubscriptionLike><any>0,
+    right: <ISubscriptionLike><any>0
+};
 
 let isReverse: boolean;
 let counter: number;
@@ -39,7 +49,26 @@ export function handleMiddle(scene: AbstractScene): void {
 
 function clearVariables() {
     isStopMove.value = true;
-    move.value = <any>0;
+    if (move.value) {
+        move.value.unsubscribe();
+        move.value = <any>0;
+    }
+    if (moveHeart.up) {
+        moveHeart.up.unsubscribe();
+        moveHeart.up = <any>0;
+    }
+    if (moveHeart.down) {
+        moveHeart.down.unsubscribe();
+        moveHeart.down = <any>0;
+    }
+    if (moveHeart.left) {
+        moveHeart.left.unsubscribe();
+        moveHeart.left = <any>0;
+    }
+    if (moveHeart.right) {
+        moveHeart.right.unsubscribe();
+        moveHeart.right = <any>0;
+    }
 
     isReverse = true;
     counter = 100;
@@ -124,7 +153,9 @@ function initActors(scene: AbstractScene) {
 
 function initActions(scene: AbstractScene) {
     scene.moveOnMouseDrag(heart);
+    scene.moveOnMouseDrag(snakeSpiral);
     const movedOptions: IDragDropOptions = {};
+    initHeartMoveOnKeyPress(scene);
 
     actorGroup.forEach(el => {
         movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
@@ -151,6 +182,15 @@ function initActions(scene: AbstractScene) {
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
+        }),
+        snakeSpiral.isMouseOver$.subscribe(() => {
+            cursorHandler.pointerOrDefaultChange(scene, snakeSpiral);
+        }),
+        snakeSpiral.isMouseLeftDrag$.subscribe(() => {
+            scene.cursor.setType(ECursor.CATCH);
+        }),
+        snakeSpiral.isMouseLeftDrop$.subscribe(() => {
+            scene.cursor.setType(ECursor.POINTER);
         }),
         heart.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, heart);
@@ -220,4 +260,35 @@ export function toggleReverse() {
         });
     }
     isReverse = !isReverse;
+}
+
+function initHeartMoveOnKeyPress(scene: AbstractScene) {
+    const moveHeartUp = new MoveUpOnKeyPress(scene, 'w');
+    const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
+    const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
+    const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
+    heart.pluginDock.add(moveHeartUp);
+    heart.pluginDock.add(moveHeartDown);
+    heart.pluginDock.add(moveHeartLeft);
+    heart.pluginDock.add(moveHeartRight);
+    moveHeartUp.onKeyDown$.subscribe((step: number) => {
+        if (heart.yPos < step) {
+            heart.yPos = step;
+        }
+    });
+    moveHeartDown.onKeyDown$.subscribe((step: number) => {
+        if (heart.yPos > scene.generalLayer.height - heart.height - step) {
+            heart.yPos = scene.generalLayer.height - heart.height - step;
+        }
+    });
+    moveHeartLeft.onKeyDown$.subscribe((step: number) => {
+        if (heart.xPos < step) {
+            heart.xPos = step;
+        }
+    });
+    moveHeartRight.onKeyDown$.subscribe((step: number) => {
+        if (heart.xPos > scene.generalLayer.width - heart.width - step) {
+            heart.xPos = scene.generalLayer.width - heart.width - step;
+        }
+    });
 }

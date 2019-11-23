@@ -3,7 +3,7 @@ import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {E_Scene} from "../../../AppScenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {cursorHandler} from "./cursor";
 

@@ -1,4 +1,4 @@
-import {AbstractActor} from "./AbstractActor";
+import {AbstractActor} from "./AbstractActor/AbstractActor";
 
 export enum ECursor {
     DEFAULT = 'DEFAULT',

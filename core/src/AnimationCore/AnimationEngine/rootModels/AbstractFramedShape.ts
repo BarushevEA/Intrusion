@@ -1,4 +1,4 @@
-import {AbstractActor} from "./AbstractActor";
+import {AbstractActor} from "./AbstractActor/AbstractActor";
 
 /**
  * WARNING !!!
