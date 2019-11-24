@@ -11,8 +11,9 @@ import {IMousePosition} from "../../../DomComponent/AppAnimation";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
-import {IActor, IDimensions, IPluginDock} from "./ActorTypes";
-import {PluginDock} from "./ActorPluginDock";
+import {IActor, IDimensions} from "./ActorTypes";
+import {PluginDock} from "../../Plugins/root/ActorPluginDock";
+import {IPluginDock} from "../../Plugins/root/PluginTypes";
 
 /** Frame pool technology need to use for lot of entities of class */
 

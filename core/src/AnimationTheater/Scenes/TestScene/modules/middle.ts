@@ -14,10 +14,10 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {cursorHandler} from "./cursor";
-import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveUpOnKeyPress";
-import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveDownOnKeyPress";
-import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveLeftOnKeyPress";
-import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveRightOnKeyPress";
+import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveUpOnKeyPress";
+import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveDownOnKeyPress";
+import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveLeftOnKeyPress";
+import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveRightOnKeyPress";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};

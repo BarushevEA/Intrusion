@@ -1,4 +1,4 @@
-import {IPlugin, IPluginDock} from "./ActorTypes";
+import {IPlugin, IPluginDock} from "./PluginTypes";
 
 export class PluginDock<T> implements IPluginDock {
     private readonly root: T;

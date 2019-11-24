@@ -1,5 +1,6 @@
-import {IActor, IPlugin} from "../rootModels/AbstractActor/ActorTypes";
-import {AbstractScene} from "../rootScenes/AbstractScene";
+import {IActor} from "../../rootModels/AbstractActor/ActorTypes";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {IPlugin} from "./PluginTypes";
 
 export abstract class AbstractActorPlugin implements IPlugin {
     private _isDestroyed: boolean = false;
