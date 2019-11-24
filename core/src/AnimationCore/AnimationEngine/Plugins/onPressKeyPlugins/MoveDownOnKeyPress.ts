@@ -1,6 +1,6 @@
-import {AbstractActionOnKeyPress} from "./AbstractActionOnKeyPress";
-import {AbstractScene} from "../rootScenes/AbstractScene";
-import {E_KEY_MOVE_PLUGIN} from "./PluginTypes";
+import {AbstractActionOnKeyPress} from "../root/AbstractActionOnKeyPress";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {E_KEY_MOVE_PLUGIN} from "../root/PluginTypes";
 
 export class MoveDownOnKeyPress extends AbstractActionOnKeyPress {
     constructor(scene: AbstractScene, key: string, step = 10) {
