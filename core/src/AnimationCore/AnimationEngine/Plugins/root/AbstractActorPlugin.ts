@@ -25,6 +25,10 @@ export abstract class AbstractActorPlugin implements IPlugin {
         this.scene = <any>0;
     };
 
+    unLink(): void {
+        this.root = <any>0;
+    };
+
     getName(): string {
         return this.name;
     };

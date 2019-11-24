@@ -13,6 +13,13 @@ export class PluginDock<T> implements IPluginDock {
         this.pluginCase[plugin.getName()] = plugin;
     };
 
+    unLink(plugin: IPlugin): void{
+        if (this.pluginCase.hasOwnProperty(plugin.getName())) {
+            this.pluginCase[plugin.getName()].unLink();
+            delete this.pluginCase[plugin.getName()];
+        }
+    };
+
     destroyPlugin(plugin: IPlugin): void {
         if (this.pluginCase.hasOwnProperty(plugin.getName())) {
             this.pluginCase[plugin.getName()].destroy();

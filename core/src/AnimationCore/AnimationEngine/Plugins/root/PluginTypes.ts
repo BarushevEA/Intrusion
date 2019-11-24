@@ -9,11 +9,13 @@ export type IPlugin = {
     readonly isDestroyed: boolean;
     getName(): string;
     destroy(): void;
+    unLink(): void;
     setRoot(root: any): void;
 }
 
 export type IPluginDock = {
     add(plugin: IPlugin): void;
+    unLink(plugin: IPlugin): void;
     destroy(): void;
     destroyPluginName(name: string): void;
     destroyPlugin(plugin: IPlugin): void;
