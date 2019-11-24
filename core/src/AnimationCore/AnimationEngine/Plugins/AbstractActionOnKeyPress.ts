@@ -65,5 +65,9 @@ export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
         this._onKeyUp$.destroy();
         this._onKeyDown$ = <any>0;
         this._onKeyUp$ = <any>0;
+        if (this.keyUp) {
+            this.keyUp.unsubscribe();
+        }
+        this.keyUp = <any>0;
     }
 }
