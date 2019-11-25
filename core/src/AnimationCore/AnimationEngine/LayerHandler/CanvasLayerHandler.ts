@@ -61,7 +61,7 @@ export class CanvasLayerHandler {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    public restorePreviousLayer(): void {
+    public restoreDefaultLayer(): void {
         this.canvas = this.savedCanvas;
         this.context = this.savedContext;
     }

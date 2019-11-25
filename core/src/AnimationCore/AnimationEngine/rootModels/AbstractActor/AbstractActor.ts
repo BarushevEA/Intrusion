@@ -279,8 +279,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this.layerHandler.setVirtualLayer(name, height, width);
     }
 
-    public restorePreviousLayer() {
-        this.layerHandler.restorePreviousLayer();
+    public restoreDefaultLayer() {
+        this.layerHandler.restoreDefaultLayer();
     }
 
     public deleteVirtual(targetName: string): void {

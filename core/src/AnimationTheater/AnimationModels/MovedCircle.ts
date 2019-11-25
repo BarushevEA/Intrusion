@@ -32,7 +32,7 @@ export class MovedCircle extends AbstractActor {
                 `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
                 `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`)
             .circle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
     }
 
     renderFrame(): void {

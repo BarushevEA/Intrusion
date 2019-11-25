@@ -16,7 +16,7 @@ export class HorizontalBackground extends AbstractActor {
             Math.round(canvas.height),
             Math.round(canvas.width));
         this.init();
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
     }
 
     init(): void {
@@ -56,7 +56,7 @@ function getGreed($: AbstractActor): void {
             {x: 0, y: 0},
         ])
         .customStroke(false);
-    $.restorePreviousLayer();
+    $.restoreDefaultLayer();
 }
 
 function getWork($: AbstractActor) {
@@ -78,10 +78,10 @@ function getWork($: AbstractActor) {
     triangle1.yPos = $.height - rectangle1.height - triangle1.height;
     triangle1.renderFrame();
     // $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
-    $.restorePreviousLayer();
+    $.restoreDefaultLayer();
 }
 
 function getCopy($: AbstractActor){
     $.setVirtualLayer(ELayer.COPY);
-    $.restorePreviousLayer();
+    $.restoreDefaultLayer();
 }

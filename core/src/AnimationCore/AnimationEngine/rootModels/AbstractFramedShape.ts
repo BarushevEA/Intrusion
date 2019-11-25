@@ -25,7 +25,7 @@ export abstract class AbstractFramedShape extends AbstractActor {
         this.layerHandler.setLastFrameToStop();
         this.layerHandler.setOriginalToPlay();
         this.framePool = this.layerHandler.getFramePool();
-        this.layerHandler.restorePreviousLayer();
+        this.layerHandler.restoreDefaultLayer();
     }
 
     protected abstract setFramesName(): void;

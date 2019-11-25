@@ -9,7 +9,7 @@ export class GreenRectangle extends AbstractActor {
     constructor(canvas: HTMLCanvasElement) {
         super(canvas, 100, 100);
         this.init();
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
     }
 
     init(): void {
@@ -32,5 +32,5 @@ function getWork($: AbstractActor) {
             {x: 95, y: 95},
             {x: 5, y: 95},
         ]);
-    $.restorePreviousLayer();
+    $.restoreDefaultLayer();
 }
