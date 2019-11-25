@@ -1,6 +1,7 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {GreenTriangle} from "./GreenTriangle";
 import {GreenRectangle} from "./GreenRectangle";
+import {BrickWall} from "./briks/BrickWall";
 
 enum ELayer {
     WORK = 'WORK',
@@ -19,7 +20,6 @@ export class HorizontalBackground extends AbstractActor {
             Math.round(canvas.height),
             Math.round(canvas.width));
         this.init();
-        this.restoreDefaultLayer();
     }
 
     init(): void {
@@ -34,12 +34,11 @@ export class HorizontalBackground extends AbstractActor {
             this.drawVirtualOnVirtual(ELayer.WORK, ELayer.COPY, 0 - this.counter, 0);
             this.setVirtualLayer(ELayer.COPY);
             this.clearLayer();
-            this.restoreDefaultLayer();
             this.drawVirtualOnVirtual(ELayer.COPY, ELayer.WORK, 0, 0);
             this.counter = 0;
         }
         this.drawVirtualOnGeneral(ELayer.COPY, 0 - this.counter, 0);
-        this.drawVirtualOnGeneral(ELayer.GREED, 0, 0);
+        // this.drawVirtualOnGeneral(ELayer.GREED, 0, 0);
         this.counter += this.step;
     }
 }
@@ -69,33 +68,31 @@ function getGreed($: AbstractActor): void {
             {x: 0, y: 0},
         ])
         .customStroke(false);
-    $.restoreDefaultLayer();
 }
 
 function getWork($: AbstractActor) {
     const layer = $.setVirtualLayer(ELayer.WORK, $.height, $.width + 100);
     $.clearLayer();
-    const triangle = new GreenTriangle(layer);
-    triangle.xPos = layer.width - triangle.width;
-    triangle.yPos = 0;
-    triangle.renderFrame();
+    const brickWall = new BrickWall(layer);
+    brickWall.xPos = layer.width - brickWall.width;
+    brickWall.yPos = 0;
+    brickWall.setShowedFrame(80);
+    brickWall.renderFrame();
     const rectangle = new GreenRectangle(layer);
     rectangle.xPos = layer.width - rectangle.width;
-    rectangle.yPos = triangle.height;
+    rectangle.yPos = brickWall.height;
     rectangle.renderFrame();
-    const rectangle1 = new GreenRectangle(layer);
+    const rectangle1 = new BrickWall(layer);
     rectangle1.xPos = layer.width - rectangle1.width;
-    rectangle1.yPos = layer.height - rectangle1.height;
+    rectangle1.yPos = layer.height - rectangle1.height * 2;
+    rectangle1.setShowedFrame(80);
     rectangle1.renderFrame();
     const triangle1 = new GreenTriangle(layer);
     triangle1.xPos = layer.width - triangle1.width;
-    triangle1.yPos = layer.height - rectangle1.height - triangle1.height;
+    triangle1.yPos = layer.height - rectangle1.height;
     triangle1.renderFrame();
-    // $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
-    $.restoreDefaultLayer();
 }
 
 function getCopy($: AbstractActor) {
     $.setVirtualLayer(ELayer.COPY, $.height, $.width + 100);
-    $.restoreDefaultLayer();
 }
