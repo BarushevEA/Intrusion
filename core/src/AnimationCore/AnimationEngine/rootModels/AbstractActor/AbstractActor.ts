@@ -273,8 +273,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler.setOriginalToPlay();
     }
 
-    public setVirtualLayer(name: string): HTMLCanvasElement {
-        return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
+    public setVirtualLayer(name: string,
+                           height = this._elementHeight,
+                           width = this._elementWidth): HTMLCanvasElement {
+        return this.layerHandler.setVirtualLayer(name, height, width);
     }
 
     public restorePreviousLayer() {

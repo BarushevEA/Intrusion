@@ -67,23 +67,28 @@ export class CanvasLayerHandler {
     }
 
     public setVirtualLayer(name: string, height: number, width: number): HTMLCanvasElement {
-        this.canvas = document.createElement('canvas');
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
-        this.canvas.height = height;
-        this.canvas.width = width;
-        this.virtualPool[name] = {canvas: this.canvas, context: this.context};
+        if (this.virtualPool.hasOwnProperty(name)) {
+            this.canvas = this.virtualPool[name].canvas;
+            this.context = this.virtualPool[name].context;
+        } else {
+            this.canvas = document.createElement('canvas');
+            this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+            this.canvas.height = height;
+            this.canvas.width = width;
+            this.virtualPool[name] = {canvas: this.canvas, context: this.context};
+        }
         return this.canvas;
     }
 
     public drawVirtualOnGeneral(sourceName: string,
-                         x: number,
-                         y: number,
-                         width = -1,
-                         height = -1,
-                         xD = -1,
-                         yD = -1,
-                         widthD = -1,
-                         heightD = -1
+                                x: number,
+                                y: number,
+                                width = -1,
+                                height = -1,
+                                xD = -1,
+                                yD = -1,
+                                widthD = -1,
+                                heightD = -1
     ): void {
         if (width > -1 &&
             height > -1 &&
@@ -99,8 +104,8 @@ export class CanvasLayerHandler {
     }
 
     public drawVirtualOnVirtual(targetName: string,
-                         sourceName: string,
-                         x: number, y: number): void {
+                                sourceName: string,
+                                x: number, y: number): void {
         this.virtualPool[targetName].context.drawImage(this.virtualPool[sourceName].canvas, x, y);
     }
 

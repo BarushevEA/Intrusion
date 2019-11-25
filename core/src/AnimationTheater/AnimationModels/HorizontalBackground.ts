@@ -4,10 +4,11 @@ import {GreenRectangle} from "./GreenRectangle";
 
 enum ELayer {
     WORK = 'WORK',
-    GREED = 'GREED'
+    GREED = 'GREED',
+    COPY = 'COPY'
 }
 
-export class DynamicBackground extends AbstractActor {
+export class HorizontalBackground extends AbstractActor {
 
     constructor(canvas: HTMLCanvasElement) {
         super(
@@ -21,6 +22,7 @@ export class DynamicBackground extends AbstractActor {
     init(): void {
         getGreed(this);
         getWork(this);
+        getCopy(this);
     }
 
     renderFrame() {
@@ -60,12 +62,26 @@ function getGreed($: AbstractActor): void {
 function getWork($: AbstractActor) {
     const layer = $.setVirtualLayer(ELayer.WORK);
     const triangle = new GreenTriangle(layer);
-    triangle.xPos = 500;
-    triangle.yPos = 300;
+    triangle.xPos = $.width - triangle.width;
+    triangle.yPos = 0;
     triangle.renderFrame();
     const rectangle = new GreenRectangle(layer);
-    rectangle.xPos = 500;
-    rectangle.yPos = 400;
+    rectangle.xPos = $.width - rectangle.width;
+    rectangle.yPos = triangle.height;
     rectangle.renderFrame();
-    $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
+    const rectangle1 = new GreenRectangle(layer);
+    rectangle1.xPos = $.width - rectangle1.width;
+    rectangle1.yPos = $.height - rectangle1.height;
+    rectangle1.renderFrame();
+    const triangle1 = new GreenTriangle(layer);
+    triangle1.xPos = $.width - triangle1.width;
+    triangle1.yPos = $.height - rectangle1.height - triangle1.height;
+    triangle1.renderFrame();
+    // $.drawVirtualOnVirtual(ELayer.WORK, ELayer.WORK, -100, 0);
+    $.restorePreviousLayer();
+}
+
+function getCopy($: AbstractActor){
+    $.setVirtualLayer(ELayer.COPY);
+    $.restorePreviousLayer();
 }

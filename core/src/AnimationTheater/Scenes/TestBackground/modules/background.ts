@@ -1,8 +1,8 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
-import {DynamicBackground} from "../../../AnimationModels/DynamicBackground";
+import {HorizontalBackground} from "../../../AnimationModels/HorizontalBackground";
 
-let background: DynamicBackground;
+let background: HorizontalBackground;
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
@@ -16,7 +16,7 @@ function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
-    background = new DynamicBackground(scene.generalLayer);
+    background = new HorizontalBackground(scene.generalLayer);
     scene.setActors(background);
 }
 
