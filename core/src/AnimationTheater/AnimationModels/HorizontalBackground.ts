@@ -15,6 +15,7 @@ export class HorizontalBackground extends AbstractActor {
     private counter = 100;
     private copyLayerCounter = 0;
     private arrayCounter = 0;
+    private arr: AbstractActor[] = [];
 
     constructor(canvas: HTMLCanvasElement) {
         super(
@@ -31,7 +32,7 @@ export class HorizontalBackground extends AbstractActor {
     renderFrame() {
         if (this.counter >= this.number) {
             this.counter = 0;
-            setDataToCopy(this, this.arrayCounter);
+            setDataToCopy(this, this.arrayCounter, this.arr);
             this.arrayCounter++;
         }
         if (this.copyLayerCounter >= this.generalLayer.width) {
@@ -76,24 +77,36 @@ function getGreed($: AbstractActor): void {
         .customStroke(false);
 }
 
-function setDataToCopy($: AbstractActor, delta: number) {
-    const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
-    const brickWall = new BrickWall(layer);
-    brickWall.xPos = $.width + delta * brickWall.width;
-    brickWall.yPos = 0;
-    brickWall.setShowedFrame(80);
-    brickWall.renderFrame();
-    const rectangle = new GreenRectangle(layer);
-    rectangle.xPos = $.width + delta * rectangle.width;
-    rectangle.yPos = brickWall.height;
-    rectangle.renderFrame();
-    const rectangle1 = new BrickWall(layer);
-    rectangle1.xPos = $.width + delta * rectangle1.width;
-    rectangle1.yPos = $.height - rectangle1.height * 2;
-    rectangle1.setShowedFrame(80);
-    rectangle1.renderFrame();
-    const triangle1 = new GreenTriangle(layer);
-    triangle1.xPos = $.width + delta * triangle1.width;
-    triangle1.yPos = $.height - rectangle1.height;
-    triangle1.renderFrame();
+function setDataToCopy($: AbstractActor, delta: number, arr: AbstractActor[]) {
+    if (!arr.length) {
+        const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
+        const brickWall = new BrickWall(layer);
+        brickWall.xPos = $.width + delta * brickWall.width;
+        brickWall.yPos = 0;
+        brickWall.setShowedFrame(80);
+        brickWall.renderFrame();
+        arr.push(brickWall);
+        const rectangle = new GreenRectangle(layer);
+        rectangle.xPos = $.width + delta * rectangle.width;
+        rectangle.yPos = brickWall.height;
+        rectangle.renderFrame();
+        arr.push(rectangle);
+        const rectangle1 = new BrickWall(layer);
+        rectangle1.xPos = $.width + delta * rectangle1.width;
+        rectangle1.yPos = $.height - rectangle1.height * 2;
+        rectangle1.setShowedFrame(80);
+        rectangle1.renderFrame();
+        arr.push(rectangle1);
+        const triangle1 = new GreenTriangle(layer);
+        triangle1.xPos = $.width + delta * triangle1.width;
+        triangle1.yPos = $.height - rectangle1.height;
+        triangle1.renderFrame();
+        arr.push(triangle1);
+    } else {
+        for (let i = 0; i < arr.length; i++) {
+            const actor = arr[i];
+            actor.xPos = $.width + delta * actor.width;
+            actor.renderFrame();
+        }
+    }
 }
