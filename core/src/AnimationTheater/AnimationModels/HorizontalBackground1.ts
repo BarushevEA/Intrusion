@@ -10,6 +10,8 @@ export class HorizontalBackground1 extends AbstractActor {
     private step = 2;
     private number = 100;
     private counter = 100;
+    private copyLayerCounter = 0;
+    private arrayCounter = 0;
 
     constructor(canvas: HTMLCanvasElement) {
         super(
@@ -20,36 +22,37 @@ export class HorizontalBackground1 extends AbstractActor {
     }
 
     init(): void {
-        getWork(this);
-        getCopy(this);
+
     }
 
     renderFrame() {
         if (this.counter >= this.number) {
-            getWork(this);
-            this.drawVirtualOnVirtual(ELayer.WORK, ELayer.COPY, 0 - this.counter, 0);
-            this.setVirtualLayer(ELayer.COPY);
-            this.clearLayer();
-            this.drawVirtualOnVirtual(ELayer.COPY, ELayer.WORK, 0, 0);
             this.counter = 0;
+            setDataToCopy(this, this.arrayCounter);
+            this.arrayCounter++;
         }
-        this.drawVirtualOnGeneral(ELayer.COPY, 0 - this.counter, 0);
+        if (this.copyLayerCounter >= this.generalLayer.width) {
+            this.copyLayerCounter = 0;
+            this.arrayCounter = 0;
+            this.counter = this.number;
+            this.clearLayer(0, 0, this.generalLayer.width, this.generalLayer.height);
+            this.drawVirtualOnVirtual(ELayer.COPY, ELayer.COPY, 0 - this.generalLayer.width, 0);
+            this.clearLayer(this.generalLayer.width, 0, this.generalLayer.width, this.generalLayer.height);
+        }
+        this.drawVirtualOnGeneral(ELayer.COPY, 0 - this.copyLayerCounter, 0);
+        console.log(this.copyLayerCounter);
         this.counter += this.step;
+        this.copyLayerCounter += this.step;
     }
 }
 
-function getWork($: AbstractActor) {
-    const layer = $.setVirtualLayer(ELayer.WORK, $.height, $.width + 100);
-    $.clearLayer();
+function setDataToCopy($: AbstractActor, delta: number) {
+    const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
     for (let i = 0; i < $.height; i += 100) {
         const brickWall = new BrickWall(layer);
-        brickWall.xPos = layer.width - brickWall.width;
+        brickWall.xPos = $.width + delta * brickWall.width;
         brickWall.yPos = i;
         brickWall.setShowedFrame(399);
         brickWall.renderFrame();
     }
-}
-
-function getCopy($: AbstractActor) {
-    $.setVirtualLayer(ELayer.COPY, $.height, $.width + 100);
 }

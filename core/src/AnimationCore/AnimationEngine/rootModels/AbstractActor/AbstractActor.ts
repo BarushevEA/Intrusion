@@ -14,6 +14,7 @@ import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
 import {IActor, IDimensions} from "./ActorTypes";
 import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
+import {x_pos, y_pos} from "../../../Libraries/Types";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -279,8 +280,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this.layerHandler.setVirtualLayer(name, height, width);
     }
 
-    public clearLayer(): void {
-        this.layerHandler.clear();
+    public clearLayer(x: x_pos = 0, y: y_pos = 0, width?: number, height?: number): void {
+        this.layerHandler.clear(x, y, width, height);
     }
 
     public restoreDefaultLayer() {

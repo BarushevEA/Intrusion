@@ -1,5 +1,6 @@
 import {ITextHandler, textHandler} from "./TextHandler";
 import {IShapeHandler, shapeHandler} from "./ShapeHandler";
+import {x_pos, y_pos} from "../../Libraries/Types";
 
 export type IVirtualCanvasesPool = {
     [key: string]: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D };
@@ -57,8 +58,8 @@ export class CanvasLayerHandler {
         return this._shape;
     }
 
-    public clear(): void {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    public clear(x: x_pos = 0, y: y_pos = 0, width = this.canvas.width, height = this.canvas.height): void {
+        this.context.clearRect(x, y, width, height);
     }
 
     public restoreDefaultLayer(): void {

@@ -20,6 +20,7 @@ function clearVariables() {
 function initActors(scene: AbstractScene) {
     background = new HorizontalBackground(scene.generalLayer);
     background1 = new HorizontalBackground1(scene.generalLayer);
+    // background = background;
     scene.setActors(background1);
     scene.setActors(background);
 }
