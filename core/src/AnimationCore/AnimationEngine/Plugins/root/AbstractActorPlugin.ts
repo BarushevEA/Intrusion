@@ -1,13 +1,13 @@
-import {IActor} from "../../rootModels/AbstractActor/ActorTypes";
 import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {IPlugin} from "./PluginTypes";
+import {AbstractActor} from "../../rootModels/AbstractActor/AbstractActor";
 
 export abstract class AbstractActorPlugin implements IPlugin {
     public numberSeparator = '_#';
     private static pluginCounter = 0;
     private _isDestroyed: boolean = false;
     private readonly name: string = '';
-    protected root: IActor = <any>0;
+    protected root: AbstractActor = <any>0;
     protected scene: AbstractScene = <any>0;
 
     protected constructor(name: string, scene: AbstractScene) {
