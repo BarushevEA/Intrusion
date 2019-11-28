@@ -23,19 +23,19 @@ function initActors(scene: AbstractScene) {
         switch (j) {
             case 0:
                 backgroundColor = 'rgba(195,5,7,0.5)';
-                borderColor = 'rgba(195,187,58,0)';
+                borderColor = 'rgba(5,4,195,0)';
                 break;
             case 1:
                 backgroundColor = 'rgba(0,195,15,0.5)';
-                borderColor = 'rgba(0,195,15,0)';
+                borderColor = 'rgba(5,4,195,0)';
                 break;
             case 2:
                 backgroundColor = 'rgba(5,4,195,0.5)';
-                borderColor = 'rgba(5,4,195,0)';
+                borderColor = 'rgba(195,187,58,0)';
                 break;
             default:
                 backgroundColor = 'rgba(255,255,255,0.3)';
-                borderColor = 'rgba(255,255,255,0.5)';
+                borderColor = 'rgba(255,255,255,0)';
         }
         const web = new PolygonWeb(scene, backgroundColor, borderColor);
         for (let i = 0; i < 3; i++) {

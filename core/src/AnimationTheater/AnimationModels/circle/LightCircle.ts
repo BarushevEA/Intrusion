@@ -34,7 +34,7 @@ export class LightCircle extends AbstractFramedShape {
                 .stopDrawing();
         }
         for (let i = length; i > -1; i--) {
-            this.createFrame(1);
+            this.createFrame(0);
             this.shape
                 .colors('rgba(0,0,0,0)', 'rgba(0,0,0,0)')
                 .lineWidth(0)

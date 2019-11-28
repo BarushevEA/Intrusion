@@ -4,9 +4,9 @@ import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
-    private xDelta = 5;
-    private yDelta = 5;
-    private deltaNum = 5;
+    private deltaNum = 10;
+    private xDelta = this.getRandomDelta();
+    private yDelta = this.getRandomDelta();
 
     constructor(scene: AbstractScene) {
         super('BounceOffTheWall', scene);

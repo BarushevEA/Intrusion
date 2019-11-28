@@ -21,8 +21,30 @@ export class PolygonWeb extends AbstractActorPlugin {
                 this.rootPool[0].yPos,
                 this.rootPool[0].height,
                 this.rootPool[0].width);
-            shape.colors(backgroundColor, borderColor)
-                .lineWidth(2);
+            if (this.rootPool.length < 2) {
+                shape.colors(backgroundColor, borderColor)
+                    .lineWidth(2);
+            } else {
+                const middle1 = getRectangleCenter(
+                    this.rootPool[1].xPos,
+                    this.rootPool[1].yPos,
+                    this.rootPool[1].height,
+                    this.rootPool[1].width);
+                shape
+                    .colors(backgroundColor, borderColor)
+                    .lineWidth(0)
+                    .linearGradient()
+                    .setGradientDirectionPoints(
+                        middle0.x,
+                        middle0.y,
+                        middle1.x,
+                        middle1.y)
+                    .addColorStop(0, 'rgba(0,0,0,0.2)')
+                    .addColorStop(0.1, backgroundColor)
+                    .addColorStop(0.9, 'rgba(0,0,0,0)')
+                    .addColorStop(1, 'rgba(0,0,0,0.2)')
+                    .stopExecution();
+            }
 
             const polygon = shape.advancedPolygon();
             polygon.startPoint(middle0.x, middle0.y);
