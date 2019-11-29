@@ -1,5 +1,5 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {getRectangleCenter} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 
 export class LightCircle extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
@@ -11,7 +11,8 @@ export class LightCircle extends AbstractFramedShape {
     }
 
     protected initShape(): void {
-        const middle = getRectangleCenter(0, 0, this.height, this.width);
+        const x = getCenterX(0, this.width);
+        const y = getCenterY(0, this.height);
         const length = 20;
         for (let i = 0; i < length; i++) {
             this.createFrame(1);
@@ -20,12 +21,8 @@ export class LightCircle extends AbstractFramedShape {
                 .lineWidth(0)
                 .radialGradient()
                 .setGradientDirectionPoints(
-                    middle.x,
-                    middle.y,
-                    i,
-                    middle.x,
-                    middle.y,
-                    30 + i)
+                    x, y, i,
+                    x, y, 30 + i)
                 .addColorStop(0, 'rgba(195,187,58,1)')
                 .addColorStop(0.5, 'rgba(195,187,58,0.3)')
                 .addColorStop(1, 'rgba(0,0,0,0)')
@@ -40,12 +37,8 @@ export class LightCircle extends AbstractFramedShape {
                 .lineWidth(0)
                 .radialGradient()
                 .setGradientDirectionPoints(
-                    middle.x,
-                    middle.y,
-                    i,
-                    middle.x,
-                    middle.y,
-                    30 + i)
+                    x, y, i,
+                    x, y, 30 + i)
                 .addColorStop(0, 'rgba(195,187,58,1)')
                 .addColorStop(0.2, 'rgba(195,187,58,0.3)')
                 .addColorStop(1, 'rgba(0,0,0,0)')
