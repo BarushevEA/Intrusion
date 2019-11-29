@@ -7,10 +7,7 @@ import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModel
 import {cursorHandler} from "./cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {Plane} from "../../../AnimationModels/Plane";
-import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveUpOnKeyPress";
-import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveDownOnKeyPress";
-import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveLeftOnKeyPress";
-import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveRightOnKeyPress";
+import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -45,35 +42,8 @@ function initActors(scene: AbstractScene) {
 }
 
 function planeAction(scene: AbstractScene) {
-    const moveHeartUp = new MoveUpOnKeyPress(scene, 'w');
-    const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
-    const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
-    const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
-    plane.pluginDock.add(moveHeartUp);
-    plane.pluginDock.add(moveHeartDown);
-    plane.pluginDock.add(moveHeartLeft);
-    plane.pluginDock.add(moveHeartRight);
-
-    moveHeartUp.onKeyDown$.subscribe((step: number) => {
-        if (plane.yPos < step) {
-            plane.yPos = step;
-        }
-    });
-    moveHeartDown.onKeyDown$.subscribe((step: number) => {
-        if (plane.yPos > scene.generalLayer.height - plane.height - step) {
-            plane.yPos = scene.generalLayer.height - plane.height - step;
-        }
-    });
-    moveHeartLeft.onKeyDown$.subscribe((step: number) => {
-        if (plane.xPos < step) {
-            plane.xPos = step;
-        }
-    });
-    moveHeartRight.onKeyDown$.subscribe((step: number) => {
-        if (plane.xPos > scene.generalLayer.width - plane.width - step) {
-            plane.xPos = scene.generalLayer.width - plane.width - step;
-        }
-    });
+    const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
+    plane.pluginDock.add(moveKeys);
 }
 
 function initActions(scene: AbstractScene) {
