@@ -5,6 +5,7 @@ import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {cursorHandler} from "./cursor";
+import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 let circles: AbstractActor[] = <any>0;
 
@@ -66,7 +67,13 @@ function initActions(scene: AbstractScene) {
             scene.collect(
                 circle.isMouseOver$.subscribe(() => {
                     cursorHandler.pointerOrDefaultChange(scene, circle);
-                })
+                }),
+                circle.isMouseLeftDrag$.subscribe(() => {
+                    scene.cursor.setType(ECursor.CATCH);
+                }),
+                circle.isMouseLeftDrop$.subscribe(() => {
+                    scene.cursor.setType(ECursor.POINTER);
+                }),
             );
             counter++;
         }
