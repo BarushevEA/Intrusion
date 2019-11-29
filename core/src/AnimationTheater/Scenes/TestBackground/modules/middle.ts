@@ -6,7 +6,7 @@ import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 
 
 export function handleMiddle(scene: AbstractScene): void {
-    scene.setActiveLayer(ELayers.BACKGROUND);
+    scene.setActiveLayer(ELayers.MIDDLE);
     clearVariables();
     initActors(scene);
     initActions(scene);
