@@ -6,8 +6,14 @@ import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {cursorHandler} from "./cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
+import {Plane} from "../../../AnimationModels/Plane";
+import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveUpOnKeyPress";
+import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveDownOnKeyPress";
+import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveLeftOnKeyPress";
+import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveRightOnKeyPress";
 
 let circles: AbstractActor[] = <any>0;
+let plane: AbstractActor = <any>0;
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -17,6 +23,7 @@ export function handleMiddle(scene: AbstractScene): void {
 }
 
 function clearVariables() {
+    plane = <any>0;
     if (circles) {
         for (let i = 0; i < circles.length; i++) {
             const circle = circles[i];
@@ -33,9 +40,45 @@ function initActors(scene: AbstractScene) {
         circles.push(circle);
         scene.setActors(circle);
     }
+    plane = new Plane(scene.generalLayer);
+    scene.setActors(plane);
+}
+
+function planeAction(scene: AbstractScene) {
+    const moveHeartUp = new MoveUpOnKeyPress(scene, 'w');
+    const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
+    const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
+    const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
+    plane.pluginDock.add(moveHeartUp);
+    plane.pluginDock.add(moveHeartDown);
+    plane.pluginDock.add(moveHeartLeft);
+    plane.pluginDock.add(moveHeartRight);
+
+    moveHeartUp.onKeyDown$.subscribe((step: number) => {
+        if (plane.yPos < step) {
+            plane.yPos = step;
+        }
+    });
+    moveHeartDown.onKeyDown$.subscribe((step: number) => {
+        if (plane.yPos > scene.generalLayer.height - plane.height - step) {
+            plane.yPos = scene.generalLayer.height - plane.height - step;
+        }
+    });
+    moveHeartLeft.onKeyDown$.subscribe((step: number) => {
+        if (plane.xPos < step) {
+            plane.xPos = step;
+        }
+    });
+    moveHeartRight.onKeyDown$.subscribe((step: number) => {
+        if (plane.xPos > scene.generalLayer.width - plane.width - step) {
+            plane.xPos = scene.generalLayer.width - plane.width - step;
+        }
+    });
 }
 
 function initActions(scene: AbstractScene) {
+    planeAction(scene);
+
     let counter = 0;
     for (let j = 0; j < 3; j++) {
         let backgroundColor: string = '',
@@ -78,6 +121,8 @@ function initActions(scene: AbstractScene) {
             counter++;
         }
     }
+
+
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
