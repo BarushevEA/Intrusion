@@ -23,8 +23,7 @@ export class MoveKeyControls extends AbstractActorPlugin {
         this.moveRight = new MoveRightOnKeyPress(scene, moveRight);
     }
 
-    setRoot(root: any): void {
-        super.setRoot(root);
+    onInit(): void {
         this.init();
     }
 

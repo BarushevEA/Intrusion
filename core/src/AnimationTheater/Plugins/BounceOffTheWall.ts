@@ -10,6 +10,9 @@ export class BounceOffTheWall extends AbstractActorPlugin {
 
     constructor(scene: AbstractScene) {
         super('BounceOffTheWall', scene);
+    }
+
+    onInit(): void {
         this.init();
     }
 

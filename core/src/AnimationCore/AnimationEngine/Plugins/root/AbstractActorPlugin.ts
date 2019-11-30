@@ -33,7 +33,10 @@ export abstract class AbstractActorPlugin implements IPlugin {
         return this.name;
     };
 
-    setRoot(root: any): void {
+    setRoot(root: AbstractActor): void {
         this.root = root;
+        this.onInit(root);
     };
+
+    abstract onInit(root?: AbstractActor): void;
 }

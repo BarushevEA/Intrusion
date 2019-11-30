@@ -15,4 +15,7 @@ export class MoveLeftOnKeyPress extends AbstractActionOnKeyPress {
                 this._onKeyDown$.next(this._step);
             });
     }
+
+    onInit(): void {
+    }
 }

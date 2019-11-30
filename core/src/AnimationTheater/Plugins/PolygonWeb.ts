@@ -7,14 +7,22 @@ import {getCenterX, getCenterY} from "../../AnimationCore/Libraries/FunctionLibs
 export class PolygonWeb extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private rootPool: AbstractActor[] = [];
+    private bgColor = '';
+    private bdColor = '';
+
 
     constructor(scene: AbstractScene, backgroundColor: string, borderColor: string) {
         super('PolygonWeb', scene);
-        this.init(backgroundColor, borderColor);
+        this.bgColor = backgroundColor;
+        this.bdColor = borderColor;
+        this.init();
     }
 
-    init(backgroundColor: string, borderColor: string) {
+    init() {
         this.subscriber = this.scene.tickCount$.subscribe(() => {
+            if (!this.rootPool[0]) {
+                return;
+            }
             const shape = this.rootPool[0].shape;
             const x0 = getCenterX(
                 this.rootPool[0].xPos,
@@ -23,7 +31,7 @@ export class PolygonWeb extends AbstractActorPlugin {
                 this.rootPool[0].yPos,
                 this.rootPool[0].height);
             if (this.rootPool.length < 2) {
-                shape.colors(backgroundColor, borderColor)
+                shape.colors(this.bgColor, this.bdColor)
                     .lineWidth(2);
             } else {
                 const x1 = getCenterX(
@@ -33,12 +41,12 @@ export class PolygonWeb extends AbstractActorPlugin {
                     this.rootPool[1].yPos,
                     this.rootPool[1].height);
                 shape
-                    .colors(backgroundColor, borderColor)
+                    .colors(this.bgColor, this.bdColor)
                     .lineWidth(0)
                     .linearGradient()
                     .setGradientDirectionPoints(x0, y0, x1, y1)
                     .addColorStop(0, 'rgba(0,0,0,0.2)')
-                    .addColorStop(0.1, backgroundColor)
+                    .addColorStop(0.1, this.bgColor)
                     .addColorStop(0.9, 'rgba(0,0,0,0)')
                     .addColorStop(1, 'rgba(0,0,0,0.2)')
                     .stopExecution();
@@ -64,10 +72,11 @@ export class PolygonWeb extends AbstractActorPlugin {
         }
         this.subscriber = <any>0;
         this.rootPool.length = 0;
+        this.bgColor = <any>0;
+        this.bdColor = <any>0;
     }
 
-    setRoot(root: any): void {
-        super.setRoot(root);
+    onInit(root: AbstractActor): void {
         this.rootPool.push(root);
     }
 }
