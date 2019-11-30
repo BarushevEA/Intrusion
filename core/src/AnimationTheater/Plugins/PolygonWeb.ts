@@ -10,11 +10,14 @@ export class PolygonWeb extends AbstractActorPlugin {
     private bgColor = '';
     private bdColor = '';
 
-
     constructor(scene: AbstractScene, backgroundColor: string, borderColor: string) {
         super('PolygonWeb', scene);
         this.bgColor = backgroundColor;
         this.bdColor = borderColor;
+    }
+
+    onInit(root: AbstractActor): void {
+        this.rootPool.push(root);
         this.init();
     }
 
@@ -74,9 +77,5 @@ export class PolygonWeb extends AbstractActorPlugin {
         this.rootPool.length = 0;
         this.bgColor = <any>0;
         this.bdColor = <any>0;
-    }
-
-    onInit(root: AbstractActor): void {
-        this.rootPool.push(root);
     }
 }
