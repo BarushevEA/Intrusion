@@ -9,6 +9,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
     private fire: AbstractActor = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private yBalance: number = 0;
+    private xBalance: number = 0;
 
     constructor(scene: AbstractScene) {
         super('BlueFirePlugin', scene);
@@ -18,17 +19,33 @@ export class BlueFirePlugin extends AbstractActorPlugin {
         this.fire = new BlueFire(this.scene.generalLayer);
         this.scene.setActors(this.fire);
         this.yBalance = this.root.yPos;
+        this.xBalance = this.root.xPos;
+        let ortY = -1;
+        let ortX = -1;
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            let ort = this.yBalance - this.root.yPos;
+            let xDelta = this.xBalance - this.root.xPos;
+            let yDelta = this.yBalance - this.root.yPos;
+
+            if (!ortY &&
+                !ortX &&
+                !yDelta &&
+                !xDelta
+            ) {
+                return;
+            }
+
+            ortY = yDelta;
+            ortX = xDelta;
 
             this.scene.setActorZIndex(this.fire, this.root.z_index - 10);
             this.fire.xPos = this.root.xPos - this.root.width - 20;
             this.fire.yPos =
                 getCenterY(this.root.yPos, this.root.height)
                 - Math.round(this.fire.height / 2)
-                - ort;
+                - ortY;
 
             this.yBalance = this.root.yPos;
+            this.xBalance = this.root.xPos;
         });
     }
 
@@ -42,6 +59,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             this.fire = <any>0;
         }
         this.yBalance = 0;
+        this.xBalance = 0;
         super.destroy();
     }
 }
