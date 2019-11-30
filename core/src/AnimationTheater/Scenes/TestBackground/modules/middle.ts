@@ -9,9 +9,11 @@ import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Type
 import {Plane} from "../../../AnimationModels/Plane";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
+import {BlueFire} from "../../../AnimationModels/circle/BlueFire";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
+let fire: AbstractActor = <any>0;
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -22,6 +24,7 @@ export function handleMiddle(scene: AbstractScene): void {
 
 function clearVariables() {
     plane = <any>0;
+    fire = <any>0;
     if (circles) {
         for (let i = 0; i < circles.length; i++) {
             const circle = circles[i];
@@ -38,8 +41,10 @@ function initActors(scene: AbstractScene) {
         circles.push(circle);
         scene.setActors(circle);
     }
+    fire = new BlueFire(scene.generalLayer);
     plane = new Plane(scene.generalLayer);
     scene.setActors(plane);
+    scene.setActors(fire);
 }
 
 function planeAction(scene: AbstractScene) {
