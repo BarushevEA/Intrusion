@@ -33,7 +33,8 @@ export type IObserver<T> =
     ISetObservableValue &
     ISubscriber<T> &
     IUnSubscribe &
-    ISubscribeCounter;
+    ISubscribeCounter &
+    { unsubscribeAll(): void };
 
 class SubscriberLike implements ISubscriptionLike {
     private readonly observable: IUnSubscribe;
@@ -61,27 +62,23 @@ export class Observable<T> implements IObserver<T> {
         this._value = value;
     }
 
-    next(value: T): void {
+    public next(value: T): void {
         this._value = value;
         for (let i = 0; i < this.keys.length; i++) {
             this.listeners[this.keys[i]](value);
         }
     }
 
-    unSubscribe(index: string): void {
+    public unSubscribe(index: string): void {
         if (this.listeners.hasOwnProperty(index)) {
             delete this.listeners[index];
             this.keys = Object.keys(this.listeners);
         }
     }
 
-    destroy(): void {
+    public destroy(): void {
         this._value = <any>0;
-        const length = this.keys.length;
-        for (let i = 0; i < length; i++) {
-            const key = this.keys[i];
-            this.unSubscribe(key);
-        }
+        this.unsubscribeAll();
         this.keys = <any>0;
         this.listeners = <any>0;
         this.indexCounter = <any>0;
@@ -89,15 +86,23 @@ export class Observable<T> implements IObserver<T> {
         this.flexibleCounter = <any>0;
     }
 
-    getValue(): T {
+    public unsubscribeAll(): void {
+        const length = this.keys.length;
+        for (let i = 0; i < length; i++) {
+            const key = this.keys[i];
+            this.unSubscribe(key);
+        }
+    }
+
+    public getValue(): T {
         return this._value;
     }
 
-    getNumberOfSubscribers(): number {
+    public getNumberOfSubscribers(): number {
         return this.keys.length;
     }
 
-    subscribe(callback: ICallback): ISubscriptionLike {
+    public subscribe(callback: ICallback): ISubscriptionLike {
         this.indexCounter++;
         let index = this.indexFlexible[this.flexibleCounter];
         if (this.indexCounter >= Number.MAX_SAFE_INTEGER - 1) {

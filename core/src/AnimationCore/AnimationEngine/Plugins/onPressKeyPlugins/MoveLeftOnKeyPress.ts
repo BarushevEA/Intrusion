@@ -1,6 +1,6 @@
-import {AbstractScene} from "../rootScenes/AbstractScene";
-import {E_KEY_MOVE_PLUGIN} from "./PluginTypes";
-import {AbstractActionOnKeyPress} from "./AbstractActionOnKeyPress";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {E_KEY_MOVE_PLUGIN} from "../root/PluginTypes";
+import {AbstractActionOnKeyPress} from "../root/AbstractActionOnKeyPress";
 
 export class MoveLeftOnKeyPress extends AbstractActionOnKeyPress {
     constructor(scene: AbstractScene, key: string, step = 10) {
@@ -14,5 +14,8 @@ export class MoveLeftOnKeyPress extends AbstractActionOnKeyPress {
                 this.root.xPos -= this._step;
                 this._onKeyDown$.next(this._step);
             });
+    }
+
+    onInit(): void {
     }
 }

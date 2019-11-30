@@ -1,27 +1,12 @@
 import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observable";
 import {x_pos, y_pos} from "../../../Libraries/Types";
+import {IPluginDock} from "../../Plugins/root/PluginTypes";
 
 export type IDimensions = {
     xPos: x_pos;
     yPos: y_pos;
     width: number;
     height: number;
-}
-
-export type IPlugin = {
-    readonly isDestroyed: boolean;
-    getName(): string;
-    destroy(): void;
-    setRoot(root: any): void;
-}
-
-export type IPluginDock = {
-    add(plugin: IPlugin): void;
-    destroy(): void;
-    destroyPluginName(name: string): void;
-    destroyPlugin(plugin: IPlugin): void;
-    getPlugin<T>(name: string): T;
-    getPluginList(): string[];
 }
 
 export type IActor = {

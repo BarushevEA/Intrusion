@@ -14,10 +14,7 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {cursorHandler} from "./cursor";
-import {MoveUpOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveUpOnKeyPress";
-import {MoveDownOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveDownOnKeyPress";
-import {MoveLeftOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveLeftOnKeyPress";
-import {MoveRightOnKeyPress} from "../../../../AnimationCore/AnimationEngine/Plugins/MoveRightOnKeyPress";
+import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -263,32 +260,6 @@ export function toggleReverse() {
 }
 
 function initHeartMoveOnKeyPress(scene: AbstractScene) {
-    const moveHeartUp = new MoveUpOnKeyPress(scene, 'w');
-    const moveHeartDown = new MoveDownOnKeyPress(scene, 's');
-    const moveHeartLeft = new MoveLeftOnKeyPress(scene, 'a');
-    const moveHeartRight = new MoveRightOnKeyPress(scene, 'd');
-    heart.pluginDock.add(moveHeartUp);
-    heart.pluginDock.add(moveHeartDown);
-    heart.pluginDock.add(moveHeartLeft);
-    heart.pluginDock.add(moveHeartRight);
-    moveHeartUp.onKeyDown$.subscribe((step: number) => {
-        if (heart.yPos < step) {
-            heart.yPos = step;
-        }
-    });
-    moveHeartDown.onKeyDown$.subscribe((step: number) => {
-        if (heart.yPos > scene.generalLayer.height - heart.height - step) {
-            heart.yPos = scene.generalLayer.height - heart.height - step;
-        }
-    });
-    moveHeartLeft.onKeyDown$.subscribe((step: number) => {
-        if (heart.xPos < step) {
-            heart.xPos = step;
-        }
-    });
-    moveHeartRight.onKeyDown$.subscribe((step: number) => {
-        if (heart.xPos > scene.generalLayer.width - heart.width - step) {
-            heart.xPos = scene.generalLayer.width - heart.width - step;
-        }
-    });
+    const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
+    heart.pluginDock.add(moveKeys);
 }

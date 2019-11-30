@@ -21,6 +21,7 @@ export type IRenderController = {
     setFullSpeed(): void;
     setHalfSpeed(): void;
     tickCount$: ISubscriber<boolean>;
+    context: CanvasRenderingContext2D;
 }
 
 export type IActorsPool = IActor[];
@@ -30,7 +31,7 @@ export class RenderController implements IRenderController {
     private canvas: HTMLCanvasElement = <any>0;
     private currentPool: IActorsPool = [];
     private animFrameIndex = -1;
-    private context: CanvasRenderingContext2D = <any>0;
+    private _context: CanvasRenderingContext2D = <any>0;
     private isBackgroundLayerPresent = false;
     private currentLayerName = 'background';
     private layers: ILayerPool = {[this.currentLayerName]: this.currentPool};
@@ -39,13 +40,17 @@ export class RenderController implements IRenderController {
     private delayCounter = 0;
     private _tickCount$ = new Observable(<boolean>false);
 
+    get context(): CanvasRenderingContext2D {
+        return this._context;
+    }
+
     get tickCount$(): ISubscriber<boolean> {
         return this._tickCount$;
     }
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
-        this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this._context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
     }
 
     public setActor(actor: IActor): void {
@@ -152,7 +157,7 @@ export class RenderController implements IRenderController {
 
     runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawLayers();
     }
 
@@ -164,7 +169,7 @@ export class RenderController implements IRenderController {
         }
         this.delayCounter++;
         if (!this.isBackgroundLayerPresent) {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
         this.drawLayers();
     }

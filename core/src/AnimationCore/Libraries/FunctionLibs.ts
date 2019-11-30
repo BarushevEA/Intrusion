@@ -1,7 +1,6 @@
 import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {IDegrees, IRadian, x_pos, y_pos} from "./Types";
-import {IPoint} from "../AnimationEngine/LayerHandler/ShapeHandler";
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export type ICoordinatesConverter = {
@@ -25,15 +24,16 @@ export function degreesToRadian(degrees: IDegrees): IRadian {
     return (Math.PI / 180) * degrees;
 }
 
-export function getRectCenter(x1: x_pos, y1: y_pos, x2: x_pos, y2: y_pos): IPoint {
-    const result: IPoint = <any>{};
-    result.x = Math.trunc((x1 + x2) / 2);
-    result.y = Math.trunc((y1 + y2) / 2);
-    return result;
+export function getRectCenterCoordinate(n1: number, n2: number): number {
+    return Math.trunc((n1 + n2) / 2);
 }
 
-export function getRectangleCenter(x: x_pos, y: y_pos, height: number, weight: number): IPoint {
-    return getRectCenter(x, y, x + weight, y + height);
+export function getCenterX(x: x_pos, weight: number): x_pos {
+    return getRectCenterCoordinate(x,  x + weight);
+}
+
+export function getCenterY(y: y_pos, height: number): y_pos {
+    return getRectCenterCoordinate(y,  y + height);
 }
 
 export class CoordinatesConverter implements ICoordinatesConverter {

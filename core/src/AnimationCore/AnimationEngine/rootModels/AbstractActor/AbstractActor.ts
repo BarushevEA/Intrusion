@@ -11,8 +11,10 @@ import {IMousePosition} from "../../../DomComponent/AppAnimation";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
-import {IActor, IDimensions, IPluginDock} from "./ActorTypes";
-import {PluginDock} from "./ActorPluginDock";
+import {IActor, IDimensions} from "./ActorTypes";
+import {PluginDock} from "../../Plugins/root/ActorPluginDock";
+import {IPluginDock} from "../../Plugins/root/PluginTypes";
+import {x_pos, y_pos} from "../../../Libraries/Types";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -220,19 +222,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return Math.round(Math.random() * num)
     }
 
-    get xPos(): number {
+    get xPos(): x_pos {
         return this._elementX;
     }
 
-    set xPos(value: number) {
+    set xPos(value: x_pos) {
         this._elementX = value;
     }
 
-    get yPos(): number {
+    get yPos(): x_pos {
         return this._elementY;
     }
 
-    set yPos(value: number) {
+    set yPos(value: x_pos) {
         this._elementY = value;
     }
 
@@ -272,12 +274,18 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler.setOriginalToPlay();
     }
 
-    public setVirtualLayer(name: string): HTMLCanvasElement {
-        return this.layerHandler.setVirtualLayer(name, this._elementHeight, this._elementWidth);
+    public setVirtualLayer(name: string,
+                           height = this._elementHeight,
+                           width = this._elementWidth): HTMLCanvasElement {
+        return this.layerHandler.setVirtualLayer(name, height, width);
     }
 
-    public restorePreviousLayer() {
-        this.layerHandler.restorePreviousLayer();
+    public clearLayer(x: x_pos = 0, y: y_pos = 0, width?: number, height?: number): void {
+        this.layerHandler.clear(x, y, width, height);
+    }
+
+    public restoreDefaultLayer() {
+        this.layerHandler.restoreDefaultLayer();
     }
 
     public deleteVirtual(targetName: string): void {

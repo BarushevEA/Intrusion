@@ -5,7 +5,7 @@ import {ECursor} from "../../../rootModels/Types";
 import {IMousePosition} from "../../../../DomComponent/AppAnimation";
 import {CursorHandler} from "../../../../Libraries/FunctionLibs";
 
-export let cursorHandler = <any>0;
+export let cursorHandler: CursorHandler = <any>0;
 
 export function initCursor(scene: AbstractScene) {
     // If need to create cursor delete next line
@@ -23,7 +23,10 @@ export function handleCursor(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    cursorHandler = <any>0;
+    if (cursorHandler) {
+        cursorHandler.clear();
+        cursorHandler = <any>0;
+    }
     defaultCursor$.next(true);
 }
 

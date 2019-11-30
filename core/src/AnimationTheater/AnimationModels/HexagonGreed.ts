@@ -21,7 +21,7 @@ export class HexagonGreed extends AbstractActor {
             Math.round(canvas.height + startDelta * 1.2),
             Math.round(canvas.width + startDelta * 1.2));
         this.init();
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
     }
 
     init(): void {
@@ -54,21 +54,21 @@ export class HexagonGreed extends AbstractActor {
             .lineWidth(11)
             .colors('rgb(30,30,30)', 'rgba(0,0,0,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
 
         this.setVirtualLayer(centerLayerName);
         this.shape
             .lineWidth(3)
             .colors('rgba(100,100,100,0)', 'rgba(255,255,255,0.3)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
 
         this.setVirtualLayer(topLayerName);
         this.shape
             .lineWidth(3)
             .colors('rgba(0,100,255,0)', 'rgba(0,0,0,0.5)');
         this.createVirtualGreed(modRadius, hexagon, modDX, modDY);
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
 
         this.drawVirtualOnVirtual(this.bottomLayerName, centerLayerName, 3, 1);
         this.drawVirtualOnVirtual(this.bottomLayerName, topLayerName, 0, 0);

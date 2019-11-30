@@ -43,7 +43,7 @@ export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
     public generalLayer: HTMLCanvasElement;
     public actors: AbstractActor[] = [];
-    private _cursor: ICursor = <any>0;
+    private _cursor: ICursor & AbstractActor = <any>0;
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
@@ -64,7 +64,7 @@ export abstract class AbstractScene implements IScene {
         this.run();
     }
 
-    get cursor(): AbstractActor & ICursor {
+    get cursor(): ICursor & AbstractActor {
         return this._cursor;
     }
 

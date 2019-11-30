@@ -31,7 +31,7 @@ export abstract class AbstractButtonWithText extends AbstractActor {
         this.text.fontFamily = 'Comic Sans MS';
         this.text.strokeText(outerText);
         this.text.fillText(outerText);
-        this.restorePreviousLayer();
+        this.restoreDefaultLayer();
     }
 
     renderFrame(): void {

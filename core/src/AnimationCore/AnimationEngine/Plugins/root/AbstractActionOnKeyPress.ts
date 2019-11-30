@@ -1,8 +1,8 @@
 import {AbstractActorPlugin} from "./AbstractActorPlugin";
-import {ISubscriptionLike, Observable} from "../../Libraries/Observable";
-import {AbstractScene} from "../rootScenes/AbstractScene";
-import {keyDownCode$, keyUpCode$} from "../../Store/EventStore";
-import {IKeyCode} from "../../Store/Types";
+import {ISubscriptionLike, Observable} from "../../../Libraries/Observable";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {keyDownCode$, keyUpCode$} from "../../../Store/EventStore";
+import {IKeyCode} from "../../../Store/Types";
 
 export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
     private readonly key = 'Key';
@@ -59,11 +59,25 @@ export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
         this._step = value;
     }
 
-    destroy(): void {
+    public destroy(): void {
         super.destroy();
         this._onKeyDown$.destroy();
         this._onKeyUp$.destroy();
         this._onKeyDown$ = <any>0;
         this._onKeyUp$ = <any>0;
+        if (this.keyUp) {
+            this.keyUp.unsubscribe();
+        }
+        this.keyUp = <any>0;
+    }
+
+    public unLink(): void {
+        super.unLink();
+        this._onKeyDown$.unsubscribeAll();
+        this._onKeyUp$.unsubscribeAll();
+        if (this.keyUp) {
+            this.keyUp.unsubscribe();
+        }
+        this.keyUp = <any>0;
     }
 }

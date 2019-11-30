@@ -13,6 +13,7 @@ import {
 } from "../Store/EventStore";
 import {platform} from "../AnimationEngine/rootScenes/AnimationPlatform";
 import {IKeyCode, ISize} from "../Store/Types";
+import {x_pos, y_pos} from "../Libraries/Types";
 
 export type IAppAnimation = {
     customCanvas: HTMLCanvasElement;
@@ -23,8 +24,8 @@ export type IAppAnimation = {
 };
 
 export type IMousePosition = {
-    x: number;
-    y: number;
+    x: x_pos;
+    y: y_pos;
 }
 
 export const mouseMovePosition: IMousePosition = {x: 0, y: 0};
@@ -76,7 +77,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         keyCode.key = event.key;
         keyCode.keyCode = event.keyCode;
         keyCode.code = event.code;
-        
+
         for (let i = 0; i < this.keyPressedPool.length; i++) {
             const key = this.keyPressedPool[i].key;
             if (key === keyCode.key) {

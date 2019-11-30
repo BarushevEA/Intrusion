@@ -47,7 +47,7 @@ function initEvents(platform: AbstractPlatform): void {
                     sceneSerge.start(false);
                     break;
                 case E_Scene.BACKGROUND:
-                    sceneBackground.start(false);
+                    sceneBackground.start(true);
                     break;
             }
         }
