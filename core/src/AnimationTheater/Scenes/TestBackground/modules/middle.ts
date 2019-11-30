@@ -8,6 +8,7 @@ import {cursorHandler} from "./cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {Plane} from "../../../AnimationModels/Plane";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
+import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -43,7 +44,9 @@ function initActors(scene: AbstractScene) {
 
 function planeAction(scene: AbstractScene) {
     const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
+    const highlighting = new RectangleHighlighting(scene);
     plane.pluginDock.add(moveKeys);
+    plane.pluginDock.add(highlighting);
 }
 
 function initActions(scene: AbstractScene) {
@@ -74,7 +77,9 @@ function initActions(scene: AbstractScene) {
         for (let i = 0; i < 3; i++) {
             const circle = circles[counter];
             const bounce = new BounceOffTheWall(scene);
+            const highlighting = new RectangleHighlighting(scene);
             circle.pluginDock.add(bounce);
+            circle.pluginDock.add(highlighting);
             circle.pluginDock.add(web);
             scene.moveOnMouseDrag(circle);
             scene.collect(
