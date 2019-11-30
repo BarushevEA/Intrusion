@@ -10,6 +10,7 @@ import {Plane} from "../../../AnimationModels/Plane";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../Plugins/BlueFirePlugin";
+import {getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -40,6 +41,8 @@ function initActors(scene: AbstractScene) {
         scene.setActors(circle);
     }
     plane = new Plane(scene.generalLayer);
+    plane.xPos = plane.width;
+    plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
     scene.setActors(plane);
 }
 
