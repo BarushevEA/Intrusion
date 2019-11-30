@@ -52,7 +52,7 @@ export class BlueFire extends AbstractFramedShape {
             .setGradientDirectionPoints(
                 x, y, 0,
                 x, y, this.maxRadius - i * 2)
-            .addColorStop(0, 'rgba(37,80,195,0.5)')
+            .addColorStop(0, 'rgba(37,80,195,0.3)')
             .addColorStop(1, 'rgba(0,0,0,0)')
             .stopExecution()
             .rectangle(0, 0, this.width, this.height)
