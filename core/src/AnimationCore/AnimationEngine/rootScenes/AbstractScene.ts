@@ -3,6 +3,7 @@ import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
+import {findElementOnArray} from "../../Libraries/FunctionLibs";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -120,8 +121,11 @@ export abstract class AbstractScene implements IScene {
     public setActors(...actors: AbstractActor[]): void {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            this.actors.push(actor);
-            this.renderController.setActor(actor);
+            const index = findElementOnArray(this.actors, actor);
+            if (index === -1) {
+                this.actors.push(actor);
+                this.renderController.setActor(actor);
+            }
         }
     }
 
