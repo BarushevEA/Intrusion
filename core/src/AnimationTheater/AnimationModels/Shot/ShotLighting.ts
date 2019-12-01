@@ -93,6 +93,7 @@ export class ShotLighting extends AbstractFramedShape {
 
     drawStar(stArr: IPoint[], ort: IOrt) {
         this.shape
+            .lineWidth(3)
             .colors(this.bgColor, this.bdColor);
         const polygon = this.shape.advancedPolygon();
         polygon.startPoint(
@@ -116,8 +117,8 @@ export class ShotLighting extends AbstractFramedShape {
     }
 
     initColors(): void {
-        this.bgColor = 'rgba(27,143,195,0.5)';
-        this.bdColor = 'rgba(32,187,255,0)';
+        this.bgColor = 'rgb(19,98,133)';
+        this.bdColor = 'rgba(27,143,195,0.2)';
     }
 
     initFirst(): void {

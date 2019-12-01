@@ -4,6 +4,7 @@ import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/Abst
 import {BlueFire} from "../AnimationModels/circle/BlueFire";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
+import {ELayers} from "../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class BlueFirePlugin extends AbstractActorPlugin {
     private fire: AbstractActor = <any>0;
@@ -38,8 +39,11 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             ortY = yDelta;
             ortX = xDelta;
 
-            this.scene.setActorZIndex(this.fire, this.root.z_index - 10);
-            this.fire.xPos = this.root.xPos - this.root.width - 20;
+            if (ortX > 0) {
+                this.fire.xPos = this.root.xPos - this.root.width + ortX * 2;
+            } else {
+                this.fire.xPos = this.root.xPos - this.root.width - 20;
+            }
             this.fire.yPos =
                 getCenterY(this.root.yPos, this.root.height)
                 - Math.round(this.fire.height / 2)
@@ -49,7 +53,9 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             this.xBalance = this.root.xPos;
 
             if (this.isUnlinked) {
+                this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.fire);
+                this.scene.setActorZIndex(this.fire, this.root.z_index - 10);
                 this._isUnlinked = false;
             }
         });

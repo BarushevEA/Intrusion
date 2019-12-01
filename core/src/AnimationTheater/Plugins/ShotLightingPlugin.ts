@@ -4,6 +4,7 @@ import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
 import {ShotLighting} from "../AnimationModels/Shot/ShotLighting";
+import {ELayers} from "../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class ShotLightingPlugin extends AbstractActorPlugin {
     private shotLighting: AbstractActor = <any>0;
@@ -38,7 +39,6 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             ortY = yDelta;
             ortX = xDelta;
 
-            this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 10);
             this.shotLighting.xPos = this.root.xPos + this.root.width - 50 - ortX;
             this.shotLighting.yPos =
                 getCenterY(this.root.yPos, this.root.height)
@@ -49,7 +49,9 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             this.xBalance = this.root.xPos;
 
             if (this.isUnlinked) {
+                this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.shotLighting);
+                this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 10);
                 this._isUnlinked = false;
             }
         });

@@ -69,6 +69,7 @@ export class RenderController implements IRenderController {
     public setActiveLayer(name: string): void {
         if (this.layers[name]) {
             this.currentPool = this.layers[name];
+            this.currentLayerName = name;
         } else {
             this.layers[name] = [];
             this.currentPool = this.layers[name];
