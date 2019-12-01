@@ -116,8 +116,8 @@ export class ShotLighting extends AbstractFramedShape {
     }
 
     initColors(): void {
-        this.bgColor = 'rgba(27,143,195,1)';
-        this.bdColor = 'rgba(32,187,255,1)';
+        this.bgColor = 'rgba(27,143,195,0.2)';
+        this.bdColor = 'rgba(32,187,255,0)';
     }
 
     initFirst(): void {

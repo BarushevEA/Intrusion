@@ -12,7 +12,7 @@ import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../Plugins/BlueFirePlugin";
 import {getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
-import {ShotLighting} from "../../../AnimationModels/Shot/ShotLighting";
+import {ShotLightingPlugin} from "../../../Plugins/ShotLightingPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -36,8 +36,6 @@ function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
-    const shl = new ShotLighting(scene.generalLayer);
-
     circles = [];
     for (let i = 0; i < 9; i++) {
         const circle = new LightCircle(scene.generalLayer);
@@ -48,8 +46,6 @@ function initActors(scene: AbstractScene) {
     plane.xPos = plane.width;
     plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
     scene.setActors(plane);
-
-    scene.setActors(shl);
 }
 
 function planeAction(scene: AbstractScene) {
@@ -57,11 +53,13 @@ function planeAction(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
+    const shotLighting = new ShotLightingPlugin(scene);
     let isFire = true;
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
+    plane.pluginDock.add(shotLighting);
     scene.collect(
         plane.isMouseClick$.subscribe(
             () => {
