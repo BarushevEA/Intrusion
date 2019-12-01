@@ -3,6 +3,7 @@ import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
+import {findElementOnArray} from "../../Libraries/FunctionLibs";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -120,9 +121,29 @@ export abstract class AbstractScene implements IScene {
     public setActors(...actors: AbstractActor[]): void {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            this.actors.push(actor);
+            const index = findElementOnArray(this.actors, actor);
+            if (index === -1) {
+                this.actors.push(actor);
+            }
             this.renderController.setActor(actor);
         }
+    }
+
+    public destroyActor(actor: IActor): void {
+        const index = findElementOnArray(this.actors, actor);
+        if (index === -1) {
+            return;
+        }
+        this.unLink(actor);
+        for (let i = index; i < this.actors.length - 1; i++) {
+            this.actors[i] = this.actors[i + 1];
+        }
+        this.actors.length = this.actors.length - 1;
+        actor.destroy();
+    }
+
+    public unLink(actor: IActor): void {
+        this.renderController.deleteActor(actor);
     }
 
     public setHalfSpeed(): void {

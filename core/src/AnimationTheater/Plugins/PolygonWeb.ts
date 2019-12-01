@@ -23,9 +23,6 @@ export class PolygonWeb extends AbstractActorPlugin {
 
     init() {
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            if (!this.rootPool[0]) {
-                return;
-            }
             const shape = this.rootPool[0].shape;
             const x0 = getCenterX(
                 this.rootPool[0].xPos,

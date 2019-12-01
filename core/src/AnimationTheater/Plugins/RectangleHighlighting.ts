@@ -8,7 +8,7 @@ export class RectangleHighlighting extends AbstractActorPlugin {
     private readonly delta = 10;
 
     constructor(scene: AbstractScene) {
-        super(name, scene);
+        super('RectangleHighlighting', scene);
         this.delta = this.delta;
     }
 

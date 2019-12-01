@@ -44,8 +44,8 @@ export abstract class AbstractFramedShape extends AbstractActor {
         this.layerHandler.setShowedFrame(index);
     }
 
-    protected createEmptyFrame(): void {
-        this.createFrame(0);
+    protected createEmptyFrame(delay = 0): void {
+        this.createFrame(delay);
         this.shape.colors(
             'rgba(0,0,0,0)',
             'rgba(0,0,0,0)');

@@ -9,11 +9,16 @@ export abstract class AbstractActorPlugin implements IPlugin {
     private readonly name: string = '';
     protected root: AbstractActor = <any>0;
     protected scene: AbstractScene = <any>0;
+    protected _isUnlinked = true;
 
     protected constructor(name: string, scene: AbstractScene) {
         this.name = name + this.numberSeparator + AbstractActorPlugin.pluginCounter;
         this.scene = scene;
         AbstractActorPlugin.pluginCounter++;
+    }
+
+    get isUnlinked(): boolean {
+        return this._isUnlinked;
     }
 
     get isDestroyed(): boolean {
@@ -27,6 +32,7 @@ export abstract class AbstractActorPlugin implements IPlugin {
 
     unLink(): void {
         this.root = <any>0;
+        this._isUnlinked = true;
     };
 
     getName(): string {

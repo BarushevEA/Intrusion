@@ -1,5 +1,4 @@
-import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-
+import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
 export class Plane extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
@@ -12,23 +11,16 @@ export class Plane extends AbstractFramedShape {
 
     protected initShape(): void {
         const multiplier = 1;
-
-        for (let i = 0; i < 2; i++) {
-            this.createFrame(20);
-            this.getPlane();
-
-            this.createFrame(10);
-            this.getPlane(multiplier);
-        }
-        this.createFrame(30);
-        this.getPlane();
+        this.createFrame(10);
+        this.getPlane(multiplier);
+        this.createFrame(10);
+        this.getPlaneVariantTwo();
     }
 
     getPlane(sizeMultiplier = 1) {
         this.shape
             .lineWidth(2)
             .colors('rgb(175,175,175)', 'rgb(125,125,125)')
-
             .advancedPolygon()
             .startPoint(100 - 15 * sizeMultiplier, 42 * sizeMultiplier)
             .quadraticCurveTo(100 - 5 * sizeMultiplier, 40 * sizeMultiplier, 100 - 0 * sizeMultiplier, 50 * sizeMultiplier)
@@ -91,8 +83,75 @@ export class Plane extends AbstractFramedShape {
             .stopDrawing();
         this.shape
             .lineWidth(2)
-            .colors('rgb(0,125,255)', 'rgb(0,80,155)')
+            .colors('rgb(0,0,175)', 'rgb(0,0,125)')
             .circle(50, 50, 15)
+            .stopDrawing();
+    }
+
+    getPlaneVariantTwo(sizeMultiplier = 1) {
+
+        this.shape
+            .lineWidth(2)
+            .colors('rgb(175,175,175)', 'rgb(125,125,125)')
+
+            .advancedPolygon()
+            .startPoint(100 - 15 * sizeMultiplier, 42 * sizeMultiplier)
+            .quadraticCurveTo(100 - 5 * sizeMultiplier, 40 * sizeMultiplier, 100 - 0 * sizeMultiplier, 50 * sizeMultiplier)
+            .quadraticCurveTo(100 - 5 * sizeMultiplier, 60 * sizeMultiplier, 100 - 15 * sizeMultiplier, 58 * sizeMultiplier)
+            .stopExecution()
+            .stopDrawing();
+        this.shape
+            .lineWidth(2)
+            .colors('rgb(0,0,175)', 'rgb(0,0,125)')
+            .advancedPolygon()
+            .startPoint(100 - 25 * sizeMultiplier, 35 * sizeMultiplier)
+            .quadraticCurveTo(100 - 35 * sizeMultiplier, 25 * sizeMultiplier, 100 - 35 * sizeMultiplier, 25 * sizeMultiplier)
+            .quadraticCurveTo(100 - 50 * sizeMultiplier, 25 * sizeMultiplier, 100 - 60 * sizeMultiplier, 38 * sizeMultiplier)
+            .stopExecution()
+            .stopDrawing();
+        this.shape
+            .lineWidth(2)
+            .colors('rgb(250,250,0)', 'rgb(100,100,0)')
+            .advancedPolygon()
+            .startPoint(100 - 60 * sizeMultiplier, 38 * sizeMultiplier)
+            .lineTo(100 - 80, 30)
+            .lineTo(100 - 90, 30)
+            .lineTo(100 - 75, 40)
+            .stopExecution()
+            .stopDrawing();
+        this.shape
+            .lineWidth(3)
+            .colors('rgb(0,0,0)', 'rgb(250,0,0)')
+            .advancedPolygon()
+            .startPoint(100 - 90 * sizeMultiplier, 30 * sizeMultiplier)
+            .lineTo(100 - 75, 30)
+            .stopExecution()
+            .stopDrawing();
+        this.shape
+            .lineWidth(2)
+            .colors('rgb(125,0,255)', 'rgb(80,0,155)')
+            .advancedPolygon()
+            .startPoint(100 - 20 * sizeMultiplier, 35 * sizeMultiplier)
+            .quadraticCurveTo(100 - 15 * sizeMultiplier, 35 * sizeMultiplier, 100 - 15 * sizeMultiplier, 40 * sizeMultiplier)
+            .quadraticCurveTo(100 - 15 * sizeMultiplier, 50 * sizeMultiplier, 100 - 15 * sizeMultiplier, 60 * sizeMultiplier)
+            .quadraticCurveTo(100 - 15 * sizeMultiplier, 65 * sizeMultiplier, 100 - 20 * sizeMultiplier, 65 * sizeMultiplier)
+            .quadraticCurveTo(100 - 62 * sizeMultiplier, 65 * sizeMultiplier, 100 - 75 * sizeMultiplier, 50 * sizeMultiplier)
+            .quadraticCurveTo(100 - 75 * sizeMultiplier, 50 * sizeMultiplier, 100 - 75 * sizeMultiplier, 40 * sizeMultiplier)
+            .quadraticCurveTo(100 - 75 * sizeMultiplier, 50 * sizeMultiplier, 100 - 75 * sizeMultiplier, 40 * sizeMultiplier)
+            .quadraticCurveTo(100 - 62 * sizeMultiplier, 35 * sizeMultiplier, 100 - 20 * sizeMultiplier, 35 * sizeMultiplier)
+            .stopExecution()
+            .stopDrawing();
+        this.shape
+            .lineWidth(2)
+            .colors('rgb(175,175,175)', 'rgb(125,125,125)')
+            .advancedPolygon()
+            .startPoint(100 - 20 * sizeMultiplier, 50 * sizeMultiplier)
+            .quadraticCurveTo(100 - 21 * sizeMultiplier, 51 * sizeMultiplier, 100 - 25 * sizeMultiplier, 52 * sizeMultiplier)
+            .lineTo(100 - 70 * sizeMultiplier, 52 * sizeMultiplier)
+            .lineTo(100 - 70 * sizeMultiplier, 48 * sizeMultiplier)
+            .lineTo(100 - 20 * sizeMultiplier, 48 * sizeMultiplier)
+            .quadraticCurveTo(100 - 19 * sizeMultiplier, 49 * sizeMultiplier, 100 - 20 * sizeMultiplier, 50 * sizeMultiplier)
+            .stopExecution()
             .stopDrawing();
     }
 }

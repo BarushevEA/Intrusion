@@ -54,6 +54,10 @@ export class RenderController implements IRenderController {
     }
 
     public setActor(actor: IActor): void {
+        const index = findElementOnArray(this.currentPool, actor);
+        if (index !== -1) {
+            return;
+        }
         if (this.currentPool.length) {
             actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
         }
@@ -65,6 +69,7 @@ export class RenderController implements IRenderController {
     public setActiveLayer(name: string): void {
         if (this.layers[name]) {
             this.currentPool = this.layers[name];
+            this.currentLayerName = name;
         } else {
             this.layers[name] = [];
             this.currentPool = this.layers[name];
