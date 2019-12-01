@@ -54,6 +54,10 @@ export class RenderController implements IRenderController {
     }
 
     public setActor(actor: IActor): void {
+        const index = findElementOnArray(this.currentPool, actor);
+        if (index !== -1) {
+            return;
+        }
         if (this.currentPool.length) {
             actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
         }

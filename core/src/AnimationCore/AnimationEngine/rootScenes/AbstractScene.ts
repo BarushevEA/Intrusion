@@ -124,9 +124,26 @@ export abstract class AbstractScene implements IScene {
             const index = findElementOnArray(this.actors, actor);
             if (index === -1) {
                 this.actors.push(actor);
-                this.renderController.setActor(actor);
             }
+            this.renderController.setActor(actor);
         }
+    }
+
+    public destroyActor(actor: IActor): void {
+        const index = findElementOnArray(this.actors, actor);
+        if (index === -1) {
+            return;
+        }
+        this.unLink(actor);
+        for (let i = index; i < this.actors.length - 1; i++) {
+            this.actors[i] = this.actors[i + 1];
+        }
+        this.actors.length = this.actors.length - 1;
+        actor.destroy();
+    }
+
+    public unLink(actor: IActor): void {
+        this.renderController.deleteActor(actor);
     }
 
     public setHalfSpeed(): void {

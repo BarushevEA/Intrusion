@@ -18,7 +18,6 @@ export class BlueFirePlugin extends AbstractActorPlugin {
     onInit(): void {
         if (!this.fire) {
             this.fire = new BlueFire(this.scene.generalLayer);
-            this.scene.setActors(this.fire);
         }
         this.yBalance = this.root.yPos;
         this.xBalance = this.root.xPos;
@@ -48,6 +47,11 @@ export class BlueFirePlugin extends AbstractActorPlugin {
 
             this.yBalance = this.root.yPos;
             this.xBalance = this.root.xPos;
+
+            if (this.isUnlinked) {
+                this.scene.setActors(this.fire);
+                this._isUnlinked = false;
+            }
         });
     }
 
@@ -58,6 +62,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
         }
         this.yBalance = 0;
         this.xBalance = 0;
+        this.scene.unLink(this.fire);
         super.unLink();
     }
 
