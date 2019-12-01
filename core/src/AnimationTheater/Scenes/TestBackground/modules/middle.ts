@@ -6,11 +6,12 @@ import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {cursorHandler} from "./cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {Plane} from "../../../AnimationModels/Plane";
+import {Plane} from "../../../AnimationModels/Plane/Plane";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../Plugins/BlueFirePlugin";
 import {getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
+import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -50,9 +51,11 @@ function planeAction(scene: AbstractScene) {
     const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
     const highlighting = new RectangleHighlighting(scene);
     const fire = new BlueFirePlugin(scene);
+    const moveFrame = new MovePlaneFramePlugin(scene);
     let isFire = true;
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
+    plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
     scene.collect(
         plane.isMouseClick$.subscribe(
