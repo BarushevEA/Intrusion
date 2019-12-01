@@ -13,6 +13,8 @@ import {BlueFirePlugin} from "../../../Plugins/BlueFirePlugin";
 import {getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
 import {ShotLightingPlugin} from "../../../Plugins/ShotLightingPlugin";
+import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
+import {IKeyCode} from "../../../../AnimationCore/Store/Types";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -54,21 +56,32 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
-    let isFire = true;
+    // let isFire = true;
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
-    plane.pluginDock.add(shotLighting);
     scene.collect(
-        plane.isMouseClick$.subscribe(
-            () => {
-                if (isFire) {
-                    plane.pluginDock.unLink(fire);
-                } else {
-                    plane.pluginDock.add(fire);
+        // plane.isMouseClick$.subscribe(
+        //     () => {
+        //         if (isFire) {
+        //             plane.pluginDock.unLink(fire);
+        //         } else {
+        //             plane.pluginDock.add(fire);
+        //         }
+        //         isFire = !isFire;
+        //     }
+        // )
+        keyDownCode$.subscribe((code: IKeyCode) => {
+                if (code.code === 'Space') {
+                    plane.pluginDock.add(shotLighting);
                 }
-                isFire = !isFire;
+            }
+        ),
+        keyUpCode$.subscribe((code: IKeyCode) => {
+                if (code.code === 'Space') {
+                    plane.pluginDock.unLink(shotLighting);
+                }
             }
         )
     );
