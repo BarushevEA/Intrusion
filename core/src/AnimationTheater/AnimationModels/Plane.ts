@@ -12,16 +12,8 @@ export class Plane extends AbstractFramedShape {
 
     protected initShape(): void {
         const multiplier = 1;
-
-        for (let i = 0; i < 2; i++) {
-            this.createFrame(20);
-            this.getPlane();
-
-            this.createFrame(10);
-            this.getPlane(multiplier);
-        }
-        this.createFrame(30);
-        this.getPlane();
+        this.createFrame(0);
+        this.getPlane(multiplier);
     }
 
     getPlane(sizeMultiplier = 1) {
