@@ -50,9 +50,22 @@ function planeAction(scene: AbstractScene) {
     const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
     const highlighting = new RectangleHighlighting(scene);
     const fire = new BlueFirePlugin(scene);
+    let isFire = true;
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(highlighting);
+    scene.collect(
+        plane.isMouseClick$.subscribe(
+            () => {
+                if (isFire) {
+                    plane.pluginDock.unLink(fire);
+                } else {
+                    plane.pluginDock.add(fire);
+                }
+                isFire = !isFire;
+            }
+        )
+    );
 }
 
 function initActions(scene: AbstractScene) {
