@@ -15,3 +15,5 @@
 // DONE TODO 10) Need to move tick counter from Abstract actor ro render controller
 // DONE TODO 11) Need create a class to handle the cursor changes to "pointer" and "default"
 // DONE TODO 12) Need create a plugin system (plugins and plugin docker)
+// TODO 13) Need delete actor from scene !!!
+// TODO 13.1) Need unlink actor from scene !!!
