@@ -28,8 +28,8 @@ export function getRectCenterCoordinate(n1: number, n2: number): number {
     return Math.trunc((n1 + n2) / 2);
 }
 
-export function getCenterX(x: x_pos, weight: number): x_pos {
-    return getRectCenterCoordinate(x,  x + weight);
+export function getCenterX(x: x_pos, width: number): x_pos {
+    return getRectCenterCoordinate(x,  x + width);
 }
 
 export function getCenterY(y: y_pos, height: number): y_pos {
