@@ -6,7 +6,6 @@ import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {cursorHandler} from "./cursor";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {Plane} from "../../../AnimationModels/Plane/Plane";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../Plugins/BlueFirePlugin";
@@ -15,6 +14,7 @@ import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
 import {ShotLightingPlugin} from "../../../Plugins/ShotLightingPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../AnimationCore/Store/Types";
+import {Plane} from "../../../AnimationModels/Plane/Plane";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
