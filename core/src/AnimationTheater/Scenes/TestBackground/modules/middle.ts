@@ -41,17 +41,39 @@ function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
+    initCircles(scene);
+    initFatherFrost(scene);
+    initPlane(scene);
+}
+
+function initActions(scene: AbstractScene) {
+    fatherFrostAction(scene);
+    planeAction(scene);
+    circlesAction(scene);
+    scene.collect(
+        scene.onDestroy$.subscribe(() => {
+            clearVariables();
+        })
+    );
+}
+
+function initCircles(scene: AbstractScene) {
     circles = [];
     for (let i = 0; i < 9; i++) {
         const circle = new LightCircle(scene.generalLayer);
         circles.push(circle);
         scene.setActors(circle);
     }
+}
 
+function initFatherFrost(scene: AbstractScene) {
     fatherFrost = new FatherFrost(scene.generalLayer);
     fatherFrost.xPos = scene.generalLayer.width - fatherFrost.width;
     fatherFrost.yPos = scene.generalLayer.height - fatherFrost.height;
     scene.setActors(fatherFrost);
+}
+
+function initPlane(scene: AbstractScene) {
     plane = new Plane(scene.generalLayer);
     plane.xPos = plane.width;
     plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
@@ -81,22 +103,11 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
-    // let isFire = true;
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
     scene.collect(
-        // plane.isMouseClick$.subscribe(
-        //     () => {
-        //         if (isFire) {
-        //             plane.pluginDock.unLink(fire);
-        //         } else {
-        //             plane.pluginDock.add(fire);
-        //         }
-        //         isFire = !isFire;
-        //     }
-        // )
         keyDownCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
                     plane.pluginDock.add(shotLighting);
@@ -112,10 +123,7 @@ function planeAction(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
-    fatherFrostAction(scene);
-    planeAction(scene);
-
+function circlesAction(scene: AbstractScene) {
     let counter = 0;
     for (let j = 0; j < 3; j++) {
         let backgroundColor: string = '',
@@ -160,11 +168,4 @@ function initActions(scene: AbstractScene) {
             counter++;
         }
     }
-
-
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
 }
