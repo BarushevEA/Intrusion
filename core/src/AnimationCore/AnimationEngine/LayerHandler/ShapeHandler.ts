@@ -52,6 +52,7 @@ export type IShapeHandler = {
     translate(x: x_pos, y: y_pos): IShapeHandler;
     rotate(angle: IRadian): IShapeHandler;
     scale(x: x_pos, y: y_pos): IShapeHandler;
+    setBase64Image(base64: string, x?: x_pos, y?: y_pos): IShapeHandler;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -92,6 +93,16 @@ class ShapeHandler implements IShapeHandler {
         this.context.strokeStyle = borderColor;
         return this;
     }
+
+    public setBase64Image(base64: string, x = 0, y = 0): IShapeHandler {
+        const context = this.context;
+        let image = new Image();
+        image.src = base64;
+        image.onload = () => {
+            context.drawImage(image, x, y);
+        };
+        return this;
+    };
 
     public translate(x: x_pos, y: y_pos): IShapeHandler {
         this.context.translate(x, y);

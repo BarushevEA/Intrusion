@@ -15,9 +15,11 @@ import {ShotLightingPlugin} from "../../../Plugins/ShotLightingPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../AnimationCore/Store/Types";
 import {Plane} from "../../../AnimationModels/Plane/Plane";
+import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
+let fatherFrost: AbstractActor = <any>0;
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -28,6 +30,7 @@ export function handleMiddle(scene: AbstractScene): void {
 
 function clearVariables() {
     plane = <any>0;
+    fatherFrost = <any>0;
     if (circles) {
         for (let i = 0; i < circles.length; i++) {
             const circle = circles[i];
@@ -44,10 +47,32 @@ function initActors(scene: AbstractScene) {
         circles.push(circle);
         scene.setActors(circle);
     }
+
+    fatherFrost = new FatherFrost(scene.generalLayer);
+    fatherFrost.xPos = scene.generalLayer.width - fatherFrost.width;
+    fatherFrost.yPos = scene.generalLayer.height - fatherFrost.height;
+    scene.setActors(fatherFrost);
     plane = new Plane(scene.generalLayer);
     plane.xPos = plane.width;
     plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
     scene.setActors(plane);
+}
+
+function fatherFrostAction(scene: AbstractScene) {
+    const highlighting = new RectangleHighlighting(scene);
+    scene.moveOnMouseDrag(fatherFrost);
+    fatherFrost.pluginDock.add(highlighting);
+    scene.collect(
+        fatherFrost.isMouseOver$.subscribe(() => {
+            cursorHandler.pointerOrDefaultChange(scene, fatherFrost);
+        }),
+        fatherFrost.isMouseLeftDrag$.subscribe(() => {
+            scene.cursor.setType(ECursor.CATCH);
+        }),
+        fatherFrost.isMouseLeftDrop$.subscribe(() => {
+            scene.cursor.setType(ECursor.POINTER);
+        }),
+    );
 }
 
 function planeAction(scene: AbstractScene) {
@@ -88,6 +113,7 @@ function planeAction(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    fatherFrostAction(scene);
     planeAction(scene);
 
     let counter = 0;
