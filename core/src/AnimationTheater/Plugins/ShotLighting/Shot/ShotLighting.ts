@@ -1,6 +1,6 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
-import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
-import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {IPoint} from "../../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
+import {getCenterX, getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
 
 type IOrt = { x: number, y: number };
 
