@@ -4,8 +4,6 @@ import {LightCircle} from "../../../AnimationModels/circle/LightCircle";
 import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {cursorHandler} from "./cursor";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../Plugins/BlueFire/BlueFirePlugin";
@@ -16,6 +14,7 @@ import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventSto
 import {IKeyCode} from "../../../../AnimationCore/Store/Types";
 import {Plane} from "../../../AnimationModels/Plane/Plane";
 import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
+import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -82,21 +81,12 @@ function initPlane(scene: AbstractScene) {
 
 function fatherFrostAction(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
+    const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(scene);
     scene.moveOnMouseDrag(fatherFrost);
     fatherFrost.pluginDock.add(highlighting);
     fatherFrost.pluginDock.add(bounce);
-    scene.collect(
-        fatherFrost.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, fatherFrost);
-        }),
-        fatherFrost.isMouseLeftDrag$.subscribe(() => {
-            scene.cursor.setType(ECursor.CATCH);
-        }),
-        fatherFrost.isMouseLeftDrop$.subscribe(() => {
-            scene.cursor.setType(ECursor.POINTER);
-        }),
-    );
+    fatherFrost.pluginDock.add(cursorBehavior);
 }
 
 function planeAction(scene: AbstractScene) {
@@ -135,22 +125,13 @@ function circlesAction(scene: AbstractScene) {
         for (let i = 0; i < 3; i++) {
             const circle = circles[counter];
             const bounce = new BounceOffTheWall(scene);
+            const cursorBehavior = new PointerAndDragCursorPlugin(scene);
             const highlighting = new RectangleHighlighting(scene);
             circle.pluginDock.add(bounce);
             circle.pluginDock.add(highlighting);
             circle.pluginDock.add(web);
+            circle.pluginDock.add(cursorBehavior);
             scene.moveOnMouseDrag(circle);
-            scene.collect(
-                circle.isMouseOver$.subscribe(() => {
-                    cursorHandler.pointerOrDefaultChange(scene, circle);
-                }),
-                circle.isMouseLeftDrag$.subscribe(() => {
-                    scene.cursor.setType(ECursor.CATCH);
-                }),
-                circle.isMouseLeftDrop$.subscribe(() => {
-                    scene.cursor.setType(ECursor.POINTER);
-                }),
-            );
             counter++;
         }
     }

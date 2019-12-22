@@ -69,16 +69,11 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     }
 
     destroy(): void {
-        if (this.subscriber) {
-            this.subscriber.unsubscribe();
-            this.subscriber = <any>0;
-        }
+        this.unLink();
         if (this.shotLighting) {
             this.shotLighting.destroy();
             this.shotLighting = <any>0;
         }
-        this.yBalance = 0;
-        this.xBalance = 0;
         super.destroy();
     }
 }
