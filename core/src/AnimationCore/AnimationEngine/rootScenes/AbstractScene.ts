@@ -3,7 +3,7 @@ import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
-import {findElementOnArray} from "../../Libraries/FunctionLibs";
+import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -45,6 +45,7 @@ export abstract class AbstractScene implements IScene {
     public generalLayer: HTMLCanvasElement;
     public actors: AbstractActor[] = [];
     private _cursor: ICursor & AbstractActor = <any>0;
+    private _cursorHandler: CursorHandler = <any>0;
     private collector: ISubscriptionLike[] = [];
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
@@ -65,12 +66,20 @@ export abstract class AbstractScene implements IScene {
         this.run();
     }
 
-    get cursor(): ICursor & AbstractActor {
-        return this._cursor;
+    set cursorHandler(value: CursorHandler) {
+        this._cursorHandler = value;
+    }
+
+    get cursorHandler(): CursorHandler {
+        return this._cursorHandler;
     }
 
     set cursor(value: AbstractActor & ICursor) {
         this._cursor = value;
+    }
+
+    get cursor(): ICursor & AbstractActor {
+        return this._cursor;
     }
 
     get tickCount$(): ISubscriber<boolean> {
@@ -364,6 +373,10 @@ export abstract class AbstractScene implements IScene {
         this.isFirstStart = <any>0;
         if (this.movedOnDrag) {
             this.movedOnDrag.length = <any>0;
+        }
+        if (this._cursorHandler) {
+            this._cursorHandler.clear()
+            this._cursorHandler = <any>0;
         }
         this.movedOnDrag = <any>0;
         this.destroySubscriberCounter = <any>0;

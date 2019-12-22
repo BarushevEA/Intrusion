@@ -1,6 +1,5 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {cursorHandler} from "../Scenes/TestBackground/modules/cursor";
 import {ECursor} from "../../AnimationCore/AnimationEngine/rootModels/Types";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 
@@ -24,7 +23,7 @@ export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
 
     initSubscribers() {
         this.PODSubscriber = this.root.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(this.scene, this.root);
+            this.scene.cursorHandler.pointerOrDefaultChange(this.scene, this.root);
         });
         this.dragSubscriber = this.root.isMouseLeftDrag$.subscribe(() => {
             this.scene.cursor.setType(ECursor.CATCH);

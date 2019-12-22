@@ -2,8 +2,7 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScene
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
 import {Heart} from "../../../AnimationModels/Heart";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {cursorHandler} from "./cursor";
+import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 
 let combinedRectangle: CombinedRectangle,
     heart: Heart;
@@ -33,30 +32,16 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
+    const cursorBehaviorCombined = new PointerAndDragCursorPlugin(scene);
+    heart.pluginDock.add(cursorBehaviorHeart);
+    combinedRectangle.pluginDock.add(cursorBehaviorCombined);
     scene.moveOnMouseDrag(heart);
     scene.moveOnMouseDrag(combinedRectangle);
 
     scene.collect(
         combinedRectangle.isMouseClick$.subscribe(() => {
             combinedRectangle.nextRectangle();
-        }),
-        heart.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, heart);
-        }),
-        heart.isMouseLeftDrag$.subscribe(() => {
-            scene.cursor.setType(ECursor.CATCH);
-        }),
-        heart.isMouseLeftDrop$.subscribe(() => {
-            scene.cursor.setType(ECursor.POINTER);
-        }),
-        combinedRectangle.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, combinedRectangle);
-        }),
-        combinedRectangle.isMouseLeftDrag$.subscribe(() => {
-            scene.cursor.setType(ECursor.CATCH);
-        }),
-        combinedRectangle.isMouseLeftDrop$.subscribe(() => {
-            scene.cursor.setType(ECursor.POINTER);
         }),
         scene.onDestroy$.subscribe(() => {
             clearVariables();
