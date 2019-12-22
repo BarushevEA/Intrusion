@@ -222,20 +222,20 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return Math.round(Math.random() * num)
     }
 
-    get xPos(): x_pos {
-        return this._elementX;
-    }
-
     set xPos(value: x_pos) {
         this._elementX = value;
     }
 
-    get yPos(): x_pos {
-        return this._elementY;
+    get xPos(): x_pos {
+        return this._elementX;
     }
 
     set yPos(value: x_pos) {
         this._elementY = value;
+    }
+
+    get yPos(): x_pos {
+        return this._elementY;
     }
 
     get width(): number {

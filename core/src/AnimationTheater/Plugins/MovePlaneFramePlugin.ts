@@ -39,13 +39,13 @@ export class MovePlaneFramePlugin extends AbstractActorPlugin {
                     (<AbstractFramedShape>this.root).setShowedFrame(1);
                     this.root.setStopFrame(1);
                     break;
-                case ortY >= 0:
+                case ortY > 0:
                     (<AbstractFramedShape>this.root).setShowedFrame(0);
                     this.root.setStopFrame(0);
                     break;
-                case ortY <= 0:
-                    (<AbstractFramedShape>this.root).setShowedFrame(0);
-                    this.root.setStopFrame(0);
+                case ortY < 0:
+                    (<AbstractFramedShape>this.root).setShowedFrame(2);
+                    this.root.setStopFrame(2);
                     break;
             }
 

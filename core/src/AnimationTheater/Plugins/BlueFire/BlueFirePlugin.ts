@@ -1,10 +1,10 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {BlueFire} from "../AnimationModels/circle/BlueFire";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
-import {getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
-import {ELayers} from "../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
+import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {BlueFire} from "./BlueFire";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class BlueFirePlugin extends AbstractActorPlugin {
     private fire: AbstractActor = <any>0;
@@ -55,7 +55,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             if (this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.fire);
-                this.scene.setActorZIndex(this.fire, this.root.z_index - 10);
+                this.scene.setActorZIndex(this.fire, this.root.z_index - 1);
                 this._isUnlinked = false;
             }
         });

@@ -1,10 +1,10 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
-import {ShotLighting} from "../AnimationModels/Shot/ShotLighting";
-import {ELayers} from "../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {ShotLighting} from "./Shot/ShotLighting";
+import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class ShotLightingPlugin extends AbstractActorPlugin {
     private shotLighting: AbstractActor = <any>0;
@@ -51,7 +51,7 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             if (this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.shotLighting);
-                this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 10);
+                this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 1);
                 this._isUnlinked = false;
             }
         });
@@ -69,16 +69,11 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     }
 
     destroy(): void {
-        if (this.subscriber) {
-            this.subscriber.unsubscribe();
-            this.subscriber = <any>0;
-        }
+        this.unLink();
         if (this.shotLighting) {
             this.shotLighting.destroy();
             this.shotLighting = <any>0;
         }
-        this.yBalance = 0;
-        this.xBalance = 0;
         super.destroy();
     }
 }

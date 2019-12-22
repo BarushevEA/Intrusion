@@ -10,6 +10,8 @@ export let cursorHandler: CursorHandler = <any>0;
 export function initCursor(scene: AbstractScene) {
     // If need to create cursor delete next line
     scene = scene;
+    cursorHandler = new CursorHandler();
+    scene.cursorHandler = cursorHandler;
 }
 
 export function handleCursor(scene: AbstractScene): void {
@@ -17,7 +19,6 @@ export function handleCursor(scene: AbstractScene): void {
         return;
     }
     scene.setActiveLayer(ELayers.CURSOR);
-    clearVariables();
     initActors(scene);
     initActions(scene);
 }
@@ -31,7 +32,6 @@ function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
-    cursorHandler = new CursorHandler();
     scene.setActors(scene.cursor);
 }
 
