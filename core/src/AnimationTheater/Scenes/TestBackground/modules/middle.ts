@@ -82,8 +82,10 @@ function initPlane(scene: AbstractScene) {
 
 function fatherFrostAction(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
+    const bounce = new BounceOffTheWall(scene);
     scene.moveOnMouseDrag(fatherFrost);
     fatherFrost.pluginDock.add(highlighting);
+    fatherFrost.pluginDock.add(bounce);
     scene.collect(
         fatherFrost.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, fatherFrost);
@@ -126,26 +128,10 @@ function planeAction(scene: AbstractScene) {
 function circlesAction(scene: AbstractScene) {
     let counter = 0;
     for (let j = 0; j < 3; j++) {
-        let backgroundColor: string = '',
-            borderColor: string = '';
-        switch (j) {
-            case 0:
-                backgroundColor = 'rgba(195,5,7,0.5)';
-                borderColor = 'rgba(5,4,195,0)';
-                break;
-            case 1:
-                backgroundColor = 'rgba(0,195,15,0.5)';
-                borderColor = 'rgba(5,4,195,0)';
-                break;
-            case 2:
-                backgroundColor = 'rgba(5,4,195,0.5)';
-                borderColor = 'rgba(195,187,58,0)';
-                break;
-            default:
-                backgroundColor = 'rgba(255,255,255,0.3)';
-                borderColor = 'rgba(255,255,255,0)';
-        }
-        const web = new PolygonWeb(scene, backgroundColor, borderColor);
+        const web = new PolygonWeb(
+            scene,
+            'rgba(195,195,20,0.5)',
+            'rgba(5,4,195,0)');
         for (let i = 0; i < 3; i++) {
             const circle = circles[counter];
             const bounce = new BounceOffTheWall(scene);
