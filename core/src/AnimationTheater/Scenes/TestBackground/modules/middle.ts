@@ -87,6 +87,12 @@ function fatherFrostAction(scene: AbstractScene) {
     fatherFrost.pluginDock.add(highlighting);
     fatherFrost.pluginDock.add(bounce);
     fatherFrost.pluginDock.add(cursorBehavior);
+    scene.collect(
+        fatherFrost.isMouseOver$.subscribe(() => {
+            fatherFrost.pluginDock.unLink(bounce);
+            fatherFrost.pluginDock.add(bounce);
+        })
+    );
 }
 
 function planeAction(scene: AbstractScene) {

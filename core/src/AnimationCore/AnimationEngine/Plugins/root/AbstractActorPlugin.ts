@@ -26,7 +26,7 @@ export abstract class AbstractActorPlugin implements IPlugin {
     }
 
     destroy(): void {
-        this.root = <any>0;
+        this.unLink();
         this.scene = <any>0;
     };
 
@@ -41,6 +41,7 @@ export abstract class AbstractActorPlugin implements IPlugin {
 
     setRoot(root: AbstractActor): void {
         this.root = root;
+        this._isUnlinked = false;
         this.onInit(root);
     };
 

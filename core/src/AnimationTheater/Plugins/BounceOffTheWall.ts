@@ -5,8 +5,8 @@ import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private deltaNum = 5;
-    private xDelta = this.getRandomDelta();
-    private yDelta = this.getRandomDelta();
+    private xDelta = 0;
+    private yDelta = 0;
 
     constructor(scene: AbstractScene) {
         super('BounceOffTheWall', scene);
@@ -17,7 +17,17 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     }
 
     init() {
+        this.xDelta = this.getRandomDelta() > this.deltaNum ? this.getRandomDelta() : -this.getRandomDelta();
+        this.yDelta = this.getRandomDelta() > this.deltaNum ? this.getRandomDelta() : -this.getRandomDelta();
+        this.xDelta *= 2;
+        this.yDelta *= 2;
+        if (!!this.subscriber) {
+            return;
+        }
         this.subscriber = this.scene.tickCount$.subscribe(() => {
+            if (!this.root) {
+                return;
+            }
             if (this.root.xPos <= 0) {
                 this.xDelta = this.getRandomDelta();
             }
