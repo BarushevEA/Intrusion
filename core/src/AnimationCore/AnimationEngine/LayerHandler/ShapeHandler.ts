@@ -52,7 +52,7 @@ export type IShapeHandler = {
     translate(x: x_pos, y: y_pos): IShapeHandler;
     rotate(angle: IRadian): IShapeHandler;
     scale(x: x_pos, y: y_pos): IShapeHandler;
-    setBase64Image(base64: string, x?: x_pos, y?: y_pos): IShapeHandler;
+    setBase64Image(base64: string, x?: x_pos, y?: y_pos): Promise<IShapeHandler>;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -94,14 +94,19 @@ class ShapeHandler implements IShapeHandler {
         return this;
     }
 
-    public setBase64Image(base64: string, x = 0, y = 0): IShapeHandler {
-        const context = this.context;
-        let image = new Image();
-        image.src = base64;
-        image.onload = () => {
-            context.drawImage(image, x, y);
-        };
-        return this;
+    public setBase64Image(base64: string, x = 0, y = 0): Promise<IShapeHandler> {
+        return new Promise<IShapeHandler>((resolve, reject) => {
+            const context = this.context;
+            let image = new Image();
+            image.src = base64;
+            image.onload = () => {
+                context.drawImage(image, x, y);
+                resolve(this);
+            };
+            image.onerror = () => {
+                reject('Error image loading');
+            };
+        });
     };
 
     public translate(x: x_pos, y: y_pos): IShapeHandler {
