@@ -3,7 +3,7 @@ import {enemy1} from "./Enemy1_base64";
 
 export class Enemy1 extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 162, 100);
+        super(canvas, 100, 100);
     }
 
     protected setFramesName(): void {
