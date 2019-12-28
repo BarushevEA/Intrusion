@@ -12,7 +12,7 @@ import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
 import {ShotLightingPlugin} from "../../../Plugins/ShotLighting/ShotLightingPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../AnimationCore/Store/Types";
-import {Plane} from "../../../AnimationModels/Plane/Plane";
+import {Plane} from "../../../AnimationModels/Planes/Plane";
 import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 
