@@ -13,6 +13,6 @@ export class FatherFrost extends AbstractFramedShape {
     protected initShape(): void {
         this.createFrame(0);
         this.shape
-            .setBase64Image(fatherFrost_base64.getInstance()).catch(err => console.error(err));
+            .setBase64Image(fatherFrost_base64.getImage()).catch(err => console.error(err));
     }
 }
