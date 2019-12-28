@@ -6,12 +6,23 @@ export enum E_KEY_MOVE_PLUGIN {
 }
 
 export type IPlugin = {
+    readonly numberSeparator: string;
     readonly isDestroyed: boolean;
+    readonly rootName: string;
     getName(): string;
     destroy(): void;
     unLink(): void;
     setRoot(root: any): void;
 }
+
+export type IPluginId = {
+    name: string;
+    number: number;
+}
+
+export type IPluginList = {
+    [rootName: string]: IPluginId[];
+};
 
 export type IPluginDock = {
     add(plugin: IPlugin): void;
@@ -20,5 +31,7 @@ export type IPluginDock = {
     destroyPluginName(name: string): void;
     destroyPlugin(plugin: IPlugin): void;
     getPlugin<T>(name: string): T;
-    getPluginList(): string[];
+    getNameList(): string[];
+    getNamesRootList(): IPluginList;
+    getPluginsFromRootName<T>(name: string): T[];
 }

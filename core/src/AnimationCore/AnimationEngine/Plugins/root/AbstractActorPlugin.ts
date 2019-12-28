@@ -3,15 +3,17 @@ import {IPlugin} from "./PluginTypes";
 import {AbstractActor} from "../../rootModels/AbstractActor/AbstractActor";
 
 export abstract class AbstractActorPlugin implements IPlugin {
-    public numberSeparator = '_#';
     private static pluginCounter = 0;
     private _isDestroyed: boolean = false;
     private readonly name: string = '';
     protected root: AbstractActor = <any>0;
     protected scene: AbstractScene = <any>0;
     protected _isUnlinked = true;
+    public readonly numberSeparator = '_#';
+    public readonly rootName: string = '';
 
     protected constructor(name: string, scene: AbstractScene) {
+        this.rootName = name;
         this.name = name + this.numberSeparator + AbstractActorPlugin.pluginCounter;
         this.scene = scene;
         AbstractActorPlugin.pluginCounter++;

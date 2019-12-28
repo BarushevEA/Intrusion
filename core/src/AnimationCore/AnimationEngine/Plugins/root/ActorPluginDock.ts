@@ -1,4 +1,4 @@
-import {IPlugin, IPluginDock} from "./PluginTypes";
+import {IPlugin, IPluginDock, IPluginId, IPluginList} from "./PluginTypes";
 
 export class PluginDock<T> implements IPluginDock {
     private readonly root: T;
@@ -13,7 +13,7 @@ export class PluginDock<T> implements IPluginDock {
         this.pluginCase[plugin.getName()] = plugin;
     };
 
-    unLink(plugin: IPlugin): void{
+    unLink(plugin: IPlugin): void {
         if (this.pluginCase.hasOwnProperty(plugin.getName())) {
             this.pluginCase[plugin.getName()].unLink();
             delete this.pluginCase[plugin.getName()];
@@ -28,7 +28,7 @@ export class PluginDock<T> implements IPluginDock {
     };
 
     destroy(): void {
-        const list = this.getPluginList();
+        const list = this.getNameList();
         for (let i = 0; i < list.length; i++) {
             const name = list[i];
             this.destroyPluginName(name);
@@ -50,7 +50,44 @@ export class PluginDock<T> implements IPluginDock {
         return <any>0;
     };
 
-    getPluginList(): string[] {
+    getNameList(): string[] {
         return Object.keys(this.pluginCase);
     };
+
+    getNamesRootList(): IPluginList {
+        const list = this.getNameList();
+        if (!list || !list.length) {
+            return <any>0;
+        }
+        const rootList: IPluginList = {};
+        for (let i = 0; i < list.length; i++) {
+            const name = list[i];
+            const plugin = this.pluginCase[name];
+            if (!rootList[plugin.rootName]) {
+                rootList[plugin.rootName] = [];
+            }
+            rootList[plugin.rootName]
+                .push({
+                    number: parseInt(name.split(plugin.numberSeparator)[1], 10),
+                    name: name
+                });
+        }
+        return rootList;
+    }
+
+    getPluginsFromRootName<T>(name: string): T[] {
+        const rootList: IPluginList = this.getNamesRootList();
+        if (!rootList || !rootList[name]) {
+            return <any>0;
+        }
+
+        const plugins: T[] = [];
+        const ids: IPluginId[] = rootList[name];
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            plugins.push(this.getPlugin<T>(id.name));
+        }
+
+        return plugins;
+    }
 }
