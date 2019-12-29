@@ -51,10 +51,11 @@ class SubscriberLike implements ISubscriptionLike {
 }
 
 export class Observable<T> implements IObserver<T> {
+    private static readonly indexFlexible = 'abcdefghijklmnopqrstuvwxyz$_!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
     private _value: T;
     private listeners: IListeners = {};
     private indexCounter = -1;
-    private indexFlexible = 'abcdefghijklmnopqrstuvwxyz$_!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     private flexibleCounter = 0;
     private keys: string[] = <any>0;
 
@@ -82,7 +83,6 @@ export class Observable<T> implements IObserver<T> {
         this.keys = <any>0;
         this.listeners = <any>0;
         this.indexCounter = <any>0;
-        this.indexFlexible = <any>0;
         this.flexibleCounter = <any>0;
     }
 
@@ -104,7 +104,7 @@ export class Observable<T> implements IObserver<T> {
 
     public subscribe(callback: ICallback): ISubscriptionLike {
         this.indexCounter++;
-        let index = this.indexFlexible[this.flexibleCounter];
+        let index = Observable.indexFlexible[this.flexibleCounter];
         if (this.indexCounter >= Number.MAX_SAFE_INTEGER - 1) {
             this.indexCounter = 0;
             this.flexibleCounter++;

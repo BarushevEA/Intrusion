@@ -30,6 +30,7 @@ export abstract class AbstractActorPlugin implements IPlugin {
     destroy(): void {
         this.unLink();
         this.scene = <any>0;
+        this._isDestroyed = true;
     };
 
     unLink(): void {

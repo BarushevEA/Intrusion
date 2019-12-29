@@ -25,7 +25,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
             return;
         }
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            if (!this.root) {
+            if (!this.root || this._isUnlinked) {
                 return;
             }
             if (this.root.xPos <= 0) {
