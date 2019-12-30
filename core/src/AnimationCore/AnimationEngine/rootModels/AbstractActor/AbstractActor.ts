@@ -53,6 +53,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isMouseRightClick$ = new Observable(<boolean>false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
+    private _isDestroyed = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -61,6 +62,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
         this.collector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
+    }
+
+    get isDestroyed(): boolean {
+        return this._isDestroyed;
     }
 
     private initEvents(): void {
@@ -322,8 +327,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public destroy(): void {
+        if (this._isDestroyed) {
+            return;
+        }
+
         this.collector.destroy();
         this.collector = <any>0;
+
         this.disableEvents();
         this._z_index = <any>0;
         this._z_index_memory = <any>0;
@@ -340,34 +350,21 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;
         this.isMouseOver = <any>0;
-        if (this._isMouseOver$.destroy) {
-            this._isMouseOver$.destroy();
-        }
-        if (this._isMouseClick$.destroy) {
-            this._isMouseClick$.destroy();
-        }
-        if (this._isMouseLeftClick$.destroy) {
-            this._isMouseLeftClick$.destroy();
-        }
-        if (this._isMouseRightClick$.destroy) {
-            this._isMouseRightClick$.destroy();
-        }
-        if (this._isMouseLeftDrag$.destroy) {
-            this._isMouseLeftDrag$.destroy();
-        }
-        if (this._isMouseLeftDrop$.destroy) {
-            this._isMouseLeftDrop$.destroy();
-        }
+        this._isMouseOver$.destroy();
+        this._isMouseClick$.destroy();
+        this._isMouseLeftClick$.destroy();
+        this._isMouseRightClick$.destroy();
+        this._isMouseLeftDrag$.destroy();
+        this._isMouseLeftDrop$.destroy();
         this._isMouseOver$ = <any>0;
         this._isMouseClick$ = <any>0;
         this._isMouseLeftClick$ = <any>0;
         this._isMouseRightClick$ = <any>0;
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
-        if (this._pluginDock) {
-            this._pluginDock.destroy();
-            this._pluginDock = <any>0;
-        }
+        this._pluginDock.destroy();
+        this._pluginDock = <any>0;
+        this._isDestroyed = true;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {

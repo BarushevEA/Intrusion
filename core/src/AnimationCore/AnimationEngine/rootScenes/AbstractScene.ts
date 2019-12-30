@@ -11,6 +11,7 @@ export type IScene = {
     stop(): void;
     exit(): void;
     destroy(): void;
+    readonly isDestroyed: boolean;
 }
 
 export type IUserData = {
@@ -58,6 +59,7 @@ export abstract class AbstractScene implements IScene {
     private isFirstStart = true;
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
+    private _isDestroyed = false;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -65,6 +67,10 @@ export abstract class AbstractScene implements IScene {
         this.renderController.setCanvas(canvas);
         this.collector = new EventCollector();
         this.run();
+    }
+
+    get isDestroyed(): boolean {
+        return this._isDestroyed;
     }
 
     set cursorHandler(value: CursorHandler) {
@@ -332,6 +338,10 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroy(): void {
+        if (this._isDestroyed) {
+            return;
+        }
+
         this._onDestroy$.next({...this._userData});
         if (this.renderController && this.renderController.destroyActors) {
             this.renderController.destroyActors();
@@ -378,6 +388,7 @@ export abstract class AbstractScene implements IScene {
         this._onSetUserData$.destroy();
         this._onDestroy$.destroy();
         this._cursor = <any>0;
+        this._isDestroyed = true;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

@@ -24,6 +24,7 @@ export type IActor = {
     readonly isMouseLeftClick$: ISubscriber<boolean>;
     readonly isMouseOver$: ISubscriber<boolean>;
     readonly isMouseOver: boolean;
+    readonly isDestroyed: boolean;
     readonly pluginDock: IPluginDock;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
