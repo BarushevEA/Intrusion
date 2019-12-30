@@ -61,6 +61,7 @@ export class Observable<T> implements IObserver<T> {
 
     constructor(value: T) {
         this._value = value;
+        this.keys = [];
     }
 
     public next(value: T): void {
@@ -71,9 +72,14 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public unSubscribe(index: string): void {
-        if (this.listeners.hasOwnProperty(index)) {
+        if (!!this.listeners[index]) {
             delete this.listeners[index];
-            this.keys = Object.keys(this.listeners);
+            const elIndex = this.keys.indexOf(index);
+            for (let i = elIndex + 1; i < this.keys.length; i++) {
+                const key = this.keys[i];
+                this.keys[i - 1] = key;
+            }
+            this.keys.length = this.keys.length - 1;
         }
     }
 
@@ -111,7 +117,7 @@ export class Observable<T> implements IObserver<T> {
         }
         index += this.indexCounter;
         this.listeners[index] = callback;
-        this.keys = Object.keys(this.listeners);
+        this.keys.push(index);
         return new SubscriberLike(this, index);
     }
 }

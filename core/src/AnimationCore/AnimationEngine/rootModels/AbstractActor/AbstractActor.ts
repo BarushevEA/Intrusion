@@ -15,6 +15,7 @@ import {IActor, IDimensions} from "./ActorTypes";
 import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {x_pos, y_pos} from "../../../Libraries/Types";
+import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -43,7 +44,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isLeftMouseCatch = false;
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 200;
-    private subscribers: ISubscriptionLike[] = [];
+    private collector: ICollector = <any>0;
     private readonly mouseEvents: ISubscriptionLike[] = [];
     public isMouseOver = false;
     private _isMouseOver$ = new Observable(<boolean>false);
@@ -52,14 +53,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isMouseRightClick$ = new Observable(<boolean>false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
-    private destroySubscriberCounter = 0;
+    private _isDestroyed = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
+        this.collector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
+    }
+
+    get isDestroyed(): boolean {
+        return this._isDestroyed;
     }
 
     private initEvents(): void {
@@ -199,7 +205,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    public setPosition(x: number, y: number): void {
+    public setPosition(x: x_pos, y: y_pos): void {
         this._elementX = x;
         this._elementY = y;
     }
@@ -216,10 +222,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
             height: this._elementHeight,
             width: this._elementWidth
         }
-    }
-
-    randomize(num: number): number {
-        return Math.round(Math.random() * num)
     }
 
     set xPos(value: x_pos) {
@@ -321,19 +323,17 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public collect(...subscribers: ISubscriptionLike[]): void {
-        for (let i = 0; i < subscribers.length; i++) {
-            this.subscribers.push(subscribers[i]);
-        }
+        this.collector.collect(...subscribers);
     }
 
     public destroy(): void {
-        for (let i = 0; i < this.subscribers.length; i++) {
-            const subscriber = this.subscribers[i];
-            if (subscriber) {
-                subscriber.unsubscribe();
-            }
+        if (this._isDestroyed) {
+            return;
         }
-        this.subscribers.length = 0;
+
+        this.collector.destroy();
+        this.collector = <any>0;
+
         this.disableEvents();
         this._z_index = <any>0;
         this._z_index_memory = <any>0;
@@ -350,61 +350,25 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;
         this.isMouseOver = <any>0;
-        if (this._isMouseOver$.destroy) {
-            this._isMouseOver$.destroy();
-        }
-        if (this._isMouseClick$.destroy) {
-            this._isMouseClick$.destroy();
-        }
-        if (this._isMouseLeftClick$.destroy) {
-            this._isMouseLeftClick$.destroy();
-        }
-        if (this._isMouseRightClick$.destroy) {
-            this._isMouseRightClick$.destroy();
-        }
-        if (this._isMouseLeftDrag$.destroy) {
-            this._isMouseLeftDrag$.destroy();
-        }
-        if (this._isMouseLeftDrop$.destroy) {
-            this._isMouseLeftDrop$.destroy();
-        }
+        this._isMouseOver$.destroy();
+        this._isMouseClick$.destroy();
+        this._isMouseLeftClick$.destroy();
+        this._isMouseRightClick$.destroy();
+        this._isMouseLeftDrag$.destroy();
+        this._isMouseLeftDrop$.destroy();
         this._isMouseOver$ = <any>0;
         this._isMouseClick$ = <any>0;
         this._isMouseLeftClick$ = <any>0;
+        this._isMouseRightClick$ = <any>0;
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
-        this.destroySubscriberCounter = <any>0;
-        if (this._pluginDock) {
-            this._pluginDock.destroy();
-            this._pluginDock = <any>0;
-        }
+        this._pluginDock.destroy();
+        this._pluginDock = <any>0;
+        this._isDestroyed = true;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
-        for (let i = 0; i < this.subscribers.length; i++) {
-            const savedSubscriber = this.subscribers[i];
-            if (savedSubscriber && savedSubscriber === subscriber) {
-                savedSubscriber.unsubscribe();
-                this.subscribers[i] = <any>0;
-                this.destroySubscriberCounter++;
-                break;
-            }
-        }
-
-        this.clearCollector();
-    }
-
-    private clearCollector(): void {
-        if (this.destroySubscriberCounter > 1000 && this.subscribers.length) {
-            const tmp: ISubscriptionLike[] = [];
-            for (let i = 0; i < this.subscribers.length; i++) {
-                const subscriber = this.subscribers[i];
-                if (subscriber) {
-                    tmp.push(subscriber);
-                }
-            }
-            this.subscribers = tmp;
-        }
+        this.collector.unsubscribe(subscriber);
     }
 
     public setFramesDelay(delay: number): void {

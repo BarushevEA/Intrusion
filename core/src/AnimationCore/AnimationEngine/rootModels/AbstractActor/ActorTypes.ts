@@ -24,9 +24,11 @@ export type IActor = {
     readonly isMouseLeftClick$: ISubscriber<boolean>;
     readonly isMouseOver$: ISubscriber<boolean>;
     readonly isMouseOver: boolean;
+    readonly isDestroyed: boolean;
     readonly pluginDock: IPluginDock;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
+    setPosition(x: x_pos, y: y_pos): void;
     setAnimationOriginal(): void;
     setAnimationReverse(): void;
     setStopFrame(index: number): void;
