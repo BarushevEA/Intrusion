@@ -367,6 +367,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseOver$ = <any>0;
         this._isMouseClick$ = <any>0;
         this._isMouseLeftClick$ = <any>0;
+        this._isMouseRightClick$ = <any>0;
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
         this.destroySubscriberCounter = <any>0;
