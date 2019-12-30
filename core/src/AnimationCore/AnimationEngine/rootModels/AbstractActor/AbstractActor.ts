@@ -15,6 +15,7 @@ import {IActor, IDimensions} from "./ActorTypes";
 import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {x_pos, y_pos} from "../../../Libraries/Types";
+import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -43,7 +44,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isLeftMouseCatch = false;
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 200;
-    private subscribers: ISubscriptionLike[] = [];
+    private collector: ICollector = <any>0;
     private readonly mouseEvents: ISubscriptionLike[] = [];
     public isMouseOver = false;
     private _isMouseOver$ = new Observable(<boolean>false);
@@ -52,13 +53,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isMouseRightClick$ = new Observable(<boolean>false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
-    private destroySubscriberCounter = 0;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
+        this.collector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
     }
 
@@ -317,19 +318,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public collect(...subscribers: ISubscriptionLike[]): void {
-        for (let i = 0; i < subscribers.length; i++) {
-            this.subscribers.push(subscribers[i]);
-        }
+        this.collector.collect(...subscribers);
     }
 
     public destroy(): void {
-        for (let i = 0; i < this.subscribers.length; i++) {
-            const subscriber = this.subscribers[i];
-            if (subscriber) {
-                subscriber.unsubscribe();
-            }
-        }
-        this.subscribers.length = 0;
+        this.collector.destroy();
+        this.collector = <any>0;
         this.disableEvents();
         this._z_index = <any>0;
         this._z_index_memory = <any>0;
@@ -370,7 +364,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseRightClick$ = <any>0;
         this._isMouseLeftDrag$ = <any>0;
         this._isMouseLeftDrop$ = <any>0;
-        this.destroySubscriberCounter = <any>0;
         if (this._pluginDock) {
             this._pluginDock.destroy();
             this._pluginDock = <any>0;
@@ -378,30 +371,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
-        for (let i = 0; i < this.subscribers.length; i++) {
-            const savedSubscriber = this.subscribers[i];
-            if (savedSubscriber && savedSubscriber === subscriber) {
-                savedSubscriber.unsubscribe();
-                this.subscribers[i] = <any>0;
-                this.destroySubscriberCounter++;
-                break;
-            }
-        }
-
-        this.clearCollector();
-    }
-
-    private clearCollector(): void {
-        if (this.destroySubscriberCounter > 1000 && this.subscribers.length) {
-            const tmp: ISubscriptionLike[] = [];
-            for (let i = 0; i < this.subscribers.length; i++) {
-                const subscriber = this.subscribers[i];
-                if (subscriber) {
-                    tmp.push(subscriber);
-                }
-            }
-            this.subscribers = tmp;
-        }
+        this.collector.unsubscribe(subscriber);
     }
 
     public setFramesDelay(delay: number): void {
