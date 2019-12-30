@@ -27,6 +27,7 @@ export type IActor = {
     readonly pluginDock: IPluginDock;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
+    setPosition(x: x_pos, y: y_pos): void;
     setAnimationOriginal(): void;
     setAnimationReverse(): void;
     setStopFrame(index: number): void;

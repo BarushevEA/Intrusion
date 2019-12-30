@@ -1,5 +1,6 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
+import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
 
 const startDelta = 1000;
 
@@ -92,27 +93,27 @@ export class HexagonGreed extends AbstractActor {
 
     renderFrame() {
         if (this.x <= 0) {
-            this.dx = this.randomize(this.maxStep);
+            this.dx = randomize(this.maxStep);
         }
         if (this.x >= this.bound) {
-            this.dx = -1 * this.randomize(this.maxStep);
+            this.dx = -1 * randomize(this.maxStep);
         }
         if (this.y <= 0) {
-            this.dy = this.randomize(this.maxStep);
+            this.dy = randomize(this.maxStep);
         }
         if (this.y >= this.bound) {
-            this.dy = -1 * this.randomize(this.maxStep);
+            this.dy = -1 * randomize(this.maxStep);
         }
 
         if (this.dx === 0 && this.dy === 0) {
-            this.dx = 1 + this.randomize(this.maxStep);
-            this.dy = 1 + this.randomize(this.maxStep);
+            this.dx = 1 + randomize(this.maxStep);
+            this.dy = 1 + randomize(this.maxStep);
         }
 
         if (!this.throttlingCounter) {
-            this.throttlingCounter = 1 + this.randomize(500);
-            this.dx = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
-            this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
+            this.throttlingCounter = 1 + randomize(500);
+            this.dx = randomize(1) ? -randomize(this.maxStep) : randomize(this.maxStep);
+            this.dy = randomize(1) ? -randomize(this.maxStep) : randomize(this.maxStep);
         }
 
         this.drawVirtualOnGeneral(

@@ -199,7 +199,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    public setPosition(x: number, y: number): void {
+    public setPosition(x: x_pos, y: y_pos): void {
         this._elementX = x;
         this._elementY = y;
     }
@@ -216,10 +216,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
             height: this._elementHeight,
             width: this._elementWidth
         }
-    }
-
-    randomize(num: number): number {
-        return Math.round(Math.random() * num)
     }
 
     set xPos(value: x_pos) {
