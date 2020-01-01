@@ -16,6 +16,7 @@ import {Plane} from "../../../AnimationModels/Planes/Plane";
 import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
+import {HPPlugin} from "../../../Plugins/HLProgress/HPPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -130,10 +131,12 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
+    const health = new HPPlugin(scene);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
+    plane.pluginDock.add(health);
     scene.collect(
         keyDownCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
