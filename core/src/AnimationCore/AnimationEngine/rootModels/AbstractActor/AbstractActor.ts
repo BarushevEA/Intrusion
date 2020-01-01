@@ -54,6 +54,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
     private _isDestroyed = false;
+    private _isEventsBlock = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -69,7 +70,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private initEvents(): void {
-        if (this.mouseEvents.length) {
+        if (this.mouseEvents.length || this._isEventsBlock) {
             return;
         }
         this.mouseEvents.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
@@ -87,6 +88,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.mouseEvents[i].unsubscribe();
         }
         this.mouseEvents.length = 0;
+    }
+
+    get isEventsBlock(): boolean {
+        return this._isEventsBlock;
+    }
+
+    set isEventsBlock(value: boolean) {
+        if (value) {
+            this.disableEvents();
+        } else {
+            this.initEvents();
+        }
+        this._isEventsBlock = value;
     }
 
     public enableEvents(): void {
