@@ -1,8 +1,8 @@
 import {AbstractActor} from "../AnimationEngine/rootModels/AbstractActor/AbstractActor";
 
 export class PositionBalance {
-    private rootActor: AbstractActor = <any>0;
-    private balancedActor: AbstractActor = <any>0;
+    private readonly rootActor: AbstractActor = <any>0;
+    private readonly balancedActor: AbstractActor = <any>0;
     private yBalance: number = 0;
     private xBalance: number = 0;
     private vectorY = 0;
@@ -22,6 +22,10 @@ export class PositionBalance {
     }
 
     public handle(xCorrection = 0, yCorrection = 0) {
+        if (!this.rootActor || !this.balancedActor) {
+            return;
+        }
+
         let xDelta = this.xBalance - this.rootActor.xPos;
         let yDelta = this.yBalance - this.rootActor.yPos;
 

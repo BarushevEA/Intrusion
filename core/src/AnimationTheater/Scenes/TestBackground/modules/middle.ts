@@ -16,7 +16,7 @@ import {Plane} from "../../../AnimationModels/Planes/Plane";
 import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
-import {HPPlugin} from "../../../Plugins/HLProgress/HPPlugin";
+import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -105,7 +105,7 @@ function enemy1Actions(scene: AbstractScene) {
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
         const bounce = new BounceOffTheWall(scene);
-        const health = new HPPlugin(scene);
+        const health = new HealthPlugin(scene);
         enemy1.pluginDock.add(bounce);
         enemy1.pluginDock.add(health);
     }
@@ -133,7 +133,7 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
-    const health = new HPPlugin(scene);
+    const health = new HealthPlugin(scene);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);

@@ -1,36 +1,62 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {HLProgress} from "./HLProgress";
+import {EnemyProgress} from "./Progresses/EnemyProgress";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {getCenterX} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {HealthType} from "./HealthType";
 
-export class HPPlugin extends AbstractActorPlugin {
+export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
     private currentHealth = 0;
-    private progressBar: HLProgress = <any>0;
+    private progressBar: EnemyProgress = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private positionBalance: PositionBalance = <any>0;
+    private type: HealthType = <any>0;
 
-    constructor(scene: AbstractScene, health = 1000) {
+    constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HPPlugin', scene);
         this.health = health;
+        this.type = viewType;
     }
 
     onInit(): void {
         this.init();
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            this.positionBalance.handle(getCenterX(0, this.root.width) - getCenterX(0, this.progressBar.width), -10);
+            if (!!this.positionBalance) {
+                this.positionBalance.handle(
+                    getCenterX(0, this.root.width) - getCenterX(0, this.progressBar.width),
+                    -10);
+            }
         });
     }
 
     init() {
         this.currentHealth = this.health;
         if (!this.progressBar) {
-            this.progressBar = new HLProgress(this.scene.generalLayer);
-            this.positionBalance = new PositionBalance(this.root, this.progressBar);
-            this.scene.setActors(this.progressBar);
+            this.setProgressBar();
+        }
+    }
+
+    private setProgressBar() {
+        switch (this.type) {
+            case HealthType.ENEMY:
+                this.progressBar = new EnemyProgress(this.scene.generalLayer);
+                this.positionBalance = new PositionBalance(this.root, this.progressBar);
+                break;
+            case HealthType.HERO:
+                this.progressBar = <any>0;
+                break;
+            case HealthType.ENEMY_BOSS:
+                this.progressBar = <any>0;
+                break;
+            case HealthType.NONE:
+                this.progressBar = <any>0;
+                break;
+        }
+        if (!!this.progressBar) {
             this.progressBar.z_index = this.root.z_index;
+            this.scene.setActors(this.progressBar);
         }
     }
 
@@ -70,7 +96,6 @@ export class HPPlugin extends AbstractActorPlugin {
         if (this.subscriber) {
             this.subscriber.unsubscribe();
             this.subscriber = <any>0;
-            this.positionBalance = <any>0;
         }
         super.unLink();
     }
@@ -80,6 +105,8 @@ export class HPPlugin extends AbstractActorPlugin {
             this.scene.destroyActor(this.progressBar);
             this.progressBar = <any>0;
         }
+        this.positionBalance = <any>0;
+        this.type = <any>0;
         super.destroy();
     }
 }

@@ -1,6 +1,6 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
-export class HLProgress extends AbstractFramedShape {
+export class EnemyProgress extends AbstractFramedShape {
     private progress = 100;
 
     constructor(canvas: HTMLCanvasElement) {
