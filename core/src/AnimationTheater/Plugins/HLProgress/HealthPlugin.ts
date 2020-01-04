@@ -80,6 +80,9 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.currentHealth -= damage;
         this.healthBalance();
         this.updateProgress();
+        if (this.currentHealth <= 0) {
+            this.scene.destroyActor(this.root);
+        }
     }
 
     upgradeMaxHealth(health: number) {

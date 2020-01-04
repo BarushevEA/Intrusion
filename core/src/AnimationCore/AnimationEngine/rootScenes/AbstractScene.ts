@@ -245,7 +245,9 @@ export abstract class AbstractScene implements IScene {
     }
 
     private onMovedActorDrag(drag: IDragActor): void {
-        const catchActors = this.movedOnDrag.filter(moved => moved.actor.isMouseOver$.getValue());
+        const catchActors = this.movedOnDrag.filter(moved => {
+            return !moved.actor.isDestroyed && moved.actor.isMouseOver$.getValue();
+        });
         if (!catchActors.length) {
             return;
         }

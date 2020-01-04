@@ -3,7 +3,7 @@ import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/roo
 
 export class Bullet extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 100, 100);
+        super(canvas, 12, 15);
     }
 
     protected setFramesName(): void {

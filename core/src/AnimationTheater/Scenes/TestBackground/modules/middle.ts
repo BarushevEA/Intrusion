@@ -18,6 +18,7 @@ import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorP
 import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
+import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -138,6 +139,7 @@ function planeAction(scene: AbstractScene) {
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
     const health = new HealthPlugin(scene, HealthType.HERO, 5000);
+    const bulletShot = new BulletShotPlugin(scene, enemies1);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
@@ -147,12 +149,14 @@ function planeAction(scene: AbstractScene) {
         keyDownCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
                     plane.pluginDock.add(shotLighting);
+                    plane.pluginDock.add(bulletShot);
                 }
             }
         ),
         keyUpCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
                     plane.pluginDock.unLink(shotLighting);
+                    plane.pluginDock.unLink(bulletShot);
                 }
             }
         )
