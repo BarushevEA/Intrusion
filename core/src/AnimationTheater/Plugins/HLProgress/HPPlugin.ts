@@ -2,37 +2,39 @@ import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugin
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {HLProgress} from "./HLProgress";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 
 export class HPPlugin extends AbstractActorPlugin {
     private health = 0;
     private currentHealth = 0;
     private progressBar: HLProgress = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
+    private positionBalance: PositionBalance = <any>0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: AbstractScene, health = 1000) {
         super('HPPlugin', scene);
+        this.health = health;
     }
 
     onInit(): void {
         this.init();
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            this.progressBar.xPos = this.root.xPos;
-            this.progressBar.yPos = this.root.yPos;
+            this.positionBalance.handle(0, -20);
         });
     }
 
     init() {
-        this.health = 1000;
         this.currentHealth = this.health;
         if (!this.progressBar) {
             this.progressBar = new HLProgress(this.scene.generalLayer);
+            this.positionBalance = new PositionBalance(this.root, this.progressBar);
             this.scene.setActors(this.progressBar);
         }
     }
 
     private updateProgress() {
         if (this.progressBar) {
-            const progress = Math.round(this.currentHealth / this.health) * 100;
+            const progress = Math.round(this.currentHealth / this.health * 100);
             this.progressBar.setProgress(progress);
         }
     }
@@ -66,6 +68,7 @@ export class HPPlugin extends AbstractActorPlugin {
         if (this.subscriber) {
             this.subscriber.unsubscribe();
             this.subscriber = <any>0;
+            this.positionBalance = <any>0;
         }
         super.unLink();
     }

@@ -4,7 +4,7 @@ export class HLProgress extends AbstractFramedShape {
     private progress = 100;
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 7, 100);
+        super(canvas, 5, 100);
     }
 
     protected setFramesName(): void {
