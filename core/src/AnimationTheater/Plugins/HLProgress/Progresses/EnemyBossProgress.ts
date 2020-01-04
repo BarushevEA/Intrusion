@@ -1,5 +1,6 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IHealthProgress} from "../HealthType";
+import {EAlign} from "../../../../AnimationCore/AnimationEngine/LayerHandler/TextHandler";
 
 export class EnemyBossProgress extends AbstractFramedShape implements IHealthProgress{
     private progress = 100;
@@ -18,6 +19,21 @@ export class EnemyBossProgress extends AbstractFramedShape implements IHealthPro
             .lineWidth(1)
             .colors('rgba(0,0,0,0.3)', 'rgb(255,99,3)')
             .rectangle(0, 0, this.width, this.height);
+
+        this.shape
+            .lineWidth(5)
+            .colors('rgb(255,0,5)', 'rgb(0,0,0)');
+
+        this.text.x = 4;
+        this.text.y = 17;
+        this.text.options = {
+            textAlign: EAlign.left,
+            maxWidth: 100
+        };
+        this.text.fontFamily = 'Comic Sans MS';
+        this.text.fontSize = '18px';
+        this.text.strokeText('BOSS');
+        this.text.fillText('BOSS');
     }
 
     renderFrame(): void {
