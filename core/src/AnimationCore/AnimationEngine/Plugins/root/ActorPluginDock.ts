@@ -78,7 +78,7 @@ export class PluginDock<T> implements IPluginDock {
     getPluginsFromRootName<T>(name: string): T[] {
         const rootList: IPluginList = this.getNamesRootList();
         if (!rootList || !rootList[name]) {
-            return <any>0;
+            return <any>[0];
         }
 
         const plugins: T[] = [];
