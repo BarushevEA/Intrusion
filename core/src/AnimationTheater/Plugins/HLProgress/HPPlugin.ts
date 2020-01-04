@@ -3,6 +3,7 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/A
 import {HLProgress} from "./HLProgress";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
+import {getCenterX} from "../../../AnimationCore/Libraries/FunctionLibs";
 
 export class HPPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -19,7 +20,7 @@ export class HPPlugin extends AbstractActorPlugin {
     onInit(): void {
         this.init();
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            this.positionBalance.handle(0, -20);
+            this.positionBalance.handle(getCenterX(0, this.root.width) - getCenterX(0, this.progressBar.width), -10);
         });
     }
 
@@ -29,6 +30,7 @@ export class HPPlugin extends AbstractActorPlugin {
             this.progressBar = new HLProgress(this.scene.generalLayer);
             this.positionBalance = new PositionBalance(this.root, this.progressBar);
             this.scene.setActors(this.progressBar);
+            this.progressBar.z_index = this.root.z_index;
         }
     }
 

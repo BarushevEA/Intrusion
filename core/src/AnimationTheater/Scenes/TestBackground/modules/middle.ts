@@ -105,7 +105,9 @@ function enemy1Actions(scene: AbstractScene) {
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
         const bounce = new BounceOffTheWall(scene);
+        const health = new HPPlugin(scene);
         enemy1.pluginDock.add(bounce);
+        enemy1.pluginDock.add(health);
     }
 }
 
