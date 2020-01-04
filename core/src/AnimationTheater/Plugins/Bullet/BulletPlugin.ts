@@ -14,7 +14,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     private isPreliminaryDestroyed = false;
     private damagedEnemy: AbstractActor = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], damage = 510) {
+    constructor(scene: AbstractScene, enemies: AbstractActor[], damage = 50) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);
