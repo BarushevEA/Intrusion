@@ -46,23 +46,25 @@ export class HealthPlugin extends AbstractActorPlugin {
             case HealthType.ENEMY:
                 this.progressBar = new EnemyProgress(this.scene.generalLayer);
                 this.positionBalance = new PositionBalance(this.root, this.progressBar);
+                this.progressBar.z_index = this.root.z_index;
                 break;
             case HealthType.HERO:
                 this.progressBar = new HeroProgress(this.scene.generalLayer);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
+                this.progressBar.z_index = this.root.z_index + 1;
                 break;
             case HealthType.ENEMY_BOSS:
                 this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
                 this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
                 this.progressBar.yPos = space;
+                this.progressBar.z_index = this.root.z_index + 1;
                 break;
             case HealthType.NONE:
                 this.progressBar = <any>0;
                 break;
         }
         if (!!this.progressBar) {
-            this.progressBar.z_index = this.root.z_index;
             this.scene.setActors(this.progressBar);
         }
     }

@@ -21,13 +21,13 @@ export class HeroProgress extends AbstractFramedShape implements IHealthProgress
     }
 
     renderFrame(): void {
-        super.renderFrame();
         this.drawProgressBar();
+        super.renderFrame();
     }
 
     private drawProgressBar() {
         this.shape
-            .lineWidth(1)
+            .lineWidth(5)
             .colors('rgb(255,29,2)', 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,

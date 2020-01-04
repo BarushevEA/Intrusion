@@ -21,13 +21,13 @@ export class EnemyBossProgress extends AbstractFramedShape implements IHealthPro
     }
 
     renderFrame(): void {
-        super.renderFrame();
         this.drawProgressBar();
+        super.renderFrame();
     }
 
     private drawProgressBar() {
         this.shape
-            .lineWidth(1)
+            .lineWidth(5)
             .colors('rgb(255,113,5)', 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,

@@ -21,8 +21,8 @@ export class EnemyProgress extends AbstractFramedShape implements IHealthProgres
     }
 
     renderFrame(): void {
-        super.renderFrame();
         this.drawProgressBar();
+        super.renderFrame();
     }
 
     private drawProgressBar() {
