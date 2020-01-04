@@ -58,10 +58,10 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    circlesAction(scene);
     enemy1Actions(scene);
     fatherFrostAction(scene);
     planeAction(scene);
-    circlesAction(scene);
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
@@ -117,6 +117,7 @@ function fatherFrostAction(scene: AbstractScene) {
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(scene);
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
+    enemies1.push(fatherFrost);
     scene.moveOnMouseDrag(fatherFrost);
     fatherFrost.pluginDock.add(health);
     fatherFrost.pluginDock.add(highlighting);
