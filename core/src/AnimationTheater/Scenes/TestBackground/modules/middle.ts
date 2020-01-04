@@ -17,6 +17,7 @@ import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
+import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -115,7 +116,9 @@ function fatherFrostAction(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(scene);
+    const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
     scene.moveOnMouseDrag(fatherFrost);
+    fatherFrost.pluginDock.add(health);
     fatherFrost.pluginDock.add(highlighting);
     fatherFrost.pluginDock.add(bounce);
     fatherFrost.pluginDock.add(cursorBehavior);
@@ -133,7 +136,7 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
-    const health = new HealthPlugin(scene);
+    const health = new HealthPlugin(scene, HealthType.HERO, 5000);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);

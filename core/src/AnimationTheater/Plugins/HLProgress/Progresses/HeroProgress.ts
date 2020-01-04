@@ -1,15 +1,15 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IHealthProgress} from "../HealthType";
 
-export class EnemyProgress extends AbstractFramedShape implements IHealthProgress{
+export class HeroProgress extends AbstractFramedShape implements IHealthProgress{
     private progress = 100;
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 5, 50);
+        super(canvas, 20, 300);
     }
 
     protected setFramesName(): void {
-        this.setFramePoolName('EnemyProgress');
+        this.setFramePoolName('HeroProgress');
     }
 
     protected initShape(): void {
@@ -28,7 +28,7 @@ export class EnemyProgress extends AbstractFramedShape implements IHealthProgres
     private drawProgressBar() {
         this.shape
             .lineWidth(1)
-            .colors('rgb(255,0,0)', 'rgb(0,0,0)')
+            .colors('rgb(255,29,2)', 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,
                 this.yPos,
@@ -36,7 +36,7 @@ export class EnemyProgress extends AbstractFramedShape implements IHealthProgres
                 this.height);
     }
 
-    public setProgress(progress: number): void {
+    public setProgress(progress: number) {
         if (progress > 100) {
             progress = 100;
         }

@@ -397,12 +397,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this.layerHandler.shape;
     }
 
-    get z_index(): number {
-        return this._z_index;
-    }
-
     set z_index(value: number) {
         this._z_index = value;
+    }
+
+    get z_index(): number {
+        return this._z_index;
     }
 
     get layerName(): string {

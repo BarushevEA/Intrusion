@@ -4,12 +4,14 @@ import {EnemyProgress} from "./Progresses/EnemyProgress";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {getCenterX} from "../../../AnimationCore/Libraries/FunctionLibs";
-import {HealthType} from "./HealthType";
+import {HealthType, IHealthProgress} from "./HealthType";
+import {EnemyBossProgress} from "./Progresses/EnemyBossProgress";
+import {HeroProgress} from "./Progresses/HeroProgress";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
     private currentHealth = 0;
-    private progressBar: EnemyProgress = <any>0;
+    private progressBar: IHealthProgress = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private positionBalance: PositionBalance = <any>0;
     private type: HealthType = <any>0;
@@ -39,16 +41,21 @@ export class HealthPlugin extends AbstractActorPlugin {
     }
 
     private setProgressBar() {
+        const space = 10;
         switch (this.type) {
             case HealthType.ENEMY:
                 this.progressBar = new EnemyProgress(this.scene.generalLayer);
                 this.positionBalance = new PositionBalance(this.root, this.progressBar);
                 break;
             case HealthType.HERO:
-                this.progressBar = <any>0;
+                this.progressBar = new HeroProgress(this.scene.generalLayer);
+                this.progressBar.xPos = space * 10;
+                this.progressBar.yPos = space;
                 break;
             case HealthType.ENEMY_BOSS:
-                this.progressBar = <any>0;
+                this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
+                this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
+                this.progressBar.yPos = space;
                 break;
             case HealthType.NONE:
                 this.progressBar = <any>0;
