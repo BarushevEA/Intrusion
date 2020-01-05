@@ -51,15 +51,17 @@ class SubscriberLike implements ISubscriptionLike {
 }
 
 export class Observable<T> implements IObserver<T> {
+    private static readonly indexFlexible = 'abcdefghijklmnopqrstuvwxyz$_!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
     private _value: T;
     private listeners: IListeners = {};
     private indexCounter = -1;
-    private indexFlexible = 'abcdefghijklmnopqrstuvwxyz$_!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     private flexibleCounter = 0;
     private keys: string[] = <any>0;
 
     constructor(value: T) {
         this._value = value;
+        this.keys = [];
     }
 
     public next(value: T): void {
@@ -70,9 +72,14 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public unSubscribe(index: string): void {
-        if (this.listeners.hasOwnProperty(index)) {
+        if (!!this.listeners[index]) {
             delete this.listeners[index];
-            this.keys = Object.keys(this.listeners);
+            const elIndex = this.keys.indexOf(index);
+            for (let i = elIndex + 1; i < this.keys.length; i++) {
+                const key = this.keys[i];
+                this.keys[i - 1] = key;
+            }
+            this.keys.length = this.keys.length - 1;
         }
     }
 
@@ -82,7 +89,6 @@ export class Observable<T> implements IObserver<T> {
         this.keys = <any>0;
         this.listeners = <any>0;
         this.indexCounter = <any>0;
-        this.indexFlexible = <any>0;
         this.flexibleCounter = <any>0;
     }
 
@@ -104,14 +110,14 @@ export class Observable<T> implements IObserver<T> {
 
     public subscribe(callback: ICallback): ISubscriptionLike {
         this.indexCounter++;
-        let index = this.indexFlexible[this.flexibleCounter];
+        let index = Observable.indexFlexible[this.flexibleCounter];
         if (this.indexCounter >= Number.MAX_SAFE_INTEGER - 1) {
             this.indexCounter = 0;
             this.flexibleCounter++;
         }
         index += this.indexCounter;
         this.listeners[index] = callback;
-        this.keys = Object.keys(this.listeners);
+        this.keys.push(index);
         return new SubscriberLike(this, index);
     }
 }

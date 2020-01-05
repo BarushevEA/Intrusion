@@ -45,18 +45,24 @@ function initEvents(platform: AbstractPlatform): void {
                         sceneSerge.setHalfSpeed();
                     });
                     sceneSerge.start(false);
+                    sceneSerge.onExit$.subscribe(() => {
+                        menu.start(true);
+                    });
                     break;
                 case E_Scene.BACKGROUND:
+                    if (sceneBackground.isDestroyed) {
+                        sceneBackground = platform.createScene(TestBackground);
+                    }
                     sceneBackground.start(true);
+                    sceneBackground.onExit$.subscribe(() => {
+                        menu.start(true);
+                    });
+                    sceneBackground.onDestroy$.subscribe(() => {
+                        menu.start(true);
+                    });
                     break;
             }
         }
-    });
-    sceneSerge.onExit$.subscribe(() => {
-        menu.start(true);
-    });
-    sceneBackground.onExit$.subscribe(() => {
-        menu.start(true);
     });
     menu.onDestroy$.subscribe(() => {
         if (sceneTest) {

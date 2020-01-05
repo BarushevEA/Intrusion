@@ -48,11 +48,10 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             this.yBalance = this.root.yPos;
             this.xBalance = this.root.xPos;
 
-            if (this.isUnlinked) {
+            if (!this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.shotLighting);
                 this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 1);
-                this._isUnlinked = false;
             }
         });
     }
@@ -69,9 +68,8 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     }
 
     destroy(): void {
-        this.unLink();
         if (this.shotLighting) {
-            this.shotLighting.destroy();
+            this.scene.destroyActor(this.shotLighting);
             this.shotLighting = <any>0;
         }
         super.destroy();

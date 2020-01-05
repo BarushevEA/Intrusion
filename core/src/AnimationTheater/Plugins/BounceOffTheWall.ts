@@ -1,15 +1,18 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
+import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private deltaNum = 5;
-    private xDelta = this.getRandomDelta();
-    private yDelta = this.getRandomDelta();
+    private xDelta = 0;
+    private yDelta = 0;
+    private minXBound = 0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: AbstractScene, minXBound = 0) {
         super('BounceOffTheWall', scene);
+        this.minXBound = minXBound;
     }
 
     onInit(): void {
@@ -17,27 +20,33 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     }
 
     init() {
+        this.xDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.yDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.xDelta *= 2;
+        this.yDelta *= 2;
+        if (!!this.subscriber) {
+            return;
+        }
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            if (this.root.xPos <= 0) {
-                this.xDelta = this.getRandomDelta();
+            if (!this.root || this._isUnlinked) {
+                return;
+            }
+            if (this.root.xPos <= this.minXBound) {
+                this.xDelta = randomize(this.deltaNum);
             }
             if (this.root.xPos >= (this.scene.generalLayer.width - this.root.width)) {
-                this.xDelta = -this.getRandomDelta();
+                this.xDelta = -randomize(this.deltaNum);
             }
             if (this.root.yPos <= 0) {
-                this.yDelta = this.getRandomDelta();
+                this.yDelta = randomize(this.deltaNum);
             }
             if (this.root.yPos >= (this.scene.generalLayer.height - this.root.height)) {
-                this.yDelta = -this.getRandomDelta();
+                this.yDelta = -randomize(this.deltaNum);
             }
 
             this.root.xPos += this.xDelta;
             this.root.yPos += this.yDelta;
         });
-    }
-
-    getRandomDelta(): number {
-        return Math.round(Math.random() * this.deltaNum);
     }
 
     destroy(): void {

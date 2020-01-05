@@ -4,12 +4,14 @@ import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observ
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
 import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
+import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
     stop(): void;
     exit(): void;
     destroy(): void;
+    readonly isDestroyed: boolean;
 }
 
 export type IUserData = {
@@ -46,7 +48,7 @@ export abstract class AbstractScene implements IScene {
     public actors: AbstractActor[] = [];
     private _cursor: ICursor & AbstractActor = <any>0;
     private _cursorHandler: CursorHandler = <any>0;
-    private collector: ISubscriptionLike[] = [];
+    private collector: ICollector = <any>0;
     private readonly _onStop$ = new Observable(<IUserData><any>0);
     private readonly _onExit$ = new Observable(<IUserData><any>0);
     private readonly _onStart$ = new Observable(<IUserData><any>0);
@@ -57,13 +59,19 @@ export abstract class AbstractScene implements IScene {
     private isFirstStart = true;
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
-    private destroySubscriberCounter = 0;
+    private _isDestroyed = false;
+    private _isDestroyProcessed = false;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
+        this.collector = new EventCollector();
         this.run();
+    }
+
+    get isDestroyed(): boolean {
+        return this._isDestroyed;
     }
 
     set cursorHandler(value: CursorHandler) {
@@ -139,16 +147,28 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroyActor(actor: IActor): void {
+        if (!this.actors) {
+            return;
+        }
+
         const index = findElementOnArray(this.actors, actor);
         if (index === -1) {
             return;
         }
+
         this.unLink(actor);
+
         for (let i = index; i < this.actors.length - 1; i++) {
             this.actors[i] = this.actors[i + 1];
         }
+
         this.actors.length = this.actors.length - 1;
-        actor.destroy();
+
+        if (actor &&
+            !actor.isDestroyed &&
+            actor.destroy) {
+            actor.destroy();
+        }
     }
 
     public unLink(actor: IActor): void {
@@ -196,9 +216,7 @@ export abstract class AbstractScene implements IScene {
     }
 
     public collect(...subscribers: ISubscriptionLike[]) {
-        for (let i = 0; i < subscribers.length; i++) {
-            this.collector.push(subscribers[i]);
-        }
+        this.collector.collect(...subscribers);
     }
 
     protected abstract createScene(): void;
@@ -240,7 +258,9 @@ export abstract class AbstractScene implements IScene {
     }
 
     private onMovedActorDrag(drag: IDragActor): void {
-        const catchActors = this.movedOnDrag.filter(moved => moved.actor.isMouseOver$.getValue());
+        const catchActors = this.movedOnDrag.filter(moved => {
+            return !moved.actor.isDestroyed && moved.actor.isMouseOver$.getValue();
+        });
         if (!catchActors.length) {
             return;
         }
@@ -316,7 +336,7 @@ export abstract class AbstractScene implements IScene {
             });
             this.renderController.renderStart(isBackgroundLayerPresent);
             this._onStart$.next({...this._userData});
-        }, 300);
+        }, 100);
     }
 
     public stop(): void {
@@ -333,22 +353,26 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroy(): void {
+        if (this._isDestroyed || this._isDestroyProcessed) {
+            return;
+        }
+        this._isDestroyProcessed = true;
+
         this._onDestroy$.next({...this._userData});
+
+        this.collector.destroy();
+        this.collector = <any>0;
+
         if (this.renderController && this.renderController.destroyActors) {
             this.renderController.destroyActors();
         }
+
         for (let i = 0; i < this.actors.length; i++) {
             let actor = this.actors[i];
             if (actor) {
                 actor.destroy();
             }
             actor = <any>0;
-        }
-        for (let i = 0; i < this.collector.length; i++) {
-            const subscriber = this.collector[i];
-            if (subscriber) {
-                subscriber.unsubscribe();
-            }
         }
         const keys = Object.keys(this._userData);
         for (let i = 0; i < keys.length; i++) {
@@ -360,9 +384,6 @@ export abstract class AbstractScene implements IScene {
             this.movedBehaviors.length = <any>0;
         }
         this.movedBehaviors = <any>0;
-        if (this.collector) {
-            this.collector.length = <any>0;
-        }
         this.collector = <any>0;
         if (this.actors) {
             this.actors.length = <any>0;
@@ -375,11 +396,10 @@ export abstract class AbstractScene implements IScene {
             this.movedOnDrag.length = <any>0;
         }
         if (this._cursorHandler) {
-            this._cursorHandler.clear()
+            this._cursorHandler.clear();
             this._cursorHandler = <any>0;
         }
         this.movedOnDrag = <any>0;
-        this.destroySubscriberCounter = <any>0;
         this._onStop$.destroy();
         this._onExit$.destroy();
         this._onStart$.destroy();
@@ -387,32 +407,12 @@ export abstract class AbstractScene implements IScene {
         this._onSetUserData$.destroy();
         this._onDestroy$.destroy();
         this._cursor = <any>0;
+        this._isDestroyed = true;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {
-        for (let i = 0; i < this.collector.length; i++) {
-            const savedSubscriber = this.collector[i];
-            if (savedSubscriber && savedSubscriber === subscriber) {
-                savedSubscriber.unsubscribe();
-                this.collector[i] = <any>0;
-                this.destroySubscriberCounter++;
-                break;
-            }
-        }
-
-        this.clearCollector();
-    }
-
-    private clearCollector() {
-        if (this.destroySubscriberCounter > 1000 && this.collector.length) {
-            const tmp: ISubscriptionLike[] = [];
-            for (let i = 0; i < this.collector.length; i++) {
-                const subscriber = this.collector[i];
-                if (subscriber) {
-                    tmp.push(subscriber);
-                }
-            }
-            this.collector = tmp;
+        if (!!this.collector) {
+            this.collector.unsubscribe(subscriber);
         }
     }
 }

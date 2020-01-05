@@ -52,11 +52,10 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             this.yBalance = this.root.yPos;
             this.xBalance = this.root.xPos;
 
-            if (this.isUnlinked) {
+            if (!this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.fire);
                 this.scene.setActorZIndex(this.fire, this.root.z_index - 1);
-                this._isUnlinked = false;
             }
         });
     }

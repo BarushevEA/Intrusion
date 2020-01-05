@@ -8,16 +8,12 @@ export type ICoordinatesConverter = {
     y(y: y_pos): y_pos;
 }
 
+export function randomize(num: number): number {
+    return Math.round(Math.random() * num)
+}
+
 export function findElementOnArray(arr: any[], element: any): number {
-    for (let i = 0, k = arr.length - 1; i < arr.length; i++, k--) {
-        if (arr[i] === element) {
-            return i;
-        }
-        if (arr[k] === element) {
-            return k;
-        }
-    }
-    return -1;
+    return arr.indexOf(element);
 }
 
 export function degreesToRadian(degrees: IDegrees): IRadian {
@@ -29,11 +25,11 @@ export function getRectCenterCoordinate(n1: number, n2: number): number {
 }
 
 export function getCenterX(x: x_pos, width: number): x_pos {
-    return getRectCenterCoordinate(x,  x + width);
+    return getRectCenterCoordinate(x, x + width);
 }
 
 export function getCenterY(y: y_pos, height: number): y_pos {
-    return getRectCenterCoordinate(y,  y + height);
+    return getRectCenterCoordinate(y, y + height);
 }
 
 export class CoordinatesConverter implements ICoordinatesConverter {

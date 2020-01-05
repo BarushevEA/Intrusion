@@ -12,9 +12,10 @@ import {AnimatedWave} from "../../../AnimationModels/waves/AnimatedWave";
 import {AnimatedWaveDark} from "../../../AnimationModels/waves/AnimatedWaveDark";
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {cursorHandler} from "./cursor";
 import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
+import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
+import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
+import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -149,30 +150,37 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
+    const highlightingHeart = new RectangleHighlighting(scene);
     scene.moveOnMouseDrag(heart);
-    scene.moveOnMouseDrag(snakeSpiral);
-    const movedOptions: IDragDropOptions = {};
+    heart.pluginDock.add(cursorBehaviorHeart);
+    heart.pluginDock.add(highlightingHeart);
     initHeartMoveOnKeyPress(scene);
+
+    const cursorBehaviorSnakeSpiral = new PointerAndDragCursorPlugin(scene);
+    const highlightingSnakeSpiral = new RectangleHighlighting(scene);
+    scene.moveOnMouseDrag(snakeSpiral);
+    snakeSpiral.pluginDock.add(cursorBehaviorSnakeSpiral);
+    snakeSpiral.pluginDock.add(highlightingSnakeSpiral);
+
+    const movedOptions: IDragDropOptions = {};
+    const bounce = new BounceOffTheWall(scene);
 
     actorGroup.forEach(el => {
         movedOptions.callbackOnDrag = el.setAnimationOriginal.bind(el);
-
+        const cursorBehaviorEl = new PointerAndDragCursorPlugin(scene);
+        const highlightingEl = new RectangleHighlighting(scene);
+        el.pluginDock.add(cursorBehaviorEl);
+        el.pluginDock.add(highlightingEl);
         scene.moveOnMouseDrag(el, movedOptions);
         scene.collect(
             el.isMouseOver$.subscribe(isOver => {
-                cursorHandler.pointerOrDefaultChange(scene, el);
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
                     el.setAnimationOriginal();
                 }
-            }),
-            el.isMouseLeftDrag$.subscribe(() => {
-                scene.cursor.setType(ECursor.CATCH);
-            }),
-            el.isMouseLeftDrop$.subscribe(() => {
-                scene.cursor.setType(ECursor.POINTER);
-            }),
+            })
         );
     });
 
@@ -180,46 +188,25 @@ function initActions(scene: AbstractScene) {
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
-        snakeSpiral.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, snakeSpiral);
-        }),
-        snakeSpiral.isMouseLeftDrag$.subscribe(() => {
-            scene.cursor.setType(ECursor.CATCH);
-        }),
-        snakeSpiral.isMouseLeftDrop$.subscribe(() => {
-            scene.cursor.setType(ECursor.POINTER);
-        }),
-        heart.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, heart);
-        }),
-        heart.isMouseLeftDrag$.subscribe(() => {
-            scene.cursor.setType(ECursor.CATCH);
-        }),
-        heart.isMouseLeftDrop$.subscribe(() => {
-            scene.cursor.setType(ECursor.POINTER);
-        }),
         heart.isMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
                 const newHeart = new Heart(scene.generalLayer);
+                const cursorBehaviorNewHeart = new PointerAndDragCursorPlugin(scene);
+                const highlightingNewHeart = new RectangleHighlighting(scene);
                 newHeart.xPos = heart.xPos;
                 newHeart.yPos = heart.yPos;
                 scene.setActors(newHeart);
                 newHeart.enableEvents();
                 setTimeout(() => {
                     scene.moveOnMouseDrag(newHeart);
-                    scene.collect(
-                        newHeart.isMouseOver$.subscribe(() => {
-                            cursorHandler.pointerOrDefaultChange(scene, newHeart);
-                        }),
-                        newHeart.isMouseLeftDrag$.subscribe(() => {
-                            scene.cursor.setType(ECursor.CATCH);
-                        }),
-                        newHeart.isMouseLeftDrop$.subscribe(() => {
-                            scene.cursor.setType(ECursor.POINTER);
-                        }),
-                    );
+                    newHeart.pluginDock.add(cursorBehaviorNewHeart);
+                    newHeart.pluginDock.add(highlightingNewHeart);
                 }, 300);
             }
+        }),
+        snakeSpiral.isMouseOver$.subscribe(() => {
+            snakeSpiral.pluginDock.unLink(bounce);
+            snakeSpiral.pluginDock.add(bounce);
         })
     );
 }

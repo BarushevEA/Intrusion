@@ -1,10 +1,11 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
 
 export class MovedCircle extends AbstractActor {
     maxStep = 7;
-    dx = this.randomize(this.maxStep) + 1;
-    dy = this.randomize(this.maxStep) + 1;
-    radius = this.randomize(100) + 20;
+    dx = randomize(this.maxStep) + 1;
+    dy = randomize(this.maxStep) + 1;
+    radius = randomize(100) + 20;
     lineWidth = 10;
     radiusCalc = (this.radius + this.lineWidth) * 2;
     bottomLayerName = 'circle';
@@ -29,35 +30,35 @@ export class MovedCircle extends AbstractActor {
         this.shape
             .lineWidth(this.lineWidth)
             .colors(
-                `rgba(${this.randomize(255)},${this.randomize(255)},${this.randomize(255)},${Math.random() / 4})`,
-                `rgba(${this.randomize(120) + 135},${this.randomize(120) + 135},${this.randomize(120) + 135},0.02)`)
+                `rgba(${randomize(255)},${randomize(255)},${randomize(255)},${Math.random() / 4})`,
+                `rgba(${randomize(120) + 135},${randomize(120) + 135},${randomize(120) + 135},0.02)`)
             .circle(this.radius + this.lineWidth / 2, this.radius + this.lineWidth / 2, this.radius);
         this.restoreDefaultLayer();
     }
 
     renderFrame(): void {
         if (this.xPos <= 0) {
-            this.dx = this.randomize(this.maxStep);
+            this.dx = randomize(this.maxStep);
         }
         if (this.xPos >= this.generalLayer.width - this.radiusCalc) {
-            this.dx = -1 * this.randomize(this.maxStep);
+            this.dx = -1 * randomize(this.maxStep);
         }
         if (this.yPos <= 0) {
-            this.dy = this.randomize(this.maxStep);
+            this.dy = randomize(this.maxStep);
         }
         if (this.yPos >= this.generalLayer.height - this.radiusCalc) {
-            this.dy = -1 * this.randomize(this.maxStep);
+            this.dy = -1 * randomize(this.maxStep);
         }
 
         if (this.dx === 0 && this.dy === 0) {
-            this.dx = 1 + this.randomize(this.maxStep);
-            this.dy = 1 + this.randomize(this.maxStep);
+            this.dx = 1 + randomize(this.maxStep);
+            this.dy = 1 + randomize(this.maxStep);
         }
 
         if (!this.throttlingCounter) {
-            this.throttlingCounter = 1 + this.randomize(500);
-            this.dx = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
-            this.dy = this.randomize(1) ? -this.randomize(this.maxStep) : this.randomize(this.maxStep);
+            this.throttlingCounter = 1 + randomize(500);
+            this.dx = randomize(1) ? -randomize(this.maxStep) : randomize(this.maxStep);
+            this.dy = randomize(1) ? -randomize(this.maxStep) : randomize(this.maxStep);
         }
 
         this.drawVirtualOnGeneral(this.bottomLayerName, this.xPos, this.yPos);
