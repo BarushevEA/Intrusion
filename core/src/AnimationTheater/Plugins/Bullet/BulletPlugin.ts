@@ -50,7 +50,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 }
             }, 100);
             if (this.root && !this.root.isDestroyed) {
-                const lightPlugin = new ShotLightingPlugin(this.scene);
+                const lightPlugin = new ShotLightingPlugin(this.scene, true);
                 this.root.pluginDock.add(lightPlugin);
             }
         }

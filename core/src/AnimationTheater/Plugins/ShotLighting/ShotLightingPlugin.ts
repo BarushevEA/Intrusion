@@ -11,9 +11,11 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private yBalance: number = 0;
     private xBalance: number = 0;
+    private isOver = false;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: AbstractScene, isOver = false) {
         super('ShotLightingPlugin', scene);
+        this.isOver = isOver;
     }
 
     onInit(): void {
@@ -51,7 +53,7 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             if (!this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.shotLighting);
-                this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 1);
+                this.scene.setActorZIndex(this.shotLighting, this.root.z_index + (this.isOver ? 1 : -1));
             }
         });
     }
