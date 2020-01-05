@@ -336,7 +336,7 @@ export abstract class AbstractScene implements IScene {
             });
             this.renderController.renderStart(isBackgroundLayerPresent);
             this._onStart$.next({...this._userData});
-        }, 300);
+        }, 100);
     }
 
     public stop(): void {
