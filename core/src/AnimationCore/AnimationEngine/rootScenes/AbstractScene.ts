@@ -60,6 +60,7 @@ export abstract class AbstractScene implements IScene {
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
     private _isDestroyed = false;
+    private _isDestroyProcessed = false;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -146,16 +147,28 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroyActor(actor: IActor): void {
+        if (!this.actors) {
+            return;
+        }
+
         const index = findElementOnArray(this.actors, actor);
         if (index === -1) {
             return;
         }
+
         this.unLink(actor);
+
         for (let i = index; i < this.actors.length - 1; i++) {
             this.actors[i] = this.actors[i + 1];
         }
+
         this.actors.length = this.actors.length - 1;
-        actor.destroy();
+
+        if (actor &&
+            !actor.isDestroyed &&
+            actor.destroy) {
+            actor.destroy();
+        }
     }
 
     public unLink(actor: IActor): void {
@@ -340,14 +353,20 @@ export abstract class AbstractScene implements IScene {
     }
 
     public destroy(): void {
-        if (this._isDestroyed) {
+        if (this._isDestroyed || this._isDestroyProcessed) {
             return;
         }
+        this._isDestroyProcessed = true;
 
         this._onDestroy$.next({...this._userData});
+
+        this.collector.destroy();
+        this.collector = <any>0;
+
         if (this.renderController && this.renderController.destroyActors) {
             this.renderController.destroyActors();
         }
+
         for (let i = 0; i < this.actors.length; i++) {
             let actor = this.actors[i];
             if (actor) {
@@ -355,8 +374,6 @@ export abstract class AbstractScene implements IScene {
             }
             actor = <any>0;
         }
-        this.collector.destroy();
-        this.collector = <any>0;
         const keys = Object.keys(this._userData);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
@@ -379,7 +396,7 @@ export abstract class AbstractScene implements IScene {
             this.movedOnDrag.length = <any>0;
         }
         if (this._cursorHandler) {
-            this._cursorHandler.clear()
+            this._cursorHandler.clear();
             this._cursorHandler = <any>0;
         }
         this.movedOnDrag = <any>0;
@@ -394,7 +411,9 @@ export abstract class AbstractScene implements IScene {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {
-        this.collector.unsubscribe(subscriber);
+        if (!!this.collector) {
+            this.collector.unsubscribe(subscriber);
+        }
     }
 }
 

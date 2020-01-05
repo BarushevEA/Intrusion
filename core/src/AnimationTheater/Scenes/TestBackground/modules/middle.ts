@@ -128,6 +128,9 @@ function fatherFrostAction(scene: AbstractScene) {
         fatherFrost.isMouseOver$.subscribe(() => {
             fatherFrost.pluginDock.unLink(bounce);
             fatherFrost.pluginDock.add(bounce);
+        }),
+        fatherFrost.isDestroyed$.subscribe(() => {
+            scene.destroy();
         })
     );
 }

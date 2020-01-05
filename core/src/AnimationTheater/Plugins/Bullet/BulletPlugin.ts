@@ -45,10 +45,14 @@ export class BulletPlugin extends AbstractActorPlugin {
         if (!this.isPreliminaryDestroyed) {
             this.isPreliminaryDestroyed = true;
             setTimeout(() => {
-                this.scene.destroyActor(this.root);
+                if (!!this.scene) {
+                    this.scene.destroyActor(this.root);
+                }
             }, 100);
-            const lightPlugin = new ShotLightingPlugin(this.scene);
-            this.root.pluginDock.add(lightPlugin);
+            if (this.root && !this.root.isDestroyed) {
+                const lightPlugin = new ShotLightingPlugin(this.scene);
+                this.root.pluginDock.add(lightPlugin);
+            }
         }
     }
 
@@ -60,7 +64,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 if (
                     !actor.isDestroyed &&
                     getCenterX(this.root.xPos, this.root.width) >= actor.xPos &&
-                    getCenterX(this.root.xPos, this.root.width) <= actor.xPos+ actor.width &&
+                    getCenterX(this.root.xPos, this.root.width) <= actor.xPos + actor.width &&
                     getCenterY(this.root.yPos, this.root.height) >= actor.yPos &&
                     getCenterY(this.root.yPos, this.root.height) <= actor.yPos + actor.height
                 ) {

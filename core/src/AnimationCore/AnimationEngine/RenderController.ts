@@ -258,6 +258,10 @@ export class RenderController implements IRenderController {
     }
 
     public destroyActors(): void {
+        this._tickCount$.destroy();
+        if (this._tickCount$) {
+            this._tickCount$ = <any>0;
+        }
         this.renderStop();
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];
@@ -270,12 +274,9 @@ export class RenderController implements IRenderController {
             this.currentPool.length = 0;
             delete this.layers[this.layersNames[k]];
         }
+        this.layers = <any>0;
         this.layersNames.length = 0;
         this.layersNames = <any>0;
         this.currentPool = <any>0;
-        this._tickCount$.destroy();
-        if (this._tickCount$) {
-            this._tickCount$ = <any>0;
-        }
     }
 }
