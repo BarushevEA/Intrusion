@@ -8,9 +8,11 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     private deltaNum = 5;
     private xDelta = 0;
     private yDelta = 0;
+    private minXBound = 0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: AbstractScene, minXBound = 0) {
         super('BounceOffTheWall', scene);
+        this.minXBound = minXBound;
     }
 
     onInit(): void {
@@ -29,7 +31,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
             if (!this.root || this._isUnlinked) {
                 return;
             }
-            if (this.root.xPos <= 0) {
+            if (this.root.xPos <= this.minXBound) {
                 this.xDelta = randomize(this.deltaNum);
             }
             if (this.root.xPos >= (this.scene.generalLayer.width - this.root.width)) {

@@ -16,7 +16,7 @@ export class HealthPlugin extends AbstractActorPlugin {
     private positionBalance: PositionBalance = <any>0;
     private type: HealthType = <any>0;
 
-    constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 200) {
+    constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HealthPlugin', scene);
         this.health = health;
         this.type = viewType;

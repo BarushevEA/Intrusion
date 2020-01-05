@@ -106,7 +106,7 @@ function initPlane(scene: AbstractScene) {
 function enemy1Actions(scene: AbstractScene) {
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
-        const bounce = new BounceOffTheWall(scene);
+        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
         const health = new HealthPlugin(scene);
         enemy1.pluginDock.add(bounce);
         enemy1.pluginDock.add(health);
