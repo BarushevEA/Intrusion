@@ -51,6 +51,7 @@ function setDataToCopy($: AbstractActor, delta: number, arr: AbstractActor[]) {
         const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
         for (let i = 0; i < $.height; i += 100) {
             const brickWall = new BrickWall(layer);
+            brickWall.isEventsBlock = true;
             arr.push(brickWall);
             brickWall.xPos = $.width + delta * brickWall.width;
             brickWall.yPos = i;

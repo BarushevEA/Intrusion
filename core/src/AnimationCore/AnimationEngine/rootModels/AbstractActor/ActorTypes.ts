@@ -16,6 +16,7 @@ export type IActor = {
     yPos: y_pos;
     width: number;
     height: number;
+    isEventsBlock: boolean;
     readonly isLeftMouseCatch: boolean;
     readonly isMouseClick$: ISubscriber<boolean>;
     readonly isMouseLeftDrop$: ISubscriber<any>;
@@ -23,8 +24,9 @@ export type IActor = {
     readonly isMouseRightClick$: ISubscriber<boolean>;
     readonly isMouseLeftClick$: ISubscriber<boolean>;
     readonly isMouseOver$: ISubscriber<boolean>;
-    readonly isMouseOver: boolean;
+    readonly isDestroyed$: ISubscriber<boolean>;
     readonly isDestroyed: boolean;
+    readonly isMouseOver: boolean;
     readonly pluginDock: IPluginDock;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;

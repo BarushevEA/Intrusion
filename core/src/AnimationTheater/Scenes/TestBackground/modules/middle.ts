@@ -16,6 +16,9 @@ import {Plane} from "../../../AnimationModels/Planes/Plane";
 import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
+import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
+import {HealthType} from "../../../Plugins/HLProgress/HealthType";
+import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -56,10 +59,10 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
+    circlesAction(scene);
     enemy1Actions(scene);
     fatherFrostAction(scene);
     planeAction(scene);
-    circlesAction(scene);
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
@@ -103,8 +106,10 @@ function initPlane(scene: AbstractScene) {
 function enemy1Actions(scene: AbstractScene) {
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
-        const bounce = new BounceOffTheWall(scene);
+        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        const health = new HealthPlugin(scene);
         enemy1.pluginDock.add(bounce);
+        enemy1.pluginDock.add(health);
     }
 }
 
@@ -112,7 +117,10 @@ function fatherFrostAction(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(scene);
+    const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
+    enemies1.push(fatherFrost);
     scene.moveOnMouseDrag(fatherFrost);
+    fatherFrost.pluginDock.add(health);
     fatherFrost.pluginDock.add(highlighting);
     fatherFrost.pluginDock.add(bounce);
     fatherFrost.pluginDock.add(cursorBehavior);
@@ -120,6 +128,9 @@ function fatherFrostAction(scene: AbstractScene) {
         fatherFrost.isMouseOver$.subscribe(() => {
             fatherFrost.pluginDock.unLink(bounce);
             fatherFrost.pluginDock.add(bounce);
+        }),
+        fatherFrost.isDestroyed$.subscribe(() => {
+            scene.destroy();
         })
     );
 }
@@ -130,20 +141,25 @@ function planeAction(scene: AbstractScene) {
     const fire = new BlueFirePlugin(scene);
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
+    const health = new HealthPlugin(scene, HealthType.HERO, 5000);
+    const bulletShot = new BulletShotPlugin(scene, enemies1);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
     plane.pluginDock.add(highlighting);
+    plane.pluginDock.add(health);
     scene.collect(
         keyDownCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
                     plane.pluginDock.add(shotLighting);
+                    plane.pluginDock.add(bulletShot);
                 }
             }
         ),
         keyUpCode$.subscribe((code: IKeyCode) => {
                 if (code.code === 'Space') {
                     plane.pluginDock.unLink(shotLighting);
+                    plane.pluginDock.unLink(bulletShot);
                 }
             }
         )

@@ -51,9 +51,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isMouseClick$ = new Observable(<boolean>false);
     private _isMouseLeftClick$ = new Observable(<boolean>false);
     private _isMouseRightClick$ = new Observable(<boolean>false);
+    private _isDestroyed$ = new Observable(<boolean>false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
     private _isDestroyed = false;
+    private _isEventsBlock = false;
+    private _isDestroyProcessed = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -68,8 +71,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this._isDestroyed;
     }
 
+    get isDestroyed$(): Observable<boolean> {
+        return this._isDestroyed$;
+    }
+
     private initEvents(): void {
-        if (this.mouseEvents.length) {
+        if (this.mouseEvents.length || this._isEventsBlock) {
             return;
         }
         this.mouseEvents.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
@@ -87,6 +94,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.mouseEvents[i].unsubscribe();
         }
         this.mouseEvents.length = 0;
+    }
+
+    get isEventsBlock(): boolean {
+        return this._isEventsBlock;
+    }
+
+    set isEventsBlock(value: boolean) {
+        if (value) {
+            this.disableEvents();
+        } else {
+            this.initEvents();
+        }
+        this._isEventsBlock = value;
     }
 
     public enableEvents(): void {
@@ -327,9 +347,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public destroy(): void {
-        if (this._isDestroyed) {
+        if (this._isDestroyed || this._isDestroyProcessed) {
             return;
         }
+        this._isDestroyProcessed = true;
+
+        this._isDestroyed$.next(true);
 
         this.collector.destroy();
         this.collector = <any>0;
@@ -341,7 +364,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._layer_name_memory = <any>0;
         this.framePoolName = <any>0;
         this.generalLayer = <any>0;
-        this.layerHandler = <any>0;
         this._elementX = <any>0;
         this._elementY = <any>0;
         this._elementWidth = <any>0;
@@ -356,6 +378,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseRightClick$.destroy();
         this._isMouseLeftDrag$.destroy();
         this._isMouseLeftDrop$.destroy();
+        this._isDestroyed$.destroy();
+        this._isDestroyed$ = <any>0;
         this._isMouseOver$ = <any>0;
         this._isMouseClick$ = <any>0;
         this._isMouseLeftClick$ = <any>0;
@@ -364,11 +388,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrop$ = <any>0;
         this._pluginDock.destroy();
         this._pluginDock = <any>0;
+        this.layerHandler = <any>0;
         this._isDestroyed = true;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
-        this.collector.unsubscribe(subscriber);
+        if (this.collector) {
+            this.collector.unsubscribe(subscriber);
+        }
     }
 
     public setFramesDelay(delay: number): void {
@@ -383,12 +410,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this.layerHandler.shape;
     }
 
-    get z_index(): number {
-        return this._z_index;
-    }
-
     set z_index(value: number) {
         this._z_index = value;
+    }
+
+    get z_index(): number {
+        return this._z_index;
     }
 
     get layerName(): string {

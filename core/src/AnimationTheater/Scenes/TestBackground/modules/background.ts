@@ -15,12 +15,16 @@ export function handleBackgrounds(scene: AbstractScene): void {
 
 function clearVariables() {
     background = <any>0;
+    background1 = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
     background = new HorizontalBackground(scene.generalLayer);
     background1 = new HorizontalBackground1(scene.generalLayer);
-    // background = background;
+
+    background.isEventsBlock = true;
+    background1.isEventsBlock = true;
+
     scene.setActors(background1);
     scene.setActors(background);
 }
