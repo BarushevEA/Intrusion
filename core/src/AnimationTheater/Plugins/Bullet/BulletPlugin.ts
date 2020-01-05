@@ -10,7 +10,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
     private enemies: AbstractActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
-    private xSpeed = 5;
+    private xSpeed = 15;
     private isPreliminaryDestroyed = false;
     private damagedEnemy: AbstractActor = <any>0;
 
@@ -60,7 +60,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 if (
                     !actor.isDestroyed &&
                     getCenterX(this.root.xPos, this.root.width) >= actor.xPos &&
-                    getCenterX(this.root.xPos, this.root.width) + actor.width &&
+                    getCenterX(this.root.xPos, this.root.width) <= actor.xPos+ actor.width &&
                     getCenterY(this.root.yPos, this.root.height) >= actor.yPos &&
                     getCenterY(this.root.yPos, this.root.height) <= actor.yPos + actor.height
                 ) {
