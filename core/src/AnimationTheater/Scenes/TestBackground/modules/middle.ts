@@ -22,6 +22,7 @@ import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
 import {EnemySmall1} from "../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
 import {Enemy2} from "../../../AnimationModels/Planes/enemy2/Enemy2";
 import {Enemy3} from "../../../AnimationModels/Planes/enemy3/Enemy3";
+import {EnemySmall2} from "../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -93,6 +94,13 @@ function initEnemies(scene: AbstractScene) {
 
     for (let i = 0; i < 7; i++) {
         const enemy = new EnemySmall1(scene.generalLayer);
+        enemies.push(enemy);
+        enemy.xPos = scene.generalLayer.width - enemy.width;
+        scene.setActors(enemy);
+    }
+
+    for (let i = 0; i < 7; i++) {
+        const enemy = new EnemySmall2(scene.generalLayer);
         enemies.push(enemy);
         enemy.xPos = scene.generalLayer.width - enemy.width;
         scene.setActors(enemy);
