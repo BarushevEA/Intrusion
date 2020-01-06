@@ -83,8 +83,12 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.healthBalance();
         this.updateProgress();
         if (this.currentHealth <= 0) {
-            this.scene.destroyActor(this.root);
+            this.handleDestroy();
         }
+    }
+
+    private handleDestroy() {
+        this.scene.destroyActor(this.root);
     }
 
     upgradeMaxHealth(health: number) {

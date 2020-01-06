@@ -11,7 +11,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private xSpeed = 15;
-    private isPreliminaryDestroyed = false;
+    private isDestroyProcessed = false;
     private damagedEnemy: AbstractActor = <any>0;
 
     constructor(scene: AbstractScene, enemies: AbstractActor[], damage = 50) {
@@ -23,7 +23,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     onInit(): void {
         this.init();
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            if (!this.root || this.isPreliminaryDestroyed) {
+            if (!this.root || this.isDestroyProcessed) {
                 return;
             }
             this.root.xPos += this.xSpeed;
@@ -42,17 +42,22 @@ export class BulletPlugin extends AbstractActorPlugin {
     }
 
     private handleDestroy() {
-        if (!this.isPreliminaryDestroyed) {
-            this.isPreliminaryDestroyed = true;
-            setTimeout(() => {
-                if (!!this.scene) {
-                    this.scene.destroyActor(this.root);
-                }
-            }, 100);
-            if (this.root && !this.root.isDestroyed) {
-                const lightPlugin = new ShotLightingPlugin(this.scene, true);
-                this.root.pluginDock.add(lightPlugin);
+        if (this.isDestroyProcessed) {
+            return;
+        }
+        this.isDestroyProcessed = true;
+
+        setTimeout(() => {
+            if (!!this.scene) {
+                this.scene.destroyActor(this.root);
+            } else if (this.root && !this.root.isDestroyed) {
+                this.root.destroy();
             }
+        }, 100);
+
+        if (this.root && !this.root.isDestroyed) {
+            const lightPlugin = new ShotLightingPlugin(this.scene, true);
+            this.root.pluginDock.add(lightPlugin);
         }
     }
 
