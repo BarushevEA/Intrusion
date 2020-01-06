@@ -19,11 +19,14 @@ import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
+import {EnemySmall1} from "../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
+import {Enemy2} from "../../../AnimationModels/Planes/enemy2/Enemy2";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
 let fatherFrost: AbstractActor = <any>0;
-let enemies1: AbstractActor[] = <any>0;
+let enemies: AbstractActor[] = <any>0;
+let enemiesMiniBosses: AbstractActor[] = <any>0;
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -42,12 +45,19 @@ function clearVariables() {
         }
         circles = <any>0;
     }
-    if (!!enemies1) {
-        for (let i = 0; i < enemies1.length; i++) {
-            const enemy1 = enemies1[i];
+    if (!!enemies) {
+        for (let i = 0; i < enemies.length; i++) {
+            const enemy1 = enemies[i];
             enemy1.destroy();
         }
-        enemies1 = <any>0;
+        enemies = <any>0;
+    }
+    if (!!enemiesMiniBosses) {
+        for (let i = 0; i < enemiesMiniBosses.length; i++) {
+            const enemy1 = enemiesMiniBosses[i];
+            enemy1.destroy();
+        }
+        enemiesMiniBosses = <any>0;
     }
 }
 
@@ -71,13 +81,25 @@ function initActions(scene: AbstractScene) {
 }
 
 function initEnemies(scene: AbstractScene) {
-    enemies1 = [];
+    enemies = [];
+    enemiesMiniBosses = [];
+
     for (let i = 0; i < 10; i++) {
-        const enemy1 = new Enemy1(scene.generalLayer);
-        enemies1.push(enemy1);
-        enemy1.xPos = scene.generalLayer.width - enemy1.width;
-        scene.setActors(enemy1);
+        const enemy = new EnemySmall1(scene.generalLayer);
+        enemies.push(enemy);
+        enemy.xPos = scene.generalLayer.width - enemy.width;
+        scene.setActors(enemy);
     }
+
+    const miniBoss1 = new Enemy1(scene.generalLayer);
+    miniBoss1.xPos = scene.generalLayer.width - miniBoss1.width;
+    enemiesMiniBosses.push(miniBoss1);
+    scene.setActors(miniBoss1);
+
+    const miniBoss2 = new Enemy2(scene.generalLayer);
+    miniBoss2.xPos = scene.generalLayer.width - miniBoss2.width;
+    enemiesMiniBosses.push(miniBoss2);
+    scene.setActors(miniBoss2);
 }
 
 function initCircles(scene: AbstractScene) {
@@ -104,12 +126,21 @@ function initPlane(scene: AbstractScene) {
 }
 
 function enemy1Actions(scene: AbstractScene) {
-    for (let i = 0; i < enemies1.length; i++) {
-        const enemy1 = enemies1[i];
+    for (let i = 0; i < enemies.length; i++) {
+        const enemy1 = enemies[i];
         const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
-        const health = new HealthPlugin(scene);
+        const health = new HealthPlugin(scene, HealthType.NONE, 200);
         enemy1.pluginDock.add(bounce);
         enemy1.pluginDock.add(health);
+    }
+
+    for (let i = 0; i < enemiesMiniBosses.length; i++) {
+        const miniBoss = enemiesMiniBosses[i];
+        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        const health = new HealthPlugin(scene);
+        miniBoss.pluginDock.add(bounce);
+        miniBoss.pluginDock.add(health);
+        enemies.push(miniBoss);
     }
 }
 
@@ -118,7 +149,7 @@ function fatherFrostAction(scene: AbstractScene) {
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(scene);
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
-    enemies1.push(fatherFrost);
+    enemies.push(fatherFrost);
     scene.moveOnMouseDrag(fatherFrost);
     fatherFrost.pluginDock.add(health);
     fatherFrost.pluginDock.add(highlighting);
@@ -142,7 +173,7 @@ function planeAction(scene: AbstractScene) {
     const moveFrame = new MovePlaneFramePlugin(scene);
     const shotLighting = new ShotLightingPlugin(scene);
     const health = new HealthPlugin(scene, HealthType.HERO, 5000);
-    const bulletShot = new BulletShotPlugin(scene, enemies1);
+    const bulletShot = new BulletShotPlugin(scene, enemies);
     plane.pluginDock.add(fire);
     plane.pluginDock.add(moveKeys);
     plane.pluginDock.add(moveFrame);
