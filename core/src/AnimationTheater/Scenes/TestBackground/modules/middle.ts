@@ -21,6 +21,7 @@ import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
 import {EnemySmall1} from "../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
 import {Enemy2} from "../../../AnimationModels/Planes/enemy2/Enemy2";
+import {Enemy3} from "../../../AnimationModels/Planes/enemy3/Enemy3";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -80,11 +81,17 @@ function initActions(scene: AbstractScene) {
     );
 }
 
+function miniBossActivate(miniBoss: AbstractActor, scene: AbstractScene) {
+    miniBoss.xPos = scene.generalLayer.width - miniBoss.width;
+    scene.setActors(miniBoss);
+    enemiesMiniBosses.push(miniBoss);
+}
+
 function initEnemies(scene: AbstractScene) {
     enemies = [];
     enemiesMiniBosses = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 7; i++) {
         const enemy = new EnemySmall1(scene.generalLayer);
         enemies.push(enemy);
         enemy.xPos = scene.generalLayer.width - enemy.width;
@@ -92,14 +99,13 @@ function initEnemies(scene: AbstractScene) {
     }
 
     const miniBoss1 = new Enemy1(scene.generalLayer);
-    miniBoss1.xPos = scene.generalLayer.width - miniBoss1.width;
-    enemiesMiniBosses.push(miniBoss1);
-    scene.setActors(miniBoss1);
+    miniBossActivate(miniBoss1, scene);
 
     const miniBoss2 = new Enemy2(scene.generalLayer);
-    miniBoss2.xPos = scene.generalLayer.width - miniBoss2.width;
-    enemiesMiniBosses.push(miniBoss2);
-    scene.setActors(miniBoss2);
+    miniBossActivate(miniBoss2, scene);
+
+    const miniBoss3 = new Enemy3(scene.generalLayer);
+    miniBossActivate(miniBoss3, scene);
 }
 
 function initCircles(scene: AbstractScene) {
