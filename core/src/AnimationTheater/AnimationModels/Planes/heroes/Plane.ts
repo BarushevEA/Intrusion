@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 
 export class Plane extends AbstractFramedShape {
     constructor(canvas: HTMLCanvasElement) {
