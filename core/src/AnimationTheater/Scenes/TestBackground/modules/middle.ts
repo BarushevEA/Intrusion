@@ -82,12 +82,6 @@ function initActions(scene: AbstractScene) {
     );
 }
 
-function miniBossActivate(miniBoss: AbstractActor, scene: AbstractScene) {
-    miniBoss.xPos = scene.generalLayer.width - miniBoss.width;
-    scene.setActors(miniBoss);
-    enemiesMiniBosses.push(miniBoss);
-}
-
 function initEnemies(scene: AbstractScene) {
     enemies = [];
     enemiesMiniBosses = [];
@@ -106,14 +100,20 @@ function initEnemies(scene: AbstractScene) {
         scene.setActors(enemy);
     }
 
+    const miniBossActivate = (miniBoss: AbstractActor) => {
+        miniBoss.xPos = scene.generalLayer.width - miniBoss.width;
+        scene.setActors(miniBoss);
+        enemiesMiniBosses.push(miniBoss);
+    };
+
     const miniBoss1 = new Enemy1(scene.generalLayer);
-    miniBossActivate(miniBoss1, scene);
+    miniBossActivate(miniBoss1);
 
     const miniBoss2 = new Enemy2(scene.generalLayer);
-    miniBossActivate(miniBoss2, scene);
+    miniBossActivate(miniBoss2);
 
     const miniBoss3 = new Enemy3(scene.generalLayer);
-    miniBossActivate(miniBoss3, scene);
+    miniBossActivate(miniBoss3);
 }
 
 function initCircles(scene: AbstractScene) {
