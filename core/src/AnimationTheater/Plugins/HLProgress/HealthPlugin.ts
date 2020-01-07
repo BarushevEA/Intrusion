@@ -46,27 +46,29 @@ export class HealthPlugin extends AbstractActorPlugin {
             case HealthType.ENEMY:
                 this.progressBar = new EnemyProgress(this.scene.generalLayer);
                 this.positionBalance = new PositionBalance(this.root, this.progressBar);
-                this.progressBar.z_index = this.root.z_index;
+                this.addProgressToScene(this.root.z_index);
                 break;
             case HealthType.HERO:
                 this.progressBar = new HeroProgress(this.scene.generalLayer);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
-                this.progressBar.z_index = this.root.z_index + 1;
+                this.addProgressToScene(this.root.z_index + 1);
                 break;
             case HealthType.ENEMY_BOSS:
                 this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
                 this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
                 this.progressBar.yPos = space;
-                this.progressBar.z_index = this.root.z_index + 1;
+                this.addProgressToScene(this.root.z_index + 1);
                 break;
             case HealthType.NONE:
                 this.progressBar = <any>0;
                 break;
         }
-        if (!!this.progressBar) {
-            this.scene.setActors(this.progressBar);
-        }
+    }
+
+    private addProgressToScene(zIndex: number): void {
+        this.scene.setActors(this.progressBar);
+        this.scene.setActorZIndex(this.progressBar, zIndex);
     }
 
     private updateProgress() {
@@ -81,8 +83,12 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.healthBalance();
         this.updateProgress();
         if (this.currentHealth <= 0) {
-            this.scene.destroyActor(this.root);
+            this.handleDestroy();
         }
+    }
+
+    private handleDestroy() {
+        this.scene.destroyActor(this.root);
     }
 
     upgradeMaxHealth(health: number) {

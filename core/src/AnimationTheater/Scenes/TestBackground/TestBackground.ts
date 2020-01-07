@@ -1,6 +1,6 @@
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {handleBackgrounds} from "./modules/background";
-import {handleMiddle} from "./modules/middle";
+import {handleMiddle} from "./modules/Middle/middle";
 import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 

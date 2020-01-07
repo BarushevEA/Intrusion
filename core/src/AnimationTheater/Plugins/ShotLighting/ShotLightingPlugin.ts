@@ -2,56 +2,38 @@ import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugin
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {ShotLighting} from "./Shot/ShotLighting";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 
 export class ShotLightingPlugin extends AbstractActorPlugin {
     private shotLighting: AbstractActor = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
-    private yBalance: number = 0;
-    private xBalance: number = 0;
+    private positionBalance: PositionBalance = <any>0;
+    private isOver = false;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: AbstractScene, isOver = false) {
         super('ShotLightingPlugin', scene);
+        this.isOver = isOver;
     }
 
     onInit(): void {
         if (!this.shotLighting) {
             this.shotLighting = new ShotLighting(this.scene.generalLayer);
+            this.positionBalance = new PositionBalance(this.root, this.shotLighting);
         }
-        this.yBalance = this.root.yPos;
-        this.xBalance = this.root.xPos;
-        let ortY = -1;
-        let ortX = -1;
+
         this.subscriber = this.scene.tickCount$.subscribe(() => {
-            let xDelta = this.xBalance - this.root.xPos;
-            let yDelta = this.yBalance - this.root.yPos;
-
-            if (!ortY &&
-                !ortX &&
-                !yDelta &&
-                !xDelta
-            ) {
-                return;
+            if (!!this.positionBalance) {
+                this.positionBalance.handle(
+                    this.root.width - 50,
+                    Math.round(this.root.height / 2) - Math.round(this.shotLighting.height / 2));
             }
-
-            ortY = yDelta;
-            ortX = xDelta;
-
-            this.shotLighting.xPos = this.root.xPos + this.root.width - 50 - ortX;
-            this.shotLighting.yPos =
-                getCenterY(this.root.yPos, this.root.height)
-                - Math.round(this.shotLighting.height / 2)
-                - ortY;
-
-            this.yBalance = this.root.yPos;
-            this.xBalance = this.root.xPos;
 
             if (!this.isUnlinked) {
                 this.scene.setActiveLayer(ELayers.MIDDLE);
                 this.scene.setActors(this.shotLighting);
-                this.scene.setActorZIndex(this.shotLighting, this.root.z_index - 1);
+                this.scene.setActorZIndex(this.shotLighting, this.root.z_index + (this.isOver ? 1 : -1));
             }
         });
     }
@@ -61,8 +43,6 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             this.subscriber.unsubscribe();
             this.subscriber = <any>0;
         }
-        this.yBalance = 0;
-        this.xBalance = 0;
         this.scene.unLink(this.shotLighting);
         super.unLink();
     }
@@ -72,6 +52,7 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             this.scene.destroyActor(this.shotLighting);
             this.shotLighting = <any>0;
         }
+        this.positionBalance = <any>0;
         super.destroy();
     }
 }
