@@ -1,28 +1,28 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
-import {LightCircle} from "../../../AnimationModels/circle/LightCircle";
-import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {AbstractScene} from "../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {ELayers} from "../../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {LightCircle} from "../../../../AnimationModels/circle/LightCircle";
+import {BounceOffTheWall} from "../../../../Plugins/BounceOffTheWall";
 // import {PolygonWeb} from "../../../Plugins/PolygonWeb";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
-import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
-import {BlueFirePlugin} from "../../../Plugins/BlueFire/BlueFirePlugin";
-import {getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
-import {MovePlaneFramePlugin} from "../../../Plugins/MovePlaneFramePlugin";
-import {ShotLightingPlugin} from "../../../Plugins/ShotLighting/ShotLightingPlugin";
-import {keyDownCode$, keyUpCode$} from "../../../../AnimationCore/Store/EventStore";
-import {IKeyCode} from "../../../../AnimationCore/Store/Types";
-import {Plane} from "../../../AnimationModels/Planes/Plane";
-import {FatherFrost} from "../../../AnimationModels/FatherFrost/FatherFrost";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
-import {Enemy1} from "../../../AnimationModels/Planes/enemy1/Enemy1";
-import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
-import {HealthType} from "../../../Plugins/HLProgress/HealthType";
-import {BulletShotPlugin} from "../../../Plugins/Bullet/BulletShotPlugin";
-import {EnemySmall1} from "../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
-import {Enemy2} from "../../../AnimationModels/Planes/enemy2/Enemy2";
-import {Enemy3} from "../../../AnimationModels/Planes/enemy3/Enemy3";
-import {EnemySmall2} from "../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
+import {AbstractActor} from "../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {MoveKeyControls} from "../../../../Plugins/MoveKeyControls";
+import {RectangleHighlighting} from "../../../../Plugins/RectangleHighlighting";
+import {BlueFirePlugin} from "../../../../Plugins/BlueFire/BlueFirePlugin";
+import {getCenterY} from "../../../../../AnimationCore/Libraries/FunctionLibs";
+import {MovePlaneFramePlugin} from "../../../../Plugins/MovePlaneFramePlugin";
+import {ShotLightingPlugin} from "../../../../Plugins/ShotLighting/ShotLightingPlugin";
+import {keyDownCode$, keyUpCode$} from "../../../../../AnimationCore/Store/EventStore";
+import {IKeyCode} from "../../../../../AnimationCore/Store/Types";
+import {Plane} from "../../../../AnimationModels/Planes/heroes/Plane";
+import {FatherFrost} from "../../../../AnimationModels/FatherFrost/FatherFrost";
+import {PointerAndDragCursorPlugin} from "../../../../Plugins/PointerAndDragCursorPlugin";
+import {Enemy1} from "../../../../AnimationModels/Planes/enemy1/Enemy1";
+import {HealthPlugin} from "../../../../Plugins/HLProgress/HealthPlugin";
+import {HealthType} from "../../../../Plugins/HLProgress/HealthType";
+import {BulletShotPlugin} from "../../../../Plugins/Bullet/BulletShotPlugin";
+import {EnemySmall1} from "../../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
+import {Enemy2} from "../../../../AnimationModels/Planes/enemy2/Enemy2";
+import {Enemy3} from "../../../../AnimationModels/Planes/enemy3/Enemy3";
+import {EnemySmall2} from "../../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;
@@ -83,8 +83,12 @@ function initActions(scene: AbstractScene) {
 }
 
 function initEnemies(scene: AbstractScene) {
+    initLowLevelEnemies(scene);
+    initMiniBosses(scene);
+}
+
+function initLowLevelEnemies(scene: AbstractScene) {
     enemies = [];
-    enemiesMiniBosses = [];
 
     for (let i = 0; i < 7; i++) {
         const enemy = new EnemySmall1(scene.generalLayer);
@@ -99,6 +103,10 @@ function initEnemies(scene: AbstractScene) {
         enemy.xPos = scene.generalLayer.width - enemy.width;
         scene.setActors(enemy);
     }
+}
+
+function initMiniBosses(scene: AbstractScene) {
+    enemiesMiniBosses = [];
 
     const miniBossActivate = (miniBoss: AbstractActor) => {
         miniBoss.xPos = scene.generalLayer.width - miniBoss.width;
