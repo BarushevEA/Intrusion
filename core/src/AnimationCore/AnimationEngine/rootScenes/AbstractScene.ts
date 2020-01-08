@@ -5,7 +5,8 @@ import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
 import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
-import {E_MouseCatch, E_ZOnDrop, IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
+import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
+import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
@@ -339,6 +340,7 @@ export abstract class AbstractScene implements IScene {
             }
             actor = <any>0;
         }
+
         const keys = Object.keys(this._userData);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];

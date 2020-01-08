@@ -2,7 +2,6 @@ import {AbstractScene} from "../../../../../AnimationCore/AnimationEngine/rootSc
 import {ELayers} from "../../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {LightCircle} from "../../../../AnimationModels/circle/LightCircle";
 import {BounceOffTheWall} from "../../../../Plugins/BounceOffTheWall";
-// import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 import {AbstractActor} from "../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {MoveKeyControls} from "../../../../Plugins/MoveKeyControls";
 import {RectangleHighlighting} from "../../../../Plugins/RectangleHighlighting";
@@ -23,6 +22,7 @@ import {EnemySmall1} from "../../../../AnimationModels/Planes/enemySmall1/EnemyS
 import {Enemy2} from "../../../../AnimationModels/Planes/enemy2/Enemy2";
 import {Enemy3} from "../../../../AnimationModels/Planes/enemy3/Enemy3";
 import {EnemySmall2} from "../../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
+// import {PolygonWeb} from "../../../Plugins/PolygonWeb";
 
 let circles: AbstractActor[] = <any>0;
 let plane: AbstractActor = <any>0;

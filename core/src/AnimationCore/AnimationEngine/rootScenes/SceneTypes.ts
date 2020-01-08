@@ -1,4 +1,6 @@
 import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
+import {AbstractScene} from "./AbstractScene";
+import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -13,16 +15,6 @@ export type IUserData = {
     [key: string]: any;
 }
 
-export enum E_ZOnDrop {
-    DEFAULT = 'DEFAULT',
-    ON_TOP = 'ON_TOP'
-}
-
-export enum E_MouseCatch {
-    BY_CENTER = 'BY_CENTER',
-    BY_POSITION = 'BY_POSITION',
-}
-
 export type IDragDropOptions = {
     callbackOnDrag?: () => void;
     callbackOnDrop?: () => void;
@@ -34,4 +26,10 @@ export type IDragDropOptions = {
 export type IDragActor = {
     actor: AbstractActor;
     options?: IDragDropOptions;
+};
+
+export type IActorGroup = {
+    initActors(scene: AbstractScene): void;
+    initActions(scene: AbstractScene): void;
+    destroy(): void;
 };
