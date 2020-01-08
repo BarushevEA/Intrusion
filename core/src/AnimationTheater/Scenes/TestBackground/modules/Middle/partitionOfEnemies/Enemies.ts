@@ -112,6 +112,8 @@ function initGeneralBossesActions(scene: AbstractScene) {
 }
 
 class Enemies extends AbstractActorGroup {
+    private timer = 0;
+
     initActors(scene: AbstractScene): void {
         enemies = [];
         initSimpleEnemies(scene);
@@ -121,6 +123,27 @@ class Enemies extends AbstractActorGroup {
     initActions(scene: AbstractScene): void {
         initSimpleEnemiesActions(scene);
         initBossesActions(scene);
+        this.handleClearEnemies();
+    }
+
+    private handleClearEnemies() {
+        this.timer = setInterval(() => {
+            let tmp = [];
+            let length = enemies.length;
+            for (let i = 0; i < length; i++) {
+                const enemy = enemies.pop();
+                if (enemy && !enemy.isDestroyed) {
+                    tmp.push(enemy);
+                }
+            }
+            length = tmp.length;
+            for (let i = 0; i < length; i++) {
+                const actor = tmp.pop();
+                if (!!actor) {
+                    enemies.push(actor);
+                }
+            }
+        }, 5000);
     }
 
     get enemies(): AbstractActor[] {
@@ -137,6 +160,7 @@ class Enemies extends AbstractActorGroup {
         }
         enemiesMiniBosses = <any>0;
         generalBoss = <any>0;
+        clearInterval(this.timer);
     }
 }
 
