@@ -12,6 +12,7 @@ import {Enemy3} from "../../../../../AnimationModels/Planes/enemy3/Enemy3";
 import {FatherFrost} from "../../../../../AnimationModels/FatherFrost/FatherFrost";
 import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
 import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragCursorPlugin";
+import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 
 let enemies: AbstractActor[] = <any>0;
 let enemiesMiniBosses: AbstractActor[] = <any>0;
@@ -22,11 +23,13 @@ function initSimpleEnemies(scene: AbstractScene) {
     for (let i = 0; i < 7; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         enemies.push(enemy1);
-        enemy1.xPos = scene.generalLayer.width - enemy1.width;
+        enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
+        enemy1.yPos = randomize(scene.generalLayer.height - enemy1.height);
 
         const enemy2 = new EnemySmall2(scene.generalLayer);
         enemies.push(enemy2);
-        enemy2.xPos = scene.generalLayer.width - enemy2.width;
+        enemy2.xPos = scene.generalLayer.width + 5 * enemy2.width;
+        enemy2.yPos = randomize(scene.generalLayer.height - enemy2.height);
     }
 }
 
@@ -51,7 +54,8 @@ function initMiniBosses(scene: AbstractScene) {
     enemiesMiniBosses = [];
 
     const miniBossActivate = (miniBoss: AbstractActor) => {
-        miniBoss.xPos = scene.generalLayer.width - miniBoss.width;
+        miniBoss.xPos = scene.generalLayer.width + 3 * miniBoss.width;
+        miniBoss.yPos = randomize(scene.generalLayer.height - miniBoss.height);
         enemiesMiniBosses.push(miniBoss);
     };
 
@@ -67,13 +71,17 @@ function initMiniBosses(scene: AbstractScene) {
 
 function initGeneralBosses(scene: AbstractScene) {
     generalBoss = new FatherFrost(scene.generalLayer);
-    generalBoss.xPos = scene.generalLayer.width - generalBoss.width;
-    generalBoss.yPos = scene.generalLayer.height - generalBoss.height;
+    generalBoss.xPos = scene.generalLayer.width + 2 * generalBoss.width;
+    generalBoss.yPos = randomize(scene.generalLayer.height - generalBoss.height);
 }
 
 function initBossesActions(scene: AbstractScene) {
-    initMiniBossesActions(scene);
-    initGeneralBossesActions(scene);
+    setTimeout(() => {
+        initMiniBossesActions(scene);
+    }, 10000);
+    setTimeout(() => {
+        initGeneralBossesActions(scene);
+    }, 20000);
 }
 
 function initMiniBossesActions(scene: AbstractScene) {
