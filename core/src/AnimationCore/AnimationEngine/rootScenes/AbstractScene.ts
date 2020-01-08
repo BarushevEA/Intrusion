@@ -292,14 +292,19 @@ export abstract class AbstractScene implements IScene {
     }
 
     public start(isBackgroundLayerPresent: boolean): void {
+        if (this._isDestroyed || this._isDestroyProcessed) {
+            console.log('scene is destroyed !!!');
+            return;
+        }
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         }
         setTimeout(() => {
-            this.actors.forEach(actor => {
+            for (let i = 0; i < this.actors.length; i++) {
+                const actor = this.actors[i];
                 actor.enableEvents();
-            });
+            }
             this.renderController.renderStart(isBackgroundLayerPresent);
             this._onStart$.next({...this._userData});
         }, 100);
