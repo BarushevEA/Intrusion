@@ -27,6 +27,7 @@ export abstract class AbstractScene implements IScene {
     private movedBehaviors: ISubscriptionLike[] = [];
     private _isDestroyed = false;
     private _isDestroyProcessed = false;
+    private isBackgroundLayerPresent = false;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -62,8 +63,22 @@ export abstract class AbstractScene implements IScene {
 
     private run(): void {
         this.collect(
-            this._onStartOnce$.subscribe(this.createScene.bind(this))
+            this._onStartOnce$.subscribe(this.handleCreateScene.bind(this))
         );
+    }
+
+    private handleCreateScene() {
+        this.createScene();
+        this.handleStartScene();
+    }
+
+    private handleStartScene() {
+        for (let i = 0; i < this.actors.length; i++) {
+            const actor = this.actors[i];
+            actor.enableEvents();
+        }
+        this.renderController.renderStart(this.isBackgroundLayerPresent);
+        this._onStart$.next({...this._userData});
     }
 
     set userData(data: IUserData) {
@@ -296,18 +311,15 @@ export abstract class AbstractScene implements IScene {
             console.log('scene is destroyed !!!');
             return;
         }
+        this.isBackgroundLayerPresent = isBackgroundLayerPresent;
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
+        } else {
+            setTimeout(() => {
+                this.handleStartScene();
+            }, 100);
         }
-        setTimeout(() => {
-            for (let i = 0; i < this.actors.length; i++) {
-                const actor = this.actors[i];
-                actor.enableEvents();
-            }
-            this.renderController.renderStart(isBackgroundLayerPresent);
-            this._onStart$.next({...this._userData});
-        }, 100);
     }
 
     public stop(): void {
