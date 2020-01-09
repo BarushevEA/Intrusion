@@ -41,6 +41,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         scene.setActors(enemy);
         enemy.pluginDock.add(bounce);
         enemy.pluginDock.add(health);
+        enemy.isEventsBlock = true;
     }
 }
 
@@ -93,6 +94,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         miniBoss.pluginDock.add(bounce);
         miniBoss.pluginDock.add(health);
         enemies.push(miniBoss);
+        miniBoss.isEventsBlock = true;
     }
 }
 
@@ -108,6 +110,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     generalBoss.pluginDock.add(highlighting);
     generalBoss.pluginDock.add(bounce);
     generalBoss.pluginDock.add(cursorBehavior);
+    generalBoss.enableEvents();
     scene.collect(
         generalBoss.isMouseOver$.subscribe(() => {
             generalBoss.pluginDock.unLink(bounce);

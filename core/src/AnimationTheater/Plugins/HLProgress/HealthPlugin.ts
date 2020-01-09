@@ -64,6 +64,9 @@ export class HealthPlugin extends AbstractActorPlugin {
                 this.progressBar = <any>0;
                 break;
         }
+        if (this.progressBar) {
+            this.progressBar.isEventsBlock = true;
+        }
     }
 
     private addProgressToScene(zIndex: number): void {

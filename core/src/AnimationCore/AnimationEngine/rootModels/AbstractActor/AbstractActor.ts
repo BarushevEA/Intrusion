@@ -96,10 +96,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.length = 0;
     }
 
-    get isEventsBlock(): boolean {
-        return this._isEventsBlock;
-    }
-
     set isEventsBlock(value: boolean) {
         if (value) {
             this.disableEvents();
@@ -107,6 +103,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.initEvents();
         }
         this._isEventsBlock = value;
+    }
+
+    get isEventsBlock(): boolean {
+        return this._isEventsBlock;
     }
 
     public enableEvents(): void {

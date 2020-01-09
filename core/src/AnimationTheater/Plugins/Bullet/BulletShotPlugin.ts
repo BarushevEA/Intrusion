@@ -29,6 +29,7 @@ export class BulletShotPlugin extends AbstractActorPlugin {
         const plugin = new BulletPlugin(this.scene, this.enemies);
         bullet.xPos = this.root.xPos + this.root.width;
         bullet.yPos = getCenterY(this.root.yPos, this.root.height) - Math.round(bullet.height / 2);
+        bullet.isEventsBlock = true;
         this.scene.setActors(bullet);
         bullet.pluginDock.add(plugin);
     }
