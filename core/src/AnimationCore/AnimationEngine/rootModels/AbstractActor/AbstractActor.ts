@@ -364,10 +364,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._layer_name_memory = <any>0;
         this.framePoolName = <any>0;
         this.generalLayer = <any>0;
-        this._elementX = <any>0;
-        this._elementY = <any>0;
-        this._elementWidth = <any>0;
-        this._elementHeight = <any>0;
+        // this._elementX = <any>0;
+        // this._elementY = <any>0;
+        // this._elementWidth = <any>0;
+        // this._elementHeight = <any>0;
         this._isLeftMouseCatch = <any>0;
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;
