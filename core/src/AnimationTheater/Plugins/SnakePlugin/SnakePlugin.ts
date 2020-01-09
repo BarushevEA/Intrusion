@@ -13,12 +13,15 @@ export class SnakePlugin extends AbstractActorPlugin {
     private distance = 0;
     private emptyActor: AbstractActor = <any>0;
 
-    constructor(scene: AbstractScene, plugin: AbstractActorPlugin, distance = 15) {
+    constructor(scene: AbstractScene, plugins: AbstractActorPlugin[], distance = 15) {
         super('SnakePlugin', scene);
         this.distance = distance;
         this.emptyActor = new EmptyActor(scene.generalLayer);
         this.scene.setActors(this.emptyActor);
-        this.emptyActor.pluginDock.add(plugin);
+        for (let i = 0; i < plugins.length; i++) {
+            const plugin = plugins[i];
+            this.emptyActor.pluginDock.add(plugin);
+        }
     }
 
     onInit(): void {

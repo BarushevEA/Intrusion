@@ -58,7 +58,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
 
     setTimeout(() => {
         const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 4));
-        const snake = new SnakePlugin(scene, bounce, 20);
+        const snake = new SnakePlugin(scene, [bounce], 20);
         for (let i = 0; i < enemies2.length; i++) {
             const enemy2 = enemies2[i];
             scene.setActors(enemy2);
