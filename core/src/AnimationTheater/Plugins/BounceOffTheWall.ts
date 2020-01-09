@@ -24,24 +24,32 @@ export class BounceOffTheWall extends AbstractActorPlugin {
         this.yDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
         this.xDelta *= 2;
         this.yDelta *= 2;
+        this.xDelta = !!this.xDelta ? this.xDelta : this.deltaNum;
+        this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
+
         if (!!this.subscriber) {
             return;
         }
+
         this.subscriber = this.scene.tickCount$.subscribe(() => {
             if (!this.root || this._isUnlinked) {
                 return;
             }
             if (this.root.xPos <= this.minXBound) {
                 this.xDelta = randomize(this.deltaNum);
+                this.xDelta = !!this.xDelta ? this.xDelta : this.deltaNum;
             }
             if (this.root.xPos >= (this.scene.generalLayer.width - this.root.width)) {
                 this.xDelta = -randomize(this.deltaNum);
+                this.xDelta = !!this.xDelta ? this.xDelta : -this.deltaNum;
             }
             if (this.root.yPos <= 0) {
                 this.yDelta = randomize(this.deltaNum);
+                this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
             }
             if (this.root.yPos >= (this.scene.generalLayer.height - this.root.height)) {
                 this.yDelta = -randomize(this.deltaNum);
+                this.yDelta = !!this.yDelta ? this.yDelta : -this.deltaNum;
             }
 
             this.root.xPos += this.xDelta;

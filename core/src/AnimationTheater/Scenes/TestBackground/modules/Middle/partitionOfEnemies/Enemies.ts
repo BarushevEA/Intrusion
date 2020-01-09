@@ -45,7 +45,6 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
         const health = new HealthPlugin(scene, HealthType.ENEMY, 200);
-        scene.setActors(enemy);
         enemy.pluginDock.add(health);
         enemy.isEventsBlock = true;
     }
@@ -53,15 +52,19 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
         const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        scene.setActors(enemy1);
         enemy1.pluginDock.add(bounce);
     }
 
-    const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 4));
-    const snake = new SnakePlugin(scene, bounce);
-    for (let i = 0; i < enemies2.length; i++) {
-        const enemy2 = enemies2[i];
-        enemy2.pluginDock.add(snake);
-    }
+    setTimeout(() => {
+        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 4));
+        const snake = new SnakePlugin(scene, bounce, 20);
+        for (let i = 0; i < enemies2.length; i++) {
+            const enemy2 = enemies2[i];
+            scene.setActors(enemy2);
+            enemy2.pluginDock.add(snake);
+        }
+    }, 10000);
 }
 
 
@@ -98,10 +101,10 @@ function initGeneralBosses(scene: AbstractScene) {
 function initBossesActions(scene: AbstractScene) {
     setTimeout(() => {
         initMiniBossesActions(scene);
-    }, 10000);
+    }, 30000);
     setTimeout(() => {
         initGeneralBossesActions(scene);
-    }, 20000);
+    }, 40000);
 }
 
 function initMiniBossesActions(scene: AbstractScene) {
