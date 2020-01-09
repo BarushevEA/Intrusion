@@ -56,8 +56,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         enemy1.pluginDock.add(bounce);
     }
 
-    const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
-    // enemies2[0].pluginDock.add(bounce);
+    const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 4));
     const snake = new SnakePlugin(scene, bounce);
     for (let i = 0; i < enemies2.length; i++) {
         const enemy2 = enemies2[i];
