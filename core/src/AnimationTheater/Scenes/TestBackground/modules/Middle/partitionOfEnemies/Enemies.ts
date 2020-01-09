@@ -20,7 +20,7 @@ let generalBoss: AbstractActor = <any>0;
 
 
 function initSimpleEnemies(scene: AbstractScene) {
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 20; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         enemies.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
@@ -37,7 +37,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
         const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
-        const health = new HealthPlugin(scene, HealthType.NONE, 200);
+        const health = new HealthPlugin(scene, HealthType.ENEMY, 200);
         scene.setActors(enemy);
         enemy.pluginDock.add(bounce);
         enemy.pluginDock.add(health);
@@ -89,7 +89,7 @@ function initMiniBossesActions(scene: AbstractScene) {
     for (let i = 0; i < enemiesMiniBosses.length; i++) {
         const miniBoss = enemiesMiniBosses[i];
         const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
-        const health = new HealthPlugin(scene);
+        const health = new HealthPlugin(scene, HealthType.ENEMY_MINI_BOSS);
         scene.setActors(miniBoss);
         miniBoss.pluginDock.add(bounce);
         miniBoss.pluginDock.add(health);

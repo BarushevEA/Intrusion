@@ -4,6 +4,7 @@ export enum HealthType {
     ENEMY = 'ENEMY',
     HERO = 'HERO',
     ENEMY_BOSS = 'ENEMY_BOSS',
+    ENEMY_MINI_BOSS = 'ENEMY_MINI_BOSS',
     NONE = 'NONE'
 }
 

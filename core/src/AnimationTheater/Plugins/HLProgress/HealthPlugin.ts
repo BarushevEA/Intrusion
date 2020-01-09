@@ -7,6 +7,7 @@ import {getCenterX} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthType, IHealthProgress} from "./HealthType";
 import {EnemyBossProgress} from "./Progresses/EnemyBossProgress";
 import {HeroProgress} from "./Progresses/HeroProgress";
+import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -41,18 +42,30 @@ export class HealthPlugin extends AbstractActorPlugin {
     }
 
     private setProgressBar() {
+        if (!!this.progressBar) {
+            return;
+        }
         const space = 10;
         switch (this.type) {
-            case HealthType.ENEMY:
-                this.progressBar = new EnemyProgress(this.scene.generalLayer);
-                this.positionBalance = new PositionBalance(this.root, this.progressBar);
-                this.addProgressToScene(this.root.z_index);
-                break;
             case HealthType.HERO:
                 this.progressBar = new HeroProgress(this.scene.generalLayer);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
                 this.addProgressToScene(this.root.z_index + 1);
+                break;
+            case HealthType.ENEMY:
+                if (this.currentHealth < this.health) {
+                    this.progressBar = new EnemyProgress(this.scene.generalLayer);
+                    this.positionBalance = new PositionBalance(this.root, this.progressBar);
+                    this.addProgressToScene(this.root.z_index);
+                }
+                break;
+            case HealthType.ENEMY_MINI_BOSS:
+                if (this.currentHealth < this.health) {
+                    this.progressBar = new EnemyMiniBossProgress(this.scene.generalLayer);
+                    this.positionBalance = new PositionBalance(this.root, this.progressBar);
+                    this.addProgressToScene(this.root.z_index);
+                }
                 break;
             case HealthType.ENEMY_BOSS:
                 this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
@@ -75,7 +88,8 @@ export class HealthPlugin extends AbstractActorPlugin {
     }
 
     private updateProgress() {
-        if (this.progressBar) {
+        this.setProgressBar();
+        if (!!this.progressBar) {
             const progress = Math.round(this.currentHealth / this.health * 100);
             this.progressBar.setProgress(progress);
         }
