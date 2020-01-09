@@ -15,19 +15,26 @@ import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragC
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 
 let enemies: AbstractActor[] = <any>0;
+let enemies2: AbstractActor[] = <any>0;
+let enemies1: AbstractActor[] = <any>0;
 let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
 
 
 function initSimpleEnemies(scene: AbstractScene) {
+    enemies2 = [];
+    enemies1 = [];
+
     for (let i = 0; i < 20; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         enemies.push(enemy1);
+        enemies1.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
         enemy1.yPos = randomize(scene.generalLayer.height - enemy1.height);
 
         const enemy2 = new EnemySmall2(scene.generalLayer);
         enemies.push(enemy2);
+        enemies2.push(enemy2);
         enemy2.xPos = scene.generalLayer.width + 5 * enemy2.width;
         enemy2.yPos = randomize(scene.generalLayer.height - enemy2.height);
     }
@@ -169,7 +176,18 @@ class Enemies extends AbstractActorGroup {
             }
             enemies = <any>0;
         }
-        enemiesMiniBosses = <any>0;
+        if (!!enemies1) {
+            enemies1.length = 0;
+            enemies1 = <any>0;
+        }
+        if (!!enemies2) {
+            enemies2.length = 0;
+            enemies2 = <any>0;
+        }
+        if (!!enemiesMiniBosses) {
+            enemiesMiniBosses.length = 0;
+            enemiesMiniBosses = <any>0;
+        }
         generalBoss = <any>0;
         clearInterval(this.timer);
     }
