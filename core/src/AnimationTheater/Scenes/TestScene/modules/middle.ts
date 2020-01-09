@@ -1,4 +1,4 @@
-import {AbstractScene, IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {Heart} from "../../../AnimationModels/Heart";
@@ -16,6 +16,7 @@ import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};

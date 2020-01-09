@@ -5,42 +5,8 @@ import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
 import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
-
-export type IScene = {
-    start(isBackgroundLayerPresent: boolean): void;
-    stop(): void;
-    exit(): void;
-    destroy(): void;
-    readonly isDestroyed: boolean;
-}
-
-export type IUserData = {
-    nextScene?: string;
-    [key: string]: any;
-}
-
-export enum E_ZOnDrop {
-    DEFAULT = 'DEFAULT',
-    ON_TOP = 'ON_TOP'
-}
-
-export enum E_MouseCatch {
-    BY_CENTER = 'BY_CENTER',
-    BY_POSITION = 'BY_POSITION',
-}
-
-export type IDragDropOptions = {
-    callbackOnDrag?: () => void;
-    callbackOnDrop?: () => void;
-    callbackOnMOve?: () => void;
-    zIndexOnDrop?: E_ZOnDrop | number;
-    mouseCatch?: E_MouseCatch;
-};
-
-export type IDragActor = {
-    actor: AbstractActor;
-    options?: IDragDropOptions;
-};
+import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
+import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
@@ -61,6 +27,7 @@ export abstract class AbstractScene implements IScene {
     private movedBehaviors: ISubscriptionLike[] = [];
     private _isDestroyed = false;
     private _isDestroyProcessed = false;
+    private isBackgroundLayerPresent = false;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -96,8 +63,22 @@ export abstract class AbstractScene implements IScene {
 
     private run(): void {
         this.collect(
-            this._onStartOnce$.subscribe(this.createScene.bind(this))
+            this._onStartOnce$.subscribe(this.handleCreateScene.bind(this))
         );
+    }
+
+    private handleCreateScene() {
+        this.createScene();
+        this.handleStartScene();
+    }
+
+    private handleStartScene() {
+        for (let i = 0; i < this.actors.length; i++) {
+            const actor = this.actors[i];
+            actor.enableEvents();
+        }
+        this.renderController.renderStart(this.isBackgroundLayerPresent);
+        this._onStart$.next({...this._userData});
     }
 
     set userData(data: IUserData) {
@@ -326,17 +307,19 @@ export abstract class AbstractScene implements IScene {
     }
 
     public start(isBackgroundLayerPresent: boolean): void {
+        if (this._isDestroyed || this._isDestroyProcessed) {
+            console.log('scene is destroyed !!!');
+            return;
+        }
+        this.isBackgroundLayerPresent = isBackgroundLayerPresent;
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
+        } else {
+            setTimeout(() => {
+                this.handleStartScene();
+            }, 100);
         }
-        setTimeout(() => {
-            this.actors.forEach(actor => {
-                actor.enableEvents();
-            });
-            this.renderController.renderStart(isBackgroundLayerPresent);
-            this._onStart$.next({...this._userData});
-        }, 100);
     }
 
     public stop(): void {
@@ -374,6 +357,7 @@ export abstract class AbstractScene implements IScene {
             }
             actor = <any>0;
         }
+
         const keys = Object.keys(this._userData);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];

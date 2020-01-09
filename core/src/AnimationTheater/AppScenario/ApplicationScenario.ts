@@ -2,9 +2,10 @@ import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/A
 import {Menu} from "../Scenes/Menu/Menu";
 import {SergeScene} from "../Scenes/Serge/SergeScene";
 import {E_Scene} from "./types";
-import {AbstractScene, IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
+import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let menu: AbstractScene = <any>0,
     sceneTest: AbstractScene = <any>0,
