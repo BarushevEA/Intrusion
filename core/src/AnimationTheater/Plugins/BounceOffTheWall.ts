@@ -9,10 +9,18 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     private xDelta = 0;
     private yDelta = 0;
     private minXBound = 0;
+    private reInitTime = 0;
+    private isReInitDeltas = false;
+    private reInitTimer = -1;
 
-    constructor(scene: AbstractScene, minXBound = 0) {
+    constructor(scene: AbstractScene,
+                minXBound = 0,
+                isReInitDeltas = false,
+                reInitTime = 5000) {
         super('BounceOffTheWall', scene);
         this.minXBound = minXBound;
+        this.reInitTime = reInitTime;
+        this.isReInitDeltas = isReInitDeltas;
     }
 
     onInit(): void {
@@ -20,12 +28,13 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     }
 
     init() {
-        this.xDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
-        this.yDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
-        this.xDelta *= 2;
-        this.yDelta *= 2;
-        this.xDelta = !!this.xDelta ? this.xDelta : this.deltaNum;
-        this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
+        this.reInitDeltas();
+
+        if (this.isReInitDeltas) {
+            this.reInitTimer = setInterval(() => {
+                this.reInitDeltas();
+            }, this.reInitTime);
+        }
 
         if (!!this.subscriber) {
             return;
@@ -57,10 +66,22 @@ export class BounceOffTheWall extends AbstractActorPlugin {
         });
     }
 
+    private reInitDeltas() {
+        this.xDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.yDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.xDelta *= 2;
+        this.yDelta *= 2;
+        this.xDelta = !!this.xDelta ? this.xDelta : this.deltaNum;
+        this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
+    }
+
     destroy(): void {
         super.destroy();
         if (this.subscriber) {
             this.subscriber.unsubscribe()
+        }
+        if (this.isReInitDeltas) {
+            clearInterval(this.reInitTimer);
         }
         this.subscriber = <any>0;
     }

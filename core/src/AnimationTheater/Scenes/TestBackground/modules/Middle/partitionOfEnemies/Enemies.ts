@@ -51,14 +51,20 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
 
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
-        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        const bounce = new BounceOffTheWall(
+            scene,
+            Math.round(scene.generalLayer.width / 3),
+            true,
+            randomize(8000) + 2000);
         scene.setActors(enemy1);
         enemy1.pluginDock.add(bounce);
     }
 
     setTimeout(() => {
-        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 4));
-        const snake = new SnakePlugin(scene, [bounce], 20);
+        const bounce = new BounceOffTheWall(
+            scene, Math.round(scene.generalLayer.width / 4),
+            true);
+        const snake = new SnakePlugin(scene, [bounce]);
         for (let i = 0; i < enemies2.length; i++) {
             const enemy2 = enemies2[i];
             scene.setActors(enemy2);
