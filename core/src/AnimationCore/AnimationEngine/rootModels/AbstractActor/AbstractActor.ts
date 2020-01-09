@@ -39,6 +39,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     protected layerHandler: CanvasLayerHandler;
     private _elementX = 0;
     private _elementY = 0;
+    private _elementXPreview = 0;
+    private _elementYPreview = 0;
     private _elementWidth = 0;
     private _elementHeight = 0;
     private _isLeftMouseCatch = false;
@@ -244,7 +246,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
+    get XPreview(): number {
+        return this._elementXPreview;
+    }
+
+    get YPreview(): number {
+        return this._elementYPreview;
+    }
+
     set xPos(value: x_pos) {
+        this._elementXPreview = this._elementX;
         this._elementX = value;
     }
 
@@ -253,6 +264,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     set yPos(value: x_pos) {
+        this._elementYPreview = this._elementY;
         this._elementY = value;
     }
 
