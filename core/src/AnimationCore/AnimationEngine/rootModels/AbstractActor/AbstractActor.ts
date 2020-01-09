@@ -246,11 +246,11 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
-    get XPreview(): number {
+    get xPosPreview(): number {
         return this._elementXPreview;
     }
 
-    get YPreview(): number {
+    get yPosPreview(): number {
         return this._elementYPreview;
     }
 

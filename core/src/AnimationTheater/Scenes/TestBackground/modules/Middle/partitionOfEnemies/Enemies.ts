@@ -13,6 +13,7 @@ import {FatherFrost} from "../../../../../AnimationModels/FatherFrost/FatherFros
 import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
 import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragCursorPlugin";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
+import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -43,12 +44,24 @@ function initSimpleEnemies(scene: AbstractScene) {
 function initSimpleEnemiesActions(scene: AbstractScene) {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
-        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
         const health = new HealthPlugin(scene, HealthType.ENEMY, 200);
         scene.setActors(enemy);
-        enemy.pluginDock.add(bounce);
         enemy.pluginDock.add(health);
         enemy.isEventsBlock = true;
+    }
+
+    for (let i = 0; i < enemies1.length; i++) {
+        const enemy1 = enemies1[i];
+        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        enemy1.pluginDock.add(bounce);
+    }
+
+    const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+    enemies2[0].pluginDock.add(bounce);
+    const snake = new SnakePlugin(scene);
+    for (let i = 0; i < enemies2.length; i++) {
+        const enemy2 = enemies2[i];
+        enemy2.pluginDock.add(snake);
     }
 }
 
