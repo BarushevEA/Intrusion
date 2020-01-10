@@ -23,7 +23,7 @@ export class Explode extends AbstractFramedShape {
     }
 
     setFrame(image_base64: string) {
-        this.createFrame(1);
+        this.createFrame(2);
         this.shape.setBase64Image(image_base64).catch(err => console.error(err));
     }
 }

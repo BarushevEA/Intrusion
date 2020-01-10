@@ -113,7 +113,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         }
         this.isDestroyProcessed = true;
         const explosions: AbstractActor[] = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             const explosion = new Explode(this.scene.generalLayer);
             explosions.push(explosion);
         }
@@ -129,14 +129,15 @@ export class HealthPlugin extends AbstractActorPlugin {
             if (counter >= explosions.length) {
                 clearInterval(timer);
             }
-        }, 100);
+        }, 120);
+        this.scene.unLink(this.root);
         setTimeout(() => {
             for (let i = 0; i < explosions.length; i++) {
                 const explosion = explosions[i];
                 this.scene.destroyActor(explosion);
             }
             this.scene.destroyActor(this.root);
-        }, 500);
+        }, 400);
     }
 
     upgradeMaxHealth(health: number) {

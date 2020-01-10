@@ -145,7 +145,9 @@ function initGeneralBossesActions(scene: AbstractScene) {
             generalBoss.pluginDock.add(bounce);
         }),
         generalBoss.isDestroyed$.subscribe(() => {
-            scene.destroy();
+            setTimeout(() => {
+                scene.destroy();
+            }, 1000);
         })
     );
 }
