@@ -3,11 +3,13 @@ import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/A
 import {EnemyProgress} from "./Progresses/EnemyProgress";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
-import {getCenterX} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthType, IHealthProgress} from "./HealthType";
 import {EnemyBossProgress} from "./Progresses/EnemyBossProgress";
 import {HeroProgress} from "./Progresses/HeroProgress";
 import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
+import {Explode} from "../../AnimationModels/Explode/Explode";
+import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -16,6 +18,7 @@ export class HealthPlugin extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private positionBalance: PositionBalance = <any>0;
     private type: HealthType = <any>0;
+    private isDestroyProcessed = false;
 
     constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HealthPlugin', scene);
@@ -105,7 +108,35 @@ export class HealthPlugin extends AbstractActorPlugin {
     }
 
     private handleDestroy() {
-        this.scene.destroyActor(this.root);
+        if (this.isDestroyProcessed || !this.scene) {
+            return;
+        }
+        this.isDestroyProcessed = true;
+        const explosions: AbstractActor[] = [];
+        for (let i = 0; i < 5; i++) {
+            const explosion = new Explode(this.scene.generalLayer);
+            explosions.push(explosion);
+        }
+        let counter = 0;
+        const timer = setInterval(() => {
+            const explosion = explosions[counter];
+            explosion.xPos = this.root.xPos + getCenterX(0, this.root.width) - Math.round(explosion.width / 2);
+            explosion.yPos = this.root.yPos + getCenterY(0, this.root.height) - Math.round(explosion.height / 2);
+            if (this.scene && this.scene.setActors) {
+                this.scene.setActors(explosions[counter]);
+            }
+            counter++;
+            if (counter >= explosions.length) {
+                clearInterval(timer);
+            }
+        }, 100);
+        setTimeout(() => {
+            for (let i = 0; i < explosions.length; i++) {
+                const explosion = explosions[i];
+                this.scene.destroyActor(explosion);
+            }
+            this.scene.destroyActor(this.root);
+        }, 500);
     }
 
     upgradeMaxHealth(health: number) {
