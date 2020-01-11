@@ -28,6 +28,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _layerName = '';
     private _layer_name_memory = '';
     private _pluginDock: IPluginDock = <any>0;
+    private _isUnlinked = true;
 
     public static tickCount() {
         requestAnimationFrame(AbstractActor.tickCount);
@@ -67,6 +68,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
         this.collector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
+    }
+
+    get isUnlinked(): boolean {
+        return this._isUnlinked;
+    }
+
+    set isUnlinked(value: boolean) {
+        this._isUnlinked = value;
     }
 
     get isDestroyed(): boolean {

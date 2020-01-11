@@ -49,20 +49,21 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         enemy.isEventsBlock = true;
     }
 
+    const bounce = new BounceOffTheWall(
+        scene,
+        Math.round(scene.generalLayer.width / 3),
+        true,
+        randomize(8000) + 2000);
+    const snake = new SnakePlugin(scene, [bounce], 20);
     for (let i = 0; i < enemies1.length; i++) {
         const enemy1 = enemies1[i];
-        const bounce = new BounceOffTheWall(
-            scene,
-            Math.round(scene.generalLayer.width / 3),
-            true,
-            randomize(8000) + 2000);
         scene.setActors(enemy1);
-        enemy1.pluginDock.add(bounce);
+        enemy1.pluginDock.add(snake);
     }
 
     setTimeout(() => {
         const bounce = new BounceOffTheWall(
-            scene, Math.round(scene.generalLayer.width / 4),
+            scene, Math.round(scene.generalLayer.width / 5),
             true);
         const snake = new SnakePlugin(scene, [bounce]);
         for (let i = 0; i < enemies2.length; i++) {
@@ -116,7 +117,11 @@ function initBossesActions(scene: AbstractScene) {
 function initMiniBossesActions(scene: AbstractScene) {
     for (let i = 0; i < enemiesMiniBosses.length; i++) {
         const miniBoss = enemiesMiniBosses[i];
-        const bounce = new BounceOffTheWall(scene, Math.round(scene.generalLayer.width / 3));
+        const bounce = new BounceOffTheWall(
+            scene,
+            Math.round(scene.generalLayer.width / 3),
+            true,
+            randomize(5000) + 1000);
         const health = new HealthPlugin(scene, HealthType.ENEMY_MINI_BOSS);
         scene.setActors(miniBoss);
         miniBoss.pluginDock.add(bounce);
@@ -129,7 +134,7 @@ function initMiniBossesActions(scene: AbstractScene) {
 function initGeneralBossesActions(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
-    const bounce = new BounceOffTheWall(scene);
+    const bounce = new BounceOffTheWall(scene, 0, true);
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
     scene.setActors(generalBoss);
     scene.moveOnMouseDrag(generalBoss);
@@ -147,7 +152,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
         generalBoss.isDestroyed$.subscribe(() => {
             setTimeout(() => {
                 scene.destroy();
-            }, 1000);
+            }, 2000);
         })
     );
 }

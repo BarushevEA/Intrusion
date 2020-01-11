@@ -123,6 +123,7 @@ export abstract class AbstractScene implements IScene {
             if (index === -1) {
                 this.actors.push(actor);
             }
+            actor.isUnlinked = false;
             this.renderController.setActor(actor);
         }
     }
@@ -153,6 +154,10 @@ export abstract class AbstractScene implements IScene {
     }
 
     public unLink(actor: IActor): void {
+        if (!actor) {
+            return;
+        }
+        actor.isUnlinked = true;
         this.renderController.deleteActor(actor);
     }
 

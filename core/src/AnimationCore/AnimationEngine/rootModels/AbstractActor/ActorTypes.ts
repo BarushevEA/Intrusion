@@ -17,6 +17,7 @@ export type IActor = {
     width: number;
     height: number;
     isEventsBlock: boolean;
+    isUnlinked: boolean;
     readonly isLeftMouseCatch: boolean;
     readonly isMouseClick$: ISubscriber<boolean>;
     readonly isMouseLeftDrop$: ISubscriber<any>;

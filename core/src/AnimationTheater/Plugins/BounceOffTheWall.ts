@@ -12,6 +12,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     private reInitTime = 0;
     private isReInitDeltas = false;
     private reInitTimer = -1;
+    private isReinitProcessed = false;
 
     constructor(scene: AbstractScene,
                 minXBound = 0,
@@ -30,7 +31,8 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     init() {
         this.reInitDeltas();
 
-        if (this.isReInitDeltas) {
+        if (this.isReInitDeltas && !this.isReinitProcessed) {
+            this.isReinitProcessed = true;
             this.reInitTimer = setInterval(() => {
                 this.reInitDeltas();
             }, this.reInitTime);
@@ -75,13 +77,18 @@ export class BounceOffTheWall extends AbstractActorPlugin {
         this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
     }
 
+    unLink(): void {
+        if (this.isReInitDeltas) {
+            clearInterval(this.reInitTimer);
+            this.isReinitProcessed = false;
+        }
+        super.unLink();
+    }
+
     destroy(): void {
         super.destroy();
         if (this.subscriber) {
             this.subscriber.unsubscribe()
-        }
-        if (this.isReInitDeltas) {
-            clearInterval(this.reInitTimer);
         }
         this.subscriber = <any>0;
     }

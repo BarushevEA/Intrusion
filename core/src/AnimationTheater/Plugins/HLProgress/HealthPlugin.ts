@@ -113,31 +113,62 @@ export class HealthPlugin extends AbstractActorPlugin {
         }
         this.isDestroyProcessed = true;
         const explosions: AbstractActor[] = [];
-        for (let i = 0; i < 3; i++) {
+        let explodeCount = 0;
+        switch (this.type) {
+            case HealthType.ENEMY:
+                explodeCount = 1;
+                break;
+            case HealthType.ENEMY_MINI_BOSS:
+                explodeCount = 5;
+                break;
+            case HealthType.ENEMY_BOSS:
+                explodeCount = 20;
+                break;
+            case HealthType.HERO:
+                explodeCount = 10;
+                break;
+        }
+        for (let i = 0; i < explodeCount; i++) {
             const explosion = new Explode(this.scene.generalLayer);
+            explosion.isEventsBlock = true;
             explosions.push(explosion);
         }
-        let counter = 0;
+        this.handleExplode(explosions, this.scene);
+    }
+
+    private handleExplode(explosions: AbstractActor[], scene: AbstractScene) {
+        this.explodeShow(explosions, 0, scene);
+        let counter = 1;
         const timer = setInterval(() => {
-            const explosion = explosions[counter];
-            explosion.xPos = this.root.xPos + getCenterX(0, this.root.width) - Math.round(explosion.width / 2);
-            explosion.yPos = this.root.yPos + getCenterY(0, this.root.height) - Math.round(explosion.height / 2);
-            if (this.scene && this.scene.setActors) {
-                this.scene.setActors(explosions[counter]);
-            }
-            counter++;
             if (counter >= explosions.length) {
                 clearInterval(timer);
             }
-        }, 120);
-        this.scene.unLink(this.root);
+            this.explodeShow(explosions, counter, scene);
+            counter++;
+        }, 100);
+        scene.unLink(this.root);
         setTimeout(() => {
             for (let i = 0; i < explosions.length; i++) {
                 const explosion = explosions[i];
-                this.scene.destroyActor(explosion);
+                scene.destroyActor(explosion);
             }
-            this.scene.destroyActor(this.root);
-        }, 400);
+            scene.destroyActor(this.root);
+        }, 340 + (explosions.length - 1) * 100);
+    }
+
+    private explodeShow(explosions: AbstractActor[], counter: number, scene: AbstractScene) {
+        if (!this.root || !explosions || !explosions.length) {
+            return;
+        }
+        const explosion = explosions[counter];
+        if (!explosion) {
+            return;
+        }
+        explosion.xPos = this.root.xPos + getCenterX(0, this.root.width) - Math.round(explosion.width / 2);
+        explosion.yPos = this.root.yPos + getCenterY(0, this.root.height) - Math.round(explosion.height / 2);
+        if (scene && scene.setActors) {
+            scene.setActors(explosions[counter]);
+        }
     }
 
     upgradeMaxHealth(health: number) {
