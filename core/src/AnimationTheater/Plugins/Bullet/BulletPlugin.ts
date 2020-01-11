@@ -68,6 +68,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 const actor = this.enemies[i];
                 if (
                     !actor.isDestroyed &&
+                    !actor.isUnlinked &&
                     getCenterX(this.root.xPos, this.root.width) >= actor.xPos &&
                     getCenterX(this.root.xPos, this.root.width) <= actor.xPos + actor.width &&
                     getCenterY(this.root.yPos, this.root.height) >= actor.yPos &&

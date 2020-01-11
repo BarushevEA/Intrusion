@@ -28,6 +28,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _layerName = '';
     private _layer_name_memory = '';
     private _pluginDock: IPluginDock = <any>0;
+    private _isUnlinked = true;
 
     public static tickCount() {
         requestAnimationFrame(AbstractActor.tickCount);
@@ -39,6 +40,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     protected layerHandler: CanvasLayerHandler;
     private _elementX = 0;
     private _elementY = 0;
+    private _elementXPreview = 0;
+    private _elementYPreview = 0;
     private _elementWidth = 0;
     private _elementHeight = 0;
     private _isLeftMouseCatch = false;
@@ -65,6 +68,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
         this.collector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
+    }
+
+    get isUnlinked(): boolean {
+        return this._isUnlinked;
+    }
+
+    set isUnlinked(value: boolean) {
+        this._isUnlinked = value;
     }
 
     get isDestroyed(): boolean {
@@ -96,10 +107,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.length = 0;
     }
 
-    get isEventsBlock(): boolean {
-        return this._isEventsBlock;
-    }
-
     set isEventsBlock(value: boolean) {
         if (value) {
             this.disableEvents();
@@ -107,6 +114,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.initEvents();
         }
         this._isEventsBlock = value;
+    }
+
+    get isEventsBlock(): boolean {
+        return this._isEventsBlock;
     }
 
     public enableEvents(): void {
@@ -244,7 +255,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
     }
 
+    get xPosPreview(): number {
+        return this._elementXPreview;
+    }
+
+    get yPosPreview(): number {
+        return this._elementYPreview;
+    }
+
     set xPos(value: x_pos) {
+        this._elementXPreview = this._elementX;
         this._elementX = value;
     }
 
@@ -253,6 +273,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     set yPos(value: x_pos) {
+        this._elementYPreview = this._elementY;
         this._elementY = value;
     }
 
@@ -364,10 +385,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._layer_name_memory = <any>0;
         this.framePoolName = <any>0;
         this.generalLayer = <any>0;
-        this._elementX = <any>0;
-        this._elementY = <any>0;
-        this._elementWidth = <any>0;
-        this._elementHeight = <any>0;
+        // this._elementX = <any>0;
+        // this._elementY = <any>0;
+        // this._elementWidth = <any>0;
+        // this._elementHeight = <any>0;
         this._isLeftMouseCatch = <any>0;
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;

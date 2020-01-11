@@ -19,6 +19,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
     onInit(): void {
         if (!this.fire) {
             this.fire = new BlueFire(this.scene.generalLayer);
+            this.fire.isEventsBlock = true;
         }
         this.yBalance = this.root.yPos;
         this.xBalance = this.root.xPos;

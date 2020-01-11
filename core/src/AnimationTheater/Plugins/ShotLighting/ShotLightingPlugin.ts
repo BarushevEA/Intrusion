@@ -20,6 +20,7 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     onInit(): void {
         if (!this.shotLighting) {
             this.shotLighting = new ShotLighting(this.scene.generalLayer);
+            this.shotLighting.isEventsBlock = true;
             this.positionBalance = new PositionBalance(this.root, this.shotLighting);
         }
 
