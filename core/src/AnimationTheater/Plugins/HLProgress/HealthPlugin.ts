@@ -112,8 +112,14 @@ export class HealthPlugin extends AbstractActorPlugin {
             return;
         }
         this.isDestroyProcessed = true;
+
+        if (this.progressBar) {
+            this.scene.unLink(this.progressBar);
+        }
+
         const explosions: AbstractActor[] = [];
         let explodeCount = 0;
+
         switch (this.type) {
             case HealthType.ENEMY:
                 explodeCount = 1;
@@ -128,11 +134,13 @@ export class HealthPlugin extends AbstractActorPlugin {
                 explodeCount = 10;
                 break;
         }
+
         for (let i = 0; i < explodeCount; i++) {
             const explosion = new Explode(this.scene.generalLayer);
             explosion.isEventsBlock = true;
             explosions.push(explosion);
         }
+        
         this.handleExplode(explosions, this.scene);
     }
 
