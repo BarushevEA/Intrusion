@@ -21,8 +21,8 @@ let enemies2: AbstractActor[] = <any>0;
 let enemies1: AbstractActor[] = <any>0;
 let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
-let heroes: AbstractActor[] = [];
-let intervalTimers: number[] = [];
+let heroes: AbstractActor[] = <any>0;
+let intervalTimers: number[] = <any>0;
 
 
 function initSimpleEnemies(scene: AbstractScene) {
@@ -223,6 +223,8 @@ class EnemiesPool extends AbstractActorGroup {
 
     initActors(scene: AbstractScene): void {
         enemies = [];
+        heroes = [];
+        intervalTimers = [];
         initSimpleEnemies(scene);
         initBosses(scene);
     }

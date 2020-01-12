@@ -58,7 +58,12 @@ class Heroes extends AbstractActorGroup {
                         plane.pluginDock.unLink(bulletShot);
                     }
                 }
-            )
+            ),
+            plane.isDestroyed$.subscribe(() => {
+                setTimeout(() => {
+                    scene.destroy();
+                }, 2000);
+            })
         );
     }
 
