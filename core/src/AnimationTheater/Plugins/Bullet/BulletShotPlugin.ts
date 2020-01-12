@@ -8,10 +8,12 @@ import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
     private bulletGenerator = <any>0;
+    private isReverse = false;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[]) {
+    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false) {
         super('BulletShotPlugin', scene);
         this.setEnemies(enemies);
+        this.isReverse = isReverse;
     }
 
     onInit(): void {
@@ -26,8 +28,8 @@ export class BulletShotPlugin extends AbstractActorPlugin {
 
     private init() {
         const bullet = new Bullet(this.scene.generalLayer);
-        const plugin = new BulletPlugin(this.scene, this.enemies);
-        bullet.xPos = this.root.xPos + this.root.width;
+        const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse);
+        bullet.xPos = this.isReverse ? this.root.xPos : this.root.xPos + this.root.width;
         bullet.yPos = getCenterY(this.root.yPos, this.root.height) - Math.round(bullet.height / 2);
         bullet.isEventsBlock = true;
         this.scene.setActors(bullet);

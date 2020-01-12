@@ -14,10 +14,11 @@ export class BulletPlugin extends AbstractActorPlugin {
     private isDestroyProcessed = false;
     private damagedEnemy: AbstractActor = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], damage = 50) {
+    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false, damage = 50) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);
+        this.xSpeed *= isReverse ? -1 : 1;
     }
 
     onInit(): void {
@@ -27,7 +28,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 return;
             }
             this.root.xPos += this.xSpeed;
-            if (this.root.xPos > this.scene.generalLayer.width) {
+            if (this.root.xPos > this.scene.generalLayer.width || this.root.xPos < 0) {
                 this.scene.destroyActor(this.root);
             }
             this.damagedEnemy = this.getDamagedEnemy();
