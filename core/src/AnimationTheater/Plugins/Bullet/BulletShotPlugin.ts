@@ -11,15 +11,18 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     private bulletGenerator = <any>0;
     private isReverse = <any>0;
     private type: BULLET = <any>0;
+    private damagePerBullet = 0;
 
     constructor(scene: AbstractScene,
                 enemies: AbstractActor[],
                 type = BULLET.SMALL,
-                isReverse = false) {
+                isReverse = false,
+                damagePerBullet = 50) {
         super('BulletShotPlugin', scene);
         this.setEnemies(enemies);
         this.isReverse = isReverse;
         this.type = type;
+        this.damagePerBullet = damagePerBullet;
     }
 
     onInit(): void {
@@ -33,8 +36,11 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     }
 
     private init() {
+        if (this.root.isUnlinked) {
+            return;
+        }
         const bullet = getBullet(this.type, this.scene);
-        const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse);
+        const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse, this.damagePerBullet);
         bullet.xPos = this.isReverse ? this.root.xPos : this.root.xPos + this.root.width;
         bullet.yPos = getCenterY(this.root.yPos, this.root.height) - Math.round(bullet.height / 2);
         bullet.isEventsBlock = true;

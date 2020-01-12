@@ -151,7 +151,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         scene.setActors(miniBoss);
         miniBoss.pluginDock.add(bounce);
         miniBoss.pluginDock.add(health);
-        addActor(miniBoss, scene);
+        addActor(miniBoss, scene, HealthType.ENEMY_MINI_BOSS);
         miniBoss.isEventsBlock = true;
     }
 }
@@ -170,7 +170,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
     scene.setActors(generalBoss);
     scene.moveOnMouseDrag(generalBoss);
-    addActor(generalBoss, scene);
+    addActor(generalBoss, scene, HealthType.ENEMY_BOSS);
     generalBoss.pluginDock.add(health);
     generalBoss.pluginDock.add(highlighting);
     generalBoss.pluginDock.add(bounce);
@@ -189,13 +189,36 @@ function initGeneralBossesActions(scene: AbstractScene) {
     );
 }
 
-function addActor(actor: AbstractActor, scene: AbstractScene): void {
+function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.ENEMY): void {
     enemies.push(actor);
+    let delay = 0;
+    let duration = 0;
+    let damage = 0;
+
+    switch (type) {
+        case HealthType.ENEMY:
+            delay = 2000 + randomize(5000);
+            duration = 100;
+            damage = 50;
+            break;
+        case HealthType.ENEMY_MINI_BOSS:
+            delay = 500 + randomize(500);
+            duration = 200;
+            damage = 200;
+            break;
+        case HealthType.ENEMY_BOSS:
+            delay = 350;
+            duration = 300;
+            damage = 400;
+            break;
+    }
+
     const bulletShot = new BulletShotPlugin(
         scene,
         heroes,
         BULLET.LASER_RED,
-        true);
+        true,
+        damage);
     const timer = setInterval(() => {
         if (actor && !actor.isDestroyed) {
             actor.pluginDock.add(bulletShot);
@@ -206,8 +229,8 @@ function addActor(actor: AbstractActor, scene: AbstractScene): void {
             if (actor && !actor.isDestroyed) {
                 actor.pluginDock.unLink(bulletShot);
             }
-        }, 100);
-    }, 2000 + randomize(5000));
+        }, duration);
+    }, delay);
     intervalTimers.push(timer);
 }
 
