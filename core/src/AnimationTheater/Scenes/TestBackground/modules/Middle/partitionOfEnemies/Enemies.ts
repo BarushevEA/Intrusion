@@ -26,7 +26,7 @@ function initSimpleEnemies(scene: AbstractScene) {
     enemies2 = [];
     enemies1 = [];
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         enemies.push(enemy1);
         enemies1.push(enemy1);
@@ -55,10 +55,22 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         true,
         randomize(8000) + 2000);
     const snake = new SnakePlugin(scene, [bounce], 20);
-    for (let i = 0; i < enemies1.length; i++) {
+    for (let i = 0; i < enemies1.length / 2; i++) {
         const enemy1 = enemies1[i];
         scene.setActors(enemy1);
         enemy1.pluginDock.add(snake);
+    }
+
+    const bounce1 = new BounceOffTheWall(
+        scene,
+        Math.round(scene.generalLayer.width / 3),
+        true,
+        randomize(8000) + 2000);
+    const snake1 = new SnakePlugin(scene, [bounce1], 20);
+    for (let i = enemies1.length / 2; i < enemies1.length; i++) {
+        const enemy1 = enemies1[i];
+        scene.setActors(enemy1);
+        enemy1.pluginDock.add(snake1);
     }
 
     setTimeout(() => {
@@ -66,10 +78,20 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
             scene, Math.round(scene.generalLayer.width / 5),
             true);
         const snake = new SnakePlugin(scene, [bounce]);
-        for (let i = 0; i < enemies2.length; i++) {
+        for (let i = 0; i < enemies2.length / 2; i++) {
             const enemy2 = enemies2[i];
             scene.setActors(enemy2);
             enemy2.pluginDock.add(snake);
+        }
+
+        const bounce1 = new BounceOffTheWall(
+            scene, Math.round(scene.generalLayer.width / 5),
+            true);
+        const snake1 = new SnakePlugin(scene, [bounce1]);
+        for (let i = enemies2.length / 2; i < enemies2.length; i++) {
+            const enemy2 = enemies2[i];
+            scene.setActors(enemy2);
+            enemy2.pluginDock.add(snake1);
         }
     }, 10000);
 }
