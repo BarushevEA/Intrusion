@@ -46,14 +46,14 @@ class Heroes extends AbstractActorGroup {
         plane.pluginDock.add(health);
         scene.collect(
             keyDownCode$.subscribe((code: IKeyCode) => {
-                    if (code.code === 'Space') {
+                    if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.add(shotLighting);
                         plane.pluginDock.add(bulletShot);
                     }
                 }
             ),
             keyUpCode$.subscribe((code: IKeyCode) => {
-                    if (code.code === 'Space') {
+                    if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.unLink(shotLighting);
                         plane.pluginDock.unLink(bulletShot);
                     }
