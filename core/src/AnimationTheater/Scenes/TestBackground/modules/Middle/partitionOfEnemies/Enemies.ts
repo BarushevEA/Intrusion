@@ -9,11 +9,11 @@ import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {Enemy1} from "../../../../../AnimationModels/Planes/enemy1/Enemy1";
 import {Enemy2} from "../../../../../AnimationModels/Planes/enemy2/Enemy2";
 import {Enemy3} from "../../../../../AnimationModels/Planes/enemy3/Enemy3";
-import {FatherFrost} from "../../../../../AnimationModels/FatherFrost/FatherFrost";
 import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
 import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragCursorPlugin";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
+import {KleschBoss} from "../../../../../AnimationModels/KleschBoss/KleschBoss";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -100,7 +100,7 @@ function initMiniBosses(scene: AbstractScene) {
 }
 
 function initGeneralBosses(scene: AbstractScene) {
-    generalBoss = new FatherFrost(scene.generalLayer);
+    generalBoss = new KleschBoss(scene.generalLayer);
     generalBoss.xPos = scene.generalLayer.width + 2 * generalBoss.width;
     generalBoss.yPos = randomize(scene.generalLayer.height - generalBoss.height);
 }
@@ -134,7 +134,14 @@ function initMiniBossesActions(scene: AbstractScene) {
 function initGeneralBossesActions(scene: AbstractScene) {
     const highlighting = new RectangleHighlighting(scene);
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
-    const bounce = new BounceOffTheWall(scene, 0, true);
+    const bounce = new BounceOffTheWall(
+        scene,
+        0,
+        true,
+        5000,
+        1,
+        5,
+        1);
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
     scene.setActors(generalBoss);
     scene.moveOnMouseDrag(generalBoss);
