@@ -62,6 +62,10 @@ class Heroes extends AbstractActorGroup {
         );
     }
 
+    get heroes(): AbstractActor[] {
+        return [plane];
+    }
+
     destroy(): void {
         if (plane) {
             plane.destroy();
@@ -72,4 +76,4 @@ class Heroes extends AbstractActorGroup {
     }
 }
 
-export const heroes = new Heroes();
+export const heroesPool = new Heroes();

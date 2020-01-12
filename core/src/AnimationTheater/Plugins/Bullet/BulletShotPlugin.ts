@@ -4,16 +4,22 @@ import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/A
 import {Bullet} from "./Actors/Bullet";
 import {BulletPlugin} from "./BulletPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {LaserRed} from "./Actors/LaserRed";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
     private bulletGenerator = <any>0;
-    private isReverse = false;
+    private isReverse = <any>0;
+    private type: BULLET = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false) {
+    constructor(scene: AbstractScene,
+                enemies: AbstractActor[],
+                type = BULLET.SMALL,
+                isReverse = false) {
         super('BulletShotPlugin', scene);
         this.setEnemies(enemies);
         this.isReverse = isReverse;
+        this.type = type;
     }
 
     onInit(): void {
@@ -27,7 +33,7 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     }
 
     private init() {
-        const bullet = new Bullet(this.scene.generalLayer);
+        const bullet = getBullet(this.type, this.scene);
         const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse);
         bullet.xPos = this.isReverse ? this.root.xPos : this.root.xPos + this.root.width;
         bullet.yPos = getCenterY(this.root.yPos, this.root.height) - Math.round(bullet.height / 2);
@@ -37,7 +43,7 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     }
 
     setEnemies(enemies: AbstractActor[]) {
-        if (enemies && enemies.length) {
+        if (enemies) {
             this.enemies = enemies;
         }
     }
@@ -53,5 +59,22 @@ export class BulletShotPlugin extends AbstractActorPlugin {
         this.bulletGenerator = <any>0;
         this.enemies = <any>0;
         super.destroy();
+    }
+}
+
+export enum BULLET {
+    SMALL = 'SMALL',
+    LASER_RED = 'LASER_RED',
+}
+
+function getBullet(type: BULLET, scene: AbstractScene): AbstractActor {
+    switch (type) {
+        case BULLET.SMALL:
+            return new Bullet(scene.generalLayer);
+            break;
+        case BULLET.LASER_RED:
+            return new LaserRed(scene.generalLayer);
+        default:
+            return <any>0;
     }
 }

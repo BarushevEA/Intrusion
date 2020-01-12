@@ -90,7 +90,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     }
 
     setEnemies(enemies: AbstractActor[]) {
-        if (enemies && enemies.length) {
+        if (enemies) {
             this.enemies = enemies;
         }
     }

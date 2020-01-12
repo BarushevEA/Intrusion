@@ -14,12 +14,15 @@ import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragC
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
 import {KleschBoss} from "../../../../../AnimationModels/KleschBoss/KleschBoss";
+import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
 let enemies1: AbstractActor[] = <any>0;
 let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
+let heroes: AbstractActor[] = [];
+let intervalTimers: number[] = [];
 
 
 function initSimpleEnemies(scene: AbstractScene) {
@@ -28,13 +31,13 @@ function initSimpleEnemies(scene: AbstractScene) {
 
     for (let i = 0; i < 10; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
-        enemies.push(enemy1);
+        addActor(enemy1, scene);
         enemies1.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
         enemy1.yPos = randomize(scene.generalLayer.height - enemy1.height);
 
         const enemy2 = new EnemySmall2(scene.generalLayer);
-        enemies.push(enemy2);
+        addActor(enemy2, scene);
         enemies2.push(enemy2);
         enemy2.xPos = scene.generalLayer.width + 5 * enemy2.width;
         enemy2.yPos = randomize(scene.generalLayer.height - enemy2.height);
@@ -148,7 +151,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         scene.setActors(miniBoss);
         miniBoss.pluginDock.add(bounce);
         miniBoss.pluginDock.add(health);
-        enemies.push(miniBoss);
+        addActor(miniBoss, scene);
         miniBoss.isEventsBlock = true;
     }
 }
@@ -167,7 +170,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
     scene.setActors(generalBoss);
     scene.moveOnMouseDrag(generalBoss);
-    enemies.push(generalBoss);
+    addActor(generalBoss, scene);
     generalBoss.pluginDock.add(health);
     generalBoss.pluginDock.add(highlighting);
     generalBoss.pluginDock.add(bounce);
@@ -186,8 +189,37 @@ function initGeneralBossesActions(scene: AbstractScene) {
     );
 }
 
-class Enemies extends AbstractActorGroup {
+function addActor(actor: AbstractActor, scene: AbstractScene): void {
+    enemies.push(actor);
+    const bulletShot = new BulletShotPlugin(
+        scene,
+        heroes,
+        BULLET.LASER_RED,
+        true);
+    const timer = setInterval(() => {
+        if (actor && !actor.isDestroyed) {
+            actor.pluginDock.add(bulletShot);
+        } else {
+            clearInterval(timer);
+        }
+        setTimeout(() => {
+            if (actor && !actor.isDestroyed) {
+                actor.pluginDock.unLink(bulletShot);
+            }
+        }, 100);
+    }, 2000 + randomize(5000));
+    intervalTimers.push(timer);
+}
+
+class EnemiesPool extends AbstractActorGroup {
     private timer = 0;
+
+    set heroes(values: AbstractActor[]) {
+        for (let i = 0; i < values.length; i++) {
+            const value = values[i];
+            heroes.push(value);
+        }
+    }
 
     initActors(scene: AbstractScene): void {
         enemies = [];
@@ -245,9 +277,21 @@ class Enemies extends AbstractActorGroup {
             enemiesMiniBosses.length = 0;
             enemiesMiniBosses = <any>0;
         }
+        if (!!heroes) {
+            heroes.length = 0;
+            heroes = <any>0;
+        }
         generalBoss = <any>0;
         clearInterval(this.timer);
+        if (intervalTimers && intervalTimers.length) {
+            for (let i = 0; i < intervalTimers.length; i++) {
+                const timer = intervalTimers[i];
+                clearInterval(timer);
+            }
+            intervalTimers.length = 0;
+            intervalTimers = <any>0;
+        }
     }
 }
 
-export const enemiesPool = new Enemies();
+export const enemiesPool = new EnemiesPool();
