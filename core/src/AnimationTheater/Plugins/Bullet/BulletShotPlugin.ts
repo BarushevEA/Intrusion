@@ -5,6 +5,8 @@ import {Bullet} from "./Actors/Bullet";
 import {BulletPlugin} from "./BulletPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {LaserRed} from "./Actors/LaserRed";
+import {LaserBlue} from "./Actors/LaserBlue";
+import {LaserOrange} from "./Actors/LaserOrange";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
@@ -71,15 +73,20 @@ export class BulletShotPlugin extends AbstractActorPlugin {
 export enum BULLET {
     SMALL = 'SMALL',
     LASER_RED = 'LASER_RED',
+    LASER_BLUE = 'LASER_BLUE',
+    LASER_ORANGE = 'LASER_ORANGE',
 }
 
 function getBullet(type: BULLET, scene: AbstractScene): AbstractActor {
     switch (type) {
         case BULLET.SMALL:
             return new Bullet(scene.generalLayer);
-            break;
         case BULLET.LASER_RED:
             return new LaserRed(scene.generalLayer);
+        case BULLET.LASER_BLUE:
+            return new LaserBlue(scene.generalLayer);
+        case BULLET.LASER_ORANGE:
+            return new LaserOrange(scene.generalLayer);
         default:
             return <any>0;
     }

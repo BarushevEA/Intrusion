@@ -29,7 +29,7 @@ function initSimpleEnemies(scene: AbstractScene) {
     enemies2 = [];
     enemies1 = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         addActor(enemy1, scene);
         enemies1.push(enemy1);
@@ -120,6 +120,9 @@ function initMiniBosses(scene: AbstractScene) {
     const miniBoss2 = new Enemy2(scene.generalLayer);
     miniBossActivate(miniBoss2);
 
+    const miniBoss21 = new Enemy2(scene.generalLayer);
+    miniBossActivate(miniBoss21);
+
     const miniBoss3 = new Enemy3(scene.generalLayer);
     miniBossActivate(miniBoss3);
 }
@@ -148,11 +151,17 @@ function initMiniBossesActions(scene: AbstractScene) {
             true,
             randomize(5000) + 1000);
         const health = new HealthPlugin(scene, HealthType.ENEMY_MINI_BOSS);
-        scene.setActors(miniBoss);
         miniBoss.pluginDock.add(bounce);
         miniBoss.pluginDock.add(health);
         addActor(miniBoss, scene, HealthType.ENEMY_MINI_BOSS);
         miniBoss.isEventsBlock = true;
+        if (i >= (enemiesMiniBosses.length - 2)) {
+            setTimeout(() => {
+                scene.setActors(miniBoss);
+            }, 15000);
+        } else {
+            scene.setActors(miniBoss);
+        }
     }
 }
 
@@ -163,8 +172,8 @@ function initGeneralBossesActions(scene: AbstractScene) {
         scene,
         0,
         true,
-        5000,
-        1,
+        3000,
+        3,
         5,
         1);
     const health = new HealthPlugin(scene, HealthType.ENEMY_BOSS, 5000);
@@ -194,29 +203,33 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
     let delay = 0;
     let duration = 0;
     let damage = 0;
+    let laserType = <any>0;
 
     switch (type) {
         case HealthType.ENEMY:
-            delay = 2000 + randomize(5000);
+            delay = 1000 + randomize(1000);
             duration = 100;
             damage = 50;
+            laserType = BULLET.LASER_RED;
             break;
         case HealthType.ENEMY_MINI_BOSS:
             delay = 500 + randomize(500);
             duration = 200;
-            damage = 200;
+            damage = 300;
+            laserType = BULLET.LASER_BLUE;
             break;
         case HealthType.ENEMY_BOSS:
             delay = 350;
             duration = 300;
             damage = 400;
+            laserType = BULLET.LASER_ORANGE;
             break;
     }
 
     const bulletShot = new BulletShotPlugin(
         scene,
         heroes,
-        BULLET.LASER_RED,
+        laserType,
         true,
         damage);
     const timer = setInterval(() => {
