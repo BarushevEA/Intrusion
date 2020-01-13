@@ -13,8 +13,9 @@ import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlightin
 import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragCursorPlugin";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
-import {KleschBoss} from "../../../../../AnimationModels/KleschBoss/KleschBoss";
+import {KleschBoss} from "../../../../../AnimationModels/Planes/KleschBoss/KleschBoss";
 import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
+import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -29,7 +30,7 @@ function initSimpleEnemies(scene: AbstractScene) {
     enemies2 = [];
     enemies1 = [];
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
         const enemy1 = new EnemySmall1(scene.generalLayer);
         addActor(enemy1, scene);
         enemies1.push(enemy1);
@@ -113,6 +114,9 @@ function initMiniBosses(scene: AbstractScene) {
         miniBoss.yPos = randomize(scene.generalLayer.height - miniBoss.height);
         enemiesMiniBosses.push(miniBoss);
     };
+
+    const miniBoss0 = new MiniBoss4(scene.generalLayer);
+    miniBossActivate(miniBoss0);
 
     const miniBoss1 = new Enemy1(scene.generalLayer);
     miniBossActivate(miniBoss1);

@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {kleschBoss} from "./KleschBoss_base64";
 
 export class KleschBoss extends AbstractFramedShape {
