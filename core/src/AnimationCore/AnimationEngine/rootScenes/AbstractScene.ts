@@ -117,6 +117,10 @@ export abstract class AbstractScene implements IScene {
     }
 
     public setActors(...actors: AbstractActor[]): void {
+        if (this._isDestroyed || !actors || !actors.length) {
+            return;
+        }
+
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             const index = findElementOnArray(this.actors, actor);
@@ -208,6 +212,9 @@ export abstract class AbstractScene implements IScene {
     protected abstract createScene(): void;
 
     public moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
+        if (this._isDestroyed) {
+            return;
+        }
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(

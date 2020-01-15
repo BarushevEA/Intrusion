@@ -170,6 +170,9 @@ function initMiniBossesActions(scene: AbstractScene) {
 }
 
 function initGeneralBossesActions(scene: AbstractScene) {
+    if (scene.isDestroyed) {
+        return;
+    }
     const highlighting = new RectangleHighlighting(scene);
     const cursorBehavior = new PointerAndDragCursorPlugin(scene);
     const bounce = new BounceOffTheWall(
