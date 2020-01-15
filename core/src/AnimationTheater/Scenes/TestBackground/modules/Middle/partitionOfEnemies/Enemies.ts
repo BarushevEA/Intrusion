@@ -16,6 +16,7 @@ import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
 import {KleschBoss} from "../../../../../AnimationModels/Planes/KleschBoss/KleschBoss";
 import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
+import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -24,6 +25,7 @@ let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
 let heroes: AbstractActor[] = <any>0;
 let intervalTimers: number[] = <any>0;
+const numberOfSmallEnemies = 10;
 
 
 function initSimpleEnemies(scene: AbstractScene) {
@@ -31,7 +33,8 @@ function initSimpleEnemies(scene: AbstractScene) {
     enemies1 = [];
 
     for (let i = 0; i < 10; i++) {
-        const enemy1 = new EnemySmall1(scene.generalLayer);
+        const enemy1 = i < Math.round(numberOfSmallEnemies / 2) ?
+            new EnemySmall1(scene.generalLayer) : new Enemy4(scene.generalLayer);
         addActor(enemy1, scene);
         enemies1.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
