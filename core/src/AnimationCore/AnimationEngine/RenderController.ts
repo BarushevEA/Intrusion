@@ -152,22 +152,24 @@ export class RenderController implements IRenderController {
                 this.layers[layerName][i].renderFrame();
             }
         }
-        this._tickCount$.next(true);
     }
 
-    runFullSpeedWithBackground(): void {
+    private runFullSpeedWithBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
+        this._tickCount$.next(true);
         this.drawLayers();
     }
 
-    runFullSpeedWithoutBackground(): void {
+    private runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
+        this._tickCount$.next(true);
         this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawLayers();
     }
 
     private runHalfSpeed(): void {
         this.animFrameIndex = requestAnimationFrame(this.runHalfSpeed.bind(this));
+        this._tickCount$.next(true);
         if (this.delayCounter >= this.delay) {
             this.delayCounter = 0;
             return;

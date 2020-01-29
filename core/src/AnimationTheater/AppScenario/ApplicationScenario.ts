@@ -54,13 +54,16 @@ function initEvents(platform: AbstractPlatform): void {
                     if (sceneBackground.isDestroyed) {
                         sceneBackground = platform.createScene(TestBackground);
                     }
-                    sceneBackground.start(true);
+                    sceneBackground.onStart$.subscribe(() => {
+                        // sceneBackground.setHalfSpeed();
+                    });
                     sceneBackground.onExit$.subscribe(() => {
                         menu.start(true);
                     });
                     sceneBackground.onDestroy$.subscribe(() => {
                         menu.start(true);
                     });
+                    sceneBackground.start(true);
                     break;
             }
         }
