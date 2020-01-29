@@ -7,6 +7,7 @@ import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {LaserRed} from "./Actors/LaserRed";
 import {LaserBlue} from "./Actors/LaserBlue";
 import {LaserOrange} from "./Actors/LaserOrange";
+import {E_BulletPosition} from "./BulletTypes";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
@@ -14,17 +15,20 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     private isReverse = <any>0;
     private type: BULLET = <any>0;
     private damagePerBullet = 0;
+    private position: E_BulletPosition = <any>0;
 
     constructor(scene: AbstractScene,
                 enemies: AbstractActor[],
                 type = BULLET.SMALL,
                 isReverse = false,
-                damagePerBullet = 50) {
+                damagePerBullet = 50,
+                position: E_BulletPosition = E_BulletPosition.CENTER) {
         super('BulletShotPlugin', scene);
         this.setEnemies(enemies);
         this.isReverse = isReverse;
         this.type = type;
         this.damagePerBullet = damagePerBullet;
+        this.position = position;
     }
 
     onInit(): void {
@@ -42,9 +46,19 @@ export class BulletShotPlugin extends AbstractActorPlugin {
             return;
         }
         const bullet = getBullet(this.type, this.scene);
-        const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse, this.damagePerBullet);
+        const plugin = new BulletPlugin(this.scene, this.enemies, this.isReverse, this.damagePerBullet, this.position);
         bullet.xPos = this.isReverse ? this.root.xPos : this.root.xPos + this.root.width;
         bullet.yPos = getCenterY(this.root.yPos, this.root.height) - Math.round(bullet.height / 2);
+        switch (this.position) {
+            case E_BulletPosition.TOP:
+                bullet.yPos = Math.round(bullet.yPos - this.root.height / 6);
+                bullet.xPos = Math.round(bullet.xPos - bullet.width);
+                break;
+            case E_BulletPosition.BOTTOM:
+                bullet.yPos = Math.round(bullet.yPos + this.root.height / 6);
+                bullet.xPos = Math.round(bullet.xPos - bullet.width);
+                break;
+        }
         bullet.isEventsBlock = true;
         this.scene.setActors(bullet);
         bullet.pluginDock.add(plugin);

@@ -10,9 +10,10 @@ import {MovePlaneFramePlugin} from "../../../../../Plugins/MovePlaneFramePlugin"
 import {ShotLightingPlugin} from "../../../../../Plugins/ShotLighting/ShotLightingPlugin";
 import {HealthPlugin} from "../../../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
-import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
+import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
+import {E_BulletPosition} from "../../../../../Plugins/Bullet/BulletTypes";
 
 let plane: AbstractActor = <any>0;
 
@@ -39,6 +40,8 @@ class Heroes extends AbstractActorGroup {
         const shotLighting = new ShotLightingPlugin(scene);
         const health = new HealthPlugin(scene, HealthType.HERO, 5000);
         const bulletShot = new BulletShotPlugin(scene, this._enemies);
+        const bulletShot1 = new BulletShotPlugin(scene, this._enemies, BULLET.SMALL, false, 50, E_BulletPosition.TOP);
+        const bulletShot2 = new BulletShotPlugin(scene, this._enemies, BULLET.SMALL, false, 50, E_BulletPosition.BOTTOM);
         plane.pluginDock.add(fire);
         plane.pluginDock.add(moveKeys);
         plane.pluginDock.add(moveFrame);
@@ -49,6 +52,8 @@ class Heroes extends AbstractActorGroup {
                     if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.add(shotLighting);
                         plane.pluginDock.add(bulletShot);
+                        plane.pluginDock.add(bulletShot1);
+                        plane.pluginDock.add(bulletShot2);
                     }
                 }
             ),
@@ -56,6 +61,8 @@ class Heroes extends AbstractActorGroup {
                     if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.unLink(shotLighting);
                         plane.pluginDock.unLink(bulletShot);
+                        plane.pluginDock.unLink(bulletShot1);
+                        plane.pluginDock.unLink(bulletShot2);
                     }
                 }
             ),

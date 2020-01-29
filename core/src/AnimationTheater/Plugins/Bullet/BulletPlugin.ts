@@ -5,6 +5,7 @@ import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
+import {E_BulletPosition} from "./BulletTypes";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
@@ -13,12 +14,18 @@ export class BulletPlugin extends AbstractActorPlugin {
     private xSpeed = 15;
     private isDestroyProcessed = false;
     private damagedEnemy: AbstractActor = <any>0;
+    private direction: E_BulletPosition = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false, damage = 50) {
+    constructor(scene: AbstractScene,
+                enemies: AbstractActor[],
+                isReverse = false,
+                damage = 50,
+                direction = E_BulletPosition.CENTER) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);
         this.xSpeed *= isReverse ? -1 : 1;
+        this.direction = direction;
     }
 
     onInit(): void {
@@ -28,6 +35,14 @@ export class BulletPlugin extends AbstractActorPlugin {
                 return;
             }
             this.root.xPos += this.xSpeed;
+            switch (this.direction) {
+                case E_BulletPosition.TOP:
+                    this.root.yPos--;
+                    break;
+                case E_BulletPosition.BOTTOM:
+                    this.root.yPos++;
+                    break;
+            }
             if (this.root.xPos > this.scene.generalLayer.width || this.root.xPos < 0) {
                 this.scene.destroyActor(this.root);
             }
