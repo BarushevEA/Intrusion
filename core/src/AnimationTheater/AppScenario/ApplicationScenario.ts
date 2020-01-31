@@ -24,8 +24,6 @@ function runEnterPoint(): void {
 
 function initScenes(platform: AbstractPlatform): void {
     menu = platform.createScene(Menu);
-    sceneSerge = platform.createScene(SergeScene);
-    sceneBackground = platform.createScene(TestBackground);
 }
 
 function initEvents(platform: AbstractPlatform): void {
@@ -42,6 +40,7 @@ function initEvents(platform: AbstractPlatform): void {
                     sceneTest.start(true);
                     break;
                 case E_Scene.SERGE:
+                    sceneSerge = platform.createScene(SergeScene);
                     sceneSerge.onStart$.subscribe(() => {
                         sceneSerge.setHalfSpeed();
                     });
@@ -51,9 +50,7 @@ function initEvents(platform: AbstractPlatform): void {
                     });
                     break;
                 case E_Scene.BACKGROUND:
-                    if (sceneBackground.isDestroyed) {
-                        sceneBackground = platform.createScene(TestBackground);
-                    }
+                    sceneBackground = platform.createScene(TestBackground);
                     sceneBackground.onStart$.subscribe(() => {
                         // sceneBackground.setHalfSpeed();
                     });
