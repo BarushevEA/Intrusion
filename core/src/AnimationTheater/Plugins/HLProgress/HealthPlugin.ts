@@ -156,7 +156,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             counter++;
         }, 100);
         scene.unLink(this.root);
-        tickGenerator.execute(() => {
+        tickGenerator.executeTimeout(() => {
             for (let i = 0; i < explosions.length; i++) {
                 const explosion = explosions[i];
                 scene.destroyActor(explosion);

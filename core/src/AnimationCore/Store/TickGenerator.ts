@@ -97,7 +97,7 @@ class TickGenerator implements ITick {
         return tick1000$;
     }
 
-    execute(cb: cb_function, time: delay_ms): id_string {
+    executeTimeout(cb: cb_function, time: delay_ms): id_string {
         const key = '' + (++id);
         timeoutListeners[key] = {
             counter: 0,

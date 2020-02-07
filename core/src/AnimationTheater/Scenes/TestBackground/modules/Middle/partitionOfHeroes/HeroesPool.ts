@@ -61,7 +61,7 @@ class Heroes extends AbstractActorGroup {
                 }
             ),
             plane.isDestroyed$.subscribe(() => {
-                tickGenerator.execute(() => {
+                tickGenerator.executeTimeout(() => {
                     scene.destroy();
                 }, 2000);
             })

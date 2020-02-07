@@ -26,7 +26,7 @@ export type ITick = {
     tick10$: Observable<any>;
     tick100$: Observable<any>;
     tick1000$: Observable<any>;
-    execute(cb: cb_function, time: delay_ms): id_string;
+    executeTimeout(cb: cb_function, time: delay_ms): id_string;
     clear(id: id_string): void;
     destroy(): void;
 }

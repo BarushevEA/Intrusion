@@ -199,7 +199,7 @@ function initActions(scene: AbstractScene) {
                 newHeart.yPos = heart.yPos;
                 scene.setActors(newHeart);
                 newHeart.enableEvents();
-                tickGenerator.execute(() => {
+                tickGenerator.executeTimeout(() => {
                     scene.moveOnMouseDrag(newHeart);
                     newHeart.pluginDock.add(cursorBehaviorNewHeart);
                     newHeart.pluginDock.add(highlightingNewHeart);

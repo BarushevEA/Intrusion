@@ -113,7 +113,7 @@ export class SnakePlugin extends AbstractActorPlugin {
 
     destroy(): void {
         super.destroy();
-        tickGenerator.execute(() => {
+        tickGenerator.executeTimeout(() => {
             if (this.checkIsDestroyed()) {
                 this.unLink();
                 this.actors = <any>0;

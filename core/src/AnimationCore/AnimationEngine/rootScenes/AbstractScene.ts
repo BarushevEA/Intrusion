@@ -329,7 +329,7 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         } else {
-            tickGenerator.execute(() => {
+            tickGenerator.executeTimeout(() => {
                 this.handleStartScene();
             }, 100);
         }

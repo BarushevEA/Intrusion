@@ -81,7 +81,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         enemy1.pluginDock.add(snake1);
     }
 
-    tickGenerator.execute(() => {
+    tickGenerator.executeTimeout(() => {
         const bounce = new BounceOffTheWall(
             scene, Math.round(scene.generalLayer.width / 5),
             true);
@@ -142,10 +142,10 @@ function initGeneralBosses(scene: AbstractScene) {
 }
 
 function initBossesActions(scene: AbstractScene) {
-    tickGenerator.execute(() => {
+    tickGenerator.executeTimeout(() => {
         initMiniBossesActions(scene);
     }, 30000);
-    tickGenerator.execute(() => {
+    tickGenerator.executeTimeout(() => {
         initGeneralBossesActions(scene);
     }, 40000);
 }
@@ -164,7 +164,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         addActor(miniBoss, scene, HealthType.ENEMY_MINI_BOSS);
         miniBoss.isEventsBlock = true;
         if (i >= (enemiesMiniBosses.length - 2)) {
-            tickGenerator.execute(() => {
+            tickGenerator.executeTimeout(() => {
                 scene.setActors(miniBoss);
             }, 15000);
         } else {
@@ -202,7 +202,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
             generalBoss.pluginDock.add(bounce);
         }),
         generalBoss.isDestroyed$.subscribe(() => {
-            tickGenerator.execute(() => {
+            tickGenerator.executeTimeout(() => {
                 scene.destroy();
             }, 2000);
         })
@@ -249,7 +249,7 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
         } else {
             clearInterval(timer);
         }
-        tickGenerator.execute(() => {
+        tickGenerator.executeTimeout(() => {
             if (actor && !actor.isDestroyed) {
                 actor.pluginDock.unLink(bulletShot);
             }
