@@ -18,6 +18,10 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     }
 
     onInit(): void {
+        if (!this.scene || !this.scene.generalLayer) {
+            return;
+        }
+
         if (!this.shotLighting) {
             this.shotLighting = new ShotLighting(this.scene.generalLayer);
             this.shotLighting.isEventsBlock = true;
@@ -44,7 +48,9 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
             this.subscriber.unsubscribe();
             this.subscriber = <any>0;
         }
-        this.scene.unLink(this.shotLighting);
+        if (this.scene && this.scene.unLink) {
+            this.scene.unLink(this.shotLighting);
+        }
         super.unLink();
     }
 
