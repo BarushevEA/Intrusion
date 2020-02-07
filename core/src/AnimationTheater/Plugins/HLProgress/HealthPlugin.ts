@@ -148,13 +148,13 @@ export class HealthPlugin extends AbstractActorPlugin {
     private handleExplode(explosions: AbstractActor[], scene: AbstractScene) {
         this.explodeShow(explosions, 0, scene);
         let counter = 1;
-        const timer = setInterval(() => {
+        const timer = tickGenerator.execute100MsInterval(() => {
             if (counter >= explosions.length) {
-                clearInterval(timer);
+                timer.unsubscribe();
             }
             this.explodeShow(explosions, counter, scene);
             counter++;
-        }, 100);
+        }, 1);
         scene.unLink(this.root);
         tickGenerator.executeTimeout(() => {
             for (let i = 0; i < explosions.length; i++) {

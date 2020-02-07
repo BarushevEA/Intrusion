@@ -7,10 +7,12 @@ import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {LaserRed} from "./Actors/LaserRed";
 import {LaserBlue} from "./Actors/LaserBlue";
 import {LaserOrange} from "./Actors/LaserOrange";
+import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;
-    private bulletGenerator = <any>0;
+    private bulletGenerator: ISubscriptionLike = <any>0;
     private isReverse = <any>0;
     private type: BULLET = <any>0;
     private damagePerBullet = 0;
@@ -29,11 +31,11 @@ export class BulletShotPlugin extends AbstractActorPlugin {
 
     onInit(): void {
         if (!this.bulletGenerator) {
-            this.bulletGenerator = setInterval(() => {
+            this.bulletGenerator = tickGenerator.execute100MsInterval(() => {
                 if (!this.isUnlinked) {
                     this.init();
                 }
-            }, 100);
+            }, 1);
         }
     }
 
@@ -62,9 +64,9 @@ export class BulletShotPlugin extends AbstractActorPlugin {
 
     destroy(): void {
         if (this.bulletGenerator) {
-            clearInterval(this.bulletGenerator);
+            this.bulletGenerator.unsubscribe();
+            this.bulletGenerator = <any>0;
         }
-        this.bulletGenerator = <any>0;
         this.enemies = <any>0;
         super.destroy();
     }

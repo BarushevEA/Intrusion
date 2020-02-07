@@ -18,6 +18,7 @@ import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShot
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
 import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
+import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observable";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -25,7 +26,7 @@ let enemies1: AbstractActor[] = <any>0;
 let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
 let heroes: AbstractActor[] = <any>0;
-let intervalTimers: number[] = <any>0;
+let intervalTimers: ISubscriptionLike[] = <any>0;
 const numberOfSmallEnemies = 10;
 
 
@@ -218,20 +219,20 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
 
     switch (type) {
         case HealthType.ENEMY:
-            delay = 1000 + randomize(1000);
-            duration = 100;
+            delay = 10 + randomize(10);
+            duration = 50;
             damage = 50;
             laserType = BULLET.LASER_RED;
             break;
         case HealthType.ENEMY_MINI_BOSS:
-            delay = 500 + randomize(500);
-            duration = 200;
+            delay = 5 + randomize(5);
+            duration = 150;
             damage = 300;
             laserType = BULLET.LASER_BLUE;
             break;
         case HealthType.ENEMY_BOSS:
-            delay = 350;
-            duration = 300;
+            delay = 3;
+            duration = 250;
             damage = 400;
             laserType = BULLET.LASER_ORANGE;
             break;
@@ -243,11 +244,11 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
         laserType,
         true,
         damage);
-    const timer = setInterval(() => {
+    const timer = tickGenerator.execute100MsInterval(() => {
         if (actor && !actor.isDestroyed) {
             actor.pluginDock.add(bulletShot);
         } else {
-            clearInterval(timer);
+            timer.unsubscribe();
         }
         tickGenerator.executeTimeout(() => {
             if (actor && !actor.isDestroyed) {
@@ -259,7 +260,7 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
 }
 
 class EnemiesPool extends AbstractActorGroup {
-    private timer = 0;
+    private timer: ISubscriptionLike = <any>0;
 
     set heroes(values: AbstractActor[]) {
         for (let i = 0; i < values.length; i++) {
@@ -283,7 +284,7 @@ class EnemiesPool extends AbstractActorGroup {
     }
 
     private handleClearEnemies() {
-        this.timer = setInterval(() => {
+        this.timer = tickGenerator.executeSecondInterval(() => {
             let tmp = [];
             let length = enemies.length;
             for (let i = 0; i < length; i++) {
@@ -299,7 +300,7 @@ class EnemiesPool extends AbstractActorGroup {
                     enemies.push(actor);
                 }
             }
-        }, 5000);
+        }, 5);
     }
 
     get enemies(): AbstractActor[] {
@@ -331,11 +332,11 @@ class EnemiesPool extends AbstractActorGroup {
             heroes = <any>0;
         }
         generalBoss = <any>0;
-        clearInterval(this.timer);
+        this.timer.unsubscribe();
         if (intervalTimers && intervalTimers.length) {
             for (let i = 0; i < intervalTimers.length; i++) {
                 const timer = intervalTimers[i];
-                clearInterval(timer);
+                timer.unsubscribe();
             }
             intervalTimers.length = 0;
             intervalTimers = <any>0;

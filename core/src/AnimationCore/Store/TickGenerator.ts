@@ -1,5 +1,5 @@
-import {ITickListeners, ITick, cb_function, delay_ms, id_string} from "./Types";
-import {Observable} from "../Libraries/Observable";
+import {ITickListeners, ITick, cb_function, delay_ms, id_string, delay_second} from "./Types";
+import {ISubscriptionLike, Observable} from "../Libraries/Observable";
 
 const timeOutListeners: ITickListeners = {};
 const timeOutKeys: string[] = [];
@@ -32,7 +32,7 @@ class TickGenerator implements ITick {
                     tick1000$.next(1000);
                 }
                 this.counter100++;
-                if (this.counter100 >= 100) {
+                if (this.counter100 >= 10) {
                     this.counter100 = 0;
                 }
                 this.counter1000++;
@@ -42,6 +42,28 @@ class TickGenerator implements ITick {
                 this.handleTimeOutListeners();
             }, tickDelay);
         }
+    }
+
+    executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
+        const number = time;
+        return tick1000$.subscribe(() => {
+            time--;
+            if (!time) {
+                cb();
+                time = number;
+            }
+        });
+    }
+
+    execute100MsInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
+        const number = time;
+        return tick100$.subscribe(() => {
+            time--;
+            if (!time) {
+                cb();
+                time = number;
+            }
+        });
     }
 
     private handleTimeOutListeners(): void {
