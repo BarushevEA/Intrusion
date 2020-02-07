@@ -10,6 +10,7 @@ import {HeroProgress} from "./Progresses/HeroProgress";
 import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 import {Explode} from "../../AnimationModels/Explode/Explode";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -140,7 +141,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             explosion.isEventsBlock = true;
             explosions.push(explosion);
         }
-        
+
         this.handleExplode(explosions, this.scene);
     }
 
@@ -155,7 +156,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             counter++;
         }, 100);
         scene.unLink(this.root);
-        setTimeout(() => {
+        tickGenerator.execute(() => {
             for (let i = 0; i < explosions.length; i++) {
                 const explosion = explosions[i];
                 scene.destroyActor(explosion);

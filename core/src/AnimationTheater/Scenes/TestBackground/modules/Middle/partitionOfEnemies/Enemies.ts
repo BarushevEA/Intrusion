@@ -17,6 +17,7 @@ import {KleschBoss} from "../../../../../AnimationModels/Planes/KleschBoss/Klesc
 import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
+import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -80,7 +81,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         enemy1.pluginDock.add(snake1);
     }
 
-    setTimeout(() => {
+    tickGenerator.execute(() => {
         const bounce = new BounceOffTheWall(
             scene, Math.round(scene.generalLayer.width / 5),
             true);
@@ -141,10 +142,10 @@ function initGeneralBosses(scene: AbstractScene) {
 }
 
 function initBossesActions(scene: AbstractScene) {
-    setTimeout(() => {
+    tickGenerator.execute(() => {
         initMiniBossesActions(scene);
     }, 30000);
-    setTimeout(() => {
+    tickGenerator.execute(() => {
         initGeneralBossesActions(scene);
     }, 40000);
 }
@@ -163,7 +164,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         addActor(miniBoss, scene, HealthType.ENEMY_MINI_BOSS);
         miniBoss.isEventsBlock = true;
         if (i >= (enemiesMiniBosses.length - 2)) {
-            setTimeout(() => {
+            tickGenerator.execute(() => {
                 scene.setActors(miniBoss);
             }, 15000);
         } else {
@@ -201,7 +202,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
             generalBoss.pluginDock.add(bounce);
         }),
         generalBoss.isDestroyed$.subscribe(() => {
-            setTimeout(() => {
+            tickGenerator.execute(() => {
                 scene.destroy();
             }, 2000);
         })
@@ -248,7 +249,7 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
         } else {
             clearInterval(timer);
         }
-        setTimeout(() => {
+        tickGenerator.execute(() => {
             if (actor && !actor.isDestroyed) {
                 actor.pluginDock.unLink(bulletShot);
             }

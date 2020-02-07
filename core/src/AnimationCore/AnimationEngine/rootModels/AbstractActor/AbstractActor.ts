@@ -16,6 +16,7 @@ import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
+import {tickGenerator} from "../../../Store/TickGenerator";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -166,7 +167,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     private tryLeftMouseCatch(isDown: boolean): void {
         if (this.leftMouseCatchTimeIndex !== -1) {
-            clearTimeout(this.leftMouseCatchTimeIndex);
+            tickGenerator.clear(<any>this.leftMouseCatchTimeIndex);
             this.leftMouseCatchTimeIndex = -1;
             if (!isDown && this._isLeftMouseCatch) {
                 this._isLeftMouseCatch = false;
@@ -177,7 +178,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         if (!isDown) {
             return;
         }
-        this.leftMouseCatchTimeIndex = setTimeout(() => {
+        this.leftMouseCatchTimeIndex = <any>tickGenerator.execute(() => {
             this._isLeftMouseCatch = true;
             this._isMouseLeftDrag$.next(0);
         }, this.leftMouseCatchTime);

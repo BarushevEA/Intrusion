@@ -7,6 +7,7 @@ import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
+import {tickGenerator} from "../../Store/TickGenerator";
 
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
@@ -328,7 +329,7 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         } else {
-            setTimeout(() => {
+            tickGenerator.execute(() => {
                 this.handleStartScene();
             }, 100);
         }
