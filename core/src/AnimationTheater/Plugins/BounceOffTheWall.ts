@@ -2,6 +2,7 @@ import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/r
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
+import {tickGenerator} from "../../AnimationCore/Store/TickGenerator";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
@@ -11,7 +12,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     private minXBound = 0;
     private reInitTime = 0;
     private isReInitDeltas = false;
-    private reInitTimer = -1;
+    private reInitTimer: ISubscriptionLike = <any>0;
     private isReInitProcessed = false;
     private multiply = 2;
     private forceSpeed = 1;
@@ -19,7 +20,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     constructor(scene: AbstractScene,
                 minXBound = 0,
                 isReInitDeltas = false,
-                reInitTime = 5000,
+                reInitTime = 5,
                 deltaNum = 5,
                 multiply = 2,
                 forceSpeed = 1) {
@@ -41,7 +42,7 @@ export class BounceOffTheWall extends AbstractActorPlugin {
 
         if (this.isReInitDeltas && !this.isReInitProcessed) {
             this.isReInitProcessed = true;
-            this.reInitTimer = setInterval(() => {
+            this.reInitTimer = tickGenerator.executeSecondInterval(() => {
                 this.reInitDeltas();
             }, this.reInitTime);
         }
@@ -87,7 +88,10 @@ export class BounceOffTheWall extends AbstractActorPlugin {
 
     unLink(): void {
         if (this.isReInitDeltas) {
-            clearInterval(this.reInitTimer);
+            if (this.reInitTimer) {
+                this.reInitTimer.unsubscribe();
+                this.reInitTimer = <any>0;
+            }
             this.isReInitProcessed = false;
         }
         super.unLink();

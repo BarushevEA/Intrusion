@@ -13,6 +13,7 @@ import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
+import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
 
 let plane: AbstractActor = <any>0;
 
@@ -60,7 +61,7 @@ class Heroes extends AbstractActorGroup {
                 }
             ),
             plane.isDestroyed$.subscribe(() => {
-                setTimeout(() => {
+                tickGenerator.executeTimeout(() => {
                     scene.destroy();
                 }, 2000);
             })

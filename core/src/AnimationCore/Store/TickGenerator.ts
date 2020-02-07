@@ -1,31 +1,114 @@
-import {ITick} from "./Types";
-import {Observable} from "../Libraries/Observable";
+import {ITickListeners, ITick, cb_function, delay_ms, id_string, delay_second} from "./Types";
+import {ISubscriptionLike, Observable} from "../Libraries/Observable";
+
+const timeOutListeners: ITickListeners = {};
+const timeOutKeys: string[] = [];
 
 let tickIndex = <any>0,
-    tickDelay = 100,
+    id = Number.MIN_SAFE_INTEGER,
+    tickDelay = 10,
+    optimizeCounter = 0,
+    optimizeNumber = 1000,
+    tick10$ = new Observable(<any>0),
     tick100$ = new Observable(<any>0),
     tick1000$ = new Observable(<any>0);
 
 class TickGenerator implements ITick {
-    private counter = 0;
+    private counter100 = 0;
+    private counter1000 = 0;
 
     constructor() {
         this.init();
     }
 
-    private init() {
+    private init(): void {
         if (!tickIndex) {
             tickIndex = setInterval(() => {
-                tick100$.next(100);
-                if (!this.counter) {
+                tick10$.next(10);
+                if (!this.counter100) {
+                    tick100$.next(100);
+                }
+                if (!this.counter1000) {
                     tick1000$.next(1000);
                 }
-                this.counter++;
-                if (this.counter >= 10) {
-                    this.counter = 0;
+                this.counter100++;
+                if (this.counter100 >= 10) {
+                    this.counter100 = 0;
                 }
+                this.counter1000++;
+                if (this.counter1000 >= 100) {
+                    this.counter1000 = 0;
+                }
+                this.handleTimeOutListeners();
             }, tickDelay);
         }
+    }
+
+    executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
+        const number = time;
+        return tick1000$.subscribe(() => {
+            time--;
+            if (!time) {
+                cb();
+                time = number;
+            }
+        });
+    }
+
+    execute100MsInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
+        const number = time;
+        return tick100$.subscribe(() => {
+            time--;
+            if (!time) {
+                cb();
+                time = number;
+            }
+        });
+    }
+
+    private handleTimeOutListeners(): void {
+        let isNeedToOptimize = false;
+        for (let i = 0; i < timeOutKeys.length; i++) {
+            const listener = timeOutListeners[timeOutKeys[i]];
+            if (!listener) {
+                continue;
+            }
+            if (listener.isDestroy) {
+                delete timeOutListeners[timeOutKeys[i]];
+                isNeedToOptimize = true;
+            } else {
+                if (listener.counter >= listener.delay) {
+                    listener.callback();
+                    delete timeOutListeners[timeOutKeys[i]];
+                    isNeedToOptimize = true;
+                } else {
+                    listener.counter += tickDelay;
+                }
+            }
+        }
+        this.optimizeKeys(isNeedToOptimize);
+    }
+
+    private optimizeKeys(isNeedToOptimize: boolean): void {
+        if (!isNeedToOptimize) {
+            return;
+        }
+        optimizeCounter++;
+        if (optimizeCounter < optimizeNumber) {
+            return;
+        }
+        optimizeCounter = 0;
+        timeOutKeys.length = 0;
+        const tmpKeys = Object.keys(timeOutListeners);
+        const length = tmpKeys.length;
+        for (let i = 0; i < length; i++) {
+            timeOutKeys.push(<string>tmpKeys.pop());
+        }
+        tmpKeys.length = 0;
+    }
+
+    get tick10$(): Observable<any> {
+        return tick10$;
     }
 
     get tick100$(): Observable<any> {
@@ -36,8 +119,27 @@ class TickGenerator implements ITick {
         return tick1000$;
     }
 
+    executeTimeout(cb: cb_function, time: delay_ms): id_string {
+        const key = '' + (++id);
+        timeOutListeners[key] = {
+            counter: 0,
+            delay: time,
+            callback: cb,
+            isDestroy: false
+        };
+        timeOutKeys.push(key);
+        return key;
+    }
+
+    clearTimeout(id: id_string): void {
+        if (timeOutListeners[id]) {
+            timeOutListeners[id].isDestroy = true;
+        }
+    }
+
     destroy(): void {
-        this.counter = 0;
+        this.counter100 = 0;
+        this.counter1000 = 0;
         clearInterval(tickIndex);
         tickIndex = <any>0;
         if (tick100$) {

@@ -5,6 +5,7 @@ import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
+import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
@@ -48,7 +49,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         }
         this.isDestroyProcessed = true;
 
-        setTimeout(() => {
+        tickGenerator.executeTimeout(() => {
             if (!!this.scene) {
                 this.scene.destroyActor(this.root);
             } else if (this.root && !this.root.isDestroyed) {

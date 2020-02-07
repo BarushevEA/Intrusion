@@ -17,6 +17,7 @@ import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorP
 import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
 import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {tickGenerator} from "../../../../AnimationCore/Store/TickGenerator";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -198,7 +199,7 @@ function initActions(scene: AbstractScene) {
                 newHeart.yPos = heart.yPos;
                 scene.setActors(newHeart);
                 newHeart.enableEvents();
-                setTimeout(() => {
+                tickGenerator.executeTimeout(() => {
                     scene.moveOnMouseDrag(newHeart);
                     newHeart.pluginDock.add(cursorBehaviorNewHeart);
                     newHeart.pluginDock.add(highlightingNewHeart);

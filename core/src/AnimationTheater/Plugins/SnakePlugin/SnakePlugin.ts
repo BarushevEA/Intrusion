@@ -4,6 +4,7 @@ import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/A
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
+import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
 
 export class SnakePlugin extends AbstractActorPlugin {
     private actors: AbstractActor[] = <any>0;
@@ -112,7 +113,7 @@ export class SnakePlugin extends AbstractActorPlugin {
 
     destroy(): void {
         super.destroy();
-        setTimeout(() => {
+        tickGenerator.executeTimeout(() => {
             if (this.checkIsDestroyed()) {
                 this.unLink();
                 this.actors = <any>0;
