@@ -16,6 +16,7 @@ import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
 import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
 
 let plane: AbstractActor = <any>0;
+let destroyedCounter = <any>0;
 
 class Heroes extends AbstractActorGroup {
     private _enemies: AbstractActor[] = <any>0;
@@ -61,7 +62,7 @@ class Heroes extends AbstractActorGroup {
                 }
             ),
             plane.isDestroyed$.subscribe(() => {
-                tickGenerator.executeTimeout(() => {
+                destroyedCounter = tickGenerator.executeTimeout(() => {
                     scene.destroy();
                 }, 2000);
             })
@@ -79,6 +80,7 @@ class Heroes extends AbstractActorGroup {
         }
 
         this._enemies = <any>0;
+        tickGenerator.clearTimeout(destroyedCounter);
     }
 }
 

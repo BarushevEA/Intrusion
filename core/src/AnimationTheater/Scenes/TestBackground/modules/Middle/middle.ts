@@ -17,6 +17,7 @@ function clearVariables() {
 }
 
 function initActors(scene: AbstractScene) {
+    clearVariables();
     decoration.initActors(scene);
     enemiesPool.initActors(scene);
     heroesPool.initActors(scene);

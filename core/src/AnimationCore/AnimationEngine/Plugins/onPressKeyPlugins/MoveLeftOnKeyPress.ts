@@ -8,12 +8,18 @@ export class MoveLeftOnKeyPress extends AbstractActionOnKeyPress {
     }
 
     protected initOnKeyDown(): void {
-        this.keyUp = this.scene
-            .tickCount$
-            .subscribe(() => {
-                this.root.xPos -= this._step;
-                this._onKeyDown$.next(this._step);
-            });
+        if (!this.scene) {
+            this.destroy();
+            return;
+        }
+        if (!this.keyUp) {
+            this.keyUp = this.scene
+                .tickCount$
+                .subscribe(() => {
+                    this.root.xPos -= this._step;
+                    this._onKeyDown$.next(this._step);
+                });
+        }
     }
 
     onInit(): void {

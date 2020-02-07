@@ -14,6 +14,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     private xSpeed = 15;
     private isDestroyProcessed = false;
     private damagedEnemy: AbstractActor = <any>0;
+    private handleDestroyCounter = <any>0;
 
     constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false, damage = 50) {
         super('BulletPlugin', scene);
@@ -49,7 +50,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         }
         this.isDestroyProcessed = true;
 
-        tickGenerator.executeTimeout(() => {
+        this.handleDestroyCounter = tickGenerator.executeTimeout(() => {
             if (!!this.scene) {
                 this.scene.destroyActor(this.root);
             } else if (this.root && !this.root.isDestroyed) {
@@ -97,6 +98,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     }
 
     unLink(): void {
+        tickGenerator.clearTimeout(this.handleDestroyCounter);
         super.unLink();
     }
 

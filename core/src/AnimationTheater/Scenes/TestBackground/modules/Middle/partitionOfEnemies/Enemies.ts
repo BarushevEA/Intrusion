@@ -27,6 +27,13 @@ let enemiesMiniBosses: AbstractActor[] = <any>0;
 let generalBoss: AbstractActor = <any>0;
 let heroes: AbstractActor[] = <any>0;
 let intervalTimers: ISubscriptionLike[] = <any>0;
+
+let simpleEnemyTimer = <any>0;
+let boss1DestroyTimer = <any>0;
+let boss2DestroyTimer = <any>0;
+let bossActionsTimer = <any>0;
+let genBossDestroyTimer = <any>0;
+
 const numberOfSmallEnemies = 10;
 
 
@@ -82,7 +89,7 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
         enemy1.pluginDock.add(snake1);
     }
 
-    tickGenerator.executeTimeout(() => {
+    simpleEnemyTimer = tickGenerator.executeTimeout(() => {
         const bounce = new BounceOffTheWall(
             scene, Math.round(scene.generalLayer.width / 5),
             true);
@@ -143,10 +150,10 @@ function initGeneralBosses(scene: AbstractScene) {
 }
 
 function initBossesActions(scene: AbstractScene) {
-    tickGenerator.executeTimeout(() => {
+    boss1DestroyTimer = tickGenerator.executeTimeout(() => {
         initMiniBossesActions(scene);
     }, 30000);
-    tickGenerator.executeTimeout(() => {
+    boss2DestroyTimer = tickGenerator.executeTimeout(() => {
         initGeneralBossesActions(scene);
     }, 40000);
 }
@@ -165,7 +172,7 @@ function initMiniBossesActions(scene: AbstractScene) {
         addActor(miniBoss, scene, HealthType.ENEMY_MINI_BOSS);
         miniBoss.isEventsBlock = true;
         if (i >= (enemiesMiniBosses.length - 2)) {
-            tickGenerator.executeTimeout(() => {
+            bossActionsTimer = tickGenerator.executeTimeout(() => {
                 scene.setActors(miniBoss);
             }, 15000);
         } else {
@@ -203,7 +210,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
             generalBoss.pluginDock.add(bounce);
         }),
         generalBoss.isDestroyed$.subscribe(() => {
-            tickGenerator.executeTimeout(() => {
+            genBossDestroyTimer = tickGenerator.executeTimeout(() => {
                 scene.destroy();
             }, 2000);
         })
@@ -332,7 +339,9 @@ class EnemiesPool extends AbstractActorGroup {
             heroes = <any>0;
         }
         generalBoss = <any>0;
-        this.timer.unsubscribe();
+        if (this.timer && this.timer.unsubscribe) {
+            this.timer.unsubscribe();
+        }
         if (intervalTimers && intervalTimers.length) {
             for (let i = 0; i < intervalTimers.length; i++) {
                 const timer = intervalTimers[i];
@@ -341,6 +350,11 @@ class EnemiesPool extends AbstractActorGroup {
             intervalTimers.length = 0;
             intervalTimers = <any>0;
         }
+        tickGenerator.clearTimeout(simpleEnemyTimer);
+        tickGenerator.clearTimeout(boss1DestroyTimer);
+        tickGenerator.clearTimeout(boss2DestroyTimer);
+        tickGenerator.clearTimeout(bossActionsTimer);
+        tickGenerator.clearTimeout(genBossDestroyTimer);
     }
 }
 

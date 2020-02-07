@@ -29,6 +29,7 @@ export abstract class AbstractScene implements IScene {
     private _isDestroyed = false;
     private _isDestroyProcessed = false;
     private isBackgroundLayerPresent = false;
+    private timerCounter = <any>0;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -124,6 +125,9 @@ export abstract class AbstractScene implements IScene {
 
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
+            if (!actor) {
+                continue;
+            }
             const index = findElementOnArray(this.actors, actor);
             if (index === -1) {
                 this.actors.push(actor);
@@ -329,7 +333,7 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         } else {
-            tickGenerator.executeTimeout(() => {
+            this.timerCounter = tickGenerator.executeTimeout(() => {
                 this.handleStartScene();
             }, 100);
         }
@@ -405,6 +409,7 @@ export abstract class AbstractScene implements IScene {
         this._onDestroy$.destroy();
         this._cursor = <any>0;
         this._isDestroyed = true;
+        tickGenerator.clearTimeout(this.timerCounter);
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {
