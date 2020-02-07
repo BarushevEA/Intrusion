@@ -167,7 +167,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     private tryLeftMouseCatch(isDown: boolean): void {
         if (this.leftMouseCatchTimeIndex !== -1) {
-            tickGenerator.clear(<any>this.leftMouseCatchTimeIndex);
+            tickGenerator.clearTimeout(<any>this.leftMouseCatchTimeIndex);
             this.leftMouseCatchTimeIndex = -1;
             if (!isDown && this._isLeftMouseCatch) {
                 this._isLeftMouseCatch = false;

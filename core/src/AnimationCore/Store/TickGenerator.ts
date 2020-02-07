@@ -1,8 +1,8 @@
 import {ITickListeners, ITick, cb_function, delay_ms, id_string} from "./Types";
 import {Observable} from "../Libraries/Observable";
 
-const timeoutListeners: ITickListeners = {};
-const keys: string[] = [];
+const timeOutListeners: ITickListeners = {};
+const timeOutKeys: string[] = [];
 
 let tickIndex = <any>0,
     id = Number.MIN_SAFE_INTEGER,
@@ -39,25 +39,25 @@ class TickGenerator implements ITick {
                 if (this.counter1000 >= 100) {
                     this.counter1000 = 0;
                 }
-                this.handleListeners();
+                this.handleTimeOutListeners();
             }, tickDelay);
         }
     }
 
-    private handleListeners(): void {
+    private handleTimeOutListeners(): void {
         let isNeedToOptimize = false;
-        for (let i = 0; i < keys.length; i++) {
-            const listener = timeoutListeners[keys[i]];
+        for (let i = 0; i < timeOutKeys.length; i++) {
+            const listener = timeOutListeners[timeOutKeys[i]];
             if (!listener) {
                 continue;
             }
             if (listener.isDestroy) {
-                delete timeoutListeners[keys[i]];
+                delete timeOutListeners[timeOutKeys[i]];
                 isNeedToOptimize = true;
             } else {
                 if (listener.counter >= listener.delay) {
                     listener.callback();
-                    delete timeoutListeners[keys[i]];
+                    delete timeOutListeners[timeOutKeys[i]];
                     isNeedToOptimize = true;
                 } else {
                     listener.counter += tickDelay;
@@ -76,11 +76,11 @@ class TickGenerator implements ITick {
             return;
         }
         optimizeCounter = 0;
-        keys.length = 0;
-        const tmpKeys = Object.keys(timeoutListeners);
+        timeOutKeys.length = 0;
+        const tmpKeys = Object.keys(timeOutListeners);
         const length = tmpKeys.length;
         for (let i = 0; i < length; i++) {
-            keys.push(<string>tmpKeys.pop());
+            timeOutKeys.push(<string>tmpKeys.pop());
         }
         tmpKeys.length = 0;
     }
@@ -99,19 +99,19 @@ class TickGenerator implements ITick {
 
     executeTimeout(cb: cb_function, time: delay_ms): id_string {
         const key = '' + (++id);
-        timeoutListeners[key] = {
+        timeOutListeners[key] = {
             counter: 0,
             delay: time,
             callback: cb,
             isDestroy: false
         };
-        keys.push(key);
+        timeOutKeys.push(key);
         return key;
     }
 
-    clear(id: id_string): void {
-        if (timeoutListeners[id]) {
-            timeoutListeners[id].isDestroy = true;
+    clearTimeout(id: id_string): void {
+        if (timeOutListeners[id]) {
+            timeOutListeners[id].isDestroy = true;
         }
     }
 
