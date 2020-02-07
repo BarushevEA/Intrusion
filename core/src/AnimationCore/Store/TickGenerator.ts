@@ -107,7 +107,13 @@ class TickGenerator implements ITick {
         };
         keys.push(key);
         return key;
-    };
+    }
+
+    clear(id: id_string): void {
+        if (timeoutListeners[id]) {
+            timeoutListeners[id].isDestroy = true;
+        }
+    }
 
     destroy(): void {
         this.counter100 = 0;
