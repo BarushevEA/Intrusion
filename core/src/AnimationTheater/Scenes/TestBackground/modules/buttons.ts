@@ -26,7 +26,7 @@ function initActions(scene: AbstractScene) {
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.test++;
-            scene.exit();
+            scene.destroy();
         }),
         buttonExit.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, buttonExit);

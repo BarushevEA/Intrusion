@@ -16,13 +16,13 @@ export abstract class AbstractScene implements IScene {
     private _cursor: ICursor & AbstractActor = <any>0;
     private _cursorHandler: CursorHandler = <any>0;
     private collector: ICollector = <any>0;
-    private readonly _onStop$ = new Observable(<IUserData><any>0);
-    private readonly _onExit$ = new Observable(<IUserData><any>0);
-    private readonly _onStart$ = new Observable(<IUserData><any>0);
-    private readonly _onStartOnce$ = new Observable(<IUserData><any>0);
-    private readonly _onDestroy$ = new Observable(<IUserData><any>0);
-    private readonly _onSetUserData$ = new Observable(<IUserData><any>0);
-    private readonly _userData: IUserData = {};
+    private _onStop$ = new Observable(<IUserData><any>0);
+    private _onExit$ = new Observable(<IUserData><any>0);
+    private _onStart$ = new Observable(<IUserData><any>0);
+    private _onStartOnce$ = new Observable(<IUserData><any>0);
+    private _onDestroy$ = new Observable(<IUserData><any>0);
+    private _onSetUserData$ = new Observable(<IUserData><any>0);
+    private _userData: IUserData = {};
     private isFirstStart = true;
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
@@ -358,6 +358,8 @@ export abstract class AbstractScene implements IScene {
         }
         this._isDestroyProcessed = true;
 
+        this.exit();
+
         this._onDestroy$.next({...this._userData});
 
         this.collector.destroy();
@@ -406,7 +408,16 @@ export abstract class AbstractScene implements IScene {
         this._onStart$.destroy();
         this._onStartOnce$.destroy();
         this._onSetUserData$.destroy();
+
+        this._onStop$ = <any>0;
+        this._onExit$ = <any>0;
+        this._onStart$ = <any>0;
+        this._onStartOnce$ = <any>0;
+        this._onSetUserData$ = <any>0;
+
         this._onDestroy$.destroy();
+        this._onDestroy$ = <any>0;
+
         this._cursor = <any>0;
         this._isDestroyed = true;
         tickGenerator.clearTimeout(this.timerCounter);
