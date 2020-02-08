@@ -56,9 +56,7 @@ export class HealthPlugin extends AbstractActorPlugin {
                 this.progressBar = new HeroProgress(this.scene.generalLayer);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
-                this.scene.setActiveLayer(ELayers.BOSS_HEALTH);
-                this.addProgressToScene(this.root.z_index + 1);
-                this.scene.setActiveLayer(ELayers.MIDDLE);
+                this.setBossProgressHealth();
                 break;
             case HealthType.ENEMY:
                 if (this.currentHealth < this.health) {
@@ -78,9 +76,7 @@ export class HealthPlugin extends AbstractActorPlugin {
                 this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
                 this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
                 this.progressBar.yPos = space;
-                this.scene.setActiveLayer(ELayers.BOSS_HEALTH);
-                this.addProgressToScene(this.root.z_index + 1);
-                this.scene.setActiveLayer(ELayers.MIDDLE);
+                this.setBossProgressHealth();
                 break;
             case HealthType.NONE:
                 this.progressBar = <any>0;
@@ -89,6 +85,13 @@ export class HealthPlugin extends AbstractActorPlugin {
         if (this.progressBar) {
             this.progressBar.isEventsBlock = true;
         }
+    }
+
+    private setBossProgressHealth() {
+        const currentLayerName = this.scene.getActiveLayerName();
+        this.scene.setActiveLayer(ELayers.BOSS_HEALTH);
+        this.addProgressToScene(this.root.z_index + 1);
+        this.scene.setActiveLayer(currentLayerName);
     }
 
     private addProgressToScene(zIndex: number): void {

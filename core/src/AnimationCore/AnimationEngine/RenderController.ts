@@ -1,4 +1,3 @@
-
 import {findElementOnArray} from "../Libraries/FunctionLibs";
 import {ISubscriber, Observable} from "../Libraries/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
@@ -16,6 +15,7 @@ export type IRenderController = {
     setActorGroupOnTop(elements: IActor[]): void;
     setActorsGroupByZIndex(elements: IActor[], z_index: number): void;
     setActiveLayer(name: string): void;
+    getActiveLayerName(): string;
     setLayerOnTop(name: string): void;
     setLayerOnIndex(layerName: string, index: number): void;
     setFullSpeed(): void;
@@ -76,6 +76,10 @@ export class RenderController implements IRenderController {
             this.currentLayerName = name;
             this.layersNames = Object.keys(this.layers);
         }
+    }
+
+    getActiveLayerName(): string {
+        return this.currentLayerName;
     }
 
     public setLayerOnTop(name: string): void {

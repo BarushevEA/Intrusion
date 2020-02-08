@@ -202,6 +202,10 @@ export abstract class AbstractScene implements IScene {
         this.renderController.setActiveLayer(name);
     }
 
+    public getActiveLayerName(): string {
+        return this.renderController.getActiveLayerName();
+    }
+
     public setLayerOnTop(name: string): void {
         this.renderController.setLayerOnTop(name);
     }
