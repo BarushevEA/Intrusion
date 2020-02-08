@@ -20,6 +20,6 @@
 // DONE TODO 13) Need delete actor from scene !!!
 // DONE TODO 13.1) Need unlink actor from scene !!!
 // TODO 14)  memory leak search
-// TODO 15) ADD SINGLETON tick counter
+// DONE TODO 15) ADD SINGLETON tick counter
 // TODO 16) Create virtual dimension plugin
 // TODO 17)
