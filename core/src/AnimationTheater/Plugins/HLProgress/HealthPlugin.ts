@@ -11,6 +11,7 @@ import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 import {Explode} from "../../AnimationModels/Explode/Explode";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
+import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -55,7 +56,9 @@ export class HealthPlugin extends AbstractActorPlugin {
                 this.progressBar = new HeroProgress(this.scene.generalLayer);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
+                this.scene.setActiveLayer(ELayers.BOSS_HEALTH);
                 this.addProgressToScene(this.root.z_index + 1);
+                this.scene.setActiveLayer(ELayers.MIDDLE);
                 break;
             case HealthType.ENEMY:
                 if (this.currentHealth < this.health) {
@@ -75,7 +78,9 @@ export class HealthPlugin extends AbstractActorPlugin {
                 this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
                 this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
                 this.progressBar.yPos = space;
+                this.scene.setActiveLayer(ELayers.BOSS_HEALTH);
                 this.addProgressToScene(this.root.z_index + 1);
+                this.scene.setActiveLayer(ELayers.MIDDLE);
                 break;
             case HealthType.NONE:
                 this.progressBar = <any>0;
