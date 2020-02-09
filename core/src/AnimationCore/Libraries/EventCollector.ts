@@ -20,14 +20,19 @@ export class EventCollector implements ICollector {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
+        let isSubscriberFounded = false;
         for (let i = 0; i < this.collector.length; i++) {
             const savedSubscriber = this.collector[i];
             if (savedSubscriber && savedSubscriber === subscriber) {
                 savedSubscriber.unsubscribe();
                 this.collector[i] = <any>0;
                 this.destroySubscriberCounter++;
+                isSubscriberFounded = true;
                 break;
             }
+        }
+        if (!isSubscriberFounded && subscriber.unsubscribe) {
+            subscriber.unsubscribe();
         }
 
         this.clearCollector();
