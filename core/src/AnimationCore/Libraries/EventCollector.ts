@@ -10,6 +10,7 @@ const clearNumber = 1000;
 
 export class EventCollector implements ICollector {
     private collector: ISubscriptionLike[] = [];
+    private collectorBuffer: ISubscriptionLike[] = [];
     private destroySubscriberCounter = 0;
 
     public collect(...subscribers: ISubscriptionLike[]): void {
@@ -34,12 +35,17 @@ export class EventCollector implements ICollector {
 
     private clearCollector(): void {
         if (this.destroySubscriberCounter >= clearNumber && this.collector.length) {
-            const length = this.collector.length;
+            let length = this.collector.length;
             for (let i = 0; i < length; i++) {
-                const subscriber = this.collector.shift();
-                if (subscriber) {
-                    this.collector.push(subscriber);
+                const subscriber = this.collector.pop();
+                if (!!subscriber) {
+                    this.collectorBuffer.push(subscriber);
                 }
+            }
+            length = this.collectorBuffer.length;
+            for (let i = 0; i < length; i++) {
+                const subscriber = this.collectorBuffer.pop();
+                this.collector.push(<ISubscriptionLike>subscriber);
             }
         }
     }
