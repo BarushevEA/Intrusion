@@ -6,6 +6,8 @@ export type ICollector = {
     destroy(): void;
 };
 
+const clearNumber = 1000;
+
 export class EventCollector implements ICollector {
     private collector: ISubscriptionLike[] = [];
     private destroySubscriberCounter = 0;
@@ -31,16 +33,14 @@ export class EventCollector implements ICollector {
     }
 
     private clearCollector(): void {
-        if (this.destroySubscriberCounter > 1000 && this.collector.length) {
-            const tmp: ISubscriptionLike[] = [];
-            for (let i = 0; i < this.collector.length; i++) {
-                const subscriber = this.collector[i];
+        if (this.destroySubscriberCounter >= clearNumber && this.collector.length) {
+            const length = this.collector.length;
+            for (let i = 0; i < length; i++) {
+                const subscriber = this.collector.shift();
                 if (subscriber) {
-                    tmp.push(subscriber);
-                    this.collector[i] = <any>0;
+                    this.collector.push(subscriber);
                 }
             }
-            this.collector = tmp;
         }
     }
 
