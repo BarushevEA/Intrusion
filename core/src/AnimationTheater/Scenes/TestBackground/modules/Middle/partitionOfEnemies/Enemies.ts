@@ -17,7 +17,7 @@ import {KleschBoss} from "../../../../../AnimationModels/Planes/KleschBoss/Klesc
 import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
-import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observable";
 
 let enemies: AbstractActor[] = <any>0;

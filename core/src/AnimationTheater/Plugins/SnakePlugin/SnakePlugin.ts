@@ -4,7 +4,7 @@ import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/A
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
-import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 
 export class SnakePlugin extends AbstractActorPlugin {
     private actors: AbstractActor[] = <any>0;

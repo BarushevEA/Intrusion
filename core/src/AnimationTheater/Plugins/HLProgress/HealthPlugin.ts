@@ -10,7 +10,7 @@ import {HeroProgress} from "./Progresses/HeroProgress";
 import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 import {Explode} from "../../AnimationModels/Explode/Explode";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class HealthPlugin extends AbstractActorPlugin {

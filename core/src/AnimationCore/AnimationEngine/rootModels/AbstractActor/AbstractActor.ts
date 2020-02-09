@@ -16,7 +16,7 @@ import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
-import {tickGenerator} from "../../../Store/TickGenerator";
+import {tickGenerator} from "../../../Libraries/TickGenerator";
 
 /** Frame pool technology need to use for lot of entities of class */
 

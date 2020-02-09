@@ -13,7 +13,7 @@ import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
-import {tickGenerator} from "../../../../../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
 
 let plane: AbstractActor = <any>0;
 let destroyedCounter = <any>0;

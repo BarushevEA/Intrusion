@@ -7,7 +7,7 @@ import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {LaserRed} from "./Actors/LaserRed";
 import {LaserBlue} from "./Actors/LaserBlue";
 import {LaserOrange} from "./Actors/LaserOrange";
-import {tickGenerator} from "../../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 
 export class BulletShotPlugin extends AbstractActorPlugin {

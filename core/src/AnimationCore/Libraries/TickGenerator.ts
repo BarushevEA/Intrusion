@@ -1,5 +1,5 @@
-import {ITickListeners, ITick, cb_function, delay_ms, id_string, delay_second} from "./Types";
-import {ISubscriptionLike, Observable} from "../Libraries/Observable";
+import {ISubscriptionLike, Observable} from "./Observable";
+import {cb_function, delay_ms, delay_second, id_string, ITick, ITickListeners} from "./Types";
 
 const timeOutListeners: ITickListeners = {};
 const timeOutKeys: string[] = [];
@@ -120,7 +120,7 @@ class TickGenerator implements ITick {
     }
 
     executeTimeout(cb: cb_function, time: delay_ms): id_string {
-        const key = '' + (++id);
+        const key = '' + ((++id === 0) ? ++id : id);
         timeOutListeners[key] = {
             counter: 0,
             delay: time,

@@ -2,7 +2,7 @@ import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/r
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
-import {tickGenerator} from "../../AnimationCore/Store/TickGenerator";
+import {tickGenerator} from "../../AnimationCore/Libraries/TickGenerator";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
