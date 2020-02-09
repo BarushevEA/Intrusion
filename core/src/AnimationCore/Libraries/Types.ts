@@ -1,5 +1,9 @@
 import {ISubscriptionLike, Observable} from "./Observable";
 
+export type IDestroyed = {
+    isDestroyed: boolean;
+};
+
 export type x_pos = number;
 export type y_pos = number;
 export type IDegrees = number;
@@ -14,15 +18,16 @@ export type ITickListener = {
     delay: delay_ms;
     callback: cb_function;
     isDestroy: boolean;
-}
-export type ITickListeners = { [id: string]: ITickListener; }
+};
+export type ITickListeners = { [id: string]: ITickListener; };
 export type ITick = {
     tick10$: Observable<any>;
     tick100$: Observable<any>;
     tick1000$: Observable<any>;
+    secondFPS$: Observable<any>;
     executeTimeout(cb: cb_function, time: delay_ms): id_string;
     execute100MsInterval(cb: cb_function, time: number): ISubscriptionLike;
     executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike;
     clearTimeout(id: id_string): void;
     destroy(): void;
-}
+} & IDestroyed;
