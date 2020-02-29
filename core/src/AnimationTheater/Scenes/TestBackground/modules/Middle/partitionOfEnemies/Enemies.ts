@@ -19,6 +19,7 @@ import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBos
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observable";
+import {EnemySmall3} from "../../../../../AnimationModels/Planes/enemySmall3/EnemySmall3";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -41,15 +42,15 @@ function initSimpleEnemies(scene: AbstractScene) {
     enemies2 = [];
     enemies1 = [];
 
-    for (let i = 0; i < 10; i++) {
-        const enemy1 = i < Math.round(numberOfSmallEnemies / 2) ?
-            new EnemySmall1(scene.generalLayer) : new Enemy4(scene.generalLayer);
+    for (let i = 0; i < numberOfSmallEnemies; i++) {
+        const isHalf = i < numberOfSmallEnemies / 2;
+        const enemy1 = isHalf ? new EnemySmall1(scene.generalLayer) : new Enemy4(scene.generalLayer);
         addActor(enemy1, scene);
         enemies1.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
         enemy1.yPos = randomize(scene.generalLayer.height - enemy1.height);
 
-        const enemy2 = new EnemySmall2(scene.generalLayer);
+        const enemy2 = isHalf ? new EnemySmall2(scene.generalLayer) : new EnemySmall3(scene.generalLayer);
         addActor(enemy2, scene);
         enemies2.push(enemy2);
         enemy2.xPos = scene.generalLayer.width + 5 * enemy2.width;
