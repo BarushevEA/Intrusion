@@ -22,4 +22,19 @@ export type IBackgroundMap = {
     replaceColumnAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap;
     addRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap;
     replaceRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap;
+    add(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
+    replace(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
 }
+
+/**
+ * EXAMPLE FOR USE
+
+ const cells = new Cells(100, 100, 10, 10);
+ cells
+ .add([<any>1, 2, 3, 4, 2, 2, 2], 1, 1)
+ .add([<any>1, 2, 3, 4, 2, 2, 2], 1, 2)
+ .add([<any>1, 2, 3, 4, 2, 2, 2], 1, 3)
+ .add([<any>1, 2, 3, 4, 2, 2, 2], 1, 3);
+ console.log(cells.cells);
+
+ **/

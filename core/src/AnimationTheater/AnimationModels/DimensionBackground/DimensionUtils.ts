@@ -70,10 +70,26 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
+    add(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {
+        for (let i = 0; i < actors.length; i++) {
+            const actor = actors[i];
+            this.addActorsAt([actor], x + i, y);
+        }
+        return this;
+    }
+
     replaceActorsAt(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {
         if ((y < this._height && x < this._width) &&
             (y >= 0 && x >= 0)) {
             this._cells[y][x] = actors;
+        }
+        return this;
+    }
+
+    replace(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {
+        for (let i = 0; i < actors.length; i++) {
+            const actor = actors[i];
+            this.replaceActorsAt([actor], x + i, y);
         }
         return this;
     }
