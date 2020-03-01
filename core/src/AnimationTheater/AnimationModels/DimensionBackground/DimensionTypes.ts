@@ -11,4 +11,6 @@ export type IBackgroundMap = {
     getBackgroundCanvasWidth(): number;
     getBackgroundCanvasHeight(): number;
     fillWithActor(actor: AbstractActor): void;
+    addCells(cells: IBackgroundMap, x: number, y: number): void;
+    replaceCells(cells: IBackgroundMap, x: number, y: number): void;
 }

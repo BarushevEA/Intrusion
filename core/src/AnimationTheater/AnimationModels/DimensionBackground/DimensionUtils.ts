@@ -34,6 +34,32 @@ export class Cells implements IBackgroundMap {
         }
     }
 
+    addCells(cells: IBackgroundMap, x: number, y: number): void {
+        const insertedCells = cells.cells;
+        for (let i = 0; i < cells.height; i++) {
+            for (let j = 0; j < cells.width; j++) {
+                for (let k = 0; k < insertedCells[i][j].length; k++) {
+                    if ((i + y < this._height && j + x < this._width) &&
+                        (i + y >= 0 && j + x >= 0)) {
+                        this._cells[i + y][j + x].push(insertedCells[i][j][k]);
+                    }
+                }
+            }
+        }
+    }
+
+    replaceCells(cells: IBackgroundMap, x: number, y: number): void {
+        const insertedCells = cells.cells;
+        for (let i = 0; i < cells.height; i++) {
+            for (let j = 0; j < cells.width; j++) {
+                if ((i + y < this._height && j + x < this._width) &&
+                    (i + y >= 0 && j + x >= 0)) {
+                    this._cells[i + y][j + x] = insertedCells[i][j];
+                }
+            }
+        }
+    }
+
     get greedHeight(): number {
         return this._greedHeight;
     }
