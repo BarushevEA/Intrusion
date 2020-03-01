@@ -1,10 +1,6 @@
 import {IBackgroundMap, ICells} from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-
-// let a: ICells = [
-//     [[<any>0], [2], [3]],
-//     [[1], [2], [3]]];
-// a = a;
+import {x_pos, y_pos} from "../../../AnimationCore/Libraries/Types";
 
 export class Cells implements IBackgroundMap {
     private readonly _greedHeight: number = 0;
@@ -25,16 +21,17 @@ export class Cells implements IBackgroundMap {
         this.fillWithActor(<any>0);
     }
 
-    fillWithActor(actor: AbstractActor): void {
+    fillWithActor(actor: AbstractActor): IBackgroundMap {
         for (let i = 0; i < this._height; i++) {
             this._cells[i] = [];
             for (let j = 0; j < this._width; j++) {
                 this._cells[i][j] = [actor];
             }
         }
+        return this;
     }
 
-    addCells(cells: IBackgroundMap, x: number, y: number): void {
+    addCells(cells: IBackgroundMap, x: number, y: number): IBackgroundMap {
         const insertedCells = cells.cells;
         for (let i = 0; i < cells.height; i++) {
             for (let j = 0; j < cells.width; j++) {
@@ -46,9 +43,10 @@ export class Cells implements IBackgroundMap {
                 }
             }
         }
+        return this;
     }
 
-    replaceCells(cells: IBackgroundMap, x: number, y: number): void {
+    replaceCells(cells: IBackgroundMap, x: number, y: number): IBackgroundMap {
         const insertedCells = cells.cells;
         for (let i = 0; i < cells.height; i++) {
             for (let j = 0; j < cells.width; j++) {
@@ -58,6 +56,68 @@ export class Cells implements IBackgroundMap {
                 }
             }
         }
+        return this;
+    }
+
+    addActorsAt(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {
+        for (let i = 0; i < actors.length; i++) {
+            const actor = actors[i];
+            if ((y < this._height && x < this._width) &&
+                (y >= 0 && x >= 0)) {
+                this._cells[y][x].push(actor);
+            }
+        }
+        return this;
+    }
+
+    replaceActorsAt(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {
+        if ((y < this._height && x < this._width) &&
+            (y >= 0 && x >= 0)) {
+            this._cells[y][x] = actors;
+        }
+        return this;
+    }
+
+    addRowAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap {
+        for (let i = 0; i < repeat; i++) {
+            this.addActorsAt(actors, x + i, y);
+        }
+        return this;
+    }
+
+    replaceRowAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap {
+        for (let i = 0; i < repeat; i++) {
+            this.replaceActorsAt(actors, x + i, y);
+        }
+        return this;
+    }
+
+    addColumnAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap {
+        for (let i = 0; i < repeat; i++) {
+            this.addActorsAt(actors, x, y + i);
+        }
+        return this;
+    }
+
+    replaceColumnAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap {
+        for (let i = 0; i < repeat; i++) {
+            this.replaceActorsAt(actors, x, y + i);
+        }
+        return this;
+    }
+
+    addRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap {
+        for (let i = 0; i < height; i++) {
+            this.addRowAt(actors, x, y + i, width);
+        }
+        return this;
+    }
+
+    replaceRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap {
+        for (let i = 0; i < height; i++) {
+            this.replaceRowAt(actors, x, y + i, width);
+        }
+        return this;
     }
 
     get greedHeight(): number {
