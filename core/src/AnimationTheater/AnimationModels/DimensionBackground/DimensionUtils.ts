@@ -1,4 +1,4 @@
-import {IBackgroundMap, ICells} from "./DimensionTypes";
+import {IBackgroundMap, ICell, ICells} from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {x_pos, y_pos} from "../../../AnimationCore/Libraries/Types";
 
@@ -68,6 +68,44 @@ export class Cells implements IBackgroundMap {
             }
         }
         return this;
+    }
+
+    getActorsAt(x: x_pos, y: y_pos): ICell {
+        let arr = this._cells[y];
+        if (arr) {
+            return arr[x];
+        }
+        return <any>0;
+    }
+
+    getRow(x: x_pos, y: y_pos, length: number): ICell[] {
+        const arr: ICell[] = [];
+        for (let i = 0; i < length; i++) {
+            const actors: ICell = this.getActorsAt(x + i, y);
+            if (!!actors) {
+                arr.push(actors);
+            }
+        }
+        return arr;
+    }
+
+    getColumn(x: x_pos, y: y_pos, length: number): ICell[] {
+        const arr: ICell[] = [];
+        for (let i = 0; i < length; i++) {
+            const actors: ICell = this.getActorsAt(x, y + i);
+            if (!!actors) {
+                arr.push(actors);
+            }
+        }
+        return arr;
+    }
+
+    getRowReverse(x: x_pos, y: y_pos, length: number): ICell[] {
+        return this.getRow(x - length + 1, y, length);
+    }
+
+    getColumnReverse(x: x_pos, y: y_pos, length: number): ICell[] {
+        return this.getColumn(x, y - length + 1, length);
     }
 
     add(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap {

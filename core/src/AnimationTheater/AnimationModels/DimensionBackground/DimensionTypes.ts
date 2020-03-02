@@ -24,6 +24,11 @@ export type IBackgroundMap = {
     replaceRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap;
     add(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
     replace(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
+    getActorsAt(x: x_pos, y: y_pos): ICell;
+    getRow(x: x_pos, y: y_pos, length: number): ICell[];
+    getColumn(x: x_pos, y: y_pos, length: number): ICell[];
+    getRowReverse(x: x_pos, y: y_pos, length: number): ICell[];
+    getColumnReverse(x: x_pos, y: y_pos, length: number): ICell[];
 }
 
 /**
