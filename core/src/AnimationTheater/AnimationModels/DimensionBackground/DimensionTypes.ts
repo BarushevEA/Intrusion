@@ -29,6 +29,7 @@ export type IBackgroundMap = {
     getColumn(x: x_pos, y: y_pos, length: number): ICell[];
     getRowReverse(x: x_pos, y: y_pos, length: number): ICell[];
     getColumnReverse(x: x_pos, y: y_pos, length: number): ICell[];
+    getRectangle(x: x_pos, y: y_pos, height: number, width: number): ICells;
 }
 
 /**

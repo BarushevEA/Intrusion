@@ -78,6 +78,14 @@ export class Cells implements IBackgroundMap {
         return <any>0;
     }
 
+    getRectangle(x: x_pos, y: y_pos, height: number, width: number): ICells {
+        const cells: ICells = [];
+        for (let i = 0; i < height; i++) {
+            cells.push(this.getRow(x, y + i, width));
+        }
+        return cells;
+    }
+
     getRow(x: x_pos, y: y_pos, length: number): ICell[] {
         const arr: ICell[] = [];
         for (let i = 0; i < length; i++) {
