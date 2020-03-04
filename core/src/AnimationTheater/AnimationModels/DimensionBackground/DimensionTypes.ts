@@ -1,35 +1,51 @@
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {x_pos, y_pos} from "../../../AnimationCore/Libraries/Types";
 
 export type ICell = AbstractActor[];
 export type ICells = ICell[][];
+export type x_canvas = number;
+export type y_canvas = number;
+export type x_array = number;
+export type y_array = number;
+export type canvas_width = number;
+export type canvas_height = number;
+export type array_width = number;
+export type array_height = number;
+export type x_pair = { x: x_array; xDelta: number; }
+export type y_pair = { y: y_array; yDelta: number; }
+export type ICellsMap = {
+    cellHeight: canvas_height;
+    cellWidth: canvas_width;
+    width: canvas_width;
+    height: canvas_height;
+    xPair: x_pair;
+    yPair: y_pair;
+    calculateX(x: x_canvas): IBackgroundMap;
+    calculateY(y: y_canvas): IBackgroundMap;
+}
 export type IBackgroundMap = {
-    width: number;
-    height: number;
-    greedWidth: number;
-    greedHeight: number;
     cells: ICells;
-    getBackgroundCanvasWidth(): number;
-    getBackgroundCanvasHeight(): number;
+    map: ICellsMap;
+    width: array_width;
+    height: array_height;
     fillWithActor(actor: AbstractActor): IBackgroundMap;
-    addCells(cells: IBackgroundMap, x: x_pos, y: y_pos): IBackgroundMap;
-    replaceCells(cells: IBackgroundMap, x: x_pos, y: y_pos): IBackgroundMap;
-    addActorsAt(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
-    replaceActorsAt(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
-    addRowAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap;
-    replaceRowAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap;
-    addColumnAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap;
-    replaceColumnAt(actors: AbstractActor[], x: x_pos, y: y_pos, repeat: number): IBackgroundMap;
-    addRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap;
-    replaceRectangleAt(actors: AbstractActor[], x: x_pos, y: y_pos, height: number, width: number): IBackgroundMap;
-    add(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
-    replace(actors: AbstractActor[], x: x_pos, y: y_pos): IBackgroundMap;
-    getActorsAt(x: x_pos, y: y_pos): ICell;
-    getRow(x: x_pos, y: y_pos, length: number): ICell[];
-    getColumn(x: x_pos, y: y_pos, length: number): ICell[];
-    getRowReverse(x: x_pos, y: y_pos, length: number): ICell[];
-    getColumnReverse(x: x_pos, y: y_pos, length: number): ICell[];
-    getRectangle(x: x_pos, y: y_pos, height: number, width: number): ICells;
+    addCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
+    replaceCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
+    addActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
+    replaceActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
+    addRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    replaceRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    addColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    replaceColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    addRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
+    replaceRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
+    add(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
+    replace(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
+    getActorsAt(x: x_array, y: y_array): ICell;
+    getRow(x: x_array, y: y_array, length: number): ICell[];
+    getColumn(x: x_array, y: y_array, length: number): ICell[];
+    getRowReverse(x: x_array, y: y_array, length: number): ICell[];
+    getColumnReverse(x: x_array, y: y_array, length: number): ICell[];
+    getRectangle(x: x_array, y: y_array, height: array_height, width: array_width): ICells;
 }
 
 /**
