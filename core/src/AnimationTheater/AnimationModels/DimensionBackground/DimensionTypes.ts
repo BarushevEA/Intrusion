@@ -46,6 +46,8 @@ export type IBackgroundMap = {
     getRowReverse(x: x_array, y: y_array, length: number): ICell[];
     getColumnReverse(x: x_array, y: y_array, length: number): ICell[];
     getRectangle(x: x_array, y: y_array, height: array_height, width: array_width): ICells;
+    initActors(canvas: HTMLCanvasElement):IBackgroundMap;
+    destroy(): void;
 }
 
 /**

@@ -15,9 +15,10 @@ import {
     y_pair
 } from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 
 export class Cells implements IBackgroundMap {
-    private _cells: ICells = [];
+    private readonly _cells: ICells = [];
     private readonly _height: array_height = 0;
     private readonly _width: array_width = 0;
     private readonly _map: ICellsMap = <any>0;
@@ -34,6 +35,40 @@ export class Cells implements IBackgroundMap {
 
     init() {
         this.fillWithActor(<any>0);
+    }
+
+    destroy(): void {
+        for (let i = 0; i < this._height; i++) {
+            const row = this._cells[i];
+            for (let j = 0; j < this._width; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const cellItem: AbstractActor = cell[k];
+                    if (cellItem && cellItem.destroy) {
+                        cellItem.destroy();
+                    }
+                }
+            }
+        }
+        this.init();
+        this._cells.length = 0;
+    }
+
+    initActors(canvas: HTMLCanvasElement): IBackgroundMap {
+        for (let i = 0; i < this._height; i++) {
+            const row = this._cells[i];
+            for (let j = 0; j < this._width; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const ActorClassName: any = cell[k];
+                    if (ActorClassName) {
+                        cell[k] = <AbstractActor>(new ActorClassName(canvas));
+                        cell[k].disableEvents();
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     fillWithActor(actor: AbstractActor): IBackgroundMap {
@@ -142,7 +177,11 @@ export class Cells implements IBackgroundMap {
     replaceActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap {
         if ((y < this._height && x < this._width) &&
             (y >= 0 && x >= 0)) {
-            this._cells[y][x] = actors;
+            this._cells[y][x] = [];
+            for (let i = 0; i < actors.length; i++) {
+                const actor = actors[i];
+                this._cells[y][x].push(actor);
+            }
         }
         return this;
     }
@@ -285,5 +324,40 @@ class CellsMap implements ICellsMap {
 
     get yPair(): y_pair {
         return this._yPair;
+    }
+}
+
+export class ExperimentalDraw {
+    scene: AbstractScene;
+    cells: IBackgroundMap;
+    x = 0;
+    y = 0;
+
+    constructor(scene: AbstractScene, cells: IBackgroundMap, x: number, y: number) {
+        this.scene = scene;
+        this.cells = cells;
+        this.x = x;
+        this.y = y;
+    }
+
+    setToScene() {
+        const width = this.cells.width;
+        const height = this.cells.height;
+        const cellWidth = this.cells.map.cellWidth;
+        const cellHeight = this.cells.map.cellHeight;
+        for (let i = 0; i < height; i++) {
+            const row = this.cells.cells[i];
+            for (let j = 0; j < width; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const cellItem: AbstractActor = cell[k];
+                    if (cellItem) {
+                        cellItem.xPos = this.x + cellWidth * j;
+                        cellItem.yPos = this.y + cellHeight * i;
+                        this.scene.setActors(cellItem);
+                    }
+                }
+            }
+        }
     }
 }
