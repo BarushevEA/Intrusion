@@ -15,8 +15,7 @@ import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
-import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
-import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
+import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -81,15 +80,14 @@ function initDynamical(scene: AbstractScene) {
 
 function prepareCells() {
     let greenRectangle: AbstractActor = <any>GreenRectangle;
-    let brickWall: AbstractActor = <any>AnimatedRectangleLightGreen;
+    let brickWall: AbstractActor = <any>BrickWall;
     cells = new Cells(100, 100, 5, 4);
     cells
         .replaceRectangleAt([brickWall], 0, 2, 3, 4)
         .add([<any>0, GreenTriangleLeft, GreenTriangleRight, 0], 0, 0)
         .add([<any>GreenTriangleLeft, greenRectangle, greenRectangle, GreenTriangleRight], 0, 1)
-        .addRowAt([greenRectangle], 0, 2, 4)
-        .add([<any>greenRectangle, 0, 0, greenRectangle], 0, 3)
-        .addRowAt([greenRectangle], 0, 4, 4);
+        .add([<any>greenRectangle], 1, 3)
+        .add([<any>greenRectangle], 1, 4);
 }
 
 function initDynamicalActions(scene: AbstractScene) {
@@ -109,16 +107,11 @@ function initDynamicalActions(scene: AbstractScene) {
                             const bounce = new BounceOffTheWall(scene);
                             actor.pluginDock.add(health);
                             actor.pluginDock.add(bounce);
-                            let intervalSub: ISubscriptionLike = <any>0;
-                            scene.collect(
-                                intervalSub = tickGenerator.execute100MsInterval(() => {
-                                    if (!health.isDestroyed) {
-                                        health.setDamage(1);
-                                    } else {
-                                        intervalSub.unsubscribe();
-                                    }
-                                }, 3)
-                            );
+                            tickGenerator.executeTimeout(() => {
+                                if (!health.isDestroyed) {
+                                    health.setDamage(100);
+                                }
+                            }, 300);
                         }
                     }
                 }
