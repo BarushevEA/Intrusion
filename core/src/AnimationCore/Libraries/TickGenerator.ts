@@ -56,7 +56,9 @@ class TickGenerator implements ITick {
     executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick1000$.subscribe(() => {
-            time--;
+            if (time > 0) {
+                time--;
+            }
             if (!time) {
                 cb();
                 time = number;
@@ -67,7 +69,9 @@ class TickGenerator implements ITick {
     execute100MsInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick100$.subscribe(() => {
-            time--;
+            if (time > 0) {
+                time--;
+            }
             if (!time) {
                 cb();
                 time = number;

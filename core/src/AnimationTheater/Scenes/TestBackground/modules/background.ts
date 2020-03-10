@@ -16,6 +16,7 @@ import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
+import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -108,9 +109,16 @@ function initDynamicalActions(scene: AbstractScene) {
                             const bounce = new BounceOffTheWall(scene);
                             actor.pluginDock.add(health);
                             actor.pluginDock.add(bounce);
-                            tickGenerator.executeTimeout(() => {
-                                health.setDamage(100);
-                            }, 200);
+                            let intervalSub: ISubscriptionLike = <any>0;
+                            scene.collect(
+                                intervalSub = tickGenerator.execute100MsInterval(() => {
+                                    if (!health.isDestroyed) {
+                                        health.setDamage(1);
+                                    } else {
+                                        intervalSub.unsubscribe();
+                                    }
+                                }, 3)
+                            );
                         }
                     }
                 }
