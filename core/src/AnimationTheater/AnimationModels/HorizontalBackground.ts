@@ -1,5 +1,5 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {GreenTriangle} from "./GreenTriangle";
+import {GreenTriangle} from "./GreenTriangle/GreenTriangle";
 import {GreenRectangle} from "./GreenRectangle";
 import {BrickWall} from "./briks/BrickWall";
 

@@ -4,8 +4,8 @@ import {IBackgroundMap} from "../../../AnimationModels/DimensionBackground/Dimen
 import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
-import {GreenTriangle} from "../../../AnimationModels/GreenTriangle";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
+import {GreenTriangle} from "../../../AnimationModels/GreenTriangle/GreenTriangle";
 
 let cells: IBackgroundMap = <any>0;
 

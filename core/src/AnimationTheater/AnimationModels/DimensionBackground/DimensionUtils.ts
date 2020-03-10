@@ -17,6 +17,11 @@ import {
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 
+export enum E_Cells {
+    ACTOR_USE = 'ACTOR_USE',
+    SCENE_USE = 'SCENE_USE'
+}
+
 export class Cells implements IBackgroundMap {
     private readonly _cells: ICells = [];
     private readonly _height: array_height = 0;
@@ -54,7 +59,7 @@ export class Cells implements IBackgroundMap {
         this._cells.length = 0;
     }
 
-    initActors(canvas: HTMLCanvasElement): IBackgroundMap {
+    initActors(canvas: HTMLCanvasElement, ): IBackgroundMap {
         for (let i = 0; i < this._height; i++) {
             const row = this._cells[i];
             for (let j = 0; j < this._width; j++) {
