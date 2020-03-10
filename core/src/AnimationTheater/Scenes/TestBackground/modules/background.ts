@@ -8,7 +8,6 @@ import {getCenterX, getCenterY} from "../../../../AnimationCore/Libraries/Functi
 import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
-import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
 import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
@@ -16,6 +15,7 @@ import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
+import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -69,11 +69,10 @@ function initActions(scene: AbstractScene) {
 }
 
 function initDynamical(scene: AbstractScene) {
-    redButton = new ButtonRedWithText(scene.generalLayer, 'Boom !!!');
+    redButton = new ButtonRedWithText(scene.generalLayer, 'BOOM !!!');
     redButton.xPos = getCenterX(0, scene.generalLayer.width - redButton.width);
     redButton.yPos = getCenterY(0, scene.generalLayer.height - redButton.height);
     prepareCells();
-    console.log(cells.cells);
     cells.initActors(scene.generalLayer);
     (new ExperimentalDraw(scene, cells, 400, 50)).setToScene();
     scene.setActors(redButton);
@@ -81,7 +80,7 @@ function initDynamical(scene: AbstractScene) {
 
 function prepareCells() {
     let greenRectangle: AbstractActor = <any>GreenRectangle;
-    let brickWall: AbstractActor = <any>BrickWall;
+    let brickWall: AbstractActor = <any>AnimatedRectangleLightGreen;
     cells = new Cells(100, 100, 5, 4);
     cells
         .replaceRectangleAt([brickWall], 0, 2, 3, 4)
