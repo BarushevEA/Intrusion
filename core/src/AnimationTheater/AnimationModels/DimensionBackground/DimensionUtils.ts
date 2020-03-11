@@ -104,8 +104,6 @@ export class Cells implements IBackgroundMap {
                 }
             }
         }
-        console.log(this.actorsPool);
-        console.log(this.scheme);
         return this;
     }
 
