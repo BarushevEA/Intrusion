@@ -396,4 +396,25 @@ export class ExperimentalDraw {
             }
         }
     }
+
+    render() {
+        const width = this.cells.width;
+        const height = this.cells.height;
+        const cellWidth = this.cells.map.cellWidth;
+        const cellHeight = this.cells.map.cellHeight;
+        for (let i = 0; i < height; i++) {
+            const row = this.cells.cells[i];
+            for (let j = 0; j < width; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const cellItem: AbstractActor = cell[k];
+                    if (cellItem) {
+                        cellItem.xPos = this.x + cellWidth * j;
+                        cellItem.yPos = this.y + cellHeight * i;
+                        cellItem.renderFrame();
+                    }
+                }
+            }
+        }
+    }
 }

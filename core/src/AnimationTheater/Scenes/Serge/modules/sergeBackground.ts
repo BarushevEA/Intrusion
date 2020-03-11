@@ -5,8 +5,12 @@ import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackgro
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {GreenTriangle} from "../../../AnimationModels/GreenTriangle/GreenTriangle";
+import {DimensionBackground} from "../../../AnimationModels/DimensionBackground/DimensionBackground";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
 
 let cells: IBackgroundMap = <any>0;
+let bg: AbstractActor = <any>0;
 
 enum $ {
     NUL = 0,
@@ -27,9 +31,18 @@ function clearVariables() {
         cells.destroy();
     }
     cells = <any>0;
+    if (bg) {
+        bg.destroy();
+    }
+    bg = <any>0;
 }
 
 function initActors(scene: AbstractScene) {
+    bg = new DimensionBackground(scene.generalLayer);
+    bg.xPos = 400;
+    bg.yPos = 50;
+    scene.setActors(bg);
+
     const scheme: ICellScheme = {};
     scheme[$.REC] = <any>GreenRectangle;
     scheme[$.TRI] = <any>GreenTriangle;
@@ -37,10 +50,11 @@ function initActors(scene: AbstractScene) {
     prepareCells();
     cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
     (new ExperimentalDraw(scene, cells, 100, 100)).setToScene();
-    scene.setActors();
 }
 
 function initActions(scene: AbstractScene) {
+    const bounce = new BounceOffTheWall(scene);
+    bg.pluginDock.add(bounce);
     scene.collect(
         scene.onDestroy$.subscribe(() => {
             clearVariables();
