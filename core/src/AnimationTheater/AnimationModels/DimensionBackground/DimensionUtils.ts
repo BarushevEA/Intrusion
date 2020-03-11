@@ -3,9 +3,12 @@ import {
     array_width,
     canvas_height,
     canvas_width,
+    E_Cells,
     IBackgroundMap,
     ICell,
+    ICellPool,
     ICells,
+    ICellScheme,
     ICellsMap,
     x_array,
     x_canvas,
@@ -17,16 +20,14 @@ import {
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 
-export enum E_Cells {
-    ACTOR_USE = 'ACTOR_USE',
-    SCENE_USE = 'SCENE_USE'
-}
-
 export class Cells implements IBackgroundMap {
     private readonly _cells: ICells = [];
     private readonly _height: array_height = 0;
     private readonly _width: array_width = 0;
     private readonly _map: ICellsMap = <any>0;
+    private readonly actorsPool: ICellPool = {};
+    private readonly scheme: ICellScheme = {};
+    private canvas: HTMLCanvasElement = <any>0;
 
     constructor(cellHeight: canvas_height,
                 cellWidth: canvas_width,
@@ -59,7 +60,29 @@ export class Cells implements IBackgroundMap {
         this._cells.length = 0;
     }
 
-    initActors(canvas: HTMLCanvasElement, ): IBackgroundMap {
+    setScheme(scheme: ICellScheme, type: E_Cells, canvas: HTMLCanvasElement): void {
+        this.canvas = canvas;
+        const keys = Object.keys(scheme);
+        switch (type) {
+            case E_Cells.ACTOR_USE:
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    const ActorClassName: any = scheme[key];
+                    this.actorsPool[key] = <AbstractActor>(new ActorClassName(this.canvas));
+                }
+                break;
+            case E_Cells.SCENE_USE:
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    const ActorClassName: any = scheme[key];
+                    this.scheme[key] = ActorClassName;
+                }
+                break;
+        }
+        this.initActors(type);
+    }
+
+    initActors(type: E_Cells): IBackgroundMap {
         for (let i = 0; i < this._height; i++) {
             const row = this._cells[i];
             for (let j = 0; j < this._width; j++) {
@@ -67,12 +90,22 @@ export class Cells implements IBackgroundMap {
                 for (let k = 0; k < cell.length; k++) {
                     const ActorClassName: any = cell[k];
                     if (ActorClassName) {
-                        cell[k] = <AbstractActor>(new ActorClassName(canvas));
+                        switch (type) {
+                            case E_Cells.ACTOR_USE:
+                                cell[k] = this.actorsPool[ActorClassName];
+                                break;
+                            case E_Cells.SCENE_USE:
+                                const  className: any = this.scheme[ActorClassName];
+                                cell[k] = <AbstractActor>(new className(this.canvas));
+                                break;
+                        }
                         cell[k].disableEvents();
                     }
                 }
             }
         }
+        console.log(this.actorsPool);
+        console.log(this.scheme);
         return this;
     }
 

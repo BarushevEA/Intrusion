@@ -1,5 +1,10 @@
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 
+export enum E_Cells {
+    ACTOR_USE = 'ACTOR_USE',
+    SCENE_USE = 'SCENE_USE'
+}
+
 export type ICell = AbstractActor[];
 export type ICells = ICell[][];
 export type x_canvas = number;
@@ -22,11 +27,13 @@ export type ICellsMap = {
     calculateX(x: x_canvas): IBackgroundMap;
     calculateY(y: y_canvas): IBackgroundMap;
 }
+export type ICellScheme = { [key: string]: AbstractActor; }
 export type IBackgroundMap = {
     cells: ICells;
     map: ICellsMap;
     width: array_width;
     height: array_height;
+    setScheme(scheme: ICellScheme, type: E_Cells, canvas: HTMLCanvasElement): void;
     fillWithActor(actor: AbstractActor): IBackgroundMap;
     addCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
     replaceCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
@@ -46,9 +53,10 @@ export type IBackgroundMap = {
     getRowReverse(x: x_array, y: y_array, length: number): ICell[];
     getColumnReverse(x: x_array, y: y_array, length: number): ICell[];
     getRectangle(x: x_array, y: y_array, height: array_height, width: array_width): ICells;
-    initActors(canvas: HTMLCanvasElement):IBackgroundMap;
     destroy(): void;
 }
+
+export type ICellPool = { [key: string]: AbstractActor; };
 
 /**
  * EXAMPLE FOR USE

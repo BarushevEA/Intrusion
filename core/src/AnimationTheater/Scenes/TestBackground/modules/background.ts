@@ -2,11 +2,10 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScene
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {HorizontalBackground} from "../../../AnimationModels/HorizontalBackground";
 import {HorizontalBackground1} from "../../../AnimationModels/HorizontalBackground1";
-import {IBackgroundMap} from "../../../AnimationModels/DimensionBackground/DimensionTypes";
+import {E_Cells, IBackgroundMap, ICellScheme} from "../../../AnimationModels/DimensionBackground/DimensionTypes";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {getCenterX, getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
@@ -21,6 +20,14 @@ let background: HorizontalBackground;
 let background1: HorizontalBackground1;
 let cells: IBackgroundMap = <any>0,
     redButton: ButtonRedWithText = <any>0;
+
+enum $ {
+    NUL = 0,
+    REC = 'REC',
+    TRR = 'TRR',
+    TRL = 'TRL',
+    WAL = 'WAL'
+}
 
 export function handleBackgrounds(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
@@ -72,22 +79,27 @@ function initDynamical(scene: AbstractScene) {
     redButton = new ButtonRedWithText(scene.generalLayer, 'BOOM !!!');
     redButton.xPos = getCenterX(0, scene.generalLayer.width - redButton.width);
     redButton.yPos = getCenterY(0, scene.generalLayer.height - redButton.height);
+
+    const scheme: ICellScheme = {};
+    scheme[$.REC] = <any>GreenRectangle;
+    scheme[$.WAL] = <any>BrickWall;
+    scheme[$.TRL] = <any>GreenTriangleLeft;
+    scheme[$.TRR] = <any>GreenTriangleRight;
+
     prepareCells();
-    cells.initActors(scene.generalLayer);
+    cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
     (new ExperimentalDraw(scene, cells, 400, 50)).setToScene();
     scene.setActors(redButton);
 }
 
 function prepareCells() {
-    let greenRectangle: AbstractActor = <any>GreenRectangle;
-    let brickWall: AbstractActor = <any>BrickWall;
     cells = new Cells(100, 100, 5, 4);
     cells
-        .replaceRectangleAt([brickWall], 0, 2, 3, 4)
-        .add([<any>0, GreenTriangleLeft, GreenTriangleRight, 0], 0, 0)
-        .add([<any>GreenTriangleLeft, greenRectangle, greenRectangle, GreenTriangleRight], 0, 1)
-        .add([<any>greenRectangle], 1, 3)
-        .add([<any>greenRectangle], 1, 4);
+        .replaceRectangleAt([<any>$.WAL], 0, 2, 3, 4)
+        .add([<any>$.NUL, $.TRL, $.TRR, $.NUL], 0, 0)
+        .add([<any>$.TRL, $.REC, $.REC, $.TRR], 0, 1)
+        .add([<any>$.REC], 1, 3)
+        .add([<any>$.REC], 1, 4);
 }
 
 function initDynamicalActions(scene: AbstractScene) {
