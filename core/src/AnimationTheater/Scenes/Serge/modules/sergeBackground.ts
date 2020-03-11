@@ -25,7 +25,6 @@ function clearVariables() {
 
 function initActors(scene: AbstractScene) {
     prepareCells();
-    console.log(cells.cells);
     cells.initActors(scene.generalLayer);
     (new ExperimentalDraw(scene, cells, 100, 100)).setToScene();
     scene.setActors();
