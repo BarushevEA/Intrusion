@@ -30,7 +30,7 @@ export abstract class AbstractScene implements IScene {
     private _isDestroyProcessed = false;
     private isBackgroundLayerPresent = false;
     private timerCounter = <any>0;
-    private startDelayMs = 200;
+    private startDelayMs = 100;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -72,13 +72,19 @@ export abstract class AbstractScene implements IScene {
 
     private handleCreateScene() {
         this.createScene();
-        this.handleStartScene();
+        for (let i = 0; i < this.actors.length; i++) {
+            const actor = this.actors[i];
+            actor.pauseEvents();
+        }
+        this.timerCounter = tickGenerator.executeTimeout(() => {
+            this.handleStartScene();
+        }, this.startDelayMs);
     }
 
     private handleStartScene() {
         for (let i = 0; i < this.actors.length; i++) {
             const actor = this.actors[i];
-            actor.enableEvents();
+            actor.unPauseEvents();
         }
         this.renderController.renderStart(this.isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
@@ -352,7 +358,7 @@ export abstract class AbstractScene implements IScene {
     public exit() {
         this.stop();
         this.actors.forEach(actor => {
-            actor.disableEvents();
+            actor.pauseEvents();
         });
         this._onExit$.next({...this._userData});
     }

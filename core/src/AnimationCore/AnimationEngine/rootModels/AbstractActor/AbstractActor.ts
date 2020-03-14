@@ -47,7 +47,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _elementHeight = 0;
     private _isLeftMouseCatch = false;
     private leftMouseCatchTimeIndex = -1;
-    private leftMouseCatchTime = 200;
+    private leftMouseCatchTime = 140;
     private collector: ICollector = <any>0;
     private readonly mouseEvents: ISubscriptionLike[] = [];
     public isMouseOver = false;
@@ -61,6 +61,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isDestroyed = false;
     private _isEventsBlock = false;
     private _isDestroyProcessed = false;
+    private isEventsDisabled = false;
+    private _isEventsPaused = false;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -99,6 +101,30 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.push(mouseRightUp$.subscribe(this.rightMouseUp.bind(this)));
         this.mouseEvents.push(this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
         this.mouseEvents.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
+        this.isEventsDisabled = false;
+    }
+
+    public pauseEvents() {
+        if ( this.isEventsDisabled) {
+            return;
+        }
+        for (let i = 0; i < this.mouseEvents.length; i++) {
+            this.mouseEvents[i].unsubscribe();
+        }
+        this.mouseEvents.length = 0;
+        this._isEventsPaused = true;
+    }
+
+    public unPauseEvents() {
+        if ( this.isEventsDisabled) {
+            return;
+        }
+        this.isEventsBlock = false;
+        this._isEventsPaused = false;
+    }
+
+    get isEventsPaused(): boolean {
+        return this._isEventsPaused;
     }
 
     public disableEvents(): void {
@@ -106,6 +132,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.mouseEvents[i].unsubscribe();
         }
         this.mouseEvents.length = 0;
+        this.isEventsDisabled = true;
     }
 
     set isEventsBlock(value: boolean) {
