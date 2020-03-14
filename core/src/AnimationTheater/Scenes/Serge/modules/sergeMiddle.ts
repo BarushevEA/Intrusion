@@ -29,7 +29,7 @@ function clearVariables() {
 function initActors(scene: AbstractScene) {
     linkRectangle = new AnimatedRectangleLightGreen(scene.generalLayer);
     unLinLinkRectangle = new AnimatedRectangleLightRed(scene.generalLayer);
-    linkRectangle.xPos = 400;
+    linkRectangle.xPos = 0;
     unLinLinkRectangle.xPos = linkRectangle.xPos + linkRectangle.width + 20;
 
 

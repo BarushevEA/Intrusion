@@ -30,6 +30,7 @@ export abstract class AbstractScene implements IScene {
     private _isDestroyProcessed = false;
     private isBackgroundLayerPresent = false;
     private timerCounter = <any>0;
+    private startDelayMs = 200;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -339,7 +340,7 @@ export abstract class AbstractScene implements IScene {
         } else {
             this.timerCounter = tickGenerator.executeTimeout(() => {
                 this.handleStartScene();
-            }, 100);
+            }, this.startDelayMs);
         }
     }
 
