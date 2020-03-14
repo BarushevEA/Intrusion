@@ -19,7 +19,6 @@ function initActors(scene: AbstractScene) {
     for (let i = 0; i < 50; i++) {
         const circle = new MovedCircle(scene.generalLayer);
         circles.push(circle);
-        circle.isEventsBlock = true;
         scene.setActors(circle);
     }
     scene.setActors();

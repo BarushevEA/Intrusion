@@ -60,6 +60,9 @@ function initActors(scene: AbstractScene) {
     background.isEventsBlock = true;
     background1.isEventsBlock = true;
 
+    background.disableEvents();
+    background1.disableEvents();
+
     scene.setActors(background1);
     scene.setActors(background);
 
@@ -119,6 +122,7 @@ function initDynamicalActions(scene: AbstractScene) {
                             const bounce = new BounceOffTheWall(scene);
                             actor.pluginDock.add(health);
                             actor.pluginDock.add(bounce);
+                            actor.disableEvents();
                             tickGenerator.executeTimeout(() => {
                                 if (!health.isDestroyed) {
                                     health.setDamage(100);

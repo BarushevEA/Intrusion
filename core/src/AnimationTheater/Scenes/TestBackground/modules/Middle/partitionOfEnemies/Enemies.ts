@@ -220,6 +220,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
 
 function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.ENEMY): void {
     enemies.push(actor);
+    actor.disableEvents();
     let delay = 0;
     let duration = 0;
     let damage = 0;
