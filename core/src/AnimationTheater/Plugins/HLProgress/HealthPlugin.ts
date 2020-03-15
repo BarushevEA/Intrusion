@@ -1,7 +1,7 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {EnemyProgress} from "./Progresses/EnemyProgress";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {ISubscriptionLike, Observable} from "../../../AnimationCore/Libraries/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthType, IHealthProgress} from "./HealthType";
@@ -21,11 +21,16 @@ export class HealthPlugin extends AbstractActorPlugin {
     private positionBalance: PositionBalance = <any>0;
     private type: HealthType = <any>0;
     private isDestroyProcessed = false;
+    private _beforeDeath$ = new Observable(<any>0);
 
     constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HealthPlugin', scene);
         this.health = health;
         this.type = viewType;
+    }
+
+    get beforeDeath$(): Observable<any> {
+        return this._beforeDeath$;
     }
 
     onInit(): void {
@@ -150,6 +155,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             explosions.push(explosion);
         }
 
+        this._beforeDeath$.next(true);
         this.handleExplode(explosions, this.scene);
     }
 
@@ -222,6 +228,8 @@ export class HealthPlugin extends AbstractActorPlugin {
         }
         this.positionBalance = <any>0;
         this.type = <any>0;
+        this.beforeDeath$.destroy();
+        this._beforeDeath$ = <any>0;
         super.destroy();
     }
 }

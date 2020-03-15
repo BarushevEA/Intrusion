@@ -65,6 +65,8 @@ class Heroes extends AbstractActorGroup {
                 destroyedCounter = tickGenerator.executeTimeout(() => {
                     scene.destroy();
                 }, 2000);
+            }),
+            health.beforeDeath$.subscribe(() => {
             })
         );
     }
