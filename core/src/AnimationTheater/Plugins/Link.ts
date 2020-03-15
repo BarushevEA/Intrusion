@@ -16,6 +16,9 @@ export class Link extends AbstractActorPlugin {
     }
 
     onInit(): void {
+        if (this.subscriber) {
+            return;
+        }
         this.scene.collect(
             this.subscriber = this.scene.tickCount$.subscribe(() => {
                 this.linkedActor.xPos = this.root.xPos + 200;
