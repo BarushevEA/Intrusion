@@ -6,6 +6,7 @@ import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 export class Link extends AbstractActorPlugin {
     private linkedActor: AbstractActor = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
+    private subscriberUnLink: ISubscriptionLike = <any>0;
 
     constructor(scene: AbstractScene) {
         super('Link', scene);
@@ -19,6 +20,12 @@ export class Link extends AbstractActorPlugin {
         if (this.subscriber) {
             return;
         }
+
+        if (this.subscriberUnLink) {
+            this.subscriberUnLink.unsubscribe();
+            this.subscriberUnLink = <any>0;
+        }
+
         this.scene.collect(
             this.subscriber = this.scene.tickCount$.subscribe(() => {
                 this.linkedActor.xPos = this.root.xPos + 200;
@@ -33,5 +40,17 @@ export class Link extends AbstractActorPlugin {
             this.subscriber = <any>0;
         }
         super.unLink();
+
+        if (!this.subscriberUnLink) {
+            this.scene.collect(
+                this.subscriberUnLink = this.scene.tickCount$.subscribe(() => {
+                    this.linkedActor.yPos += 5;
+                    if (this.linkedActor.yPos > this.scene.generalLayer.height) {
+                        this.subscriberUnLink.unsubscribe();
+                        this.subscriberUnLink = <any>0;
+                    }
+                })
+            );
+        }
     }
 }
