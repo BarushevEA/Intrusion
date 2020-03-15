@@ -13,47 +13,52 @@ export class RectangleHighlighting extends AbstractActorPlugin {
     }
 
     onInit(): void {
-        this.subscriber = this.root.isMouseOver$.subscribe((isOver) => {
-                if (isOver) {
-                    this.subscriberTick = this.scene.tickCount$.subscribe(() => {
-                        const shape = this.root.shape;
-                        const root = this.root;
-                        shape.context = this.scene.renderController.context;
-                        shape
-                            .lineWidth(2)
-                            .colors('rgba(0,195,15,0.5)', 'rgba(0,195,15,0.5)');
-                        shape
-                            .advancedPolygon()
-                            .startPoint(root.xPos + 0, root.yPos + this.delta)
-                            .lineTo(root.xPos + 0, root.yPos + 0)
-                            .lineTo(root.xPos + this.delta, root.yPos + 0)
-                            .stopExecution();
-                        shape
-                            .advancedPolygon()
-                            .startPoint(root.xPos + root.width - this.delta, root.yPos + 0)
-                            .lineTo(root.xPos + root.width, root.yPos + 0)
-                            .lineTo(root.xPos + root.width, root.yPos + this.delta)
-                            .stopExecution();
-                        shape
-                            .advancedPolygon()
-                            .startPoint(root.xPos + root.width, root.yPos + root.height - this.delta)
-                            .lineTo(root.xPos + root.width, root.yPos + root.height)
-                            .lineTo(root.xPos + root.width - this.delta, root.yPos + root.height)
-                            .stopExecution();
-                        shape
-                            .advancedPolygon()
-                            .startPoint(root.xPos + this.delta, root.yPos + root.height)
-                            .lineTo(root.xPos + 0, root.yPos + root.height)
-                            .lineTo(root.xPos + 0, root.yPos + root.height - this.delta)
-                            .stopExecution();
-                    });
-                } else {
-                    if (this.subscriberTick) {
-                        this.subscriberTick.unsubscribe();
-                        this.subscriberTick = <any>0;
+        if (this.subscriber) {
+            return;
+        }
+        this.scene.collect(
+            this.subscriber = this.root.isMouseOver$.subscribe((isOver) => {
+                    if (isOver) {
+                        this.subscriberTick = this.scene.tickCount$.subscribe(() => {
+                            const shape = this.root.shape;
+                            const root = this.root;
+                            shape.context = this.scene.renderController.context;
+                            shape
+                                .lineWidth(2)
+                                .colors('rgba(0,195,15,0.5)', 'rgba(0,195,15,0.5)');
+                            shape
+                                .advancedPolygon()
+                                .startPoint(root.xPos + 0, root.yPos + this.delta)
+                                .lineTo(root.xPos + 0, root.yPos + 0)
+                                .lineTo(root.xPos + this.delta, root.yPos + 0)
+                                .stopExecution();
+                            shape
+                                .advancedPolygon()
+                                .startPoint(root.xPos + root.width - this.delta, root.yPos + 0)
+                                .lineTo(root.xPos + root.width, root.yPos + 0)
+                                .lineTo(root.xPos + root.width, root.yPos + this.delta)
+                                .stopExecution();
+                            shape
+                                .advancedPolygon()
+                                .startPoint(root.xPos + root.width, root.yPos + root.height - this.delta)
+                                .lineTo(root.xPos + root.width, root.yPos + root.height)
+                                .lineTo(root.xPos + root.width - this.delta, root.yPos + root.height)
+                                .stopExecution();
+                            shape
+                                .advancedPolygon()
+                                .startPoint(root.xPos + this.delta, root.yPos + root.height)
+                                .lineTo(root.xPos + 0, root.yPos + root.height)
+                                .lineTo(root.xPos + 0, root.yPos + root.height - this.delta)
+                                .stopExecution();
+                        });
+                    } else {
+                        if (this.subscriberTick) {
+                            this.subscriberTick.unsubscribe();
+                            this.subscriberTick = <any>0;
+                        }
                     }
                 }
-            }
+            )
         );
     }
 
