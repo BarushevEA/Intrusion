@@ -197,11 +197,13 @@ export class HealthPlugin extends AbstractActorPlugin {
     upgradeMaxHealth(health: number) {
         this.health = health;
         this.healthBalance();
+        this.updateProgress();
     }
 
     upgradeCurrentHealth(health: number) {
         this.currentHealth += health;
         this.healthBalance();
+        this.updateProgress();
     }
 
     private healthBalance() {

@@ -46,26 +46,35 @@ export class Link extends AbstractActorPlugin {
             this.scene.unsubscribe(this.subscriber);
             this.subscriber = <any>0;
         }
-        super.unLink();
-
         if (!this.subscriberUnLink) {
             this.scene.collect(
                 this.subscriberUnLink = this.scene.tickCount$.subscribe(() => {
+                    if (!this.linkedActor) {
+                        if (this.subscriberUnLink) {
+                            this.subscriberUnLink.unsubscribe();
+                        }
+                        return;
+                    }
                     this.linkedActor.yPos += 2;
                     if (this.linkedActor.yPos > this.scene.generalLayer.height) {
                         this.subscriberUnLink.unsubscribe();
                         this.subscriberUnLink = <any>0;
+                        this._setToBottom$.next(true);
                     }
-                    this._setToBottom$.next(true);
                 })
             );
         }
+        super.unLink();
     }
 
     destroy(): void {
         if (this._setToBottom$) {
             this._setToBottom$.destroy();
             this._setToBottom$ = <any>0;
+        }
+        if (this.subscriberUnLink) {
+            this.scene.unsubscribe(this.subscriberUnLink);
+            this.subscriberUnLink = <any>0;
         }
         this.linkedActor = <any>0;
         super.destroy();

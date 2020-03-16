@@ -22,6 +22,7 @@ import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Obser
 import {EnemySmall3} from "../../../../../AnimationModels/Planes/enemySmall3/EnemySmall3";
 import {Heart} from "../../../../../AnimationModels/Heart";
 import {Link} from "../../../../../Plugins/Link";
+import {HealsBuf} from "../../../../../Plugins/HLProgress/HealsBuf";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
@@ -171,8 +172,11 @@ function initMiniBossesActions(scene: AbstractScene) {
             randomize(5000) + 1000);
         const health = new HealthPlugin(scene, HealthType.ENEMY_MINI_BOSS);
         const heart = new Heart(scene.generalLayer);
+        const healthBuf = new HealsBuf(scene, heroes);
         const link = new Link(scene);
         link.setActorToLink(heart);
+        miniBoss.pluginDock.add(link);
+        heart.disableEvents();
 
         scene.collect(
             link.setToBottom$.subscribe(() => {
@@ -180,11 +184,9 @@ function initMiniBossesActions(scene: AbstractScene) {
                 scene.destroyActor(heart);
             }),
             health.beforeDeath$.subscribe(() => {
-                miniBoss.pluginDock.add(link);
                 scene.setActors(heart);
-                tickGenerator.executeTimeout(() => {
-                    miniBoss.pluginDock.unLink(link);
-                }, 100);
+                miniBoss.pluginDock.unLink(link);
+                heart.pluginDock.add(healthBuf);
             })
         );
 
