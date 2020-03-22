@@ -7,6 +7,7 @@ import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
+import {tickGenerator} from "../../Libraries/TickGenerator";
 
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
@@ -15,19 +16,21 @@ export abstract class AbstractScene implements IScene {
     private _cursor: ICursor & AbstractActor = <any>0;
     private _cursorHandler: CursorHandler = <any>0;
     private collector: ICollector = <any>0;
-    private readonly _onStop$ = new Observable(<IUserData><any>0);
-    private readonly _onExit$ = new Observable(<IUserData><any>0);
-    private readonly _onStart$ = new Observable(<IUserData><any>0);
-    private readonly _onStartOnce$ = new Observable(<IUserData><any>0);
-    private readonly _onDestroy$ = new Observable(<IUserData><any>0);
-    private readonly _onSetUserData$ = new Observable(<IUserData><any>0);
-    private readonly _userData: IUserData = {};
+    private _onStop$ = new Observable(<IUserData><any>0);
+    private _onExit$ = new Observable(<IUserData><any>0);
+    private _onStart$ = new Observable(<IUserData><any>0);
+    private _onStartOnce$ = new Observable(<IUserData><any>0);
+    private _onDestroy$ = new Observable(<IUserData><any>0);
+    private _onSetUserData$ = new Observable(<IUserData><any>0);
+    private _userData: IUserData = {};
     private isFirstStart = true;
     private movedOnDrag: IDragActor[] = [];
     private movedBehaviors: ISubscriptionLike[] = [];
     private _isDestroyed = false;
     private _isDestroyProcessed = false;
     private isBackgroundLayerPresent = false;
+    private timerCounter = <any>0;
+    private startDelayMs = 100;
 
     protected constructor(canvas: HTMLCanvasElement) {
         this.generalLayer = canvas;
@@ -69,13 +72,19 @@ export abstract class AbstractScene implements IScene {
 
     private handleCreateScene() {
         this.createScene();
-        this.handleStartScene();
+        for (let i = 0; i < this.actors.length; i++) {
+            const actor = this.actors[i];
+            actor.pauseEvents();
+        }
+        this.timerCounter = tickGenerator.executeTimeout(() => {
+            this.handleStartScene();
+        }, this.startDelayMs);
     }
 
     private handleStartScene() {
         for (let i = 0; i < this.actors.length; i++) {
             const actor = this.actors[i];
-            actor.enableEvents();
+            actor.unPauseEvents();
         }
         this.renderController.renderStart(this.isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
@@ -117,8 +126,15 @@ export abstract class AbstractScene implements IScene {
     }
 
     public setActors(...actors: AbstractActor[]): void {
+        if (this._isDestroyed || !actors || !actors.length) {
+            return;
+        }
+
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
+            if (!actor) {
+                continue;
+            }
             const index = findElementOnArray(this.actors, actor);
             if (index === -1) {
                 this.actors.push(actor);
@@ -193,6 +209,10 @@ export abstract class AbstractScene implements IScene {
         this.renderController.setActiveLayer(name);
     }
 
+    public getActiveLayerName(): string {
+        return this.renderController.getActiveLayerName();
+    }
+
     public setLayerOnTop(name: string): void {
         this.renderController.setLayerOnTop(name);
     }
@@ -208,6 +228,9 @@ export abstract class AbstractScene implements IScene {
     protected abstract createScene(): void;
 
     public moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
+        if (this._isDestroyed) {
+            return;
+        }
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(
@@ -321,9 +344,9 @@ export abstract class AbstractScene implements IScene {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
         } else {
-            setTimeout(() => {
+            this.timerCounter = tickGenerator.executeTimeout(() => {
                 this.handleStartScene();
-            }, 100);
+            }, this.startDelayMs);
         }
     }
 
@@ -335,7 +358,7 @@ export abstract class AbstractScene implements IScene {
     public exit() {
         this.stop();
         this.actors.forEach(actor => {
-            actor.disableEvents();
+            actor.pauseEvents();
         });
         this._onExit$.next({...this._userData});
     }
@@ -345,6 +368,8 @@ export abstract class AbstractScene implements IScene {
             return;
         }
         this._isDestroyProcessed = true;
+
+        this.exit();
 
         this._onDestroy$.next({...this._userData});
 
@@ -394,9 +419,19 @@ export abstract class AbstractScene implements IScene {
         this._onStart$.destroy();
         this._onStartOnce$.destroy();
         this._onSetUserData$.destroy();
+
+        this._onStop$ = <any>0;
+        this._onExit$ = <any>0;
+        this._onStart$ = <any>0;
+        this._onStartOnce$ = <any>0;
+        this._onSetUserData$ = <any>0;
+
         this._onDestroy$.destroy();
+        this._onDestroy$ = <any>0;
+
         this._cursor = <any>0;
         this._isDestroyed = true;
+        tickGenerator.clearTimeout(this.timerCounter);
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

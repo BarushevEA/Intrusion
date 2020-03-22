@@ -62,10 +62,10 @@ export class MoveKeyControls extends AbstractActorPlugin {
         this.root.pluginDock.destroyPlugin(this.moveDown);
         this.root.pluginDock.destroyPlugin(this.moveLeft);
         this.root.pluginDock.destroyPlugin(this.moveRight);
-        super.destroy();
         this.moveUp = <any>0;
         this.moveDown = <any>0;
         this.moveLeft = <any>0;
         this.moveRight = <any>0;
+        super.destroy();
     }
 }

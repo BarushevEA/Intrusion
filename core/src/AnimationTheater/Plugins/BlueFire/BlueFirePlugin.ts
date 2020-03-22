@@ -78,7 +78,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
             this.subscriber = <any>0;
         }
         if (this.fire) {
-            this.fire.destroy();
+            this.scene.destroyActor(this.fire);
             this.fire = <any>0;
         }
         this.yBalance = 0;

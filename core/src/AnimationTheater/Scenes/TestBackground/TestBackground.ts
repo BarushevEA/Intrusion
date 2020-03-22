@@ -3,6 +3,7 @@ import {handleBackgrounds} from "./modules/background";
 import {handleMiddle} from "./modules/Middle/middle";
 import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
+import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 
 export class TestBackground extends AbstractScene {
 
@@ -11,12 +12,21 @@ export class TestBackground extends AbstractScene {
     }
 
     protected createScene(): void {
+        this.initLayers();
         initCursor(this);
         handleBackgrounds(this);
         handleMiddle(this);
         handleButtons(this);
         handleCursor(this);
         sceneEvents(this);
+    }
+
+    private initLayers() {
+        this.setActiveLayer(ELayers.BACKGROUND);
+        this.setActiveLayer(ELayers.MIDDLE);
+        this.setActiveLayer(ELayers.BOSS_HEALTH);
+        this.setActiveLayer(ELayers.TOP);
+        this.setActiveLayer(ELayers.CURSOR);
     }
 }
 

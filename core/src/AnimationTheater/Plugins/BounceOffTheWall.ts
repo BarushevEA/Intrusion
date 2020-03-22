@@ -2,6 +2,7 @@ import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/r
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
+import {tickGenerator} from "../../AnimationCore/Libraries/TickGenerator";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
@@ -11,17 +12,25 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     private minXBound = 0;
     private reInitTime = 0;
     private isReInitDeltas = false;
-    private reInitTimer = -1;
-    private isReinitProcessed = false;
+    private reInitTimer: ISubscriptionLike = <any>0;
+    private isReInitProcessed = false;
+    private multiply = 2;
+    private forceSpeed = 1;
 
     constructor(scene: AbstractScene,
                 minXBound = 0,
                 isReInitDeltas = false,
-                reInitTime = 5000) {
+                reInitTime = 5,
+                deltaNum = 5,
+                multiply = 2,
+                forceSpeed = 1) {
         super('BounceOffTheWall', scene);
         this.minXBound = minXBound;
         this.reInitTime = reInitTime;
         this.isReInitDeltas = isReInitDeltas;
+        this.deltaNum = deltaNum;
+        this.multiply = multiply;
+        this.forceSpeed = forceSpeed;
     }
 
     onInit(): void {
@@ -31,9 +40,9 @@ export class BounceOffTheWall extends AbstractActorPlugin {
     init() {
         this.reInitDeltas();
 
-        if (this.isReInitDeltas && !this.isReinitProcessed) {
-            this.isReinitProcessed = true;
-            this.reInitTimer = setInterval(() => {
+        if (this.isReInitDeltas && !this.isReInitProcessed) {
+            this.isReInitProcessed = true;
+            this.reInitTimer = tickGenerator.executeSecondInterval(() => {
                 this.reInitDeltas();
             }, this.reInitTime);
         }
@@ -63,24 +72,27 @@ export class BounceOffTheWall extends AbstractActorPlugin {
                 this.yDelta = !!this.yDelta ? this.yDelta : -this.deltaNum;
             }
 
-            this.root.xPos += this.xDelta;
-            this.root.yPos += this.yDelta;
+            this.root.xPos += this.xDelta * this.forceSpeed;
+            this.root.yPos += this.yDelta * this.forceSpeed;
         });
     }
 
     private reInitDeltas() {
-        this.xDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
-        this.yDelta = randomize(this.deltaNum) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
-        this.xDelta *= 2;
-        this.yDelta *= 2;
+        this.xDelta = randomize(this.deltaNum * this.multiply) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.yDelta = randomize(this.deltaNum * this.multiply) > this.deltaNum ? randomize(this.deltaNum) : -randomize(this.deltaNum);
+        this.xDelta *= this.multiply;
+        this.yDelta *= this.multiply;
         this.xDelta = !!this.xDelta ? this.xDelta : this.deltaNum;
         this.yDelta = !!this.yDelta ? this.yDelta : this.deltaNum;
     }
 
     unLink(): void {
         if (this.isReInitDeltas) {
-            clearInterval(this.reInitTimer);
-            this.isReinitProcessed = false;
+            if (this.reInitTimer) {
+                this.reInitTimer.unsubscribe();
+                this.reInitTimer = <any>0;
+            }
+            this.isReInitProcessed = false;
         }
         super.unLink();
     }

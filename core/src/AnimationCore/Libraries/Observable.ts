@@ -37,8 +37,8 @@ export type IObserver<T> =
     { unsubscribeAll(): void };
 
 class SubscriberLike implements ISubscriptionLike {
-    private readonly observable: IUnSubscribe;
-    private readonly index: string;
+    private observable: IUnSubscribe;
+    private index: string;
 
     constructor(observable: IUnSubscribe, index: string) {
         this.observable = observable;
@@ -46,7 +46,11 @@ class SubscriberLike implements ISubscriptionLike {
     }
 
     public unsubscribe(): void {
-        this.observable.unSubscribe(this.index);
+        if (!!this.observable) {
+            this.observable.unSubscribe(this.index);
+            this.observable = <any>0;
+            this.index = <any>0;
+        }
     }
 }
 

@@ -13,8 +13,10 @@ import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
+import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
 
 let plane: AbstractActor = <any>0;
+let destroyedCounter = <any>0;
 
 class Heroes extends AbstractActorGroup {
     private _enemies: AbstractActor[] = <any>0;
@@ -46,20 +48,31 @@ class Heroes extends AbstractActorGroup {
         plane.pluginDock.add(health);
         scene.collect(
             keyDownCode$.subscribe((code: IKeyCode) => {
-                    if (code.code === 'Space') {
+                    if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.add(shotLighting);
                         plane.pluginDock.add(bulletShot);
                     }
                 }
             ),
             keyUpCode$.subscribe((code: IKeyCode) => {
-                    if (code.code === 'Space') {
+                    if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.unLink(shotLighting);
                         plane.pluginDock.unLink(bulletShot);
                     }
                 }
-            )
+            ),
+            plane.isDestroyed$.subscribe(() => {
+                destroyedCounter = tickGenerator.executeTimeout(() => {
+                    scene.destroy();
+                }, 2000);
+            }),
+            health.beforeDeath$.subscribe(() => {
+            })
         );
+    }
+
+    get heroes(): AbstractActor[] {
+        return [plane];
     }
 
     destroy(): void {
@@ -69,7 +82,8 @@ class Heroes extends AbstractActorGroup {
         }
 
         this._enemies = <any>0;
+        tickGenerator.clearTimeout(destroyedCounter);
     }
 }
 
-export const heroes = new Heroes();
+export const heroesPool = new Heroes();

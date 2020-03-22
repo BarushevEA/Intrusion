@@ -22,15 +22,21 @@ export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
     }
 
     initSubscribers() {
-        this.PODSubscriber = this.root.isMouseOver$.subscribe(() => {
-            this.scene.cursorHandler.pointerOrDefaultChange(this.scene, this.root);
-        });
-        this.dragSubscriber = this.root.isMouseLeftDrag$.subscribe(() => {
-            this.scene.cursor.setType(ECursor.CATCH);
-        });
-        this.dropSubscriber = this.root.isMouseLeftDrop$.subscribe(() => {
-            this.scene.cursor.setType(ECursor.POINTER);
-        });
+        if (!this.PODSubscriber) {
+            this.PODSubscriber = this.root.isMouseOver$.subscribe(() => {
+                this.scene.cursorHandler.pointerOrDefaultChange(this.scene, this.root);
+            });
+        }
+        if (!this.dragSubscriber) {
+            this.dragSubscriber = this.root.isMouseLeftDrag$.subscribe(() => {
+                this.scene.cursor.setType(ECursor.CATCH);
+            });
+        }
+        if (!this.dropSubscriber) {
+            this.dropSubscriber = this.root.isMouseLeftDrop$.subscribe(() => {
+                this.scene.cursor.setType(ECursor.POINTER);
+            });
+        }
     }
 
     unLink(): void {

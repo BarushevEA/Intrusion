@@ -5,6 +5,7 @@ import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
+import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
@@ -13,11 +14,13 @@ export class BulletPlugin extends AbstractActorPlugin {
     private xSpeed = 15;
     private isDestroyProcessed = false;
     private damagedEnemy: AbstractActor = <any>0;
+    private handleDestroyCounter = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], damage = 50) {
+    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false, damage = 50) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);
+        this.xSpeed *= isReverse ? -1 : 1;
     }
 
     onInit(): void {
@@ -27,7 +30,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 return;
             }
             this.root.xPos += this.xSpeed;
-            if (this.root.xPos > this.scene.generalLayer.width) {
+            if (this.root.xPos > this.scene.generalLayer.width || this.root.xPos < 0) {
                 this.scene.destroyActor(this.root);
             }
             this.damagedEnemy = this.getDamagedEnemy();
@@ -47,7 +50,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         }
         this.isDestroyProcessed = true;
 
-        setTimeout(() => {
+        this.handleDestroyCounter = tickGenerator.executeTimeout(() => {
             if (!!this.scene) {
                 this.scene.destroyActor(this.root);
             } else if (this.root && !this.root.isDestroyed) {
@@ -89,12 +92,13 @@ export class BulletPlugin extends AbstractActorPlugin {
     }
 
     setEnemies(enemies: AbstractActor[]) {
-        if (enemies && enemies.length) {
+        if (enemies) {
             this.enemies = enemies;
         }
     }
 
     unLink(): void {
+        tickGenerator.clearTimeout(this.handleDestroyCounter);
         super.unLink();
     }
 

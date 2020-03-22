@@ -1,4 +1,4 @@
-import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {fatherFrost_base64} from "./FatherFrost_base64";
 
 export class FatherFrost extends AbstractFramedShape {

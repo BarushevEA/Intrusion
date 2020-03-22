@@ -10,3 +10,4 @@ export type ISize = {
     height: number;
     width: number;
 };
+

@@ -1,4 +1,3 @@
-
 import {findElementOnArray} from "../Libraries/FunctionLibs";
 import {ISubscriber, Observable} from "../Libraries/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
@@ -16,6 +15,7 @@ export type IRenderController = {
     setActorGroupOnTop(elements: IActor[]): void;
     setActorsGroupByZIndex(elements: IActor[], z_index: number): void;
     setActiveLayer(name: string): void;
+    getActiveLayerName(): string;
     setLayerOnTop(name: string): void;
     setLayerOnIndex(layerName: string, index: number): void;
     setFullSpeed(): void;
@@ -76,6 +76,10 @@ export class RenderController implements IRenderController {
             this.currentLayerName = name;
             this.layersNames = Object.keys(this.layers);
         }
+    }
+
+    getActiveLayerName(): string {
+        return this.currentLayerName;
     }
 
     public setLayerOnTop(name: string): void {
@@ -152,22 +156,24 @@ export class RenderController implements IRenderController {
                 this.layers[layerName][i].renderFrame();
             }
         }
-        this._tickCount$.next(true);
     }
 
-    runFullSpeedWithBackground(): void {
+    private runFullSpeedWithBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
+        this._tickCount$.next(true);
         this.drawLayers();
     }
 
-    runFullSpeedWithoutBackground(): void {
+    private runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
+        this._tickCount$.next(true);
         this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawLayers();
     }
 
     private runHalfSpeed(): void {
         this.animFrameIndex = requestAnimationFrame(this.runHalfSpeed.bind(this));
+        this._tickCount$.next(true);
         if (this.delayCounter >= this.delay) {
             this.delayCounter = 0;
             return;

@@ -6,8 +6,11 @@ export type ICollector = {
     destroy(): void;
 };
 
+const clearNumber = 1000;
+
 export class EventCollector implements ICollector {
     private collector: ISubscriptionLike[] = [];
+    private collectorBuffer: ISubscriptionLike[] = [];
     private destroySubscriberCounter = 0;
 
     public collect(...subscribers: ISubscriptionLike[]): void {
@@ -17,30 +20,42 @@ export class EventCollector implements ICollector {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
+        if (!subscriber || !subscriber.unsubscribe) {
+            return;
+        }
+
+        let isSubscriberFounded = false;
         for (let i = 0; i < this.collector.length; i++) {
             const savedSubscriber = this.collector[i];
             if (savedSubscriber && savedSubscriber === subscriber) {
                 savedSubscriber.unsubscribe();
                 this.collector[i] = <any>0;
                 this.destroySubscriberCounter++;
+                isSubscriberFounded = true;
                 break;
             }
+        }
+        if (!isSubscriberFounded) {
+            subscriber.unsubscribe();
         }
 
         this.clearCollector();
     }
 
     private clearCollector(): void {
-        if (this.destroySubscriberCounter > 1000 && this.collector.length) {
-            const tmp: ISubscriptionLike[] = [];
-            for (let i = 0; i < this.collector.length; i++) {
-                const subscriber = this.collector[i];
-                if (subscriber) {
-                    tmp.push(subscriber);
-                    this.collector[i] = <any>0;
+        if (this.destroySubscriberCounter >= clearNumber && this.collector.length) {
+            let length = this.collector.length;
+            for (let i = 0; i < length; i++) {
+                const subscriber = this.collector.pop();
+                if (!!subscriber) {
+                    this.collectorBuffer.push(subscriber);
                 }
             }
-            this.collector = tmp;
+            length = this.collectorBuffer.length;
+            for (let i = 0; i < length; i++) {
+                const subscriber = this.collectorBuffer.pop();
+                this.collector.push(<ISubscriptionLike>subscriber);
+            }
         }
     }
 
