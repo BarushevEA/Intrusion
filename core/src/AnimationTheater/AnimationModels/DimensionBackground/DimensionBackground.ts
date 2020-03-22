@@ -3,7 +3,7 @@ import {E_Cells, IBackgroundMap, ICellScheme} from "./DimensionTypes";
 import {GreenRectangle} from "../GreenRectangle";
 import {GreenTriangle} from "../GreenTriangle/GreenTriangle";
 import {BrickWall} from "../briks/BrickWall";
-import {Cells, ExperimentalDraw} from "./DimensionUtils";
+import {Cells, DrawHelper} from "./DimensionUtils";
 
 enum $ {
     NUL = 0,
@@ -25,7 +25,7 @@ scheme[$.REC] = <any>GreenRectangle;
 scheme[$.TRI] = <any>GreenTriangle;
 scheme[$.WAL] = <any>BrickWall;
 
-let draw: ExperimentalDraw = <any>0;
+let draw: DrawHelper = <any>0;
 
 export class DimensionBackground extends AbstractActor {
     constructor(canvas: HTMLCanvasElement) {
@@ -52,7 +52,7 @@ export class DimensionBackground extends AbstractActor {
             .add([<any>$.REC, $.NUL, $.NUL, $.REC], 0, 1)
             .add([<any>$.REC, $.NUL, $.NUL, $.REC], 0, 2)
             .addRowAt([<any>$.REC], 0, 3, 4);
-        draw = new ExperimentalDraw(<any>0, cells, 0, 0);
+        draw = new DrawHelper(<any>0, cells, 0, 0);
     }
 
     renderFrame(): void {

@@ -5,7 +5,7 @@ import {HorizontalBackground1} from "../../../AnimationModels/HorizontalBackgrou
 import {E_Cells, IBackgroundMap, ICellScheme} from "../../../AnimationModels/DimensionBackground/DimensionTypes";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
 import {getCenterX, getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
-import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
+import {Cells, DrawHelper} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
@@ -91,7 +91,7 @@ function initDynamical(scene: AbstractScene) {
 
     prepareCells();
     cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
-    (new ExperimentalDraw(scene, cells, 400, 50)).setToScene();
+    (new DrawHelper(scene, cells, 400, 50)).setToScene();
     scene.setActors(redButton);
 }
 

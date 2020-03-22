@@ -95,7 +95,7 @@ export class Cells implements IBackgroundMap {
                                 cell[k] = this.actorsPool[ActorClassName];
                                 break;
                             case E_Cells.SCENE_USE:
-                                const  className: any = this.scheme[ActorClassName];
+                                const className: any = this.scheme[ActorClassName];
                                 cell[k] = <AbstractActor>(new className(this.canvas));
                                 break;
                         }
@@ -136,9 +136,11 @@ export class Cells implements IBackgroundMap {
         const insertedCells = cells.cells;
         for (let i = 0; i < cells.height; i++) {
             for (let j = 0; j < cells.width; j++) {
-                if ((i + y < this._height && j + x < this._width) &&
-                    (i + y >= 0 && j + x >= 0)) {
-                    this._cells[i + y][j + x] = insertedCells[i][j];
+                for (let k = 0; k < insertedCells[i][j].length; k++) {
+                    if ((i + y < this._height && j + x < this._width) &&
+                        (i + y >= 0 && j + x >= 0)) {
+                        this._cells[i + y][j + x][k] = insertedCells[i][j][k];
+                    }
                 }
             }
         }
@@ -159,7 +161,7 @@ export class Cells implements IBackgroundMap {
     getActorsAt(x: x_array, y: y_array): ICell {
         let arr = this._cells[y];
         if (arr) {
-            return arr[x];
+            return [...arr[x]];
         }
         return <any>0;
     }
@@ -363,7 +365,7 @@ class CellsMap implements ICellsMap {
     }
 }
 
-export class ExperimentalDraw {
+export class DrawHelper {
     scene: AbstractScene;
     cells: IBackgroundMap;
     x = 0;
@@ -376,7 +378,7 @@ export class ExperimentalDraw {
         this.y = y;
     }
 
-    setToScene() {
+    setToScene(): void {
         const width = this.cells.width;
         const height = this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
@@ -397,7 +399,7 @@ export class ExperimentalDraw {
         }
     }
 
-    render() {
+    render(): void {
         const width = this.cells.width;
         const height = this.cells.height;
         const cellWidth = this.cells.map.cellWidth;

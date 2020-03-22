@@ -1,7 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {E_Cells, IBackgroundMap, ICellScheme} from "../../../AnimationModels/DimensionBackground/DimensionTypes";
-import {Cells, ExperimentalDraw} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
+import {Cells, DrawHelper} from "../../../AnimationModels/DimensionBackground/DimensionUtils";
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {GreenTriangle} from "../../../AnimationModels/GreenTriangle/GreenTriangle";
@@ -49,7 +49,7 @@ function initActors(scene: AbstractScene) {
     scheme[$.WAL] = <any>BrickWall;
     prepareCells();
     cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
-    (new ExperimentalDraw(scene, cells, 100, 100)).setToScene();
+    (new DrawHelper(scene, cells, 100, 100)).setToScene();
 }
 
 function initActions(scene: AbstractScene) {
