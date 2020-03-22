@@ -371,7 +371,10 @@ export class DrawHelper {
     x = 0;
     y = 0;
 
-    constructor(scene: AbstractScene, cells: IBackgroundMap, x: number, y: number) {
+    constructor(scene: AbstractScene,
+                cells: IBackgroundMap,
+                x: x_canvas,
+                y: y_canvas) {
         this.scene = scene;
         this.cells = cells;
         this.x = x;
