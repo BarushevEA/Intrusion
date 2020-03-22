@@ -6,15 +6,18 @@ import {
     E_Cells,
     IBackgroundMap,
     ICell,
+    ICellDrawOptions,
     ICellPool,
     ICells,
     ICellScheme,
     ICellsMap,
     x_array,
     x_canvas,
+    X_MOVE,
     x_pair,
     y_array,
     y_canvas,
+    Y_MOVE,
     y_pair
 } from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
@@ -366,10 +369,18 @@ class CellsMap implements ICellsMap {
 }
 
 export class DrawHelper {
-    scene: AbstractScene;
-    cells: IBackgroundMap;
-    x = 0;
-    y = 0;
+    private scene: AbstractScene;
+    private cells: IBackgroundMap;
+    private _options: ICellDrawOptions = {
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        step: 1
+    };
+    private _x: x_canvas = 0;
+    private _y: y_canvas = 0;
+
 
     constructor(scene: AbstractScene,
                 cells: IBackgroundMap,
@@ -377,11 +388,63 @@ export class DrawHelper {
                 y: y_canvas) {
         this.scene = scene;
         this.cells = cells;
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
-    setToScene(): void {
+    public moveLeft(): void {
+        console.log('moveLeft');
+        this.move(X_MOVE.LEFT, Y_MOVE.NONE);
+    }
+
+    public moveRight(): void {
+        console.log('moveRight');
+        this.move(X_MOVE.RIGHT, Y_MOVE.NONE);
+    }
+
+    public moveTop(): void {
+        console.log('moveTop');
+        this.move(X_MOVE.NONE, Y_MOVE.TOP);
+    }
+
+    public moveBottom(): void {
+        console.log('moveBottom');
+        this.move(X_MOVE.NONE, Y_MOVE.BOTTOM);
+    }
+
+    private move(moveX: X_MOVE, moveY: Y_MOVE): void {
+        // @ts-ignore
+        this._options.x += this._options.step * moveX;
+        // @ts-ignore
+        this._options.y += this._options.step * moveY;
+
+        const arr = this.cells.getRectangle(
+            // @ts-ignore
+            this._options.x,
+            this._options.y,
+            this._options.height,
+            this._options.width
+        );
+
+        const cellWidth = this.cells.map.cellWidth;
+        const cellHeight = this.cells.map.cellHeight;
+        for (let i = 0; i < arr.length; i++) {
+            const row = arr[i];
+            for (let j = 0; j < row.length; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const actor = cell[k];
+                    if (actor) {
+                        actor.xPos = this._x + cellWidth * j;
+                        actor.yPos = this._y + cellHeight * i;
+                        actor.renderFrame();
+                    }
+                }
+            }
+        }
+    }
+
+    public setToScene(): void {
         const width = this.cells.width;
         const height = this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
@@ -393,8 +456,8 @@ export class DrawHelper {
                 for (let k = 0; k < cell.length; k++) {
                     const cellItem: AbstractActor = cell[k];
                     if (cellItem) {
-                        cellItem.xPos = this.x + cellWidth * j;
-                        cellItem.yPos = this.y + cellHeight * i;
+                        cellItem.xPos = this._x + cellWidth * j;
+                        cellItem.yPos = this._y + cellHeight * i;
                         this.scene.setActors(cellItem);
                     }
                 }
@@ -402,7 +465,7 @@ export class DrawHelper {
         }
     }
 
-    render(): void {
+    public render(): void {
         const width = this.cells.width;
         const height = this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
@@ -414,12 +477,53 @@ export class DrawHelper {
                 for (let k = 0; k < cell.length; k++) {
                     const cellItem: AbstractActor = cell[k];
                     if (cellItem) {
-                        cellItem.xPos = this.x + cellWidth * j;
-                        cellItem.yPos = this.y + cellHeight * i;
+                        cellItem.xPos = this._x + cellWidth * j;
+                        cellItem.yPos = this._y + cellHeight * i;
                         cellItem.renderFrame();
                     }
                 }
             }
         }
+    }
+
+    get options(): ICellDrawOptions {
+        return this._options;
+    }
+
+    set options(value: ICellDrawOptions) {
+        if (!value) {
+            return;
+        }
+        if (!!value.step) {
+            this._options.step = value.step;
+        }
+        if (!!value.width) {
+            this._options.width = value.width;
+        }
+        if (!!value.height) {
+            this._options.height = value.height;
+        }
+        if (!!value.x) {
+            this._options.x = value.x;
+        }
+        if (!!value.y) {
+            this._options.y = value.y;
+        }
+    }
+
+    get x(): number {
+        return this._x;
+    }
+
+    set x(value: number) {
+        this._x = value;
+    }
+
+    get y(): number {
+        return this._y;
+    }
+
+    set y(value: number) {
+        this._y = value;
     }
 }

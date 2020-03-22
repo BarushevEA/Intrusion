@@ -26,6 +26,7 @@ scheme[$.TRI] = <any>GreenTriangle;
 scheme[$.WAL] = <any>BrickWall;
 
 let draw: DrawHelper = <any>0;
+let layer: HTMLCanvasElement = <any>0;
 
 export class DimensionBackground extends AbstractActor {
     constructor(canvas: HTMLCanvasElement) {
@@ -39,19 +40,43 @@ export class DimensionBackground extends AbstractActor {
 
     init(): void {
         this.prepareCells();
-        const layer = this.setVirtualLayer(ELayer.COPY, this.height, this.width);
+        layer = this.setVirtualLayer(ELayer.COPY, this.height, this.width);
         cells.setScheme(scheme, E_Cells.ACTOR_USE, layer);
         draw.render();
     }
 
+    get draw():DrawHelper {
+        return draw;
+    }
+
+    moveLeft(): void {
+        layer.width = layer.width;
+        draw.moveLeft();
+    }
+
+    moveRight(): void {
+        layer.width = layer.width;
+        draw.moveRight();
+    }
+
+    moveTop(): void {
+        layer.width = layer.width;
+        draw.moveTop();
+    }
+
+    moveBottom(): void {
+        layer.width = layer.width;
+        draw.moveBottom();
+    }
+
     prepareCells(): void {
-        cells = new Cells(100, 100, 4, 4);
+        cells = new Cells(100, 100, 4, 10);
         cells
-            .replaceRectangleAt([<any>$.WAL], 0, 0, 4, 4)
-            .addRowAt([<any>$.REC], 0, 0, 4)
-            .add([<any>$.REC, $.NUL, $.NUL, $.REC], 0, 1)
-            .add([<any>$.REC, $.NUL, $.NUL, $.REC], 0, 2)
-            .addRowAt([<any>$.REC], 0, 3, 4);
+            .fillWithActor(<any>[$.WAL])
+            .addRowAt(<any>[$.REC],1,0,8)
+            .addRowAt(<any>[$.REC],1,3,8)
+            .addColumnAt(<any>[$.REC],0,0,4)
+            .addColumnAt(<any>[$.REC],9,0,4);
         draw = new DrawHelper(<any>0, cells, 0, 0);
     }
 

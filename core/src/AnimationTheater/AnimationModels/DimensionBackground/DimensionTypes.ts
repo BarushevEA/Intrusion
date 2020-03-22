@@ -58,6 +58,26 @@ export type IBackgroundMap = {
 
 export type ICellPool = { [key: string]: AbstractActor; };
 
+export type ICellDrawOptions = {
+    width: array_width;
+    height: array_height;
+    x?: x_array;
+    y?: y_array;
+    step?: number;
+};
+
+export enum X_MOVE {
+    LEFT = 1,
+    RIGHT = -1,
+    NONE = 0
+}
+
+export enum Y_MOVE {
+    TOP = 1,
+    BOTTOM = -1,
+    NONE = 0
+}
+
 /**
  * EXAMPLE FOR USE
 
