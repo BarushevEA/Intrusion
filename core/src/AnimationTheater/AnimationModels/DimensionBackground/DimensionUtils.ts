@@ -393,22 +393,18 @@ export class DrawHelper {
     }
 
     public moveLeft(): void {
-        console.log('moveLeft');
         this.move(X_MOVE.LEFT, Y_MOVE.NONE);
     }
 
     public moveRight(): void {
-        console.log('moveRight');
         this.move(X_MOVE.RIGHT, Y_MOVE.NONE);
     }
 
     public moveTop(): void {
-        console.log('moveTop');
         this.move(X_MOVE.NONE, Y_MOVE.TOP);
     }
 
     public moveBottom(): void {
-        console.log('moveBottom');
         this.move(X_MOVE.NONE, Y_MOVE.BOTTOM);
     }
 
