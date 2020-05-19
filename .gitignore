@@ -66,3 +66,7 @@ yarn.lock
 .idea/git_toolbox_prj.xml
 
 electron/package-lock.json
+
+.idea/codeStyles/Project.xml
+
+.idea/Intrusion.iml

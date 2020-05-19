@@ -9,11 +9,11 @@
     "noImplicitAny": true,
     "declarationDir": "../dist_dev/libs/types",
     "declaration": true,
-    "target": "es2019",
+    "target": "es2020",
     "module": "commonjs",
     "strict": true,
     "lib": [
-      "es2019",
+      "es2020",
       "dom"
     ]
   },
