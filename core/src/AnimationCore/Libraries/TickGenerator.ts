@@ -3,11 +3,10 @@ import {cb_function, delay_ms, delay_second, id_string, ITick, ITickListeners} f
 
 const timeOutListeners: ITickListeners = {};
 const timeOutKeys: string[] = [];
-
+const tickDelay = 10;
 let tickIndex = <any>0,
     secondFPSIndex = <any>0,
     id = Number.MIN_SAFE_INTEGER,
-    tickDelay = 10,
     optimizeCounter = 0,
     optimizeNumber = 1000,
     tick10$ = new Observable(<any>0),
@@ -40,12 +39,12 @@ class TickGenerator implements ITick {
                 if (!this.counter1000) {
                     tick1000$.next(1000);
                 }
-                this.counter100++;
-                if (this.counter100 >= 10) {
+                this.counter100 += 10;
+                if (this.counter100 >= 100) {
                     this.counter100 = 0;
                 }
-                this.counter1000++;
-                if (this.counter1000 >= 100) {
+                this.counter1000 += 10;
+                if (this.counter1000 >= 1000) {
                     this.counter1000 = 0;
                 }
                 this.handleTimeOutListeners();
