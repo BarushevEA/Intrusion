@@ -51,6 +51,7 @@ export class EventCollector implements ICollector {
                 const subscriber = this.collectorBuffer.pop();
                 this.collector.push(<ISubscriptionLike>subscriber);
             }
+            this.destroySubscriberCounter = 0;
         }
     }
 
