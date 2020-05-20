@@ -4,6 +4,7 @@
 // DONE TODO 3.1) create effective observable un subscribe
 // DONE TODO 3.2) Add events to animation models (mouse key up and key down)
 // DONE TODO 3.3) Handle events - right mouse click
+// DONE TODO 3.4) Update observable
 // DONE TODO 4) Create background animation (move on left, right and t.e. via virtual canvases and custom map of dimensions)
 // DONE TODO 4.1) Optimize background animation to one layer !!!
 // TODO 4.2) Update background animation
