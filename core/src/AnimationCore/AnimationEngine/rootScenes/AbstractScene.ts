@@ -61,7 +61,11 @@ export abstract class AbstractScene implements IScene {
     }
 
     get tickCount$(): ISubscriber<boolean> {
-        return this.renderController.tickCount$;
+        if (!!this.renderController && !!this.renderController.tickCount$) {
+            return this.renderController.tickCount$;
+        } else {
+            return <any>{subscribe: () => 0};
+        }
     };
 
     private run(): void {

@@ -20,22 +20,16 @@ export class EventCollector implements ICollector {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
-        if (!subscriber || !subscriber.unsubscribe) {
+        if (!subscriber || !subscriber.unsubscribe || !this.collector.length) {
             return;
         }
 
-        let isSubscriberFounded = false;
-        for (let i = 0; i < this.collector.length; i++) {
-            const savedSubscriber = this.collector[i];
-            if (savedSubscriber && savedSubscriber === subscriber) {
-                savedSubscriber.unsubscribe();
-                this.collector[i] = <any>0;
-                this.destroySubscriberCounter++;
-                isSubscriberFounded = true;
-                break;
-            }
-        }
-        if (!isSubscriberFounded) {
+        const sbIndex = this.collector.indexOf(subscriber);
+
+        if (sbIndex > -1) {
+            this.collector[sbIndex].unsubscribe();
+            this.collector[sbIndex] = <any>0;
+        } else {
             subscriber.unsubscribe();
         }
 
