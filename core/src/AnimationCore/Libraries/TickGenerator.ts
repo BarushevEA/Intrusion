@@ -1,12 +1,10 @@
 import {ISubscriptionLike, Observable} from "./Observable";
-import {cb_function, delay_ms, delay_second, id_string, ITick, ITickListeners} from "./Types";
+import {cb_function, delay_ms, delay_second, ITick, ITickListener} from "./Types";
 
-const timeOutListeners: ITickListeners = {};
-const timeOutKeys: string[] = [];
+let listeners: ITickListener[] = [];
 const tickDelay = 10;
 let tickIndex = <any>0,
     secondFPSIndex = <any>0,
-    id = Number.MIN_SAFE_INTEGER,
     optimizeCounter = 0,
     optimizeNumber = 1000,
     tick10$ = new Observable(<any>0),
@@ -80,18 +78,18 @@ class TickGenerator implements ITick {
 
     private handleTimeOutListeners(): void {
         let isNeedToOptimize = false;
-        for (let i = 0; i < timeOutKeys.length; i++) {
-            const listener = timeOutListeners[timeOutKeys[i]];
+        for (let i = 0; i < listeners.length; i++) {
+            const listener = listeners[i];
             if (!listener) {
                 continue;
             }
             if (listener.isDestroy) {
-                delete timeOutListeners[timeOutKeys[i]];
+                listeners[i] = <any>0;
                 isNeedToOptimize = true;
             } else {
                 if (listener.counter >= listener.delay) {
                     listener.callback();
-                    delete timeOutListeners[timeOutKeys[i]];
+                    listeners[i] = <any>0;
                     isNeedToOptimize = true;
                 } else {
                     listener.counter += tickDelay;
@@ -110,13 +108,17 @@ class TickGenerator implements ITick {
             return;
         }
         optimizeCounter = 0;
-        timeOutKeys.length = 0;
-        const tmpKeys = Object.keys(timeOutListeners);
-        const length = tmpKeys.length;
+        const tmpListeners: ITickListener[] = [];
+
+        const length = listeners.length;
         for (let i = 0; i < length; i++) {
-            timeOutKeys.push(<string>tmpKeys.pop());
+            if (listeners[i]) {
+                tmpListeners.push(listeners[i])
+            }
         }
-        tmpKeys.length = 0;
+        listeners.length = 0;
+        listeners = tmpListeners;
+        tmpListeners.length = 0;
     }
 
     get isDestroyed(): boolean {
@@ -139,22 +141,25 @@ class TickGenerator implements ITick {
         return secondFPS$;
     }
 
-    executeTimeout(cb: cb_function, time: delay_ms): id_string {
-        const key = '' + ((++id === 0) ? ++id : id);
-        timeOutListeners[key] = {
+    executeTimeout(cb: cb_function, time: delay_ms): ITickListener {
+        const listener: ITickListener = {
             counter: 0,
             delay: time,
             callback: cb,
             isDestroy: false
         };
-        timeOutKeys.push(key);
-        return key;
+        listeners.push(listener);
+        return listener;
     }
 
-    clearTimeout(id: id_string): void {
-        if (timeOutListeners[id]) {
-            timeOutListeners[id].isDestroy = true;
+    clearTimeout(id: ITickListener): void {
+        if (!id) {
+            return;
         }
+        id.isDestroy = true;
+        id.callback = () => {
+            console.log('listener has been destroyed');
+        };
     }
 
     destroy(): void {

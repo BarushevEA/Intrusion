@@ -25,9 +25,9 @@ export type ITick = {
     tick100$: Observable<any>;
     tick1000$: Observable<any>;
     secondFPS$: Observable<any>;
-    executeTimeout(cb: cb_function, time: delay_ms): id_string;
+    executeTimeout(cb: cb_function, time: delay_ms): ITickListener;
     execute100MsInterval(cb: cb_function, time: number): ISubscriptionLike;
     executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike;
-    clearTimeout(id: id_string): void;
+    clearTimeout(id: ITickListener): void;
     destroy(): void;
 } & IDestroyed;

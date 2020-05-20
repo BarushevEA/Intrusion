@@ -99,6 +99,7 @@ export class BulletPlugin extends AbstractActorPlugin {
 
     unLink(): void {
         tickGenerator.clearTimeout(this.handleDestroyCounter);
+        this.handleDestroyCounter = <any>0;
         super.unLink();
     }
 

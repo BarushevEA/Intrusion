@@ -379,6 +379,12 @@ class EnemiesPool extends AbstractActorGroup {
         tickGenerator.clearTimeout(boss2DestroyTimer);
         tickGenerator.clearTimeout(bossActionsTimer);
         tickGenerator.clearTimeout(genBossDestroyTimer);
+
+        simpleEnemyTimer = <any>0;
+        boss1DestroyTimer = <any>0;
+        boss2DestroyTimer = <any>0;
+        bossActionsTimer = <any>0;
+        genBossDestroyTimer = <any>0;
     }
 }
 

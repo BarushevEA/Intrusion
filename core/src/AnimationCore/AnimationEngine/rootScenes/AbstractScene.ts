@@ -436,6 +436,7 @@ export abstract class AbstractScene implements IScene {
         this._cursor = <any>0;
         this._isDestroyed = true;
         tickGenerator.clearTimeout(this.timerCounter);
+        this.timerCounter = <any>0;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike) {

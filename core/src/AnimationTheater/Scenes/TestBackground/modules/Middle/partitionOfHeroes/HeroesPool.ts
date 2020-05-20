@@ -83,6 +83,7 @@ class Heroes extends AbstractActorGroup {
 
         this._enemies = <any>0;
         tickGenerator.clearTimeout(destroyedCounter);
+        destroyedCounter = <any>0;
     }
 }
 
