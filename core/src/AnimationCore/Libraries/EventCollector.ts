@@ -27,6 +27,7 @@ export class EventCollector implements ICollector {
         const sbIndex = this.collector.indexOf(subscriber);
 
         if (sbIndex > -1) {
+            this.destroySubscriberCounter++;
             this.collector[sbIndex].unsubscribe();
             this.collector[sbIndex] = <any>0;
         } else {
