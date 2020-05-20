@@ -39,6 +39,7 @@ export class EventCollector implements ICollector {
 
     private clearCollector(): void {
         if (this.destroySubscriberCounter >= clearNumber && this.collector.length) {
+            this.destroySubscriberCounter = 0;
             let length = this.collector.length;
             for (let i = 0; i < length; i++) {
                 const subscriber = this.collector.pop();
@@ -51,7 +52,6 @@ export class EventCollector implements ICollector {
                 const subscriber = this.collectorBuffer.pop();
                 this.collector.push(<ISubscriptionLike>subscriber);
             }
-            this.destroySubscriberCounter = 0;
         }
     }
 
