@@ -31,12 +31,14 @@ export abstract class AbstractScene implements IScene {
     private isBackgroundLayerPresent = false;
     private timerCounter = <any>0;
     private startDelayMs = 100;
+    private readonly _name: string;
 
-    protected constructor(canvas: HTMLCanvasElement) {
+    protected constructor(canvas: HTMLCanvasElement, name = '') {
         this.generalLayer = canvas;
         this.renderController = new RenderController();
         this.renderController.setCanvas(canvas);
         this.collector = new EventCollector();
+        this._name = name;
         this.run();
     }
 
@@ -340,7 +342,7 @@ export abstract class AbstractScene implements IScene {
 
     public start(isBackgroundLayerPresent: boolean): void {
         if (this._isDestroyed || this._isDestroyProcessed) {
-            console.log('scene is destroyed !!!');
+            console.log('Try to start scene, but', this._name, 'is destroyed !!!');
             return;
         }
         this.isBackgroundLayerPresent = isBackgroundLayerPresent;
@@ -443,6 +445,10 @@ export abstract class AbstractScene implements IScene {
         if (!!this.collector) {
             this.collector.unsubscribe(subscriber);
         }
+    }
+
+    get name(): string {
+        return this._name;
     }
 }
 

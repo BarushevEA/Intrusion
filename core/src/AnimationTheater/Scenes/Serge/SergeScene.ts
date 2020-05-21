@@ -8,7 +8,7 @@ import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesE
 export class SergeScene extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, "SERGE");
     }
 
     protected createScene(): void {

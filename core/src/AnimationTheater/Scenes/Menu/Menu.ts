@@ -8,7 +8,7 @@ import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesE
 export class Menu extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, "MENU");
     }
 
     protected createScene(): void {

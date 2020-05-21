@@ -13,7 +13,7 @@ export const userData = {
 export class TestScene extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, "TEST_SCENE");
     }
 
     protected createScene(): void {

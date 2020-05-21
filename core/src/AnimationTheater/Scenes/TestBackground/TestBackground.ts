@@ -8,7 +8,7 @@ import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesE
 export class TestBackground extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, "TEST_BACKGROUND");
     }
 
     protected createScene(): void {

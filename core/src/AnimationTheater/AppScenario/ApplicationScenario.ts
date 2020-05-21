@@ -39,9 +39,13 @@ function initEvents(platform: AbstractPlatform): void {
                         collector.collect(
                             sceneTest.onStart$.subscribe(() => {
                             }),
-                            sceneTest.onDestroy$.subscribe(() => {
+                            sceneTest.onExit$.subscribe(() => {
+                                console.log(sceneTest.name, 'Try to start menu.')
                                 menu.start(true);
-                            })
+                            }),
+                            // sceneTest.onDestroy$.subscribe(() => {
+                            //     menu.start(true);
+                            // })
                         );
                         sceneTest.start(true);
                         break;
@@ -52,6 +56,7 @@ function initEvents(platform: AbstractPlatform): void {
                                 sceneSerge.setHalfSpeed();
                             }),
                             sceneSerge.onExit$.subscribe(() => {
+                                console.log(sceneSerge.name, 'Try to start menu.')
                                 menu.start(true);
                             })
                         )
@@ -64,11 +69,12 @@ function initEvents(platform: AbstractPlatform): void {
                                 // sceneBackground.setHalfSpeed();
                             }),
                             sceneBackground.onExit$.subscribe(() => {
+                                console.log(sceneBackground.name, 'Try to start menu.')
                                 menu.start(true);
                             }),
-                            sceneBackground.onDestroy$.subscribe(() => {
-                                menu.start(true);
-                            })
+                            // sceneBackground.onDestroy$.subscribe(() => {
+                            //     menu.start(true);
+                            // })
                         );
                         sceneBackground.start(true);
                         break;
