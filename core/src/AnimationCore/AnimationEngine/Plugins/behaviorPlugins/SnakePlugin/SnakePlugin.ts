@@ -1,10 +1,10 @@
-import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {AbstractActorPlugin} from "../../root/AbstractActorPlugin";
+import {AbstractScene} from "../../../rootScenes/AbstractScene";
+import {AbstractActor} from "../../../rootModels/AbstractActor/AbstractActor";
+import {ISubscriptionLike} from "../../../../Libraries/Observable";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
-import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
+import {tickGenerator} from "../../../../Libraries/TickGenerator";
 
 export class SnakePlugin extends AbstractActorPlugin {
     private actors: AbstractActor[] = <any>0;

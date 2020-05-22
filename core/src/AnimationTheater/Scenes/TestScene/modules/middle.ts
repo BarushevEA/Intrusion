@@ -12,10 +12,10 @@ import {AnimatedWave} from "../../../AnimationModels/waves/AnimatedWave";
 import {AnimatedWaveDark} from "../../../AnimationModels/waves/AnimatedWaveDark";
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {SnakeSpiral} from "../../../AnimationModels/SnakeSpiral";
-import {MoveKeyControls} from "../../../Plugins/MoveKeyControls";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
-import {RectangleHighlighting} from "../../../Plugins/RectangleHighlighting";
-import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {MoveKeyControls} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/MoveKeyControls";
+import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
+import {RectangleHighlighting} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/RectangleHighlighting";
+import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 

@@ -11,7 +11,7 @@ import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {GreenTriangle} from "../../../AnimationModels/GreenTriangle/GreenTriangle";
 import {DimensionBackground} from "../../../AnimationModels/DimensionBackground/DimensionBackground";
-import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightCyan} from "../../../AnimationModels/rectangles/AnimatedRectangleLightCyan";

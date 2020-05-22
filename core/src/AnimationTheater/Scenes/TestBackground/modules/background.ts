@@ -9,13 +9,12 @@ import {Cells, DrawHelper} from "../../../AnimationModels/DimensionBackground/Di
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
-import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
+import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
-import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -134,7 +133,6 @@ function initDynamicalActions(scene: AbstractScene) {
                 }
             }
             scene.destroyActor(redButton);
-            scene.cursor.setType(ECursor.DEFAULT);
         })
     );
 }

@@ -2,7 +2,7 @@ import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngin
 import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {LightCircle} from "../../../../../AnimationModels/circle/LightCircle";
-import {BounceOffTheWall} from "../../../../../Plugins/BounceOffTheWall";
+import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 
 let circles: AbstractActor[] = <any>0;

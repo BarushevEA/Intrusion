@@ -3,8 +3,8 @@ import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/roo
 import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {Plane} from "../../../../../AnimationModels/Planes/heroes/Plane";
 import {getCenterY} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
-import {MoveKeyControls} from "../../../../../Plugins/MoveKeyControls";
-import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
+import {MoveKeyControls} from "../../../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/MoveKeyControls";
+import {RectangleHighlighting} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../../../Plugins/BlueFire/BlueFirePlugin";
 import {MovePlaneFramePlugin} from "../../../../../Plugins/MovePlaneFramePlugin";
 import {ShotLightingPlugin} from "../../../../../Plugins/ShotLighting/ShotLightingPlugin";

@@ -1,4 +1,4 @@
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {AbstractActor} from "../../../rootModels/AbstractActor/AbstractActor";
 
 export class EmptyActor extends AbstractActor {
     constructor(canvas: HTMLCanvasElement) {

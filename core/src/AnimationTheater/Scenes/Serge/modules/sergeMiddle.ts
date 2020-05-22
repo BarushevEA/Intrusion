@@ -2,7 +2,7 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScene
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
 import {Heart} from "../../../AnimationModels/Heart";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
+import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightRed} from "../../../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {Link} from "../../../Plugins/Link";

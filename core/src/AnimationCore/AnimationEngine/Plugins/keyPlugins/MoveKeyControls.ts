@@ -1,9 +1,9 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {MoveUpOnKeyPress} from "../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveUpOnKeyPress";
-import {MoveDownOnKeyPress} from "../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveDownOnKeyPress";
-import {MoveLeftOnKeyPress} from "../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveLeftOnKeyPress";
-import {MoveRightOnKeyPress} from "../../AnimationCore/AnimationEngine/Plugins/onPressKeyPlugins/MoveRightOnKeyPress";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
+import {MoveUpOnKeyPress} from "./onPressKeyPlugins/MoveUpOnKeyPress";
+import {MoveDownOnKeyPress} from "./onPressKeyPlugins/MoveDownOnKeyPress";
+import {MoveLeftOnKeyPress} from "./onPressKeyPlugins/MoveLeftOnKeyPress";
+import {MoveRightOnKeyPress} from "./onPressKeyPlugins/MoveRightOnKeyPress";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
 
 export class MoveKeyControls extends AbstractActorPlugin {
     private moveUp: MoveUpOnKeyPress;

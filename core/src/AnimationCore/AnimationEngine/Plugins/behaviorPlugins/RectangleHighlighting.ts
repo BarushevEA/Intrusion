@@ -1,6 +1,6 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
+import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {ISubscriptionLike} from "../../../Libraries/Observable";
 
 export class RectangleHighlighting extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;

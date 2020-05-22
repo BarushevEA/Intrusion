@@ -1,7 +1,7 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ECursor} from "../../AnimationCore/AnimationEngine/rootModels/Types";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
+import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
+import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {ECursor} from "../../rootModels/Types";
+import {ISubscriptionLike} from "../../../Libraries/Observable";
 
 export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
     private PODSubscriber: ISubscriptionLike = <any>0;
@@ -48,6 +48,7 @@ export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
         this.PODSubscriber = <any>0;
         this.dragSubscriber = <any>0;
         this.dropSubscriber = <any>0;
+        this.scene.cursor.setType(ECursor.DEFAULT);
         super.unLink();
     }
 
