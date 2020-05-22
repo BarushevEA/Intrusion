@@ -54,11 +54,11 @@ export abstract class AbstractScene implements IScene {
         return this._cursorHandler;
     }
 
-    set cursor(value: AbstractActor & ICursor) {
+    set cursor(value: ICursor) {
         this._cursor = value;
     }
 
-    get cursor(): ICursor & AbstractActor {
+    get cursor(): ICursor {
         return this._cursor;
     }
 
