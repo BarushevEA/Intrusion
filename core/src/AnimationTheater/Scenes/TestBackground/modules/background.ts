@@ -15,6 +15,7 @@ import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
+import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -106,8 +107,8 @@ function prepareCells() {
 }
 
 function initDynamicalActions(scene: AbstractScene) {
-    const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
-    redButton.pluginDock.add(cursorBehaviorHeart);
+    const cursorOver = new PointerAndDragCursorPlugin(scene);
+    redButton.pluginDock.add(cursorOver);
     scene.collect(
         redButton.isMouseClick$.subscribe(() => {
             const arr = cells.cells;
@@ -133,6 +134,7 @@ function initDynamicalActions(scene: AbstractScene) {
                 }
             }
             scene.destroyActor(redButton);
+            scene.cursor.setType(ECursor.DEFAULT);
         })
     );
 }

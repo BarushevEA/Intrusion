@@ -23,18 +23,12 @@ import {tickGenerator} from "../../../Libraries/TickGenerator";
 export abstract class AbstractActor implements IActor, IDimensions {
     private static _savedFramePool: { [key: string]: IFramePool } = {};
     private static _mousePosition: IMousePosition = <any>0;
-    private static tickCount$ = new Observable(<boolean>false);
     private _z_index = 0;
     private _z_index_memory = 0;
     private _layerName = '';
     private _layer_name_memory = '';
     private _pluginDock: IPluginDock = <any>0;
     private _isUnlinked = true;
-
-    public static tickCount() {
-        requestAnimationFrame(AbstractActor.tickCount);
-        AbstractActor.tickCount$.next(true);
-    }
 
     protected framePoolName: string = '';
     protected generalLayer: HTMLCanvasElement;
@@ -100,7 +94,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.mouseEvents.push(mouseRightDown$.subscribe(this.rightMouseDown.bind(this)));
         this.mouseEvents.push(mouseRightUp$.subscribe(this.rightMouseUp.bind(this)));
         this.mouseEvents.push(this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
-        this.mouseEvents.push(AbstractActor.tickCount$.subscribe(this.checkMouseOver.bind(this)));
+        this.mouseEvents.push(tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this)));
         this.isEventsDisabled = false;
     }
 
@@ -393,6 +387,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public collect(...subscribers: ISubscriptionLike[]): void {
+        if (!this.collector.collect) {
+            this.destroy();
+            return;
+        }
         this.collector.collect(...subscribers);
     }
 
@@ -414,10 +412,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._layer_name_memory = <any>0;
         this.framePoolName = <any>0;
         this.generalLayer = <any>0;
-        // this._elementX = <any>0;
-        // this._elementY = <any>0;
-        // this._elementWidth = <any>0;
-        // this._elementHeight = <any>0;
         this._isLeftMouseCatch = <any>0;
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;
@@ -524,5 +518,3 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this._mousePosition;
     }
 }
-
-AbstractActor.tickCount();
