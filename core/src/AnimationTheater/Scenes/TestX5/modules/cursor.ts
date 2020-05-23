@@ -28,7 +28,7 @@ function clearVariables() {
         cursorHandler.clear();
         cursorHandler = <any>0;
     }
-    defaultCursor$.next(false);
+    defaultCursor$.next(true);
 }
 
 function initActors(scene: AbstractScene) {
@@ -42,7 +42,7 @@ function initActions(scene: AbstractScene) {
             scene.cursor.setType(ECursor.DEFAULT);
         }),
         scene.onStop$.subscribe(() => {
-            defaultCursor$.next(false);
+            defaultCursor$.next(true);
         }),
         scene.onDestroy$.subscribe(() => {
             cursorHandler.clear();

@@ -3,13 +3,13 @@ import {ELayers} from "../../scenesEnvironment";
 import {defaultCursor$, mouseMovePosition$} from "../../../../Store/EventStore";
 import {ECursor} from "../../../rootModels/Types";
 import {IMousePosition} from "../../../../DomComponent/AppAnimation";
-import {CursorHandler} from "../../../../Libraries/FunctionLibs";
+import {CursorHandler} from "../../../../Libraries/CursorHandler";
 
 export let cursorHandler: CursorHandler = <any>0;
 
 export function initCursor(scene: AbstractScene) {
-    // If need to create cursor delete next line
-    scene = scene;
+    // If need to create cursor uncomment next line
+    // scene.cursor = new Cursor(scene.generalLayer);
     cursorHandler = new CursorHandler();
     scene.cursorHandler = cursorHandler;
 }

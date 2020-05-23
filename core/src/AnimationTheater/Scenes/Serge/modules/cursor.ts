@@ -4,7 +4,7 @@ import {Cursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Curso
 import {defaultCursor$, mouseMovePosition$} from "../../../../AnimationCore/Store/EventStore";
 import {IMousePosition} from "../../../../AnimationCore/DomComponent/AppAnimation";
 import {ECursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Types";
-import {CursorHandler} from "../../../../AnimationCore/Libraries/FunctionLibs";
+import {CursorHandler} from "../../../../AnimationCore/Libraries/CursorHandler";
 
 export let cursorHandler: CursorHandler = <any>0;
 

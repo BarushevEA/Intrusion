@@ -3,11 +3,12 @@ import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../Libraries/Observable";
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
-import {CursorHandler, findElementOnArray} from "../../Libraries/FunctionLibs";
+import {findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 import {tickGenerator} from "../../Libraries/TickGenerator";
+import {CursorHandler} from "../../Libraries/CursorHandler";
 
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
