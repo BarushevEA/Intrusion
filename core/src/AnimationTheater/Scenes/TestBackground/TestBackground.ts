@@ -4,11 +4,12 @@ import {handleMiddle} from "./modules/Middle/middle";
 import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {E_Scene} from "../../AppScenario/types";
 
 export class TestBackground extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, "TEST_BACKGROUND");
+        super(canvas, E_Scene.BACKGROUND);
     }
 
     protected createScene(): void {

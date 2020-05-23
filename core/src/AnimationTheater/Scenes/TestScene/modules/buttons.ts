@@ -13,7 +13,8 @@ import {cursorHandler} from "./cursor";
 import {
     clearOnSceneDestroy,
     defaultCursorAction,
-    destroySceneOnButtonClick, toggleMouseEventsOnMouseOverGroup
+    destroySceneOnButtonClick,
+    toggleMouseEventsOnMouseOverGroup
 } from "../../../../AnimationCore/Libraries/Actions";
 
 let buttonExit: AbstractActor;
@@ -33,12 +34,30 @@ export function handleButtons(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    buttonExit = <any>0;
-    buttonMove = <any>0;
-    buttonStop = <any>0;
-    buttonPlay = <any>0;
-    buttonPause = <any>0;
-    buttonInvisible = <any>0;
+    if (buttonExit) {
+        buttonExit.destroy();
+        buttonExit = <any>0;
+    }
+    if (buttonMove) {
+        buttonMove.destroy();
+        buttonMove = <any>0;
+    }
+    if (buttonStop) {
+        buttonStop.destroy();
+        buttonStop = <any>0;
+    }
+    if (buttonPlay) {
+        buttonPlay.destroy();
+        buttonPlay = <any>0;
+    }
+    if (buttonPause) {
+        buttonPause.destroy();
+        buttonPause = <any>0;
+    }
+    if (buttonInvisible) {
+        buttonInvisible.destroy();
+        buttonInvisible = <any>0;
+    }
 }
 
 function initActors(scene: AbstractScene) {

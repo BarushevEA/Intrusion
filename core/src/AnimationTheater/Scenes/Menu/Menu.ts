@@ -4,11 +4,12 @@ import {handleMiddle} from "./modules/menuMiddle";
 import {handleButtons} from "./modules/menuButtons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {E_Scene} from "../../AppScenario/types";
 
 export class Menu extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, "MENU");
+        super(canvas, E_Scene.MENU);
     }
 
     protected createScene(): void {

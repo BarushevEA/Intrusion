@@ -3,5 +3,6 @@ export enum E_Scene {
     TEST = 'TEST',
     SERGE = 'SERGE',
     BACKGROUND = 'BACKGROUND',
+    TESTx5 = 'TESTx5',
     NULL = 'NULL'
 }

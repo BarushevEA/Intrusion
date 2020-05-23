@@ -4,11 +4,12 @@ import {handleMiddle} from "./modules/sergeMiddle";
 import {handleBackgrounds} from "./modules/sergeBackground";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {E_Scene} from "../../AppScenario/types";
 
 export class SergeScene extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas, "SERGE");
+        super(canvas, E_Scene.SERGE);
     }
 
     protected createScene(): void {

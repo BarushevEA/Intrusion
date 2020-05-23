@@ -4,11 +4,12 @@ import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {E_Scene} from "../../AppScenario/types";
 
 export class TestX5 extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, E_Scene.TESTx5);
     }
 
     protected createScene(): void {

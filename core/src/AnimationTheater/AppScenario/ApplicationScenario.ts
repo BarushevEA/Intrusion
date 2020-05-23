@@ -7,13 +7,15 @@ import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
 import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {EventCollector} from "../../AnimationCore/Libraries/EventCollector";
+import {TestX5} from "../Scenes/TestX5/TestX5";
 
 const collector = new EventCollector();
 
 let menu: AbstractScene = <any>0,
     sceneTest: AbstractScene = <any>0,
     sceneSerge: AbstractScene = <any>0,
-    sceneBackground: AbstractScene = <any>0;
+    sceneBackground: AbstractScene = <any>0,
+    sceneTestX5: AbstractScene = <any>0;
 
 export function runApplicationScenario(platform: AbstractPlatform) {
     initScenes(platform);
@@ -77,6 +79,19 @@ function initEvents(platform: AbstractPlatform): void {
                             // })
                         );
                         sceneBackground.start(true);
+                        break;
+                    case E_Scene.TESTx5:
+                        sceneTestX5 = platform.createScene(TestX5);
+                        collector.collect(
+                            sceneTestX5.onStart$.subscribe(() => {
+                                // sceneSerge.setHalfSpeed();
+                            }),
+                            sceneTestX5.onExit$.subscribe(() => {
+                                console.log(sceneSerge.name, 'Try to start menu.')
+                                menu.start(false);
+                            })
+                        )
+                        sceneTestX5.start(false);
                         break;
                 }
             }

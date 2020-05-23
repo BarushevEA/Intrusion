@@ -14,7 +14,10 @@ export function handleButtons(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    buttonExit = <any>0;
+    if (buttonExit) {
+        buttonExit.destroy();
+        buttonExit = <any>0;
+    }
 }
 
 function initActors(scene: AbstractScene) {

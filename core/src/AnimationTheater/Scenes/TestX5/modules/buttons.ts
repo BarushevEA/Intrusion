@@ -21,13 +21,16 @@ export function handleButtons(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    buttonExit = <any>0;
+    if (buttonExit) {
+        buttonExit.destroy();
+        buttonExit = <any>0;
+    }
 }
 
 function initActors(scene: AbstractScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonExit.xPos = getSceneRightX(scene, buttonExit);
-    scene.setActors();
+    scene.setActors(buttonExit);
 }
 
 function initActions(scene: AbstractScene) {
