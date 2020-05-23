@@ -34,7 +34,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 this.scene.destroyActor(this.root);
             }
             this.damagedEnemy = this.getDamagedEnemy();
-            if (this.damagedEnemy) {
+            if (this.damagedEnemy && this.damagedEnemy.pluginDock) {
                 const health = <HealthPlugin>this.damagedEnemy.pluginDock.getPluginsFromRootName('HealthPlugin')[0];
                 if (health) {
                     health.setDamage(this.damage);
