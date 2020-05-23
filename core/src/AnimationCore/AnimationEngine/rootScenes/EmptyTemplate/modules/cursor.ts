@@ -1,15 +1,14 @@
 import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
-import {defaultCursor$, mouseMovePosition$} from "../../../../Store/EventStore";
-import {ECursor} from "../../../rootModels/Types";
-import {IMousePosition} from "../../../../DomComponent/AppAnimation";
+import {defaultCursor$} from "../../../../Store/EventStore";
 import {CursorHandler} from "../../../../Libraries/CursorHandler";
+import {clearOnSceneDestroy, setDefaultCursorActions} from "../../../../Libraries/Actions";
+import {Cursor} from "../../../rootModels/Cursor/Cursor";
 
 export let cursorHandler: CursorHandler = <any>0;
 
 export function initCursor(scene: AbstractScene) {
-    // If need to create cursor uncomment next line
-    // scene.cursor = new Cursor(scene.generalLayer);
+    scene.cursor = new Cursor(scene.generalLayer);
     cursorHandler = new CursorHandler();
     scene.cursorHandler = cursorHandler;
 }
@@ -36,21 +35,6 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect(
-        scene.onStart$.subscribe(() => {
-            defaultCursor$.next(false);
-            scene.cursor.setType(ECursor.DEFAULT);
-        }),
-        scene.onStop$.subscribe(() => {
-            defaultCursor$.next(true);
-        }),
-        scene.onDestroy$.subscribe(() => {
-            cursorHandler.clear();
-            clearVariables();
-        }),
-        mouseMovePosition$.subscribe((position: IMousePosition) => {
-            scene.cursor.xPos = position.x;
-            scene.cursor.yPos = position.y;
-        })
-    );
+    setDefaultCursorActions(scene);
+    clearOnSceneDestroy(scene, clearVariables);
 }

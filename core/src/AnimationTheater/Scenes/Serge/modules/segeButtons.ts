@@ -3,6 +3,8 @@ import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scen
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
+import {getSceneRightX} from "../../../../AnimationCore/Libraries/FunctionLibs";
+import {clearOnSceneDestroy, exitSceneOnButtonClick} from "../../../../AnimationCore/Libraries/Actions";
 import {cursorHandler} from "./cursor";
 
 let buttonExit: AbstractActor;
@@ -20,21 +22,11 @@ function clearVariables() {
 
 function initActors(scene: AbstractScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
-    buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
+    buttonExit.xPos = getSceneRightX(scene, buttonExit);
     scene.setActors(buttonExit);
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect(
-        buttonExit.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = E_Scene.MENU;
-            scene.exit();
-        }),
-        buttonExit.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonExit);
-        }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    exitSceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
+    clearOnSceneDestroy(scene, clearVariables);
 }

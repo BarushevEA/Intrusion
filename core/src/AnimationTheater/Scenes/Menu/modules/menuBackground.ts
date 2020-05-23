@@ -1,6 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {HorizontalBackground1} from "../../../AnimationModels/HorizontalBackground1";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let background: HorizontalBackground1;
 
@@ -22,9 +23,5 @@ function initActors(scene: AbstractScene) {
 }
 
 function initActions(scene: AbstractScene) {
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    clearOnSceneDestroy(scene, clearVariables);
 }

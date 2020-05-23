@@ -3,6 +3,7 @@ import {ELayers} from "../../../../../AnimationCore/AnimationEngine/rootScenes/s
 import {decoration} from "./partitionOfDecoration/Decoration";
 import {heroesPool} from "./partitionOfHeroes/HeroesPool";
 import {enemiesPool} from "./partitionOfEnemies/Enemies";
+import {clearOnSceneDestroy} from "../../../../../AnimationCore/Libraries/Actions";
 
 export function handleMiddle(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -30,9 +31,5 @@ function initActions(scene: AbstractScene) {
     decoration.initActions(scene);
     enemiesPool.initActions(scene);
     heroesPool.initActions(scene);
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    clearOnSceneDestroy(scene, clearVariables);
 }

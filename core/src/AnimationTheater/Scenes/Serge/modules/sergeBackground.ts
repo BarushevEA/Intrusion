@@ -16,6 +16,7 @@ import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/A
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightCyan} from "../../../AnimationModels/rectangles/AnimatedRectangleLightCyan";
 import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let cells: IBackgroundMap = <any>0,
     bg: DimensionBackground = <any>0,
@@ -107,9 +108,6 @@ function initActions(scene: AbstractScene) {
     const bounce = new BounceOffTheWall(scene);
     bg.pluginDock.add(bounce);
     scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        }),
         left.isMouseClick$.subscribe(() => {
             bg.moveLeft();
         }),
@@ -123,6 +121,7 @@ function initActions(scene: AbstractScene) {
             bg.moveBottom();
         }),
     );
+    clearOnSceneDestroy(scene, clearVariables);
 }
 
 function prepareCells() {

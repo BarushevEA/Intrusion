@@ -2,5 +2,6 @@ export enum E_Scene {
     MENU = 'MENU',
     TEST = 'TEST',
     SERGE = 'SERGE',
-    BACKGROUND = 'BACKGROUND'
+    BACKGROUND = 'BACKGROUND',
+    NULL = 'NULL'
 }

@@ -2,6 +2,7 @@ import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScene
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {cursorHandler} from "./cursor";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let buttonExit: ButtonExit;
 
@@ -30,9 +31,7 @@ function initActions(scene: AbstractScene) {
         }),
         buttonExit.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, buttonExit);
-        }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
         })
     );
+    clearOnSceneDestroy(scene, clearVariables);
 }

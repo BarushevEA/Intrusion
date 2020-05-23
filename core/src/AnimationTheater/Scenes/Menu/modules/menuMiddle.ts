@@ -1,6 +1,7 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {MovedCircle} from "../../../AnimationModels/MovedCircle";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let circles: MovedCircle[];
 
@@ -31,9 +32,5 @@ function initActions(scene: AbstractScene) {
             circle.moreSpeed();
         }));
     }
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    clearOnSceneDestroy(scene, clearVariables);
 }

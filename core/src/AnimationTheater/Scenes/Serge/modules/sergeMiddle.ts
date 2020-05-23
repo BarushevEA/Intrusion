@@ -6,6 +6,7 @@ import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEng
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightRed} from "../../../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {Link} from "../../../Plugins/Link";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let combinedRectangle: CombinedRectangle,
     linkRectangle: AnimatedRectangleLightGreen,
@@ -63,9 +64,6 @@ function initActions(scene: AbstractScene) {
         combinedRectangle.isMouseClick$.subscribe(() => {
             combinedRectangle.nextRectangle();
         }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        }),
         linkRectangle.isMouseClick$.subscribe(() => {
             heart.pluginDock.add(link);
             console.log(heart.pluginDock.getNameList());
@@ -75,4 +73,6 @@ function initActions(scene: AbstractScene) {
             console.log(heart.pluginDock.getNameList());
         })
     );
+
+    clearOnSceneDestroy(scene, clearVariables);
 }

@@ -15,6 +15,7 @@ import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -71,11 +72,7 @@ function initActors(scene: AbstractScene) {
 
 function initActions(scene: AbstractScene) {
     initDynamicalActions(scene);
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    clearOnSceneDestroy(scene, clearVariables);
 }
 
 function initDynamical(scene: AbstractScene) {
