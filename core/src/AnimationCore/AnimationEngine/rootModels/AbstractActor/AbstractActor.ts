@@ -43,7 +43,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private leftMouseCatchTimeIndex = -1;
     private leftMouseCatchTime = 140;
     private collector: ICollector = <any>0;
-    private readonly mouseEvents: ISubscriptionLike[] = [];
+    private mouseEventsCollector: ICollector = <any>0;
     public isMouseOver = false;
     private _isMouseOver$ = new Observable(<boolean>false);
     private _isMouseClick$ = new Observable(<boolean>false);
@@ -57,6 +57,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isDestroyProcessed = false;
     private isEventsDisabled = false;
     private _isEventsPaused = false;
+    private _isDestroyEnabled = true;
 
     protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
         this._elementHeight = height;
@@ -64,6 +65,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
         this.collector = new EventCollector();
+        this.mouseEventsCollector = new EventCollector();
         this._pluginDock = new PluginDock<IActor>(this);
     }
 
@@ -84,33 +86,34 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private initEvents(): void {
-        if (this.mouseEvents.length || this._isEventsBlock) {
+        if (this._isEventsBlock ||
+            this._isDestroyProcessed) {
             return;
         }
-        this.mouseEvents.push(mouseMovePosition$.subscribe(this.mouseOver.bind(this)));
-        this.mouseEvents.push(mouseClickPosition$.subscribe(this.mouseClick.bind(this)));
-        this.mouseEvents.push(mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)));
-        this.mouseEvents.push(mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)));
-        this.mouseEvents.push(mouseRightDown$.subscribe(this.rightMouseDown.bind(this)));
-        this.mouseEvents.push(mouseRightUp$.subscribe(this.rightMouseUp.bind(this)));
-        this.mouseEvents.push(this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)));
-        this.mouseEvents.push(tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this)));
+        this.mouseEventsCollector.collect(
+            mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
+            mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
+            mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
+            mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
+            mouseRightDown$.subscribe(this.rightMouseDown.bind(this)),
+            mouseRightUp$.subscribe(this.rightMouseUp.bind(this)),
+            mouseRightUp$.subscribe(this.rightMouseUp.bind(this)),
+            this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
+            tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
+        );
         this.isEventsDisabled = false;
     }
 
     public pauseEvents() {
-        if ( this.isEventsDisabled) {
+        if (this.isEventsDisabled || !this.mouseEventsCollector) {
             return;
         }
-        for (let i = 0; i < this.mouseEvents.length; i++) {
-            this.mouseEvents[i].unsubscribe();
-        }
-        this.mouseEvents.length = 0;
+        this.mouseEventsCollector.clear();
         this._isEventsPaused = true;
     }
 
     public unPauseEvents() {
-        if ( this.isEventsDisabled) {
+        if (this.isEventsDisabled) {
             return;
         }
         this.isEventsBlock = false;
@@ -122,10 +125,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public disableEvents(): void {
-        for (let i = 0; i < this.mouseEvents.length; i++) {
-            this.mouseEvents[i].unsubscribe();
+        if (!this.mouseEventsCollector) {
+            return;
         }
-        this.mouseEvents.length = 0;
+        this.mouseEventsCollector.clear();
         this.isEventsDisabled = true;
     }
 
@@ -133,7 +136,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         if (value) {
             this.disableEvents();
         } else {
-            this.initEvents();
+            this.enableEvents();
         }
         this._isEventsBlock = value;
     }
@@ -143,6 +146,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public enableEvents(): void {
+        if (this.isDestroyed) {
+            return;
+        }
         this.initEvents();
     }
 
@@ -159,10 +165,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private checkMouseOver(): void {
+        if (this.isDestroyed) {
+            return;
+        }
         this.mouseOver(AbstractActor._mousePosition);
     }
 
     private mouseClick(position: IMousePosition): void {
+        if (this.isDestroyed) {
+            return;
+        }
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
@@ -388,6 +400,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public collect(...subscribers: ISubscriptionLike[]): void {
         if (!this.collector.collect) {
+            this.isDestroyEnabled = true;
             this.destroy();
             return;
         }
@@ -395,7 +408,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public destroy(): void {
-        if (this._isDestroyed || this._isDestroyProcessed) {
+        if (!this._isDestroyEnabled ||
+            this._isDestroyed ||
+            this._isDestroyProcessed) {
             return;
         }
         this._isDestroyProcessed = true;
@@ -405,7 +420,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.collector.destroy();
         this.collector = <any>0;
 
-        this.disableEvents();
+        this.mouseEventsCollector.destroy();
+        this.mouseEventsCollector = <any>0;
+
         this._z_index = <any>0;
         this._z_index_memory = <any>0;
         this._layerName = <any>0;
@@ -516,5 +533,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     static get mousePosition(): IMousePosition {
         return this._mousePosition;
+    }
+
+    get isDestroyEnabled(): boolean {
+        return this._isDestroyEnabled;
+    }
+
+    set isDestroyEnabled(value: boolean) {
+        this._isDestroyEnabled = value;
     }
 }
