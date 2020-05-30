@@ -90,6 +90,11 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this._isDestroyProcessed) {
             return;
         }
+        if (!this.mouseEventsCollector.collect) {
+            this.isDestroyEnabled = true;
+            this.destroy();
+            return;
+        }
         this.mouseEventsCollector.collect(
             mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
             mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
