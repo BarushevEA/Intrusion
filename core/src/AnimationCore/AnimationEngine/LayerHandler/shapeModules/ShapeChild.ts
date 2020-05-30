@@ -5,11 +5,9 @@ export class ShapeChild implements IDrawStop {
     protected readonly context: CanvasRenderingContext2D;
     protected readonly parent: IShapeHandler;
 
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        this._stopDrawing = stopDrawing;
-        this.context = context;
+    constructor(parent: IShapeHandler) {
+        this._stopDrawing = parent.stopDrawing.bind(parent);
+        this.context = parent.context;
         this.parent = parent;
     }
 

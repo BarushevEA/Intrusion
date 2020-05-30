@@ -5,11 +5,9 @@ import {ShapeChild} from "./ShapeChild";
 export class LinearGradient extends ShapeChild implements ILinearGradient {
     private gradient: CanvasGradient;
 
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        super(stopDrawing, context, parent);
-        this.gradient = context.createLinearGradient(0, 0, 10, 10);
+    constructor(parent: IShapeHandler) {
+        super(parent);
+        this.gradient = this.context.createLinearGradient(0, 0, 10, 10);
     }
 
     stopExecution(isReverse = false): IShapeHandler {

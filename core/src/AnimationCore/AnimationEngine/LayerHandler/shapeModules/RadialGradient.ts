@@ -5,11 +5,9 @@ import {ShapeChild} from "./ShapeChild";
 export class RadialGradient extends ShapeChild implements IRadialGradient {
     private gradient: CanvasGradient;
 
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        super(stopDrawing, context, parent);
-        this.gradient = context.createRadialGradient(0, 0, 10, 10, 10, 20);
+    constructor(parent: IShapeHandler) {
+        super(parent);
+        this.gradient = this.context.createRadialGradient(0, 0, 10, 10, 10, 20);
     }
 
     stopExecution(isReverse = false): IShapeHandler {

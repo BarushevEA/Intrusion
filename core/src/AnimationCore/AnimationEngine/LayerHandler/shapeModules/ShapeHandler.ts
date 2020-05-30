@@ -202,15 +202,15 @@ class ShapeHandler implements IShapeHandler {
 
     public advancedPolygon(): IAdvancedPolygon {
         this.startDrawing();
-        return new AdvancedPolygon(this.handleStopDrawing.bind(this), this._context, this);
+        return new AdvancedPolygon(this);
     }
 
     public linearGradient(): ILinearGradient {
-        return new LinearGradient(this.handleStopDrawing.bind(this), this._context, this);
+        return new LinearGradient(this);
     };
 
     public radialGradient(): IRadialGradient {
-        return new RadialGradient(this.handleStopDrawing.bind(this), this._context, this);
+        return new RadialGradient(this);
     };
 
     private handleStopDrawing() {
