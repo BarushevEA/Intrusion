@@ -3,6 +3,7 @@ import {ISubscriptionLike} from "./Observable";
 export type ICollector = {
     collect(...subscribers: ISubscriptionLike[]): void;
     unsubscribe(subscriber: ISubscriptionLike): void;
+    clear(): void;
     destroy(): void;
 };
 
