@@ -1,4 +1,5 @@
-import {ISubscriptionLike, Observable} from "./Observable";
+import {Observable} from "./Observables/Observable";
+import {ISubscriptionLike} from "./Observables/Types";
 
 export type IDestroyed = {
     isDestroyed: boolean;

@@ -1,6 +1,6 @@
-import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observable";
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
+import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 export type IDimensions = {
     xPos: x_pos;

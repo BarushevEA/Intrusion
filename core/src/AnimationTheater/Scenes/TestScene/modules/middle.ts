@@ -1,6 +1,5 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
-import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observable";
 import {Heart} from "../../../AnimationModels/Heart";
 import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
@@ -18,6 +17,7 @@ import {RectangleHighlighting} from "../../../../AnimationCore/AnimationEngine/P
 import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observables/Types";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};

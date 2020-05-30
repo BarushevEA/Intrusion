@@ -1,9 +1,9 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {HealthPlugin} from "./HealthPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 
 export class HealsBuf extends AbstractActorPlugin {
     private _buf: number = <any>0;

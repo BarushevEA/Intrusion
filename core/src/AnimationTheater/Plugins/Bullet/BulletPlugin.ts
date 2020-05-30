@@ -1,11 +1,11 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;

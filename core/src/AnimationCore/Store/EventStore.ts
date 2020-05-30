@@ -1,4 +1,4 @@
-import {Observable} from "../Libraries/Observable";
+import {Observable} from "../Libraries/Observables/Observable";
 import {IMousePosition} from "../DomComponent/AppAnimation";
 import {IKeyCode, ISize} from "./Types";
 

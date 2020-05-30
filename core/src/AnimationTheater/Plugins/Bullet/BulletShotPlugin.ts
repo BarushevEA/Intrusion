@@ -8,7 +8,7 @@ import {LaserRed} from "./Actors/LaserRed";
 import {LaserBlue} from "./Actors/LaserBlue";
 import {LaserOrange} from "./Actors/LaserOrange";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: AbstractActor[] = <any>0;

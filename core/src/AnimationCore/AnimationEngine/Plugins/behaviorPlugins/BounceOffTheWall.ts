@@ -1,8 +1,8 @@
 import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
 import {AbstractScene} from "../../rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../../Libraries/Observable";
 import {randomize} from "../../../Libraries/FunctionLibs";
 import {tickGenerator} from "../../../Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 export class BounceOffTheWall extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;

@@ -1,8 +1,9 @@
 import {AbstractActorPlugin} from "./AbstractActorPlugin";
-import {ISubscriptionLike, Observable} from "../../../Libraries/Observable";
+import {Observable} from "../../../Libraries/Observables/Observable";
 import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {keyDownCode$, keyUpCode$} from "../../../Store/EventStore";
 import {IKeyCode} from "../../../Store/Types";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
     private readonly key = 'Key';

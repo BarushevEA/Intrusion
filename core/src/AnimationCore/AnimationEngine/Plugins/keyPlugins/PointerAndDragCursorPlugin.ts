@@ -1,7 +1,7 @@
 import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
 import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {ECursor} from "../../rootModels/Types";
-import {ISubscriptionLike} from "../../../Libraries/Observable";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
     private PODSubscriber: ISubscriptionLike = <any>0;

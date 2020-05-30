@@ -1,6 +1,6 @@
 import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
 import {AbstractScene} from "../../rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../../Libraries/Observable";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 export class RectangleHighlighting extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;

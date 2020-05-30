@@ -1,5 +1,6 @@
-import {ISubscriptionLike, Observable} from "./Observable";
+import {Observable} from "./Observables/Observable";
 import {cb_function, delay_ms, delay_second, ITick, ITickListener} from "./Types";
+import {ISubscriptionLike} from "./Observables/Types";
 
 let listeners: ITickListener[] = [];
 const tickDelay = 10;

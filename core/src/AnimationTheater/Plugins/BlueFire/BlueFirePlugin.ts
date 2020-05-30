@@ -2,9 +2,9 @@ import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugin
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {BlueFire} from "./BlueFire";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 
 export class BlueFirePlugin extends AbstractActorPlugin {
     private fire: AbstractActor = <any>0;

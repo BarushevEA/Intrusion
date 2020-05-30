@@ -1,12 +1,12 @@
 import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 import {E_Scene} from "../../AnimationTheater/AppScenario/types";
-import {ICallback} from "./Observable";
 import {defaultCursor$, mouseMovePosition$} from "../Store/EventStore";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {IMousePosition} from "../DomComponent/AppAnimation";
 import {CursorHandler} from "./CursorHandler";
 import {AbstractActor} from "../AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {ICallback} from "./Observables/Types";
 
 export function exitSceneOnButtonClick(scene: AbstractScene,
                                        button: IActor,

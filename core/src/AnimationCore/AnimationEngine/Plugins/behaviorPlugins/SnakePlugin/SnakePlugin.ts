@@ -1,10 +1,10 @@
 import {AbstractActorPlugin} from "../../root/AbstractActorPlugin";
 import {AbstractScene} from "../../../rootScenes/AbstractScene";
 import {AbstractActor} from "../../../rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../../Libraries/Observable";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
 import {tickGenerator} from "../../../../Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../../Libraries/Observables/Types";
 
 export class SnakePlugin extends AbstractActorPlugin {
     private actors: AbstractActor[] = <any>0;

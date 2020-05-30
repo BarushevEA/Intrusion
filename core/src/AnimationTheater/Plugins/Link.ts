@@ -1,7 +1,8 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike, Observable} from "../../AnimationCore/Libraries/Observable";
+import {Observable} from "../../AnimationCore/Libraries/Observables/Observable";
+import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
 
 export class Link extends AbstractActorPlugin {
     private linkedActor: AbstractActor = <any>0;

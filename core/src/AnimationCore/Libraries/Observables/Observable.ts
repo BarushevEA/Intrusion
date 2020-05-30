@@ -1,53 +1,19 @@
-export type ICallback = (value?: any) => void;
-
-export type ISubscribe = {
-    subscribe(callback: ICallback): ISubscriptionLike;
-}
-
-export type IUnSubscribe = {
-    unSubscribe(index: ICallback): void;
-    destroy(): void;
-}
-
-export type ISetObservableValue = {
-    next(value: any): void;
-}
-
-export type IListeners = ICallback[]
-
-export type ISubscriptionLike = {
-    unsubscribe(): void;
-};
-
-export type ISubscribeCounter = {
-    getNumberOfSubscribers(): number;
-};
-
-export type ISubscriber<T> =
-    { getValue(): T; } &
-    ISubscribe;
-
-export type IObserver<T> =
-    ISetObservableValue &
-    ISubscriber<T> &
-    IUnSubscribe &
-    ISubscribeCounter &
-    { unsubscribeAll(): void };
+import {ICallback, IListener, IListeners, IObserver, ISubscriptionLike, IUnSubscribe} from "./Types";
 
 class SubscriberLike implements ISubscriptionLike {
     private observable: IUnSubscribe;
-    private index: ICallback;
+    private listener: IListener;
 
-    constructor(observable: IUnSubscribe, index: ICallback) {
+    constructor(observable: IUnSubscribe, listener: IListener) {
         this.observable = observable;
-        this.index = index;
+        this.listener = listener;
     }
 
     public unsubscribe(): void {
         if (!!this.observable) {
-            this.observable.unSubscribe(this.index);
+            this.observable.unSubscribe(this.listener);
             this.observable = <any>0;
-            this.index = <any>0;
+            this.listener = <any>0;
         }
     }
 }
@@ -63,15 +29,16 @@ export class Observable<T> implements IObserver<T> {
     public next(value: T): void {
         this._value = value;
         for (let i = 0; i < this.listeners.length; i++) {
-            this.listeners[i](value);
+            const listener = <ICallback>this.listeners[i];
+            listener(value);
         }
     }
 
-    public unSubscribe(index: ICallback): void {
+    public unSubscribe(listener: IListener): void {
         if (!this.listeners) {
             return;
         }
-        const elIndex = this.listeners.indexOf(index);
+        const elIndex = this.listeners.indexOf(listener);
         if (elIndex > -1) {
             for (let i = elIndex + 1; i < this.listeners.length; i++) {
                 const key = this.listeners[i];
@@ -103,8 +70,8 @@ export class Observable<T> implements IObserver<T> {
         return this.listeners.length;
     }
 
-    public subscribe(callback: ICallback): ISubscriptionLike {
-        this.listeners.push(callback);
-        return new SubscriberLike(this, callback);
+    public subscribe(listener: IListener): ISubscriptionLike {
+        this.listeners.push(listener);
+        return new SubscriberLike(this, listener);
     }
 }

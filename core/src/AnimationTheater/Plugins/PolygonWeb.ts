@@ -1,8 +1,8 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {getCenterX, getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
+import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
 
 export class PolygonWeb extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;

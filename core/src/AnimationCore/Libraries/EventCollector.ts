@@ -1,4 +1,4 @@
-import {ISubscriptionLike} from "./Observable";
+import {ISubscriptionLike} from "./Observables/Types";
 
 export type ICollector = {
     collect(...subscribers: ISubscriptionLike[]): void;

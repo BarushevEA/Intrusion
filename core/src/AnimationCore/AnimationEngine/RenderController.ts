@@ -1,6 +1,7 @@
 import {findElementOnArray} from "../Libraries/FunctionLibs";
-import {ISubscriber, Observable} from "../Libraries/Observable";
+import {Observable} from "../Libraries/Observables/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
+import {ISubscriber} from "../Libraries/Observables/Types";
 
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;

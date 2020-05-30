@@ -1,7 +1,7 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {EnemyProgress} from "./Progresses/EnemyProgress";
-import {ISubscriptionLike, Observable} from "../../../AnimationCore/Libraries/Observable";
+import {Observable} from "../../../AnimationCore/Libraries/Observables/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthType, IHealthProgress} from "./HealthType";
@@ -12,6 +12,7 @@ import {Explode} from "../../AnimationModels/Explode/Explode";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;

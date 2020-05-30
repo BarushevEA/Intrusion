@@ -18,11 +18,11 @@ import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShot
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
-import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observable";
 import {EnemySmall3} from "../../../../../AnimationModels/Planes/enemySmall3/EnemySmall3";
 import {Heart} from "../../../../../AnimationModels/Heart";
 import {Link} from "../../../../../Plugins/Link";
 import {HealsBuf} from "../../../../../Plugins/HLProgress/HealsBuf";
+import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observables/Types";
 
 let enemies: AbstractActor[] = <any>0;
 let enemies2: AbstractActor[] = <any>0;
