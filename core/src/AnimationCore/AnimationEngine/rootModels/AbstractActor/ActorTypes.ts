@@ -12,6 +12,7 @@ export type IDimensions = {
 export type IActor = {
     z_index: number;
     layerName: string;
+    layerNumber: number;
     xPos: x_pos;
     yPos: y_pos;
     width: number;

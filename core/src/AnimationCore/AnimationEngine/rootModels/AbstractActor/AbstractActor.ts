@@ -26,6 +26,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _z_index = 0;
     private _z_index_memory = 0;
     private _layerName = '';
+    private _layerNumber: number = 0;
     private _layer_name_memory = '';
     private _pluginDock: IPluginDock = <any>0;
     private _isUnlinked = true;
@@ -545,5 +546,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     set isDestroyEnabled(value: boolean) {
         this._isDestroyEnabled = value;
+    }
+
+    get layerNumber(): number {
+        return this._layerNumber;
+    }
+
+    set layerNumber(value: number) {
+        this._layerNumber = value;
     }
 }

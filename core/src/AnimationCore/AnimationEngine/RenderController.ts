@@ -63,6 +63,7 @@ export class RenderController implements IRenderController {
         }
         this.currentPool.push(actor);
         actor.layerName = this.currentLayerName;
+        actor.layerNumber = this.layersNames.indexOf(this.currentLayerName)
         this.sortActorsByZIndex();
     }
 
@@ -95,6 +96,7 @@ export class RenderController implements IRenderController {
         }
         this.layersNames = tmp;
         this.layersNames.push(name);
+        this.reInitLayerNumbers();
     }
 
     public setLayerOnIndex(layerName: string, index: number): void {
@@ -116,16 +118,25 @@ export class RenderController implements IRenderController {
             }
         }
         this.layersNames = tmp;
+        this.reInitLayerNumbers();
+    }
+
+    private reInitLayerNumbers(): void {
+        for (let k = 0; k < this.layersNames.length; k++) {
+            const layerName = this.layersNames[k];
+            for (let i = 0; i < this.layers[layerName].length; i++) {
+                this.layers[layerName][i].layerNumber = k;
+            }
+        }
     }
 
     private setCurrentPoolFromActor(actor: IActor): boolean {
-        let isSet = false;
         if (this.layers[actor.layerName]) {
             this.currentLayerName = actor.layerName;
             this.currentPool = this.layers[actor.layerName];
-            isSet = true;
+            return true;
         }
-        return isSet;
+        return false;
     }
 
     public renderStart(isBackgroundLayerPresent: boolean): void {
@@ -149,7 +160,7 @@ export class RenderController implements IRenderController {
         this.runHalfSpeed();
     };
 
-    private drawLayers() {
+    private drawLayers(): void {
         for (let k = 0; k < this.layersNames.length; k++) {
             const layerName = this.layersNames[k];
             for (let i = 0; i < this.layers[layerName].length; i++) {
