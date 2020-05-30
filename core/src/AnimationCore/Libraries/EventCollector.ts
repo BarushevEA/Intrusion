@@ -55,13 +55,25 @@ export class EventCollector implements ICollector {
         }
     }
 
-    public destroy(): void {
-        for (let i = 0; i < this.collector.length; i++) {
-            const subscriber = this.collector[i];
+    private unlinkSubscribers(arr: ISubscriptionLike[]): void {
+        for (let i = 0; i < arr.length; i++) {
+            const subscriber = arr[i];
             if (subscriber) {
                 subscriber.unsubscribe();
             }
         }
+        arr.length = 0;
+    }
+
+    public destroy(): void {
+        this.clear();
         this.collector = <any>0;
+        this.collectorBuffer = <any>0;
+    }
+
+    public clear(): void {
+        this.unlinkSubscribers(this.collector);
+        this.unlinkSubscribers(this.collectorBuffer);
+        this.destroySubscriberCounter = 0;
     }
 }
