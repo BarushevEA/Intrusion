@@ -10,7 +10,7 @@ import {
 import {IMousePosition} from "../../../DomComponent/AppAnimation";
 import {ISubscriber, ISubscriptionLike, Observable} from "../../../Libraries/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
-import {IShapeHandler} from "../../LayerHandler/ShapeHandler";
+import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
 import {IActor, IDimensions} from "./ActorTypes";
 import {PluginDock} from "../../Plugins/root/ActorPluginDock";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";

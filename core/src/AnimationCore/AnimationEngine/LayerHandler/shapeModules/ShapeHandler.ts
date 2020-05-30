@@ -1,11 +1,14 @@
-import {IRadian, x_pos, y_pos} from "../../Libraries/Types";
+import {IRadian, x_pos, y_pos} from "../../../Libraries/Types";
+import {AdvancedPolygon} from "./AdvancedPolygon";
+import {RadialGradient} from "./RadialGradient";
+import {LinearGradient} from "./LinearGradient";
 
 export type IPoint = {
     x: x_pos;
     y: y_pos;
 };
 export type IPolygon = IPoint[];
-type IDrawStop = { stopExecution(isReverse?: boolean): IShapeHandler; };
+export type IDrawStop = { stopExecution(isReverse?: boolean): IShapeHandler; };
 type IAdvanced = {
     startPoint(x: x_pos, y: y_pos): IAdvancedPolygon;
     lineTo(x: x_pos, y: y_pos): IAdvancedPolygon;
@@ -215,131 +218,6 @@ class ShapeHandler implements IShapeHandler {
             this.context.stroke();
         }
         this.stopDrawing(false);
-    }
-}
-
-class ShapeChild implements IDrawStop {
-    protected readonly _stopDrawing: (isFinishOperation?: boolean) => void;
-    protected readonly context: CanvasRenderingContext2D;
-    protected readonly parent: IShapeHandler;
-
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        this._stopDrawing = stopDrawing;
-        this.context = context;
-        this.parent = parent;
-    }
-
-    public stopExecution(): IShapeHandler {
-        this._stopDrawing(false);
-        return this.parent;
-    }
-}
-
-class LinearGradient extends ShapeChild implements ILinearGradient {
-    private gradient: CanvasGradient;
-
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        super(stopDrawing, context, parent);
-        this.gradient = context.createLinearGradient(0, 0, 10, 10);
-    }
-
-    stopExecution(isReverse = false): IShapeHandler {
-        if (isReverse) {
-            this.context.strokeStyle = this.gradient;
-        } else {
-            this.context.fillStyle = this.gradient;
-        }
-        return super.stopExecution();
-    }
-
-    addColorStop(value: number, color: string): ILinearGradient {
-        this.gradient.addColorStop(value, color);
-        return this;
-    };
-
-    setGradientDirectionPoints(x0: x_pos,
-                               y0: y_pos,
-                               x1: x_pos,
-                               y1: y_pos): ILinearGradient {
-        this.gradient = this.context.createLinearGradient(x0, y0, x1, y1);
-        return this;
-    };
-}
-
-class RadialGradient extends ShapeChild implements IRadialGradient {
-    private gradient: CanvasGradient;
-
-    constructor(stopDrawing: (isFinishOperation?: boolean) => void,
-                context: CanvasRenderingContext2D,
-                parent: IShapeHandler) {
-        super(stopDrawing, context, parent);
-        this.gradient = context.createRadialGradient(0, 0, 10, 10, 10, 20);
-    }
-
-    stopExecution(isReverse = false): IShapeHandler {
-        if (isReverse) {
-            this.context.strokeStyle = this.gradient;
-        } else {
-            this.context.fillStyle = this.gradient;
-        }
-        return super.stopExecution();
-    }
-
-    addColorStop(value: number, color: string): IRadialGradient {
-        this.gradient.addColorStop(value, color);
-        return this;
-    };
-
-    setGradientDirectionPoints(x0: x_pos,
-                               y0: y_pos,
-                               r0: number,
-                               x1: x_pos,
-                               y1: y_pos,
-                               r1: number): IRadialGradient {
-        this.gradient = this.context.createRadialGradient(x0, y0, r0, x1, y1, r1);
-        return this;
-    };
-}
-
-class AdvancedPolygon extends ShapeChild implements IAdvancedPolygon {
-    public startPoint(x: x_pos, y: y_pos): AdvancedPolygon {
-        this.context.moveTo(x, y);
-        return this;
-    }
-
-    public lineTo(x: x_pos, y: y_pos): AdvancedPolygon {
-        this.context.lineTo(x, y);
-        return this;
-    }
-
-    public quadraticCurveTo(controlX: x_pos,
-                            controlY: y_pos,
-                            x: x_pos,
-                            y: y_pos): AdvancedPolygon {
-        this.context.quadraticCurveTo(
-            controlX,
-            controlY,
-            x, y);
-        return this;
-    }
-
-    public bezierCurveTo(control1X: x_pos,
-                         control1Y: y_pos,
-                         control2X: x_pos,
-                         control2Y: y_pos,
-                         x: x_pos,
-                         y: y_pos): AdvancedPolygon {
-        this.context.bezierCurveTo(
-            control1X,
-            control1Y,
-            control2X,
-            control2Y,
-            x, y);
-        return this;
     }
 }
 

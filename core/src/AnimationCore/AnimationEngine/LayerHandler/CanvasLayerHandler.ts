@@ -1,5 +1,5 @@
 import {ITextHandler, textHandler} from "./TextHandler";
-import {IShapeHandler, shapeHandler} from "./ShapeHandler";
+import {IShapeHandler, shapeHandler} from "./shapeModules/ShapeHandler";
 import {x_pos, y_pos} from "../../Libraries/Types";
 
 export type IVirtualCanvasesPool = {

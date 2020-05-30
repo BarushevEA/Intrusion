@@ -1,5 +1,5 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
+import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/shapeModules/ShapeHandler";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
 
 const startDelta = 1000;
