@@ -97,7 +97,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
             mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
             mouseRightDown$.subscribe(this.rightMouseDown.bind(this)),
             mouseRightUp$.subscribe(this.rightMouseUp.bind(this)),
-            mouseRightUp$.subscribe(this.rightMouseUp.bind(this)),
             this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
         );
