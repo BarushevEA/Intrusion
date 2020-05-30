@@ -1,7 +1,8 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../Libraries/initOuterVariables";
 import {
-    defaultCursor$, globalSize$,
+    defaultCursor$,
+    globalSize$,
     keyDownCode$,
     keyUpCode$,
     mouseClickPosition$,
