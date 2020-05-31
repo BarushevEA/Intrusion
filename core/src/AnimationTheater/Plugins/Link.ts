@@ -47,7 +47,7 @@ export class Link extends AbstractActorPlugin {
             this.scene.unsubscribe(this.subscriber);
             this.subscriber = <any>0;
         }
-        if (!this.subscriberUnLink) {
+        if (!this.subscriberUnLink && this.scene.collect) {
             this.scene.collect(
                 this.subscriberUnLink = this.scene.tickCount$.subscribe(() => {
                     if (!this.linkedActor) {

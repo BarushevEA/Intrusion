@@ -1,6 +1,6 @@
-import {ICallback, IListener, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
+import {ICallback, IListener, IListeners, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
 
-class SubscriberLike implements ISubscriptionLike {
+export class SubscriberLike implements ISubscriptionLike {
     private observable: any;
     private listener: IOrderedListener;
 
@@ -20,7 +20,7 @@ class SubscriberLike implements ISubscriptionLike {
 
 export class Observable<T> implements IObserver<T> {
     private _value: T;
-    private listeners: IOrderedListener[] = [];
+    private listeners: IListeners = [];
 
     constructor(value: T) {
         this._value = value;
@@ -29,12 +29,12 @@ export class Observable<T> implements IObserver<T> {
     public next(value: T): void {
         this._value = value;
         for (let i = 0; i < this.listeners.length; i++) {
-            const listener = this.listeners[i];
-            listener.callBack(value);
+            const listener = <ICallback>this.listeners[i];
+            listener(value);
         }
     }
 
-    private unSubscribe(listener: IOrderedListener): void {
+    public unSubscribe(listener: IListener): void {
         if (!this.listeners) {
             return;
         }
@@ -58,7 +58,7 @@ export class Observable<T> implements IObserver<T> {
         const length = this.listeners.length;
         for (let i = 0; i < length; i++) {
             const key = this.listeners.pop();
-            this.unSubscribe(<IOrderedListener>key);
+            this.unSubscribe(<ICallback>key);
         }
     }
 
@@ -71,19 +71,7 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public subscribe(listener: IListener): ISubscriptionLike {
-        const savedListener: IOrderedListener = {
-            callBack: <any>0,
-            order: 0
-        };
-
-        if (!(<IOrderedListener>listener).callBack) {
-            savedListener.callBack = <ICallback>listener;
-        } else {
-            savedListener.callBack = (<IOrderedListener>listener).callBack;
-            savedListener.order = (<IOrderedListener>listener).order;
-        }
-
-        this.listeners.push(savedListener);
-        return new SubscriberLike(this, savedListener);
+        this.listeners.push(listener);
+        return new SubscriberLike(this, <IOrderedListener>listener);
     }
 }

@@ -98,12 +98,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
             return;
         }
         this.mouseEventsCollector.collect(
-            mouseMovePosition$.subscribe(this.mouseOver.bind(this)),
-            mouseClickPosition$.subscribe(this.mouseClick.bind(this)),
-            mouseLeftDown$.subscribe(this.leftMouseDown.bind(this)),
-            mouseLeftUp$.subscribe(this.leftMouseUp.bind(this)),
-            mouseRightDown$.subscribe(this.rightMouseDown.bind(this)),
-            mouseRightUp$.subscribe(this.rightMouseUp.bind(this)),
+            mouseMovePosition$.subscribe({callBack: this.mouseOver.bind(this), order: this.layerNumber}),
+            mouseClickPosition$.subscribe({callBack: this.mouseClick.bind(this), order: this.layerNumber}),
+            mouseLeftDown$.subscribe({callBack: this.leftMouseDown.bind(this), order: this.layerNumber}),
+            mouseLeftUp$.subscribe({callBack: this.leftMouseUp.bind(this), order: this.layerNumber}),
+            mouseRightDown$.subscribe({callBack: this.rightMouseDown.bind(this), order: this.layerNumber}),
+            mouseRightUp$.subscribe({callBack: this.rightMouseUp.bind(this), order: this.layerNumber}),
             this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
         );
