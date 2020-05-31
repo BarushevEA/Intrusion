@@ -37,6 +37,7 @@ export type IBackgroundMap = {
     fillWithActor(actor: AbstractActor): IBackgroundMap;
     addCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
     replaceCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
+    addStringDimension(dim: string[], x?: x_array, y?: y_array): IBackgroundMap;
     addActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
     replaceActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
     addRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;

@@ -71,7 +71,11 @@ export class Cells implements IBackgroundMap {
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
                     const ActorClassName: any = scheme[key];
-                    this.actorsPool[key] = <AbstractActor>(new ActorClassName(this.canvas));
+                    if (ActorClassName) {
+                        this.actorsPool[key] = <AbstractActor>(new ActorClassName(this.canvas));
+                    } else {
+                        this.actorsPool[key] = ActorClassName;
+                    }
                 }
                 break;
             case E_Cells.SCENE_USE:
@@ -99,10 +103,16 @@ export class Cells implements IBackgroundMap {
                                 break;
                             case E_Cells.SCENE_USE:
                                 const className: any = this.scheme[ActorClassName];
-                                cell[k] = <AbstractActor>(new className(this.canvas));
+                                if (className) {
+                                    cell[k] = <AbstractActor>(new className(this.canvas));
+                                } else {
+                                    cell[k] = className;
+                                }
                                 break;
                         }
-                        cell[k].disableEvents();
+                        if (cell[k]) {
+                            cell[k].disableEvents();
+                        }
                     }
                 }
             }
@@ -231,6 +241,15 @@ export class Cells implements IBackgroundMap {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             this.replaceActorsAt([actor], x + i, y);
+        }
+        return this;
+    }
+
+    addStringDimension(dim: string[], x: x_array = 0, y: y_array = 0) {
+        for (let i = 0; i < dim.length; i++) {
+            const element = dim[i];
+            const symbols = element.split('');
+            this.add(<any>symbols, x, y + i);
         }
         return this;
     }

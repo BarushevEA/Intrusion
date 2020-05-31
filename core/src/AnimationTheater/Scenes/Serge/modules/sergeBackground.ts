@@ -12,18 +12,23 @@ import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {GreenTriangle} from "../../../AnimationModels/GreenTriangle/GreenTriangle";
 import {DimensionBackground} from "../../../AnimationModels/DimensionBackground/DimensionBackground";
 import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
-import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
-import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
-import {AnimatedRectangleLightCyan} from "../../../AnimationModels/rectangles/AnimatedRectangleLightCyan";
-import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
+import {ButtonGreenWithText} from "../../../AnimationModels/Buttons/ButtonGreenWithText";
+import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
+import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWithText";
+import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
+import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
+import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
+import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
 
 let cells: IBackgroundMap = <any>0,
+    cellsString: IBackgroundMap = <any>0,
     bg: DimensionBackground = <any>0,
-    left: AnimatedRectangleLightGreen = <any>0,
-    right: AnimatedRectangleLightYellow = <any>0,
-    top: AnimatedRectangleLightCyan = <any>0,
-    bottom: AnimatedRectangleLightGray = <any>0;
+    left: AbstractActor = <any>0,
+    right: AbstractActor = <any>0,
+    top: AbstractActor = <any>0,
+    bottom: AbstractActor = <any>0;
 
 enum $ {
     NUL = 0,
@@ -43,6 +48,10 @@ function clearVariables() {
     if (cells) {
         cells.destroy();
         cells = <any>0;
+    }
+    if (cellsString) {
+        cellsString.destroy();
+        cellsString = <any>0;
     }
     if (bg) {
         bg.destroy();
@@ -72,10 +81,10 @@ function initActors(scene: AbstractScene) {
         height: 4
     };
 
-    left = new AnimatedRectangleLightGreen(scene.generalLayer);
-    right = new AnimatedRectangleLightYellow(scene.generalLayer);
-    top = new AnimatedRectangleLightCyan(scene.generalLayer);
-    bottom = new AnimatedRectangleLightGray(scene.generalLayer);
+    left = new ButtonGreenWithText(scene.generalLayer, 'Move left');
+    right = new ButtonYellowWithText(scene.generalLayer, 'Move right');
+    top = new ButtonBlueWithText(scene.generalLayer, 'Move top');
+    bottom = new ButtonGrayWithText(scene.generalLayer, 'Move bottom');
 
     left.xPos = scene.generalLayer.width - left.width * 5;
     right.xPos = scene.generalLayer.width - right.width * 4;
@@ -87,6 +96,12 @@ function initActors(scene: AbstractScene) {
     bg.yPos = 50;
     bg.draw.options = bgOptions;
 
+    prepareCells(scene);
+    prepareCellsString(scene);
+
+    cells.addCells(cellsString, 1, 1);
+    (new DrawHelper(scene, cells, 0, 0)).setToScene();
+
     scene.setActors(
         bg,
         left,
@@ -94,14 +109,6 @@ function initActors(scene: AbstractScene) {
         top,
         bottom
     );
-
-    const scheme: ICellScheme = {};
-    scheme[$.REC] = <any>GreenRectangle;
-    scheme[$.TRI] = <any>GreenTriangle;
-    scheme[$.WAL] = <any>BrickWall;
-    prepareCells();
-    cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
-    (new DrawHelper(scene, cells, 100, 100)).setToScene();
 }
 
 function initActions(scene: AbstractScene) {
@@ -124,12 +131,46 @@ function initActions(scene: AbstractScene) {
     clearOnSceneDestroy(scene, clearVariables);
 }
 
-function prepareCells() {
-    cells = new Cells(100, 100, 4, 4);
+function prepareCells(scene: AbstractScene) {
+    const scheme: ICellScheme = {};
+    scheme[$.REC] = <any>GreenRectangle;
+    scheme[$.TRI] = <any>GreenTriangle;
+    scheme[$.WAL] = <any>BrickWall;
+
+    cells = new Cells(100, 100, 6, 12);
     cells
-        .replaceRectangleAt([<any>$.WAL], 0, 1, 3, 4)
-        .addRowAt([<any>$.TRI], 0, 0, 4)
-        .addRowAt([<any>$.REC], 0, 1, 4)
-        .add([<any>$.REC, $.NUL, $.NUL, $.REC], 0, 2)
-        .addRowAt([<any>$.REC], 0, 3, 4);
+        .replaceRectangleAt([<any>$.REC], 0, 0, 6, 12)
+        .replaceRectangleAt([<any>$.WAL], 1, 1, 4, 10)
+        .addRowAt([<any>$.TRI], 0, 0, 12);
+
+    cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
+}
+
+function prepareCellsString(scene: AbstractScene) {
+    const cellsStringScheme: ICellScheme = {};
+    cellsStringScheme[' '] = <any>0;
+    cellsStringScheme['0'] = <any>GreenRectangle;
+    cellsStringScheme['['] = <any>GreenTriangleLeft;
+    cellsStringScheme[`]`] = <any>GreenTriangleRight;
+    cellsStringScheme[`#`] = <any>AnimatedRectangleLightGray;
+
+    cellsString = new Cells(100, 100, 4, 4);
+    cellsString
+        .addStringDimension(
+            [
+                ' [] ',
+                '[00]',
+                '####',
+                '####'
+            ])
+        .addStringDimension(
+            [
+                '    ',
+                '    ',
+                '0  0',
+                '0  0'
+            ]
+        );
+
+    cellsString.setScheme(cellsStringScheme, E_Cells.SCENE_USE, scene.generalLayer);
 }
