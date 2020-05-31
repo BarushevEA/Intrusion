@@ -6,8 +6,7 @@ export type ISubscribe = {
 
 export type IListener = ICallback | IOrderedListener;
 
-export type IUnSubscribe = {
-    unSubscribe(listener: IListener): void;
+export type IDestroy = {
     destroy(): void;
 };
 
@@ -32,7 +31,7 @@ export type ISubscriber<T> =
 export type IObserver<T> =
     ISetObservableValue &
     ISubscriber<T> &
-    IUnSubscribe &
+    IDestroy &
     ISubscribeCounter &
     { unsubscribeAll(): void };
 
