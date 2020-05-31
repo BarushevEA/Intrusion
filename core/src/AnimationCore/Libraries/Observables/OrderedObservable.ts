@@ -1,7 +1,7 @@
 import {ICallback, IListener, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
 import {SubscriberLike} from "./Observable";
 
-export class ObservableOrdered<T> implements IObserver<T> {
+export class OrderedObservable<T> implements IObserver<T> {
     private _value: T;
     private listeners: IOrderedListener[] = [];
 
