@@ -1,6 +1,9 @@
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IFramePool} from "../../LayerHandler/CanvasLayerHandler";
+import {ITextHandler} from "../../LayerHandler/TextHandler";
+import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
 
 export type IDimensions = {
     xPos: x_pos;
@@ -19,6 +22,10 @@ export type IActor = {
     height: number;
     isEventsBlock: boolean;
     isUnlinked: boolean;
+    framePool: IFramePool;
+    isDestroyEnabled: boolean;
+    readonly text: ITextHandler;
+    readonly shape: IShapeHandler;
     readonly isLeftMouseCatch: boolean;
     readonly isMouseClick$: ISubscriber<boolean>;
     readonly isMouseLeftDrop$: ISubscriber<any>;
@@ -29,7 +36,10 @@ export type IActor = {
     readonly isDestroyed$: ISubscriber<boolean>;
     readonly isDestroyed: boolean;
     readonly isMouseOver: boolean;
+    readonly isEventsPaused: boolean;
     readonly pluginDock: IPluginDock;
+    readonly xPosPreview: x_pos;
+    readonly yPosPreview: y_pos;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
     setPosition(x: x_pos, y: y_pos): void;
@@ -46,4 +56,22 @@ export type IActor = {
     enableEvents(): void;
     disableEvents(): void;
     getDimensions(): IDimensions;
-}
+    pauseEvents(): void;
+    unPauseEvents(): void;
+    setVirtualLayer(name: string, height?: number, width?: number): HTMLCanvasElement;
+    clearLayer(x?: x_pos, y?: y_pos, width?: number, height?: number): void;
+    restoreDefaultLayer(): void;
+    deleteVirtual(targetName: string): void;
+    drawVirtualOnVirtual(targetName: string, sourceName: string, x: number, y: number): void;
+    drawVirtualOnGeneral(sourceName: string,
+                         x: number,
+                         y: number,
+                         width?: number,
+                         height?: number,
+                         xD?: number,
+                         yD?: number,
+                         widthD?: number,
+                         heightD?: number
+    ): void;
+    setFramesDelay(delay: number): void;
+};

@@ -110,7 +110,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.isEventsDisabled = false;
     }
 
-    public pauseEvents() {
+    public pauseEvents(): void {
         if (this.isEventsDisabled || !this.mouseEventsCollector) {
             return;
         }
@@ -118,7 +118,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isEventsPaused = true;
     }
 
-    public unPauseEvents() {
+    public unPauseEvents(): void {
         if (this.isEventsDisabled) {
             return;
         }
@@ -368,7 +368,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler.clear(x, y, width, height);
     }
 
-    public restoreDefaultLayer() {
+    public restoreDefaultLayer():void {
         this.layerHandler.restoreDefaultLayer();
     }
 
