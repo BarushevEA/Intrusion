@@ -1,5 +1,4 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {EnemyProgress} from "./Progresses/EnemyProgress";
 import {Observable} from "../../../AnimationCore/Libraries/Observables/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
@@ -13,6 +12,7 @@ import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -24,7 +24,7 @@ export class HealthPlugin extends AbstractActorPlugin {
     private isDestroyProcessed = false;
     private _beforeDeath$ = new Observable(<any>0);
 
-    constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
+    constructor(scene: IScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HealthPlugin', scene);
         this.health = health;
         this.type = viewType;
@@ -160,7 +160,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.handleExplode(explosions, this.scene);
     }
 
-    private handleExplode(explosions: IActor[], scene: AbstractScene) {
+    private handleExplode(explosions: IActor[], scene: IScene) {
         this.explodeShow(explosions, 0, scene);
         let counter = 1;
         const timer = tickGenerator.execute100MsInterval(() => {
@@ -180,7 +180,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         }, 340 + (explosions.length - 1) * 100);
     }
 
-    private explodeShow(explosions: IActor[], counter: number, scene: AbstractScene) {
+    private explodeShow(explosions: IActor[], counter: number, scene: IScene) {
         if (!this.root || !explosions || !explosions.length) {
             return;
         }

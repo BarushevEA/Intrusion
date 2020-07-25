@@ -1,5 +1,4 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {Bullet} from "./Actors/Bullet";
 import {BulletPlugin} from "./BulletPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
@@ -9,6 +8,7 @@ import {LaserOrange} from "./Actors/LaserOrange";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
     private enemies: IActor[] = <any>0;
@@ -17,7 +17,7 @@ export class BulletShotPlugin extends AbstractActorPlugin {
     private type: BULLET = <any>0;
     private damagePerBullet = 0;
 
-    constructor(scene: AbstractScene,
+    constructor(scene: IScene,
                 enemies: IActor[],
                 type = BULLET.SMALL,
                 isReverse = false,
@@ -79,7 +79,7 @@ export enum BULLET {
     LASER_ORANGE = 'LASER_ORANGE',
 }
 
-function getBullet(type: BULLET, scene: AbstractScene): IActor {
+function getBullet(type: BULLET, scene: IScene): IActor {
     switch (type) {
         case BULLET.SMALL:
             return new Bullet(scene.generalLayer);

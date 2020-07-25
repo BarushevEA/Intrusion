@@ -1,10 +1,10 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {BlueFire} from "./BlueFire";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class BlueFirePlugin extends AbstractActorPlugin {
     private fire: IActor = <any>0;
@@ -12,7 +12,7 @@ export class BlueFirePlugin extends AbstractActorPlugin {
     private yBalance: number = 0;
     private xBalance: number = 0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('BlueFirePlugin', scene);
     }
 

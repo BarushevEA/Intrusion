@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {HorizontalBackground} from "../../../AnimationModels/HorizontalBackground";
 import {HorizontalBackground1} from "../../../AnimationModels/HorizontalBackground1";
@@ -16,6 +15,7 @@ import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -30,7 +30,7 @@ enum $ {
     WAL = 'WAL'
 }
 
-export function handleBackgrounds(scene: AbstractScene): void {
+export function handleBackgrounds(scene: IScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
     clearVariables();
     initActors(scene);
@@ -54,7 +54,7 @@ function clearVariables() {
     redButton = <any>0;
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     background = new HorizontalBackground(scene.generalLayer);
     background1 = new HorizontalBackground1(scene.generalLayer);
 
@@ -70,12 +70,12 @@ function initActors(scene: AbstractScene) {
     initDynamical(scene);
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     initDynamicalActions(scene);
     clearOnSceneDestroy(scene, clearVariables);
 }
 
-function initDynamical(scene: AbstractScene) {
+function initDynamical(scene: IScene) {
     redButton = new ButtonRedWithText(scene.generalLayer, 'BOOM !!!');
     redButton.xPos = getCenterX(0, scene.generalLayer.width - redButton.width);
     redButton.yPos = getCenterY(0, scene.generalLayer.height - redButton.height);
@@ -102,7 +102,7 @@ function prepareCells() {
         .add([<any>$.REC], 1, 4);
 }
 
-function initDynamicalActions(scene: AbstractScene) {
+function initDynamicalActions(scene: IScene) {
     const cursorOver = new PointerAndDragCursorPlugin(scene);
     redButton.pluginDock.add(cursorOver);
     scene.collect(

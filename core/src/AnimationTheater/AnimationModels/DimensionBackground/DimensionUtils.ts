@@ -21,8 +21,8 @@ import {
     y_pair
 } from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class Cells implements IBackgroundMap {
     private readonly _cells: ICells = [];
@@ -389,7 +389,7 @@ class CellsMap implements ICellsMap {
 }
 
 export class DrawHelper {
-    private scene: AbstractScene;
+    private scene: IScene;
     private cells: IBackgroundMap;
     private _options: ICellDrawOptions = {
         width: 0,
@@ -402,7 +402,7 @@ export class DrawHelper {
     private _y: y_canvas = 0;
 
 
-    constructor(scene: AbstractScene,
+    constructor(scene: IScene,
                 cells: IBackgroundMap,
                 x: x_canvas,
                 y: y_canvas) {

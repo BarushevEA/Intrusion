@@ -1,13 +1,13 @@
 import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
-import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export class RectangleHighlighting extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private subscriberTick: ISubscriptionLike = <any>0;
     private readonly delta = 10;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('RectangleHighlighting', scene);
         this.delta = this.delta;
     }

@@ -1,4 +1,3 @@
-import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 import {E_Scene} from "../../AnimationTheater/AppScenario/types";
 import {defaultCursor$, mouseMovePosition$} from "../Store/EventStore";
@@ -6,8 +5,9 @@ import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {IMousePosition} from "../DomComponent/AppAnimation";
 import {CursorHandler} from "./CursorHandler";
 import {ICallback} from "./Observables/Types";
+import {IScene} from "../AnimationEngine/rootScenes/SceneTypes";
 
-export function exitSceneOnButtonClick(scene: AbstractScene,
+export function exitSceneOnButtonClick(scene: IScene,
                                        button: IActor,
                                        cursorHandler: CursorHandler,
                                        sceneType = E_Scene.NULL): void {
@@ -22,7 +22,7 @@ export function exitSceneOnButtonClick(scene: AbstractScene,
     )
 }
 
-export function destroySceneOnButtonClick(scene: AbstractScene,
+export function destroySceneOnButtonClick(scene: IScene,
                                           button: IActor,
                                           cursorHandler: CursorHandler,
                                           sceneType = E_Scene.NULL): void {
@@ -37,7 +37,7 @@ export function destroySceneOnButtonClick(scene: AbstractScene,
     )
 }
 
-export function defaultCursorAction(scene: AbstractScene,
+export function defaultCursorAction(scene: IScene,
                                     button: IActor,
                                     cursorHandler: CursorHandler): void {
     // do not use if before used: exitSceneOnButtonClick, destroySceneOnButtonClick
@@ -48,7 +48,7 @@ export function defaultCursorAction(scene: AbstractScene,
     )
 }
 
-export function clearOnSceneDestroy(scene: AbstractScene,
+export function clearOnSceneDestroy(scene: IScene,
                                     clearCallback: ICallback): void {
     scene.collect(
         scene.onDestroy$.subscribe(() => {
@@ -57,7 +57,7 @@ export function clearOnSceneDestroy(scene: AbstractScene,
     );
 }
 
-export function setDefaultCursorActions(scene: AbstractScene): void {
+export function setDefaultCursorActions(scene: IScene): void {
     scene.collect(
         scene.onStart$.subscribe(() => {
             defaultCursor$.next(false);
@@ -73,7 +73,7 @@ export function setDefaultCursorActions(scene: AbstractScene): void {
     );
 }
 
-export function toggleMouseEventsOnMouseOver(scene: AbstractScene, initiator: IActor): void {
+export function toggleMouseEventsOnMouseOver(scene: IScene, initiator: IActor): void {
     scene.collect(
         initiator.isMouseOver$.subscribe(isOver => {
             const actors = scene.actors;
@@ -94,7 +94,7 @@ export function toggleMouseEventsOnMouseOver(scene: AbstractScene, initiator: IA
     );
 }
 
-export function toggleMouseEventsOnMouseOverGroup(scene: AbstractScene, actors: IActor[]): void {
+export function toggleMouseEventsOnMouseOverGroup(scene: IScene, actors: IActor[]): void {
     for (let i = 0; i < actors.length; i++) {
         toggleMouseEventsOnMouseOver(scene, actors[i]);
     }

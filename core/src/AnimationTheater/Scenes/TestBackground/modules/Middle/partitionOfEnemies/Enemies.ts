@@ -1,5 +1,4 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
-import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {EnemySmall1} from "../../../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
 import {EnemySmall2} from "../../../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
 import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
@@ -23,6 +22,7 @@ import {Link} from "../../../../../Plugins/Link";
 import {HealsBuf} from "../../../../../Plugins/HLProgress/HealsBuf";
 import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let enemies: IActor[] = <any>0;
 let enemies2: IActor[] = <any>0;
@@ -41,7 +41,7 @@ let genBossDestroyTimer = <any>0;
 const numberOfSmallEnemies = 10;
 
 
-function initSimpleEnemies(scene: AbstractScene) {
+function initSimpleEnemies(scene: IScene) {
     enemies2 = [];
     enemies1 = [];
 
@@ -61,7 +61,7 @@ function initSimpleEnemies(scene: AbstractScene) {
     }
 }
 
-function initSimpleEnemiesActions(scene: AbstractScene) {
+function initSimpleEnemiesActions(scene: IScene) {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
         const health = new HealthPlugin(scene, HealthType.ENEMY, 200);
@@ -117,12 +117,12 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
 }
 
 
-function initBosses(scene: AbstractScene) {
+function initBosses(scene: IScene) {
     initMiniBosses(scene);
     initGeneralBosses(scene);
 }
 
-function initMiniBosses(scene: AbstractScene) {
+function initMiniBosses(scene: IScene) {
     enemiesMiniBosses = [];
 
     const miniBossActivate = (miniBoss: IActor) => {
@@ -147,13 +147,13 @@ function initMiniBosses(scene: AbstractScene) {
     miniBossActivate(miniBoss3);
 }
 
-function initGeneralBosses(scene: AbstractScene) {
+function initGeneralBosses(scene: IScene) {
     generalBoss = new KleschBoss(scene.generalLayer);
     generalBoss.xPos = scene.generalLayer.width + 2 * generalBoss.width;
     generalBoss.yPos = randomize(scene.generalLayer.height - generalBoss.height);
 }
 
-function initBossesActions(scene: AbstractScene) {
+function initBossesActions(scene: IScene) {
     boss1DestroyTimer = tickGenerator.executeTimeout(() => {
         initMiniBossesActions(scene);
     }, 30000);
@@ -162,7 +162,7 @@ function initBossesActions(scene: AbstractScene) {
     }, 40000);
 }
 
-function initMiniBossesActions(scene: AbstractScene) {
+function initMiniBossesActions(scene: IScene) {
     for (let i = 0; i < enemiesMiniBosses.length; i++) {
         const miniBoss = enemiesMiniBosses[i];
         const bounce = new BounceOffTheWall(
@@ -204,7 +204,7 @@ function initMiniBossesActions(scene: AbstractScene) {
     }
 }
 
-function initGeneralBossesActions(scene: AbstractScene) {
+function initGeneralBossesActions(scene: IScene) {
     if (scene.isDestroyed) {
         return;
     }
@@ -240,7 +240,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     );
 }
 
-function addActor(actor: IActor, scene: AbstractScene, type = HealthType.ENEMY): void {
+function addActor(actor: IActor, scene: IScene, type = HealthType.ENEMY): void {
     enemies.push(actor);
     actor.disableEvents();
     let delay = 0;
@@ -300,7 +300,7 @@ class EnemiesPool extends AbstractActorGroup {
         }
     }
 
-    initActors(scene: AbstractScene): void {
+    initActors(scene: IScene): void {
         enemies = [];
         heroes = [];
         intervalTimers = [];
@@ -308,7 +308,7 @@ class EnemiesPool extends AbstractActorGroup {
         initBosses(scene);
     }
 
-    initActions(scene: AbstractScene): void {
+    initActions(scene: IScene): void {
         initSimpleEnemiesActions(scene);
         initBossesActions(scene);
         this.handleClearEnemies();

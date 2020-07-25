@@ -1,6 +1,6 @@
 import {IDegrees, IRadian, x_pos, y_pos} from "./Types";
-import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../AnimationEngine/rootScenes/SceneTypes";
 
 export type ICoordinatesConverter = {
     x(x: x_pos): x_pos;
@@ -31,11 +31,11 @@ export function getCenterY(y: y_pos, height: number): y_pos {
     return getRectCenterCoordinate(y, y + height);
 }
 
-export function getSceneRightX(scene: AbstractScene, actor: IActor): x_pos {
+export function getSceneRightX(scene: IScene, actor: IActor): x_pos {
     return scene.generalLayer.width - actor.width;
 }
 
-export function getSceneBottomY(scene: AbstractScene, actor: IActor): x_pos {
+export function getSceneBottomY(scene: IScene, actor: IActor): x_pos {
     return scene.generalLayer.height - actor.height;
 }
 

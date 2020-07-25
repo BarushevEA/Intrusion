@@ -1,19 +1,19 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {defaultCursor$} from "../../../../AnimationCore/Store/EventStore";
 import {Cursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Cursor/Cursor";
 import {CursorHandler} from "../../../../AnimationCore/Libraries/CursorHandler";
 import {clearOnSceneDestroy, setDefaultCursorActions} from "../../../../AnimationCore/Libraries/Actions";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export let cursorHandler: CursorHandler = <any>0;
 
-export function initCursor(scene: AbstractScene) {
+export function initCursor(scene: IScene) {
     scene.cursor = new Cursor(scene.generalLayer);
     cursorHandler = new CursorHandler();
     scene.cursorHandler = cursorHandler;
 }
 
-export function handleCursor(scene: AbstractScene): void {
+export function handleCursor(scene: IScene): void {
     if (!scene.cursor) {
         return;
     }
@@ -30,11 +30,11 @@ function clearVariables() {
     defaultCursor$.next(true);
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     scene.setActors(scene.cursor);
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     setDefaultCursorActions(scene);
     clearOnSceneDestroy(scene, clearVariables);
 }

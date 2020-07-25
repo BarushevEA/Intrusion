@@ -1,10 +1,10 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ShotLighting} from "./Shot/ShotLighting";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class ShotLightingPlugin extends AbstractActorPlugin {
     private shotLighting: IActor = <any>0;
@@ -12,7 +12,7 @@ export class ShotLightingPlugin extends AbstractActorPlugin {
     private positionBalance: PositionBalance = <any>0;
     private isOver = false;
 
-    constructor(scene: AbstractScene, isOver = false) {
+    constructor(scene: IScene, isOver = false) {
         super('ShotLightingPlugin', scene);
         this.isOver = isOver;
     }

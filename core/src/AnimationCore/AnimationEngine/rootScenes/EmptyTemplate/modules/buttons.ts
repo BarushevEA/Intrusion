@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 import {
     clearOnSceneDestroy,
@@ -10,10 +9,11 @@ import {E_Scene} from "../../../../../AnimationTheater/AppScenario/types";
 import {ButtonExit} from "../../../../../AnimationTheater/AnimationModels/Buttons/ButtonExit";
 import {getSceneRightX} from "../../../../Libraries/FunctionLibs";
 import {IActor} from "../../../rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../SceneTypes";
 
 let buttonExit: IActor;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -27,13 +27,13 @@ function clearVariables() {
     }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonExit.xPos = getSceneRightX(scene, buttonExit);
     scene.setActors(buttonExit);
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     exitSceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
     toggleMouseEventsOnMouseOverGroup(scene,
         [

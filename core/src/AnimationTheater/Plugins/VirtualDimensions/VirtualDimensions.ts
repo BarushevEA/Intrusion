@@ -1,14 +1,14 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class VirtualDimensions extends AbstractActorPlugin {
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('VirtualDimensions', scene);
     }
 
     onInit(): void {
     }
-    
+
     destroy(): void {
         super.destroy();
     }

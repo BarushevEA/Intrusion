@@ -5,6 +5,7 @@ import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {E_Scene} from "../../AppScenario/types";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class TestX5 extends AbstractScene {
 
@@ -30,6 +31,6 @@ export class TestX5 extends AbstractScene {
     }
 }
 
-function sceneEvents(scene: AbstractScene) {
+function sceneEvents(scene: IScene) {
     scene.collect();
 }

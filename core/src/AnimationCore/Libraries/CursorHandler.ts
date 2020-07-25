@@ -1,10 +1,10 @@
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
-import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
+import {IScene} from "../AnimationEngine/rootScenes/SceneTypes";
 
 export type ICursorHandler = {
     clear(): void;
-    pointerOrDefaultChange(scene: AbstractScene, actor: IActor): void
+    pointerOrDefaultChange(scene: IScene, actor: IActor): void
 }
 
 export class CursorHandler implements ICursorHandler {
@@ -18,7 +18,7 @@ export class CursorHandler implements ICursorHandler {
         this.mouseOverQueue = <any>0;
     }
 
-    public pointerOrDefaultChange(scene: AbstractScene, actor: IActor): void {
+    public pointerOrDefaultChange(scene: IScene, actor: IActor): void {
         if (!scene.cursor) {
             return;
         }

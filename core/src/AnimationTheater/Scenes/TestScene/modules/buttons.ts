@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonGreenWithText} from "../../../AnimationModels/Buttons/ButtonGreenWithText";
@@ -16,6 +15,7 @@ import {
     toggleMouseEventsOnMouseOverGroup
 } from "../../../../AnimationCore/Libraries/Actions";
 import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let buttonExit: IActor;
 let buttonMove: IActor;
@@ -26,7 +26,7 @@ let buttonInvisible: IActor;
 let buttonToggleSpeed: IActor;
 let isHalfSpeed = false;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -60,7 +60,7 @@ function clearVariables() {
     }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonMove = new ButtonGreenWithText(scene.generalLayer, 'Move');
     buttonStop = new ButtonRedWithText(scene.generalLayer, 'Stop');
@@ -88,7 +88,7 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     scene.collect(
         buttonMove.isMouseClick$.subscribe(() => {
             isStopMove.value = false;

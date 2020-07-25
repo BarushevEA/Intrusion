@@ -1,10 +1,10 @@
 import {AbstractActorPlugin} from "../../root/AbstractActorPlugin";
-import {AbstractScene} from "../../../rootScenes/AbstractScene";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
 import {tickGenerator} from "../../../../Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../Libraries/Observables/Types";
 import {IActor} from "../../../rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../rootScenes/SceneTypes";
 
 export class SnakePlugin extends AbstractActorPlugin {
     private actors: IActor[] = <any>0;
@@ -14,7 +14,7 @@ export class SnakePlugin extends AbstractActorPlugin {
     private distance = 0;
     private emptyActor: IActor = <any>0;
 
-    constructor(scene: AbstractScene, plugins: AbstractActorPlugin[], distance = 15) {
+    constructor(scene: IScene, plugins: AbstractActorPlugin[], distance = 15) {
         super('SnakePlugin', scene);
         this.distance = distance;
         this.emptyActor = new EmptyActor(scene.generalLayer);

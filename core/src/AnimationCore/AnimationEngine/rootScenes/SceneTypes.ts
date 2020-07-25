@@ -1,4 +1,3 @@
-import {AbstractScene} from "./AbstractScene";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
 import {ICursorHandler} from "../../Libraries/CursorHandler";
@@ -64,7 +63,7 @@ export type IDragActor = {
 };
 
 export type IActorGroup = {
-    initActors(scene: AbstractScene): void;
-    initActions(scene: AbstractScene): void;
+    initActors(scene: IScene): void;
+    initActions(scene: IScene): void;
     destroy(): void;
 };

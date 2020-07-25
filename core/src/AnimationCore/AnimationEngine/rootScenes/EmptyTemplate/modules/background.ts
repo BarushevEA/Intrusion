@@ -1,8 +1,8 @@
-import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
 import {clearOnSceneDestroy} from "../../../../Libraries/Actions";
+import {IScene} from "../../SceneTypes";
 
-export function handleBackgrounds(scene: AbstractScene): void {
+export function handleBackgrounds(scene: IScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
     clearVariables();
     initActors(scene);
@@ -12,10 +12,10 @@ export function handleBackgrounds(scene: AbstractScene): void {
 function clearVariables() {
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     scene.setActors();
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     clearOnSceneDestroy(scene, clearVariables);
 }

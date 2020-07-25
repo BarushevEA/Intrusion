@@ -1,18 +1,18 @@
-import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {IPlugin} from "./PluginTypes";
 import {IActor} from "../../rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export abstract class AbstractActorPlugin implements IPlugin {
     private static pluginCounter = 0;
     private _isDestroyed: boolean = false;
     private readonly name: string = '';
     protected root: IActor = <any>0;
-    protected scene: AbstractScene = <any>0;
+    protected scene: IScene = <any>0;
     protected _isUnlinked = true;
     public readonly numberSeparator = '_#';
     public readonly rootName: string = '';
 
-    protected constructor(name: string, scene: AbstractScene) {
+    protected constructor(name: string, scene: IScene) {
         this.rootName = name;
         this.name = name + this.numberSeparator + AbstractActorPlugin.pluginCounter;
         this.scene = scene;

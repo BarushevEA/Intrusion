@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {E_Scene} from "../../../AppScenario/types";
@@ -12,6 +11,7 @@ import {
 } from "../../../../AnimationCore/Libraries/Actions";
 import {cursorHandler} from "./cursor";
 import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let buttonExit: IActor,
     buttonTest: IActor,
@@ -20,7 +20,7 @@ let buttonExit: IActor,
     buttonTestX5: IActor,
     buttonQuit: IActor;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -54,7 +54,7 @@ function clearVariables() {
     }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonTest = new ButtonYellowWithText(scene.generalLayer, E_Scene.TEST);
     buttonSerge = new ButtonYellowWithText(scene.generalLayer, E_Scene.SERGE);
@@ -85,7 +85,7 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
 
     toggleMouseEventsOnMouseOverGroup(scene, [
         buttonTest,

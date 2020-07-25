@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {
     E_Cells,
@@ -21,6 +20,7 @@ import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTri
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
 import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let cells: IBackgroundMap = <any>0,
     cellsString: IBackgroundMap = <any>0,
@@ -37,7 +37,7 @@ enum $ {
     WAL = 'WAL'
 }
 
-export function handleBackgrounds(scene: AbstractScene): void {
+export function handleBackgrounds(scene: IScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
     clearVariables();
     initActors(scene);
@@ -75,7 +75,7 @@ function clearVariables() {
     }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     const bgOptions: ICellDrawOptions = {
         width: 4,
         height: 4
@@ -111,7 +111,7 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     const bounce = new BounceOffTheWall(scene);
     bg.pluginDock.add(bounce);
     scene.collect(
@@ -131,7 +131,7 @@ function initActions(scene: AbstractScene) {
     clearOnSceneDestroy(scene, clearVariables);
 }
 
-function prepareCells(scene: AbstractScene) {
+function prepareCells(scene: IScene) {
     const scheme: ICellScheme = {};
     scheme[$.REC] = <any>GreenRectangle;
     scheme[$.TRI] = <any>GreenTriangle;
@@ -146,7 +146,7 @@ function prepareCells(scene: AbstractScene) {
     cells.setScheme(scheme, E_Cells.SCENE_USE, scene.generalLayer);
 }
 
-function prepareCellsString(scene: AbstractScene) {
+function prepareCellsString(scene: IScene) {
     const cellsStringScheme: ICellScheme = {};
     cellsStringScheme[' '] = <any>0;
     cellsStringScheme['0'] = <any>GreenRectangle;

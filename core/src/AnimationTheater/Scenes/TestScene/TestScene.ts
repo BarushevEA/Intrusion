@@ -5,6 +5,7 @@ import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {E_Scene} from "../../AppScenario/types";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export const userData = {
     test: 123,
@@ -35,7 +36,7 @@ export class TestScene extends AbstractScene {
     }
 }
 
-function sceneEvents(scene: AbstractScene) {
+function sceneEvents(scene: IScene) {
     scene.collect(
         scene.onStart$.subscribe(() => {
             recMoveStart(scene);

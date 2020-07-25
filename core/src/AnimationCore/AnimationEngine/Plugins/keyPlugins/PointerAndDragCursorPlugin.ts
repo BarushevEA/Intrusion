@@ -1,14 +1,14 @@
 import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
-import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {ECursor} from "../../rootModels/Types";
 import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
     private PODSubscriber: ISubscriptionLike = <any>0;
     private dragSubscriber: ISubscriptionLike = <any>0;
     private dropSubscriber: ISubscriptionLike = <any>0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('PointerAndDrugCursorPlugin', scene);
     }
 

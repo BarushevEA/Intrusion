@@ -1,11 +1,11 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
@@ -16,7 +16,7 @@ export class BulletPlugin extends AbstractActorPlugin {
     private damagedEnemy: IActor = <any>0;
     private handleDestroyCounter = <any>0;
 
-    constructor(scene: AbstractScene, enemies: IActor[], isReverse = false, damage = 50) {
+    constructor(scene: IScene, enemies: IActor[], isReverse = false, damage = 50) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);

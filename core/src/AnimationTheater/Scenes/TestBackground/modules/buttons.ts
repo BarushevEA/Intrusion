@@ -1,12 +1,12 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {cursorHandler} from "./cursor";
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let buttonExit: ButtonExit;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -20,13 +20,13 @@ function clearVariables() {
     }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     scene.setActors(buttonExit);
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     scene.collect(
         buttonExit.isMouseClick$.subscribe(() => {
             scene.userData.test++;

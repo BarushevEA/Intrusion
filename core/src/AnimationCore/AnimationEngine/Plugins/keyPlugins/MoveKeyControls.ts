@@ -3,7 +3,7 @@ import {MoveUpOnKeyPress} from "./onPressKeyPlugins/MoveUpOnKeyPress";
 import {MoveDownOnKeyPress} from "./onPressKeyPlugins/MoveDownOnKeyPress";
 import {MoveLeftOnKeyPress} from "./onPressKeyPlugins/MoveLeftOnKeyPress";
 import {MoveRightOnKeyPress} from "./onPressKeyPlugins/MoveRightOnKeyPress";
-import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export class MoveKeyControls extends AbstractActorPlugin {
     private moveUp: MoveUpOnKeyPress;
@@ -11,7 +11,7 @@ export class MoveKeyControls extends AbstractActorPlugin {
     private moveLeft: MoveLeftOnKeyPress;
     private moveRight: MoveRightOnKeyPress;
 
-    constructor(scene: AbstractScene,
+    constructor(scene: IScene,
                 moveUp: string,
                 moveDown: string,
                 moveLeft: string,

@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {Heart} from "../../../AnimationModels/Heart";
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
@@ -14,7 +13,7 @@ import {MoveKeyControls} from "../../../../AnimationCore/AnimationEngine/Plugins
 import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
 import {RectangleHighlighting} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/RectangleHighlighting";
 import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
-import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {IDragDropOptions, IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observables/Types";
 import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
@@ -40,7 +39,7 @@ let wave2: AbstractFramedShape;
 let wave3: AbstractFramedShape;
 let snakeSpiral: AbstractFramedShape;
 
-export function handleMiddle(scene: AbstractScene): void {
+export function handleMiddle(scene: IScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
     clearVariables();
     initActors(scene);
@@ -83,7 +82,7 @@ function clearVariables() {
     snakeSpiral = <any>0;
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     snakeSpiral = new SnakeSpiral(scene.generalLayer);
     heart = new Heart(scene.generalLayer);
     wave = new AnimatedWave(scene.generalLayer);
@@ -151,7 +150,7 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
     const highlightingHeart = new RectangleHighlighting(scene);
     scene.moveOnMouseDrag(heart);
@@ -227,7 +226,7 @@ const recMove = () => {
     }
 };
 
-export function recMoveStart(scene: AbstractScene) {
+export function recMoveStart(scene: IScene) {
     if (!move.value) {
         move.value = scene.tickCount$
             .subscribe(recMove.bind(scene));
@@ -248,7 +247,7 @@ export function toggleReverse() {
     isReverse = !isReverse;
 }
 
-function initHeartMoveOnKeyPress(scene: AbstractScene) {
+function initHeartMoveOnKeyPress(scene: IScene) {
     const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
     heart.pluginDock.add(moveKeys);
 }

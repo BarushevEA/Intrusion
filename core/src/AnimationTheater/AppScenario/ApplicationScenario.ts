@@ -2,20 +2,19 @@ import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/A
 import {Menu} from "../Scenes/Menu/Menu";
 import {SergeScene} from "../Scenes/Serge/SergeScene";
 import {E_Scene} from "./types";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
-import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {IScene, IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {EventCollector} from "../../AnimationCore/Libraries/EventCollector";
 import {TestX5} from "../Scenes/TestX5/TestX5";
 
 const collector = new EventCollector();
 
-let menu: AbstractScene = <any>0,
-    sceneTest: AbstractScene = <any>0,
-    sceneSerge: AbstractScene = <any>0,
-    sceneBackground: AbstractScene = <any>0,
-    sceneTestX5: AbstractScene = <any>0;
+let menu: IScene = <any>0,
+    sceneTest: IScene = <any>0,
+    sceneSerge: IScene = <any>0,
+    sceneBackground: IScene = <any>0,
+    sceneTestX5: IScene = <any>0;
 
 export function runApplicationScenario(platform: AbstractPlatform) {
     initScenes(platform);
