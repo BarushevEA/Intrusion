@@ -8,15 +8,15 @@ import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 import {tickGenerator} from "../../Libraries/TickGenerator";
-import {CursorHandler} from "../../Libraries/CursorHandler";
+import {ICursorHandler} from "../../Libraries/CursorHandler";
 import {ISubscriber, ISubscriptionLike} from "../../Libraries/Observables/Types";
 
 export abstract class AbstractScene implements IScene {
-    public renderController: IRenderController;
-    public generalLayer: HTMLCanvasElement;
-    public actors: IActor[] = [];
+    private _renderController: IRenderController;
+    private _generalLayer: HTMLCanvasElement;
+    private _actors: IActor[] = [];
     private _cursor: ICursor & AbstractActor = <any>0;
-    private _cursorHandler: CursorHandler = <any>0;
+    private _cursorHandler: ICursorHandler = <any>0;
     private collector: ICollector = <any>0;
     private _onStop$ = new Observable(<IUserData><any>0);
     private _onExit$ = new Observable(<IUserData><any>0);
@@ -36,9 +36,9 @@ export abstract class AbstractScene implements IScene {
     private readonly _name: string;
 
     protected constructor(canvas: HTMLCanvasElement, name = '') {
-        this.generalLayer = canvas;
-        this.renderController = new RenderController();
-        this.renderController.setCanvas(canvas);
+        this._generalLayer = canvas;
+        this._renderController = new RenderController();
+        this._renderController.setCanvas(canvas);
         this.collector = new EventCollector();
         this._name = name;
         this.run();
@@ -48,11 +48,11 @@ export abstract class AbstractScene implements IScene {
         return this._isDestroyed;
     }
 
-    set cursorHandler(value: CursorHandler) {
+    set cursorHandler(value: ICursorHandler) {
         this._cursorHandler = value;
     }
 
-    get cursorHandler(): CursorHandler {
+    get cursorHandler(): ICursorHandler {
         return this._cursorHandler;
     }
 
@@ -65,8 +65,8 @@ export abstract class AbstractScene implements IScene {
     }
 
     get tickCount$(): ISubscriber<boolean> {
-        if (!!this.renderController && !!this.renderController.tickCount$) {
-            return this.renderController.tickCount$;
+        if (!!this._renderController && !!this._renderController.tickCount$) {
+            return this._renderController.tickCount$;
         } else {
             return <any>{subscribe: () => 0};
         }
@@ -80,8 +80,8 @@ export abstract class AbstractScene implements IScene {
 
     private handleCreateScene() {
         this.createScene();
-        for (let i = 0; i < this.actors.length; i++) {
-            const actor = this.actors[i];
+        for (let i = 0; i < this._actors.length; i++) {
+            const actor = this._actors[i];
             actor.pauseEvents();
         }
         this.timerCounter = tickGenerator.executeTimeout(() => {
@@ -90,11 +90,11 @@ export abstract class AbstractScene implements IScene {
     }
 
     private handleStartScene() {
-        for (let i = 0; i < this.actors.length; i++) {
-            const actor = this.actors[i];
+        for (let i = 0; i < this._actors.length; i++) {
+            const actor = this._actors[i];
             actor.unPauseEvents();
         }
-        this.renderController.renderStart(this.isBackgroundLayerPresent);
+        this._renderController.renderStart(this.isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
     }
 
@@ -143,32 +143,32 @@ export abstract class AbstractScene implements IScene {
             if (!actor) {
                 continue;
             }
-            const index = findElementOnArray(this.actors, actor);
+            const index = findElementOnArray(this._actors, actor);
             if (index === -1) {
-                this.actors.push(actor);
+                this._actors.push(actor);
             }
             actor.isUnlinked = false;
-            this.renderController.setActor(actor);
+            this._renderController.setActor(actor);
         }
     }
 
     public destroyActor(actor: IActor): void {
-        if (!this.actors) {
+        if (!this._actors) {
             return;
         }
 
-        const index = findElementOnArray(this.actors, actor);
+        const index = findElementOnArray(this._actors, actor);
         if (index === -1) {
             return;
         }
 
         this.unLink(actor);
 
-        for (let i = index; i < this.actors.length - 1; i++) {
-            this.actors[i] = this.actors[i + 1];
+        for (let i = index; i < this._actors.length - 1; i++) {
+            this._actors[i] = this._actors[i + 1];
         }
 
-        this.actors.length = this.actors.length - 1;
+        this._actors.length = this._actors.length - 1;
 
         if (actor &&
             !actor.isDestroyed &&
@@ -182,60 +182,72 @@ export abstract class AbstractScene implements IScene {
             return;
         }
         actor.isUnlinked = true;
-        this.renderController.deleteActor(actor);
+        this._renderController.deleteActor(actor);
     }
 
     public setHalfSpeed(): void {
-        this.renderController.setHalfSpeed();
+        this._renderController.setHalfSpeed();
     }
 
     public setFullSpeed(): void {
-        this.renderController.setFullSpeed();
+        this._renderController.setFullSpeed();
     }
 
     public setActorOnTop(actor: IActor): void {
-        this.renderController.setActorOnTop(actor);
+        this._renderController.setActorOnTop(actor);
     }
 
     public setActorZIndex(actor: IActor, z_index: number): void {
-        this.renderController.setActorZIndex(actor, z_index);
+        this._renderController.setActorZIndex(actor, z_index);
     }
 
     public setActorsGroupOnTop(actors: IActor[]): void {
-        this.renderController.setActorGroupOnTop(actors);
+        this._renderController.setActorGroupOnTop(actors);
     }
 
     public setActorsGroupByZIndex(actors: IActor[], z_index: number): void {
-        this.renderController.setActorsGroupByZIndex(actors, z_index);
+        this._renderController.setActorsGroupByZIndex(actors, z_index);
     }
 
-    public sortActorsByZIndex() {
-        this.renderController.sortActorsByZIndex();
+    public sortActorsByZIndex(): void {
+        this._renderController.sortActorsByZIndex();
     }
 
     public setActiveLayer(name: string): void {
-        this.renderController.setActiveLayer(name);
+        this._renderController.setActiveLayer(name);
     }
 
     public getActiveLayerName(): string {
-        return this.renderController.getActiveLayerName();
+        return this._renderController.getActiveLayerName();
     }
 
     public setLayerOnTop(name: string): void {
-        this.renderController.setLayerOnTop(name);
+        this._renderController.setLayerOnTop(name);
     }
 
     public setLayerOnIndex(layerName: string, index: number): void {
-        this.renderController.setLayerOnIndex(layerName, index);
+        this._renderController.setLayerOnIndex(layerName, index);
     }
 
-    public collect(...subscribers: ISubscriptionLike[]) {
+    public collect(...subscribers: ISubscriptionLike[]): void {
         this.collector.collect(...subscribers);
+    }
+
+    get renderController(): IRenderController {
+        return this._renderController;
+    }
+
+    get generalLayer(): HTMLCanvasElement {
+        return this._generalLayer;
+    }
+
+    get actors(): IActor[] {
+        return this._actors;
     }
 
     protected abstract createScene(): void;
 
-    public moveOnMouseDrag(actor: IActor, options?: IDragDropOptions) {
+    public moveOnMouseDrag(actor: IActor, options?: IDragDropOptions): void {
         if (this._isDestroyed) {
             return;
         }
@@ -359,13 +371,13 @@ export abstract class AbstractScene implements IScene {
     }
 
     public stop(): void {
-        this.renderController.renderStop();
+        this._renderController.renderStop();
         this._onStop$.next({...this._userData});
     }
 
     public exit() {
         this.stop();
-        this.actors.forEach(actor => {
+        this._actors.forEach(actor => {
             actor.pauseEvents();
         });
         this._onExit$.next({...this._userData});
@@ -384,12 +396,12 @@ export abstract class AbstractScene implements IScene {
         this.collector.destroy();
         this.collector = <any>0;
 
-        if (this.renderController && this.renderController.destroyActors) {
-            this.renderController.destroyActors();
+        if (this._renderController && this._renderController.destroyActors) {
+            this._renderController.destroyActors();
         }
 
-        for (let i = 0; i < this.actors.length; i++) {
-            let actor = this.actors[i];
+        for (let i = 0; i < this._actors.length; i++) {
+            let actor = this._actors[i];
             if (actor) {
                 actor.destroy();
             }
@@ -407,12 +419,12 @@ export abstract class AbstractScene implements IScene {
         }
         this.movedBehaviors = <any>0;
         this.collector = <any>0;
-        if (this.actors) {
-            this.actors.length = <any>0;
+        if (this._actors) {
+            this._actors.length = <any>0;
         }
-        this.actors = <any>0;
-        this.renderController = <any>0;
-        this.generalLayer = <any>0;
+        this._actors = <any>0;
+        this._renderController = <any>0;
+        this._generalLayer = <any>0;
         this.isFirstStart = <any>0;
         if (this.movedOnDrag) {
             this.movedOnDrag.length = <any>0;
@@ -443,7 +455,7 @@ export abstract class AbstractScene implements IScene {
         this.timerCounter = <any>0;
     }
 
-    public unsubscribe(subscriber: ISubscriptionLike) {
+    public unsubscribe(subscriber: ISubscriptionLike): void {
         if (!!this.collector) {
             this.collector.unsubscribe(subscriber);
         }

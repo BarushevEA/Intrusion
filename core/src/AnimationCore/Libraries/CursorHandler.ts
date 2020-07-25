@@ -2,18 +2,23 @@ import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 import {AbstractScene} from "../AnimationEngine/rootScenes/AbstractScene";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 
-export class CursorHandler {
+export type ICursorHandler = {
+    clear(): void;
+    pointerOrDefaultChange(scene: AbstractScene, actor: IActor): void
+}
+
+export class CursorHandler implements ICursorHandler {
     private mouseOverQueue: IActor[] = <any>0;
 
     constructor() {
         this.mouseOverQueue = [];
     }
 
-    public clear() {
+    public clear(): void {
         this.mouseOverQueue = <any>0;
     }
 
-    public pointerOrDefaultChange(scene: AbstractScene, actor: IActor) {
+    public pointerOrDefaultChange(scene: AbstractScene, actor: IActor): void {
         if (!scene.cursor) {
             return;
         }
