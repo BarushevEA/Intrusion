@@ -14,7 +14,7 @@ import {ISubscriber, ISubscriptionLike} from "../../Libraries/Observables/Types"
 export abstract class AbstractScene implements IScene {
     public renderController: IRenderController;
     public generalLayer: HTMLCanvasElement;
-    public actors: AbstractActor[] = [];
+    public actors: IActor[] = [];
     private _cursor: ICursor & AbstractActor = <any>0;
     private _cursorHandler: CursorHandler = <any>0;
     private collector: ICollector = <any>0;
@@ -133,7 +133,7 @@ export abstract class AbstractScene implements IScene {
         return this._onDestroy$;
     }
 
-    public setActors(...actors: AbstractActor[]): void {
+    public setActors(...actors: IActor[]): void {
         if (this._isDestroyed || !actors || !actors.length) {
             return;
         }
@@ -193,11 +193,11 @@ export abstract class AbstractScene implements IScene {
         this.renderController.setFullSpeed();
     }
 
-    public setActorOnTop(actor: AbstractActor): void {
+    public setActorOnTop(actor: IActor): void {
         this.renderController.setActorOnTop(actor);
     }
 
-    public setActorZIndex(actor: AbstractActor, z_index: number): void {
+    public setActorZIndex(actor: IActor, z_index: number): void {
         this.renderController.setActorZIndex(actor, z_index);
     }
 
@@ -235,7 +235,7 @@ export abstract class AbstractScene implements IScene {
 
     protected abstract createScene(): void;
 
-    public moveOnMouseDrag(actor: AbstractActor, options?: IDragDropOptions) {
+    public moveOnMouseDrag(actor: IActor, options?: IDragDropOptions) {
         if (this._isDestroyed) {
             return;
         }
@@ -455,10 +455,10 @@ export abstract class AbstractScene implements IScene {
 }
 
 class Drag implements IDragActor {
-    public actor: AbstractActor;
+    public actor: IActor;
     public options: IDragDropOptions;
 
-    constructor(actor: AbstractActor, options?: IDragDropOptions) {
+    constructor(actor: IActor, options?: IDragDropOptions) {
         this.actor = actor;
         this.options = this.getDefaultOptions();
         if (!options) {

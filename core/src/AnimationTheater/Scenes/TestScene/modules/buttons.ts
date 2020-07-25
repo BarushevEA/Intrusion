@@ -6,7 +6,6 @@ import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithT
 import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
 import {cursorHandler} from "./cursor";
@@ -16,14 +15,15 @@ import {
     destroySceneOnButtonClick,
     toggleMouseEventsOnMouseOverGroup
 } from "../../../../AnimationCore/Libraries/Actions";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
-let buttonExit: AbstractActor;
-let buttonMove: AbstractActor;
-let buttonStop: AbstractActor;
-let buttonPlay: AbstractActor;
-let buttonPause: AbstractActor;
-let buttonInvisible: AbstractActor;
-let buttonToggleSpeed: AbstractActor;
+let buttonExit: IActor;
+let buttonMove: IActor;
+let buttonStop: IActor;
+let buttonPlay: IActor;
+let buttonPause: IActor;
+let buttonInvisible: IActor;
+let buttonToggleSpeed: IActor;
 let isHalfSpeed = false;
 
 export function handleButtons(scene: AbstractScene): void {

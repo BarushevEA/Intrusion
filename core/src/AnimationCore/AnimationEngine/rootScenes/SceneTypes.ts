@@ -1,6 +1,6 @@
-import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {AbstractScene} from "./AbstractScene";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
+import {IActor} from "../rootModels/AbstractActor/ActorTypes";
 
 export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
@@ -24,7 +24,7 @@ export type IDragDropOptions = {
 };
 
 export type IDragActor = {
-    actor: AbstractActor;
+    actor: IActor;
     options?: IDragDropOptions;
 };
 

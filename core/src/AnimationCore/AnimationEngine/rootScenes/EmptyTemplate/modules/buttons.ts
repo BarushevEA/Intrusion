@@ -1,13 +1,17 @@
 import {AbstractScene} from "../../AbstractScene";
 import {ELayers} from "../../scenesEnvironment";
-import {clearOnSceneDestroy, exitSceneOnButtonClick, toggleMouseEventsOnMouseOverGroup} from "../../../../Libraries/Actions";
-import {AbstractActor} from "../../../rootModels/AbstractActor/AbstractActor";
+import {
+    clearOnSceneDestroy,
+    exitSceneOnButtonClick,
+    toggleMouseEventsOnMouseOverGroup
+} from "../../../../Libraries/Actions";
 import {cursorHandler} from "./cursor";
 import {E_Scene} from "../../../../../AnimationTheater/AppScenario/types";
 import {ButtonExit} from "../../../../../AnimationTheater/AnimationModels/Buttons/ButtonExit";
 import {getSceneRightX} from "../../../../Libraries/FunctionLibs";
+import {IActor} from "../../../rootModels/AbstractActor/ActorTypes";
 
-let buttonExit: AbstractActor;
+let buttonExit: IActor;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);
@@ -32,8 +36,8 @@ function initActors(scene: AbstractScene) {
 function initActions(scene: AbstractScene) {
     exitSceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
     toggleMouseEventsOnMouseOverGroup(scene,
-            [
-                buttonExit
-            ]);
+        [
+            buttonExit
+        ]);
     clearOnSceneDestroy(scene, clearVariables);
 }

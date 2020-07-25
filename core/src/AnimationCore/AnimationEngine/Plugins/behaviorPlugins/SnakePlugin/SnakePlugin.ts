@@ -1,18 +1,18 @@
 import {AbstractActorPlugin} from "../../root/AbstractActorPlugin";
 import {AbstractScene} from "../../../rootScenes/AbstractScene";
-import {AbstractActor} from "../../../rootModels/AbstractActor/AbstractActor";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
 import {tickGenerator} from "../../../../Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../Libraries/Observables/Types";
+import {IActor} from "../../../rootModels/AbstractActor/ActorTypes";
 
 export class SnakePlugin extends AbstractActorPlugin {
-    private actors: AbstractActor[] = <any>0;
-    private realActors: AbstractActor[] = <any>0;
+    private actors: IActor[] = <any>0;
+    private realActors: IActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private isUnlinkProcessed = false;
     private distance = 0;
-    private emptyActor: AbstractActor = <any>0;
+    private emptyActor: IActor = <any>0;
 
     constructor(scene: AbstractScene, plugins: AbstractActorPlugin[], distance = 15) {
         super('SnakePlugin', scene);

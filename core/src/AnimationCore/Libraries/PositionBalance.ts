@@ -1,14 +1,14 @@
-import {AbstractActor} from "../AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class PositionBalance {
-    private readonly rootActor: AbstractActor = <any>0;
-    private readonly balancedActor: AbstractActor = <any>0;
+    private readonly rootActor: IActor = <any>0;
+    private readonly balancedActor: IActor = <any>0;
     private yBalance: number = 0;
     private xBalance: number = 0;
     private vectorY = 0;
     private vectorX = 0;
 
-    constructor(rootActor: AbstractActor, balancedActor: AbstractActor) {
+    constructor(rootActor: IActor, balancedActor: IActor) {
         this.rootActor = rootActor;
         this.balancedActor = balancedActor;
         this.init();

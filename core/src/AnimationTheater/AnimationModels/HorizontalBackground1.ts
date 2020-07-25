@@ -1,5 +1,6 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {BrickWall} from "./briks/BrickWall";
+import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 enum ELayer {
     WORK = 'WORK',
@@ -12,7 +13,7 @@ export class HorizontalBackground1 extends AbstractActor {
     private counter = 100;
     private copyLayerCounter = 0;
     private arrayCounter = 0;
-    private arr: AbstractActor[] = [];
+    private arr: IActor[] = [];
 
     constructor(canvas: HTMLCanvasElement) {
         super(
@@ -46,7 +47,7 @@ export class HorizontalBackground1 extends AbstractActor {
     }
 }
 
-function setDataToCopy($: AbstractActor, delta: number, arr: AbstractActor[]) {
+function setDataToCopy($: IActor, delta: number, arr: IActor[]) {
     if (!arr.length) {
         const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
         for (let i = 0; i < $.height; i += 100) {

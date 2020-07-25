@@ -1,12 +1,12 @@
 import {AbstractScene} from "../../rootScenes/AbstractScene";
 import {IPlugin} from "./PluginTypes";
-import {AbstractActor} from "../../rootModels/AbstractActor/AbstractActor";
+import {IActor} from "../../rootModels/AbstractActor/ActorTypes";
 
 export abstract class AbstractActorPlugin implements IPlugin {
     private static pluginCounter = 0;
     private _isDestroyed: boolean = false;
     private readonly name: string = '';
-    protected root: AbstractActor = <any>0;
+    protected root: IActor = <any>0;
     protected scene: AbstractScene = <any>0;
     protected _isUnlinked = true;
     public readonly numberSeparator = '_#';
@@ -42,11 +42,11 @@ export abstract class AbstractActorPlugin implements IPlugin {
         return this.name;
     };
 
-    setRoot(root: AbstractActor): void {
+    setRoot(root: IActor): void {
         this.root = root;
         this._isUnlinked = false;
         this.onInit(root);
     };
 
-    abstract onInit(root?: AbstractActor): void;
+    abstract onInit(root?: IActor): void;
 }

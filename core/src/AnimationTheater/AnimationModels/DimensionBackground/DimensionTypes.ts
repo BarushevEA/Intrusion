@@ -1,11 +1,11 @@
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export enum E_Cells {
     ACTOR_USE = 'ACTOR_USE',
     SCENE_USE = 'SCENE_USE'
 }
 
-export type ICell = AbstractActor[];
+export type ICell = IActor[];
 export type ICells = ICell[][];
 export type x_canvas = number;
 export type y_canvas = number;
@@ -27,27 +27,27 @@ export type ICellsMap = {
     calculateX(x: x_canvas): IBackgroundMap;
     calculateY(y: y_canvas): IBackgroundMap;
 }
-export type ICellScheme = { [key: string]: AbstractActor; }
+export type ICellScheme = { [key: string]: IActor; }
 export type IBackgroundMap = {
     cells: ICells;
     map: ICellsMap;
     width: array_width;
     height: array_height;
     setScheme(scheme: ICellScheme, type: E_Cells, canvas: HTMLCanvasElement): void;
-    fillWithActor(actor: AbstractActor): IBackgroundMap;
+    fillWithActor(actor: IActor): IBackgroundMap;
     addCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
     replaceCells(cells: IBackgroundMap, x: x_array, y: y_array): IBackgroundMap;
     addStringDimension(dim: string[], x?: x_array, y?: y_array): IBackgroundMap;
-    addActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
-    replaceActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
-    addRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
-    replaceRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
-    addColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
-    replaceColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
-    addRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
-    replaceRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
-    add(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
-    replace(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap;
+    addActorsAt(actors: IActor[], x: x_array, y: y_array): IBackgroundMap;
+    replaceActorsAt(actors: IActor[], x: x_array, y: y_array): IBackgroundMap;
+    addRowAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    replaceRowAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    addColumnAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    replaceColumnAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap;
+    addRectangleAt(actors: IActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
+    replaceRectangleAt(actors: IActor[], x: x_array, y: y_array, height: number, width: number): IBackgroundMap;
+    add(actors: IActor[], x: x_array, y: y_array): IBackgroundMap;
+    replace(actors: IActor[], x: x_array, y: y_array): IBackgroundMap;
     getActorsAt(x: x_array, y: y_array): ICell;
     getRow(x: x_array, y: y_array, length: number): ICell[];
     getColumn(x: x_array, y: y_array, length: number): ICell[];
@@ -57,7 +57,7 @@ export type IBackgroundMap = {
     destroy(): void;
 }
 
-export type ICellPool = { [key: string]: AbstractActor; };
+export type ICellPool = { [key: string]: IActor; };
 
 export type ICellDrawOptions = {
     width: array_width;

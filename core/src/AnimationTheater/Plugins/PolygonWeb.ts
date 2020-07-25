@@ -1,12 +1,12 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {getCenterX, getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class PolygonWeb extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
-    private rootPool: AbstractActor[] = [];
+    private rootPool: IActor[] = [];
     private bgColor = '';
     private bdColor = '';
 
@@ -16,7 +16,7 @@ export class PolygonWeb extends AbstractActorPlugin {
         this.bdColor = borderColor;
     }
 
-    onInit(root: AbstractActor): void {
+    onInit(root: IActor): void {
         this.rootPool.push(root);
         this.init();
     }

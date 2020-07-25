@@ -1,13 +1,13 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ShotLighting} from "./Shot/ShotLighting";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class ShotLightingPlugin extends AbstractActorPlugin {
-    private shotLighting: AbstractActor = <any>0;
+    private shotLighting: IActor = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private positionBalance: PositionBalance = <any>0;
     private isOver = false;

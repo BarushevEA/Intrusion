@@ -1,6 +1,5 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
 import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {EnemySmall1} from "../../../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
 import {EnemySmall2} from "../../../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
 import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
@@ -23,13 +22,14 @@ import {Heart} from "../../../../../AnimationModels/Heart";
 import {Link} from "../../../../../Plugins/Link";
 import {HealsBuf} from "../../../../../Plugins/HLProgress/HealsBuf";
 import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
-let enemies: AbstractActor[] = <any>0;
-let enemies2: AbstractActor[] = <any>0;
-let enemies1: AbstractActor[] = <any>0;
-let enemiesMiniBosses: AbstractActor[] = <any>0;
-let generalBoss: AbstractActor = <any>0;
-let heroes: AbstractActor[] = <any>0;
+let enemies: IActor[] = <any>0;
+let enemies2: IActor[] = <any>0;
+let enemies1: IActor[] = <any>0;
+let enemiesMiniBosses: IActor[] = <any>0;
+let generalBoss: IActor = <any>0;
+let heroes: IActor[] = <any>0;
 let intervalTimers: ISubscriptionLike[] = <any>0;
 
 let simpleEnemyTimer = <any>0;
@@ -125,7 +125,7 @@ function initBosses(scene: AbstractScene) {
 function initMiniBosses(scene: AbstractScene) {
     enemiesMiniBosses = [];
 
-    const miniBossActivate = (miniBoss: AbstractActor) => {
+    const miniBossActivate = (miniBoss: IActor) => {
         miniBoss.xPos = scene.generalLayer.width + 3 * miniBoss.width;
         miniBoss.yPos = randomize(scene.generalLayer.height - miniBoss.height);
         enemiesMiniBosses.push(miniBoss);
@@ -240,7 +240,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     );
 }
 
-function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.ENEMY): void {
+function addActor(actor: IActor, scene: AbstractScene, type = HealthType.ENEMY): void {
     enemies.push(actor);
     actor.disableEvents();
     let delay = 0;
@@ -293,7 +293,7 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
 class EnemiesPool extends AbstractActorGroup {
     private timer: ISubscriptionLike = <any>0;
 
-    set heroes(values: AbstractActor[]) {
+    set heroes(values: IActor[]) {
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             heroes.push(value);
@@ -334,7 +334,7 @@ class EnemiesPool extends AbstractActorGroup {
         }, 5);
     }
 
-    get enemies(): AbstractActor[] {
+    get enemies(): IActor[] {
         return enemies;
     }
 

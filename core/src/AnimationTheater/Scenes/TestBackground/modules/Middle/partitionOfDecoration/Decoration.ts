@@ -1,11 +1,11 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
 import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {LightCircle} from "../../../../../AnimationModels/circle/LightCircle";
 import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
-let circles: AbstractActor[] = <any>0;
+let circles: IActor[] = <any>0;
 
 class Decoration extends AbstractActorGroup {
     initActors(scene: AbstractScene): void {

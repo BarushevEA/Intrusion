@@ -1,16 +1,16 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {HealthPlugin} from "./HealthPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class HealsBuf extends AbstractActorPlugin {
     private _buf: number = <any>0;
-    private _actors: AbstractActor[] = <any>0;
+    private _actors: IActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
 
-    constructor(scene: AbstractScene, actors: AbstractActor[], buf = 2000) {
+    constructor(scene: AbstractScene, actors: IActor[], buf = 2000) {
         super('HealsBuf', scene);
         this._buf = buf;
         this._actors = actors;

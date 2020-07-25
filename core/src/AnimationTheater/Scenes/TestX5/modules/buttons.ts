@@ -1,7 +1,6 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
 import {getSceneRightX} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {
@@ -10,8 +9,9 @@ import {
     toggleMouseEventsOnMouseOverGroup
 } from "../../../../AnimationCore/Libraries/Actions";
 import {cursorHandler} from "./cursor";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
-let buttonExit: AbstractActor;
+let buttonExit: IActor;
 
 export function handleButtons(scene: AbstractScene): void {
     scene.setActiveLayer(ELayers.TOP);

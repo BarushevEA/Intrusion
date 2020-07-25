@@ -14,21 +14,21 @@ import {DimensionBackground} from "../../../AnimationModels/DimensionBackground/
 import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 import {ButtonGreenWithText} from "../../../AnimationModels/Buttons/ButtonGreenWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
 import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 let cells: IBackgroundMap = <any>0,
     cellsString: IBackgroundMap = <any>0,
     bg: DimensionBackground = <any>0,
-    left: AbstractActor = <any>0,
-    right: AbstractActor = <any>0,
-    top: AbstractActor = <any>0,
-    bottom: AbstractActor = <any>0;
+    left: IActor = <any>0,
+    right: IActor = <any>0,
+    top: IActor = <any>0,
+    bottom: IActor = <any>0;
 
 enum $ {
     NUL = 0,

@@ -9,10 +9,10 @@ import {EnemyBossProgress} from "./Progresses/EnemyBossProgress";
 import {HeroProgress} from "./Progresses/HeroProgress";
 import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 import {Explode} from "../../AnimationModels/Explode/Explode";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -132,7 +132,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             this.scene.unLink(this.progressBar);
         }
 
-        const explosions: AbstractActor[] = [];
+        const explosions: IActor[] = [];
         let explodeCount = 0;
 
         switch (this.type) {
@@ -160,7 +160,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.handleExplode(explosions, this.scene);
     }
 
-    private handleExplode(explosions: AbstractActor[], scene: AbstractScene) {
+    private handleExplode(explosions: IActor[], scene: AbstractScene) {
         this.explodeShow(explosions, 0, scene);
         let counter = 1;
         const timer = tickGenerator.execute100MsInterval(() => {
@@ -180,7 +180,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         }, 340 + (explosions.length - 1) * 100);
     }
 
-    private explodeShow(explosions: AbstractActor[], counter: number, scene: AbstractScene) {
+    private explodeShow(explosions: IActor[], counter: number, scene: AbstractScene) {
         if (!this.root || !explosions || !explosions.length) {
             return;
         }

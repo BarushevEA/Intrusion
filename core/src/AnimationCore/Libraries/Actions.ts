@@ -5,7 +5,6 @@ import {defaultCursor$, mouseMovePosition$} from "../Store/EventStore";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {IMousePosition} from "../DomComponent/AppAnimation";
 import {CursorHandler} from "./CursorHandler";
-import {AbstractActor} from "../AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ICallback} from "./Observables/Types";
 
 export function exitSceneOnButtonClick(scene: AbstractScene,
@@ -74,7 +73,7 @@ export function setDefaultCursorActions(scene: AbstractScene): void {
     );
 }
 
-export function toggleMouseEventsOnMouseOver(scene: AbstractScene, initiator: AbstractActor): void {
+export function toggleMouseEventsOnMouseOver(scene: AbstractScene, initiator: IActor): void {
     scene.collect(
         initiator.isMouseOver$.subscribe(isOver => {
             const actors = scene.actors;
@@ -95,7 +94,7 @@ export function toggleMouseEventsOnMouseOver(scene: AbstractScene, initiator: Ab
     );
 }
 
-export function toggleMouseEventsOnMouseOverGroup(scene: AbstractScene, actors: AbstractActor[]): void {
+export function toggleMouseEventsOnMouseOverGroup(scene: AbstractScene, actors: IActor[]): void {
     for (let i = 0; i < actors.length; i++) {
         toggleMouseEventsOnMouseOver(scene, actors[i]);
     }

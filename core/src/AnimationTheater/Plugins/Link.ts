@@ -1,11 +1,11 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
 import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {Observable} from "../../AnimationCore/Libraries/Observables/Observable";
 import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export class Link extends AbstractActorPlugin {
-    private linkedActor: AbstractActor = <any>0;
+    private linkedActor: IActor = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private subscriberUnLink: ISubscriptionLike = <any>0;
     private _setToBottom$ = new Observable(<any>0);
@@ -14,7 +14,7 @@ export class Link extends AbstractActorPlugin {
         super('Link', scene);
     }
 
-    setActorToLink(actor: AbstractActor): void {
+    setActorToLink(actor: IActor): void {
         this.linkedActor = actor;
     }
 

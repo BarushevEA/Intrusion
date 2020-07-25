@@ -1,6 +1,5 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
 import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {Plane} from "../../../../../AnimationModels/Planes/heroes/Plane";
 import {getCenterY} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
 import {MoveKeyControls} from "../../../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/MoveKeyControls";
@@ -14,14 +13,15 @@ import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
-let plane: AbstractActor = <any>0;
+let plane: IActor = <any>0;
 let destroyedCounter = <any>0;
 
 class Heroes extends AbstractActorGroup {
-    private _enemies: AbstractActor[] = <any>0;
+    private _enemies: IActor[] = <any>0;
 
-    set enemies(value: AbstractActor[]) {
+    set enemies(value: IActor[]) {
         this._enemies = value;
     }
 
@@ -71,7 +71,7 @@ class Heroes extends AbstractActorGroup {
         );
     }
 
-    get heroes(): AbstractActor[] {
+    get heroes(): IActor[] {
         return [plane];
     }
 

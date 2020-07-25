@@ -1,7 +1,6 @@
 import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {Heart} from "../../../AnimationModels/Heart";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {AnimatedRectangleLightYellow} from "../../../AnimationModels/rectangles/AnimatedRectangleLightYellow";
 import {AnimatedRectangleLightGray} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGray";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
@@ -18,6 +17,7 @@ import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugin
 import {IDragDropOptions} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {ISubscriptionLike} from "../../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 export const isStopMove = {value: true};
 export const move = {value: <ISubscriptionLike><any>0};
@@ -32,8 +32,8 @@ let isReverse: boolean;
 let counter: number;
 let dx: number;
 
-let heart: AbstractActor;
-let actorGroup: AbstractActor[];
+let heart: IActor;
+let actorGroup: IActor[];
 let wave: AbstractFramedShape;
 let wave1: AbstractFramedShape;
 let wave2: AbstractFramedShape;
