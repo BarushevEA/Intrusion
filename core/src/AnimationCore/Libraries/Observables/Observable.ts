@@ -1,12 +1,8 @@
 import {ICallback, IListener, IListeners, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
 
 export class SubscriberLike implements ISubscriptionLike {
-    private observable: any;
-    private listener: IOrderedListener;
-
-    constructor(observable: any, listener: IOrderedListener) {
-        this.observable = observable;
-        this.listener = listener;
+    constructor(private observable: any,
+                private listener: IOrderedListener) {
     }
 
     public unsubscribe(): void {
@@ -19,11 +15,9 @@ export class SubscriberLike implements ISubscriptionLike {
 }
 
 export class Observable<T> implements IObserver<T> {
-    private _value: T;
     private listeners: IListeners = [];
 
-    constructor(value: T) {
-        this._value = value;
+    constructor(private _value: T) {
     }
 
     public next(value: T): void {
@@ -34,7 +28,7 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public unSubscribe(listener: IListener): void {
-        if (!this.listeners) {
+        if (!this.listeners || !this.listeners.length) {
             return;
         }
         const elIndex = this.listeners.indexOf(listener);

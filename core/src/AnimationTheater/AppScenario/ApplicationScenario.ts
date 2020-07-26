@@ -86,7 +86,7 @@ function initEvents(platform: AbstractPlatform): void {
                                 // sceneSerge.setHalfSpeed();
                             }),
                             sceneTestX5.onExit$.subscribe(() => {
-                                console.log(sceneSerge.name, 'Try to start menu.')
+                                console.log(sceneTestX5.name, 'Try to start menu.')
                                 menu.start(false);
                             })
                         )
