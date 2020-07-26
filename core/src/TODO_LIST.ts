@@ -23,4 +23,4 @@
 // TODO 14)  memory leak search
 // DONE TODO 15) ADD SINGLETON tick counter
 // TODO 16) Create virtual dimension plugin
-// TODO 17)
+// TODO 17) Create type Destroyable and check it function
