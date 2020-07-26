@@ -21,7 +21,8 @@ export type IRenderController = {
     setLayerOnIndex(layerName: string, index: number): void;
     setFullSpeed(): void;
     setHalfSpeed(): void;
-    tickCount$: ISubscriber<boolean>;
+    afterLayersRender$: ISubscriber<boolean>;
+    beforeLayersRender$: ISubscriber<boolean>;
     context: CanvasRenderingContext2D;
 }
 
@@ -39,14 +40,19 @@ export class RenderController implements IRenderController {
     private layersNames = [this.currentLayerName + ''];
     private delay = 1;
     private delayCounter = 0;
-    private _tickCount$ = new Observable(<boolean>false);
+    private _afterLayersRender$ = new Observable(<boolean>false);
+    private _beforeLayersRender$ = new Observable(<boolean>false);
 
     get context(): CanvasRenderingContext2D {
         return this._context;
     }
 
-    get tickCount$(): ISubscriber<boolean> {
-        return this._tickCount$;
+    get afterLayersRender$(): ISubscriber<boolean> {
+        return this._afterLayersRender$;
+    }
+
+    get beforeLayersRender$(): Observable<boolean> {
+        return this._beforeLayersRender$;
     }
 
     public setCanvas(canvas: HTMLCanvasElement): void {
@@ -172,15 +178,17 @@ export class RenderController implements IRenderController {
 
     private runFullSpeedWithBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
-        this._tickCount$.next(true);
+        this._afterLayersRender$.next(true);
     }
 
     private runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
         this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
-        this._tickCount$.next(true);
+        this._afterLayersRender$.next(true);
     }
 
     private runHalfSpeed(): void {
@@ -193,8 +201,9 @@ export class RenderController implements IRenderController {
         if (!this.isBackgroundLayerPresent) {
             this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
-        this._tickCount$.next(true);
+        this._afterLayersRender$.next(true);
     }
 
     public renderStop() {
@@ -276,10 +285,10 @@ export class RenderController implements IRenderController {
     }
 
     public destroyActors(): void {
-        this._tickCount$.destroy();
-        if (this._tickCount$) {
-            this._tickCount$ = <any>0;
-        }
+        this._beforeLayersRender$.destroy();
+        this._beforeLayersRender$ = <any>0;
+        this._afterLayersRender$.destroy();
+        this._afterLayersRender$ = <any>0;
         this.renderStop();
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];

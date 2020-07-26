@@ -33,5 +33,27 @@ export class TestBackground extends AbstractScene {
 }
 
 function sceneEvents(scene: IScene) {
-    scene.collect();
+    let renderTime = 0;
+    let isHalf = false;
+    let freezeCounter = 0;
+    scene.collect(
+        scene.renderController.beforeLayersRender$.subscribe(() => {
+            if (!isHalf) {
+                renderTime = Date.now();
+            }
+        }),
+        scene.renderController.afterLayersRender$.subscribe(() => {
+            if (isHalf) {
+                return;
+            }
+            renderTime = Date.now() - renderTime;
+            if (renderTime > 3) {
+                freezeCounter++;
+            }
+            if (freezeCounter > 1000) {
+                isHalf = true;
+                scene.setHalfSpeed();
+            }
+        })
+    );
 }
