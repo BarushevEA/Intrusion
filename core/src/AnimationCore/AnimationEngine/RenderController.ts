@@ -165,7 +165,7 @@ export class RenderController implements IRenderController {
         for (let k = 0; k < this.layersNames.length; k++) {
             const layerName = this.layersNames[k];
             for (let i = 0; i < this.layers[layerName].length; i++) {
-                this.layers[layerName][i].renderFrame();
+                this.layers[layerName][i].render();
             }
         }
     }

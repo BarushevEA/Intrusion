@@ -34,6 +34,8 @@ export type IActor = {
     readonly isMouseLeftClick$: ISubscriber<boolean>;
     readonly isMouseOver$: ISubscriber<boolean>;
     readonly isDestroyed$: ISubscriber<boolean>;
+    readonly beforeRender$: ISubscriber<any>;
+    readonly afterRender$: ISubscriber<any>;
     readonly isDestroyed: boolean;
     readonly isMouseOver: boolean;
     readonly isEventsPaused: boolean;
@@ -52,6 +54,7 @@ export type IActor = {
     saveLayerIndex(): void;
     restoreLayerIndex(): void;
     renderFrame(): void;
+    render(): void;
     destroy(): void;
     enableEvents(): void;
     disableEvents(): void;

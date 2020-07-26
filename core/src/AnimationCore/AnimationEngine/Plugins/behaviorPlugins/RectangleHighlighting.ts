@@ -16,12 +16,12 @@ export class RectangleHighlighting extends AbstractActorPlugin {
         if (this.subscriber) {
             return;
         }
+        const shape = this.root.shape;
+        const root = this.root;
         this.scene.collect(
-            this.subscriber = this.root.isMouseOver$.subscribe((isOver) => {
+            this.subscriber = root.isMouseOver$.subscribe(isOver => {
                     if (isOver) {
-                        this.subscriberTick = this.scene.tickCount$.subscribe(() => {
-                            const shape = this.root.shape;
-                            const root = this.root;
+                        this.subscriberTick = root.afterRender$.subscribe(() => {
                             shape.context = this.scene.renderController.context;
                             shape
                                 .lineWidth(2)

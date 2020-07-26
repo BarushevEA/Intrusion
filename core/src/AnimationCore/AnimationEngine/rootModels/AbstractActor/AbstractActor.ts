@@ -54,6 +54,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _isDestroyed$ = new Observable(<boolean>false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
+    private _beforeRender$ = new Observable(<any>0);
+    private _afterRender$ = new Observable(<any>0);
     private _isDestroyed = false;
     private _isEventsBlock = false;
     private _isDestroyProcessed = false;
@@ -260,6 +262,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public abstract renderFrame(): void;
 
+    public render(): void {
+        this._beforeRender$.next(0);
+        this.renderFrame();
+        this._afterRender$.next(0);
+    }
+
     protected setFramePoolName(name: string) {
         this.framePoolName = name;
     }
@@ -294,6 +302,14 @@ export abstract class AbstractActor implements IActor, IDimensions {
             height: this._elementHeight,
             width: this._elementWidth
         }
+    }
+
+    get beforeRender$(): Observable<any> {
+        return this._beforeRender$;
+    }
+
+    get afterRender$(): Observable<any> {
+        return this._afterRender$;
     }
 
     get xPosPreview(): number {
@@ -368,7 +384,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.layerHandler.clear(x, y, width, height);
     }
 
-    public restoreDefaultLayer():void {
+    public restoreDefaultLayer(): void {
         this.layerHandler.restoreDefaultLayer();
     }
 
