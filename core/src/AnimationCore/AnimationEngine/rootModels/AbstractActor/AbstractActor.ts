@@ -22,7 +22,7 @@ import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Typ
 /** Frame pool technology need to use for lot of entities of class */
 
 export abstract class AbstractActor implements IActor, IDimensions {
-    private static _savedFramePool: { [key: string]: IFramePool } = {};
+    private static _savedFramePool: { [framePoolName: string]: IFramePool } = {};
     private static _mousePosition: IMousePosition = <any>0;
     private _z_index = 0;
     private _z_index_memory = 0;
