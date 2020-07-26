@@ -94,6 +94,9 @@ function initSimpleEnemiesActions(scene: IScene) {
     }
 
     simpleEnemyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         const bounce = new BounceOffTheWall(
             scene, Math.round(scene.generalLayer.width / 5),
             true);
@@ -155,9 +158,15 @@ function initGeneralBosses(scene: IScene) {
 
 function initBossesActions(scene: IScene) {
     boss1DestroyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         initMiniBossesActions(scene);
     }, 30000);
     boss2DestroyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         initGeneralBossesActions(scene);
     }, 40000);
 }
@@ -196,6 +205,9 @@ function initMiniBossesActions(scene: IScene) {
         miniBoss.isEventsBlock = true;
         if (i >= (enemiesMiniBosses.length - 2)) {
             bossActionsTimer = tickGenerator.executeTimeout(() => {
+                if (scene.isDestroyed) {
+                    return;
+                }
                 scene.setActors(miniBoss);
             }, 15000);
         } else {

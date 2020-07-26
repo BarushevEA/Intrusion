@@ -221,8 +221,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
             return;
         }
         this.leftMouseCatchTimeIndex = <any>tickGenerator.executeTimeout(() => {
-            this._isLeftMouseCatch = true;
-            this._isMouseLeftDrag$.next(0);
+            if (!this._isDestroyed) {
+                this._isLeftMouseCatch = true;
+                this._isMouseLeftDrag$.next(0);
+            }
         }, this.leftMouseCatchTime);
     }
 

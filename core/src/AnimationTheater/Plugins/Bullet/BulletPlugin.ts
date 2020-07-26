@@ -51,7 +51,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         this.isDestroyProcessed = true;
 
         this.handleDestroyCounter = tickGenerator.executeTimeout(() => {
-            if (!!this.scene) {
+            if (!!this.scene && !this.scene.isDestroyed) {
                 this.scene.destroyActor(this.root);
             } else if (this.root && !this.root.isDestroyed) {
                 this.root.destroy();

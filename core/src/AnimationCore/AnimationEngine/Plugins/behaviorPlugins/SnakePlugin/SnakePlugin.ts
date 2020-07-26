@@ -119,7 +119,7 @@ export class SnakePlugin extends AbstractActorPlugin {
                 this.actors = <any>0;
                 this.realActors = <any>0;
                 if (this.emptyActor) {
-                    if (this.scene && this.scene.destroyActor) {
+                    if (this.scene && !this.scene.isDestroyed && this.scene.destroyActor) {
                         this.scene.destroyActor(this.emptyActor);
                     } else {
                         this.emptyActor.destroy();

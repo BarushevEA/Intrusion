@@ -85,7 +85,9 @@ export abstract class AbstractScene implements IScene {
             actor.pauseEvents();
         }
         this.timerCounter = tickGenerator.executeTimeout(() => {
-            this.handleStartScene();
+            if (!this._isDestroyed) {
+                this.handleStartScene();
+            }
         }, this.startDelayMs);
     }
 
@@ -365,7 +367,9 @@ export abstract class AbstractScene implements IScene {
             this.isFirstStart = false;
         } else {
             this.timerCounter = tickGenerator.executeTimeout(() => {
-                this.handleStartScene();
+                if (!this._isDestroyed) {
+                    this.handleStartScene();
+                }
             }, this.startDelayMs);
         }
     }

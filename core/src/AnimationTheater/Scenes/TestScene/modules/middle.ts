@@ -199,9 +199,11 @@ function initActions(scene: IScene) {
                 scene.setActors(newHeart);
                 newHeart.enableEvents();
                 tickGenerator.executeTimeout(() => {
-                    scene.moveOnMouseDrag(newHeart);
-                    newHeart.pluginDock.add(cursorBehaviorNewHeart);
-                    newHeart.pluginDock.add(highlightingNewHeart);
+                    if (!scene.isDestroyed) {
+                        scene.moveOnMouseDrag(newHeart);
+                        newHeart.pluginDock.add(cursorBehaviorNewHeart);
+                        newHeart.pluginDock.add(highlightingNewHeart);
+                    }
                 }, 300);
             }
         }),
