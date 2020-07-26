@@ -10,10 +10,10 @@ import {IScene} from "../AnimationEngine/rootScenes/SceneTypes";
 export function exitSceneOnButtonClick(scene: IScene,
                                        button: IActor,
                                        cursorHandler: CursorHandler,
-                                       sceneType = E_Scene.NULL): void {
+                                       nextScene = E_Scene.NULL): void {
     scene.collect(
         button.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = sceneType;
+            scene.userData.nextScene = nextScene;
             scene.exit();
         }),
         button.isMouseOver$.subscribe(() => {
@@ -25,10 +25,10 @@ export function exitSceneOnButtonClick(scene: IScene,
 export function destroySceneOnButtonClick(scene: IScene,
                                           button: IActor,
                                           cursorHandler: CursorHandler,
-                                          sceneType = E_Scene.NULL): void {
+                                          nextScene = E_Scene.NULL): void {
     scene.collect(
         button.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = sceneType;
+            scene.userData.nextScene = nextScene;
             scene.destroy();
         }),
         button.isMouseOver$.subscribe(() => {
