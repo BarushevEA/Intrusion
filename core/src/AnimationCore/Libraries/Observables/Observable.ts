@@ -29,8 +29,7 @@ export class Observable<T> implements IObserver<T> {
     public next(value: T): void {
         this._value = value;
         for (let i = 0; i < this.listeners.length; i++) {
-            const listener = <ICallback>this.listeners[i];
-            listener(value);
+            (<ICallback>this.listeners[i])(value);
         }
     }
 
