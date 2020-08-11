@@ -91,7 +91,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     private initEvents(): void {
         if (this._isEventsBlock ||
-            this._isDestroyProcessed) {
+            this._isDestroyProcessed ||
+            !this.mouseEventsCollector.isEmpty) {
             return;
         }
         if (!this.mouseEventsCollector.collect) {

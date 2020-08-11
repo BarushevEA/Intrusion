@@ -5,6 +5,7 @@ export type ICollector = {
     unsubscribe(subscriber: ISubscriptionLike): void;
     clear(): void;
     destroy(): void;
+    isEmpty: boolean;
 };
 
 const clearNumber = 1000;
@@ -13,11 +14,13 @@ export class EventCollector implements ICollector {
     private collector: ISubscriptionLike[] = [];
     private collectorBuffer: ISubscriptionLike[] = [];
     private destroySubscriberCounter = 0;
+    private _isEmpty = true;
 
     public collect(...subscribers: ISubscriptionLike[]): void {
         for (let i = 0; i < subscribers.length; i++) {
             this.collector.push(subscribers[i]);
         }
+        this._isEmpty = !this.collector.length;
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
@@ -36,6 +39,7 @@ export class EventCollector implements ICollector {
         }
 
         this.clearCollector();
+        this._isEmpty = !this.collector.length;
     }
 
     private clearCollector(): void {
@@ -68,6 +72,7 @@ export class EventCollector implements ICollector {
 
     public destroy(): void {
         this.clear();
+        this._isEmpty = !this.collector.length;
         this.collector = <any>0;
         this.collectorBuffer = <any>0;
     }
@@ -76,5 +81,10 @@ export class EventCollector implements ICollector {
         this.unlinkSubscribers(this.collector);
         this.unlinkSubscribers(this.collectorBuffer);
         this.destroySubscriberCounter = 0;
+        this._isEmpty = !this.collector.length;
+    }
+
+    get isEmpty(): boolean {
+        return this._isEmpty;
     }
 }
