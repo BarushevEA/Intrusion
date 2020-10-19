@@ -4,15 +4,37 @@ import {SubscriberLike} from "./Observable";
 export class OrderedObservable<T> implements IObserver<T> {
     private _value: T;
     private listeners: IOrderedListener[] = [];
+    private _isEnable: boolean = true;
 
     constructor(value: T) {
         this._value = value;
     }
 
+    disable(): void {
+        this._isEnable = false;
+    }
+
+    enable(): void {
+        this._isEnable = false;
+    }
+
+    get isEnable(): boolean {
+        return this._isEnable;
+    }
+
     public next(value: T): void {
+        if (!this._isEnable) {
+            return;
+        }
         this._value = value;
         for (let i = 0; i < this.listeners.length; i++) {
             const listener = this.listeners[i];
+            if (listener.isEventStop) {
+                return;
+            }
+            if (listener.isEventPause) {
+                continue;
+            }
             listener.callBack(value);
         }
     }
@@ -26,8 +48,7 @@ export class OrderedObservable<T> implements IObserver<T> {
         listener.order = 0;
         if (elIndex > -1) {
             for (let i = elIndex + 1; i < this.listeners.length; i++) {
-                const key = this.listeners[i];
-                this.listeners[i - 1] = key;
+                this.listeners[i - 1] = this.listeners[i];
             }
             this.listeners.length = this.listeners.length - 1;
         }
@@ -58,7 +79,9 @@ export class OrderedObservable<T> implements IObserver<T> {
     public subscribe(listener: IListener): ISubscriptionLike {
         const savedListener: IOrderedListener = {
             callBack: <any>0,
-            order: 0
+            order: 0,
+            isEventStop: false,
+            isEventPause: false
         };
 
         if (!(<IOrderedListener>listener).callBack) {
@@ -66,6 +89,8 @@ export class OrderedObservable<T> implements IObserver<T> {
         } else {
             savedListener.callBack = (<IOrderedListener>listener).callBack;
             savedListener.order = (<IOrderedListener>listener).order;
+            savedListener.isEventStop = (<IOrderedListener>listener).isEventStop;
+            savedListener.isEventPause = (<IOrderedListener>listener).isEventPause;
         }
 
         this.listeners.push(savedListener);

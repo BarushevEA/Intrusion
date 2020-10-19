@@ -29,11 +29,16 @@ export function destroySceneOnButtonClick(scene: IScene,
     scene.collect(
         button.isMouseClick$.subscribe(() => {
             scene.userData.nextScene = nextScene;
-            scene.destroy();
+            scene.destroy(button.getFramePoolName());
         }),
         button.isMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, button);
         }),
+        button.isMouseOver$.subscribe((isOver: boolean) => {
+            if (isOver) {
+                console.log('over', scene.name, button.getFramePoolName());
+            }
+        })
     )
 }
 

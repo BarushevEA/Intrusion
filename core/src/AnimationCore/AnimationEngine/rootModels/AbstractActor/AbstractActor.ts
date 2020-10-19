@@ -17,7 +17,7 @@ import {IPluginDock} from "../../Plugins/root/PluginTypes";
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
 import {tickGenerator} from "../../../Libraries/TickGenerator";
-import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {ICallback, IOrderedListener, ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -47,15 +47,16 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private collector: ICollector = <any>0;
     private mouseEventsCollector: ICollector = <any>0;
     public isMouseOver = false;
-    private _isMouseOver$ = new Observable(<boolean>false);
-    private _isMouseClick$ = new Observable(<boolean>false);
-    private _isMouseLeftClick$ = new Observable(<boolean>false);
-    private _isMouseRightClick$ = new Observable(<boolean>false);
-    private _isDestroyed$ = new Observable(<boolean>false);
+    private _isMouseOver$ = new Observable(false);
+    private _isMouseClick$ = new Observable(false);
+    private _isMouseLeftClick$ = new Observable(false);
+    private _isMouseRightClick$ = new Observable(false);
+    private _isDestroyed$ = new Observable(false);
     private _isMouseLeftDrag$ = new Observable(<any>0);
     private _isMouseLeftDrop$ = new Observable(<any>0);
     private _beforeRender$ = new Observable(<any>0);
     private _afterRender$ = new Observable(<any>0);
+    private _onEventEnableChange$ = new Observable(false);
     private _isDestroyed = false;
     private _isEventsBlock = false;
     private _isDestroyProcessed = false;
@@ -73,6 +74,31 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._pluginDock = new PluginDock<IActor>(this);
     }
 
+    private innerEventsEnable() {
+        this._isMouseOver$.enable();
+        this._isMouseClick$.enable();
+        this._isMouseLeftClick$.enable();
+        this._isMouseRightClick$.enable();
+        this._isMouseLeftDrag$.enable();
+        this._isMouseLeftDrop$.enable();
+        this._beforeRender$.enable();
+        this._afterRender$.enable();
+        this.checkMouseOver();
+        this._onEventEnableChange$.next(true);
+    }
+
+    private innerEventsDisable() {
+        this._isMouseOver$.disable();
+        this._isMouseClick$.disable();
+        this._isMouseLeftClick$.disable();
+        this._isMouseRightClick$.disable();
+        this._isMouseLeftDrag$.disable();
+        this._isMouseLeftDrop$.disable();
+        this._beforeRender$.disable();
+        this._afterRender$.disable();
+        this._onEventEnableChange$.next(false);
+    }
+
     get isUnlinked(): boolean {
         return this._isUnlinked;
     }
@@ -83,6 +109,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     get isDestroyed(): boolean {
         return this._isDestroyed;
+    }
+
+    get onEventEnableChange$(): Observable<boolean> {
+        return this._onEventEnableChange$;
     }
 
     get isDestroyed$(): Observable<boolean> {
@@ -101,31 +131,52 @@ export abstract class AbstractActor implements IActor, IDimensions {
             return;
         }
         this.mouseEventsCollector.collect(
-            mouseMovePosition$.subscribe({callBack: this.mouseOver.bind(this), order: this.layerNumber}),
-            mouseClickPosition$.subscribe({callBack: this.mouseClick.bind(this), order: this.layerNumber}),
-            mouseLeftDown$.subscribe({callBack: this.leftMouseDown.bind(this), order: this.layerNumber}),
-            mouseLeftUp$.subscribe({callBack: this.leftMouseUp.bind(this), order: this.layerNumber}),
-            mouseRightDown$.subscribe({callBack: this.rightMouseDown.bind(this), order: this.layerNumber}),
-            mouseRightUp$.subscribe({callBack: this.rightMouseUp.bind(this), order: this.layerNumber}),
+            mouseMovePosition$.subscribe(this.getOrderedListener(this.mouseOver.bind(this))),
+            mouseClickPosition$.subscribe(this.getOrderedListener(this.mouseClick.bind(this))),
+            mouseLeftDown$.subscribe(this.getOrderedListener(this.leftMouseDown.bind(this))),
+            mouseLeftUp$.subscribe(this.getOrderedListener(this.leftMouseUp.bind(this))),
+            mouseRightDown$.subscribe(this.getOrderedListener(this.rightMouseDown.bind(this))),
+            mouseRightUp$.subscribe(this.getOrderedListener(this.rightMouseUp.bind(this))),
+
             this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
         );
+        this.innerEventsEnable();
         this.isEventsDisabled = false;
     }
 
+    private getOrderedListener(callBack: ICallback): IOrderedListener {
+        return {
+            callBack,
+            order: this.layerNumber,
+            isEventPause: false,
+            isEventStop: false
+        }
+    }
+
     public pauseEvents(): void {
-        if (this.isEventsDisabled || !this.mouseEventsCollector) {
+        if (this._isEventsBlock ||
+            this.isEventsDisabled ||
+            !this.mouseEventsCollector) {
             return;
         }
-        this.mouseEventsCollector.clear();
+        this.innerEventsDisable();
+        this.mouseEventsCollector.pauseEnable();
         this._isEventsPaused = true;
     }
 
     public unPauseEvents(): void {
-        if (this.isEventsDisabled) {
+        if (this._isEventsBlock ||
+            this.isEventsDisabled) {
             return;
         }
-        this.isEventsBlock = false;
+
+        if (this.mouseEventsCollector.isEmpty) {
+            this.initEvents();
+        } else {
+            this.mouseEventsCollector.pauseDisable();
+            this.innerEventsEnable();
+        }
         this._isEventsPaused = false;
     }
 
@@ -137,17 +188,18 @@ export abstract class AbstractActor implements IActor, IDimensions {
         if (!this.mouseEventsCollector) {
             return;
         }
-        this.mouseEventsCollector.clear();
+        this.innerEventsDisable();
+        this.mouseEventsCollector.pauseEnable();
         this.isEventsDisabled = true;
     }
 
     set isEventsBlock(value: boolean) {
+        this._isEventsBlock = value;
         if (value) {
             this.disableEvents();
         } else {
             this.enableEvents();
         }
-        this._isEventsBlock = value;
     }
 
     get isEventsBlock(): boolean {
@@ -158,17 +210,24 @@ export abstract class AbstractActor implements IActor, IDimensions {
         if (this.isDestroyed) {
             return;
         }
-        this.initEvents();
+        if (this.mouseEventsCollector.isEmpty) {
+            this.initEvents();
+        } else {
+            this.mouseEventsCollector.pauseDisable();
+            this.innerEventsEnable();
+            this.isEventsDisabled = false;
+        }
     }
 
     private mouseOver(position: IMousePosition): void {
         let isOver = this.checkOverPosition(position);
 
+        AbstractActor._mousePosition = position;
+
         if (isOver === this.isMouseOver) {
             return;
-        }
 
-        AbstractActor._mousePosition = position;
+        }
         this.isMouseOver = isOver;
         this._isMouseOver$.next(this.isMouseOver);
     }
@@ -273,6 +332,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     protected setFramePoolName(name: string) {
         this.framePoolName = name;
+    }
+
+    public getFramePoolName(): string {
+        return this.framePoolName;
     }
 
     set framePool(pool: IFramePool) {
@@ -442,6 +505,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
         this._isDestroyed$.next(true);
 
+        this.disableEvents();
+
         this.collector.destroy();
         this.collector = <any>0;
 
@@ -465,6 +530,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrag$.destroy();
         this._isMouseLeftDrop$.destroy();
         this._isDestroyed$.destroy();
+        this._onEventEnableChange$.destroy();
+        this._onEventEnableChange$ = <any>0;
         this._isDestroyed$ = <any>0;
         this._isMouseOver$ = <any>0;
         this._isMouseClick$ = <any>0;

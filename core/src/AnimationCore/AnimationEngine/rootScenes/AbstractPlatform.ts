@@ -13,7 +13,9 @@ export abstract class AbstractPlatform {
         }
     }
 
-    public abstract execute(): void;
+    public abstract execute(htmlComponent: any): void;
+
+    public abstract destroy(): void;
 
     createScene(scene: typeof AbstractScene): IScene {
         return new (<any>scene)(this.canvas);

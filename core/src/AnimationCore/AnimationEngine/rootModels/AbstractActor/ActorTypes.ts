@@ -36,6 +36,7 @@ export type IActor = {
     readonly isDestroyed$: ISubscriber<boolean>;
     readonly beforeRender$: ISubscriber<any>;
     readonly afterRender$: ISubscriber<any>;
+    readonly onEventEnableChange$: ISubscriber<boolean>;
     readonly isDestroyed: boolean;
     readonly isMouseOver: boolean;
     readonly isEventsPaused: boolean;
@@ -77,4 +78,5 @@ export type IActor = {
                          heightD?: number
     ): void;
     setFramesDelay(delay: number): void;
+    getFramePoolName(): string;
 };

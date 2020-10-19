@@ -24,7 +24,7 @@ export type IScene = {
     start(isBackgroundLayerPresent: boolean): void;
     stop(): void;
     exit(): void;
-    destroy(): void;
+    destroy(initiator?: string): void;
     setActors(...actors: IActor[]): void;
     destroyActor(actor: IActor): void;
     unLink(actor: IActor): void;

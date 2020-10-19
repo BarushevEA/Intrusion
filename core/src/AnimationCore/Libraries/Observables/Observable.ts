@@ -1,6 +1,17 @@
-import {ICallback, IListener, IListeners, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
+import {
+    ICallback,
+    IEventPause,
+    IEventStop,
+    IListener,
+    IListeners,
+    IObserver,
+    IOrderedListener,
+    ISubscriptionLike
+} from "./Types";
 
-export class SubscriberLike implements ISubscriptionLike {
+export class SubscriberLike implements ISubscriptionLike,
+    IEventPause,
+    IEventStop {
     constructor(private observable: any,
                 private listener: IOrderedListener) {
     }
@@ -12,15 +23,55 @@ export class SubscriberLike implements ISubscriptionLike {
             this.listener = <any>0;
         }
     }
+
+    eventRun(): void {
+        if (!!this.observable && !!this.listener.callBack) {
+            this.listener.isEventStop = false;
+        }
+    }
+
+    eventStop(): void {
+        if (!!this.observable && !!this.listener.callBack) {
+            this.listener.isEventStop = true;
+        }
+    }
+
+    pauseDisable(): void {
+        if (!!this.observable && !!this.listener.callBack) {
+            this.listener.isEventPause = false;
+        }
+    }
+
+    pauseEnable(): void {
+        if (!!this.observable && !!this.listener.callBack) {
+            this.listener.isEventPause = true;
+        }
+    }
 }
 
 export class Observable<T> implements IObserver<T> {
     private listeners: IListeners = [];
+    private _isEnable: boolean = true;
 
     constructor(private _value: T) {
     }
 
+    disable(): void {
+        this._isEnable = false;
+    }
+
+    enable(): void {
+        this._isEnable = true;
+    }
+
+    get isEnable(): boolean {
+        return this._isEnable;
+    }
+
     public next(value: T): void {
+        if (!this._isEnable) {
+            return;
+        }
         this._value = value;
         for (let i = 0; i < this.listeners.length; i++) {
             (<ICallback>this.listeners[i])(value);
@@ -34,8 +85,7 @@ export class Observable<T> implements IObserver<T> {
         const elIndex = this.listeners.indexOf(listener);
         if (elIndex > -1) {
             for (let i = elIndex + 1; i < this.listeners.length; i++) {
-                const key = this.listeners[i];
-                this.listeners[i - 1] = key;
+                this.listeners[i - 1] = this.listeners[i];
             }
             this.listeners.length = this.listeners.length - 1;
         }

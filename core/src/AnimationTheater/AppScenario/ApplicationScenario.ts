@@ -62,8 +62,10 @@ function initEvents(platform: AbstractPlatform): void {
                         startMenuOnExit(E_Scene.TESTx5);
                         pool[E_Scene.TESTx5].start(false);
                         break;
+                    case E_Scene.MENU:
+                        break;
                     default:
-                        pool[E_Scene.MENU].destroy();
+                        pool[E_Scene.MENU].destroy('ApplicationScenario default');
                 }
             }
         }));
@@ -73,12 +75,13 @@ function initEvents(platform: AbstractPlatform): void {
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (pool[key] && key !== E_Scene.MENU) {
-                pool[key].destroy();
+                pool[key].destroy('ApplicationScenario clearOnSceneDestroy');
                 pool[key] = <any>0;
             }
         }
         collector.destroy();
         pool[E_Scene.MENU] = <any>0;
+        platform.destroy();
         console.log(E_Scene.MENU, 'destroyed');
     });
 }

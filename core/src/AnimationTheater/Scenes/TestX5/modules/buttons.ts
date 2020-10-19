@@ -4,7 +4,7 @@ import {E_Scene} from "../../../AppScenario/types";
 import {getSceneRightX} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {
     clearOnSceneDestroy,
-    exitSceneOnButtonClick,
+    destroySceneOnButtonClick,
     toggleMouseEventsOnMouseOverGroup
 } from "../../../../AnimationCore/Libraries/Actions";
 import {cursorHandler} from "./cursor";
@@ -38,6 +38,6 @@ function initActions(scene: IScene) {
         [
             buttonExit
         ]);
-    exitSceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
+    destroySceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
     clearOnSceneDestroy(scene, clearVariables);
 }

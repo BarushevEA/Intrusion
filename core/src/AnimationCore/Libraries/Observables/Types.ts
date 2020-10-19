@@ -25,7 +25,10 @@ export type ISubscribeCounter = {
 };
 
 export type ISubscriber<T> =
-    { getValue(): T; } &
+    {
+        getValue(): T,
+        isEnable: boolean
+    } &
     ISubscribe;
 
 export type IObserver<T> =
@@ -33,9 +36,27 @@ export type IObserver<T> =
     ISubscriber<T> &
     IDestroy &
     ISubscribeCounter &
-    { unsubscribeAll(): void };
+    {
+        unsubscribeAll(): void,
+        disable(): void,
+        enable(): void,
+    };
 
 export type IOrderedListener = {
     callBack: ICallback;
     order?: number;
+    isEventStop?: boolean;
+    isEventPause?: boolean;
 };
+
+export type IEventPause = {
+    pauseEnable(): void;
+    pauseDisable(): void;
+};
+
+export type IEventStop = {
+    eventStop(): void;
+    eventRun(): void;
+};
+
+export type IExtendedSubscription = ISubscriptionLike & IEventPause;

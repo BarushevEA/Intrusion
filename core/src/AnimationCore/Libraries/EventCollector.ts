@@ -1,24 +1,26 @@
-import {ISubscriptionLike} from "./Observables/Types";
+import {IExtendedSubscription, ISubscriptionLike} from "./Observables/Types";
 
 export type ICollector = {
     collect(...subscribers: ISubscriptionLike[]): void;
     unsubscribe(subscriber: ISubscriptionLike): void;
     clear(): void;
     destroy(): void;
+    pauseEnable(): void;
+    pauseDisable(): void;
     isEmpty: boolean;
 };
 
 const clearNumber = 1000;
 
 export class EventCollector implements ICollector {
-    private collector: ISubscriptionLike[] = [];
-    private collectorBuffer: ISubscriptionLike[] = [];
+    private collector: IExtendedSubscription[] = [];
+    private collectorBuffer: IExtendedSubscription[] = [];
     private destroySubscriberCounter = 0;
     private _isEmpty = true;
 
     public collect(...subscribers: ISubscriptionLike[]): void {
         for (let i = 0; i < subscribers.length; i++) {
-            this.collector.push(subscribers[i]);
+            this.collector.push(<IExtendedSubscription>subscribers[i]);
         }
         this._isEmpty = !this.collector.length;
     }
@@ -28,7 +30,7 @@ export class EventCollector implements ICollector {
             return;
         }
 
-        const sbIndex = this.collector.indexOf(subscriber);
+        const sbIndex = this.collector.indexOf(<IExtendedSubscription>subscriber);
 
         if (sbIndex > -1) {
             this.destroySubscriberCounter++;
@@ -55,7 +57,7 @@ export class EventCollector implements ICollector {
             length = this.collectorBuffer.length;
             for (let i = 0; i < length; i++) {
                 const subscriber = this.collectorBuffer.pop();
-                this.collector.push(<ISubscriptionLike>subscriber);
+                this.collector.push(<IExtendedSubscription>subscriber);
             }
         }
     }
@@ -86,5 +88,26 @@ export class EventCollector implements ICollector {
 
     get isEmpty(): boolean {
         return this._isEmpty;
+    }
+
+    public pauseDisable(): void {
+        this.setPause(false);
+    }
+
+    public pauseEnable(): void {
+        this.setPause(true);
+    }
+
+    private setPause(isEnable: boolean) {
+        if (!!this.collector) {
+            for (let i = 0; i < this.collector.length; i++) {
+                const element = this.collector[i];
+                if (isEnable) {
+                    element.pauseEnable();
+                } else {
+                    element.pauseDisable();
+                }
+            }
+        }
     }
 }

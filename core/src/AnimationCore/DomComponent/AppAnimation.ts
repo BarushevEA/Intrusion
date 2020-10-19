@@ -234,7 +234,21 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
 
     private renderCanvas() {
         platform.setCanvas(this.customCanvas);
-        platform.execute();
+        platform.execute(this);
+    }
+
+    public destroy() {
+        this.disconnectedCallback();
+        globalSize$.destroy();
+        mouseClickPosition$.destroy();
+        mouseMovePosition$.destroy();
+        mouseLeftUp$.destroy();
+        mouseRightUp$.destroy();
+        mouseLeftDown$.destroy();
+        mouseRightDown$.destroy();
+        keyUpCode$.destroy();
+        keyDownCode$.destroy();
+        defaultCursor$.destroy();
     }
 
     private setCanvasSize(size: ISize) {

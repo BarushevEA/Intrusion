@@ -387,13 +387,18 @@ export abstract class AbstractScene implements IScene {
         this._onExit$.next({...this._userData});
     }
 
-    public destroy(): void {
+    public destroy(initiator?: string): void {
         if (this._isDestroyed || this._isDestroyProcessed) {
             return;
         }
+        console.log('Scene destroy execute', this.name, initiator);
         this._isDestroyProcessed = true;
 
         this.exit();
+
+        this._actors.forEach(actor => {
+            actor.disableEvents();
+        });
 
         this._onDestroy$.next({...this._userData});
 
