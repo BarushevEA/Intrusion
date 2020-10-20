@@ -9,6 +9,7 @@ export type ICursorHandler = {
 
 export class CursorHandler implements ICursorHandler {
     private mouseOverQueue: IActor[] = <any>0;
+    private sceneMap: { [sceneName: string]: boolean; } = {};
 
     constructor() {
         this.mouseOverQueue = [];
@@ -30,6 +31,18 @@ export class CursorHandler implements ICursorHandler {
             scene.cursor.setType(ECursor.POINTER);
         } else {
             scene.cursor.setType(ECursor.DEFAULT);
+        }
+        if (!scene.isDestroyed && !this.sceneMap[scene.name]) {
+            this.sceneMap[scene.name] = true;
+            scene.collect(
+                scene.onStart$.subscribe(() => {
+                    this.mouseOverQueue = [];
+                    scene.cursor.setType(ECursor.DEFAULT);
+                }),
+                scene.onDestroy$.subscribe(() => {
+                    this.sceneMap[scene.name] = false;
+                })
+            );
         }
     }
 

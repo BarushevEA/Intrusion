@@ -39,6 +39,7 @@ export type IActor = {
     readonly onEventEnableChange$: ISubscriber<boolean>;
     readonly isDestroyed: boolean;
     readonly isMouseOver: boolean;
+    readonly isAnimationOriginal: boolean;
     readonly isEventsPaused: boolean;
     readonly pluginDock: IPluginDock;
     readonly xPosPreview: x_pos;
@@ -62,6 +63,7 @@ export type IActor = {
     getDimensions(): IDimensions;
     pauseEvents(): void;
     unPauseEvents(): void;
+    resetEvents(): void;
     setVirtualLayer(name: string, height?: number, width?: number): HTMLCanvasElement;
     clearLayer(x?: x_pos, y?: y_pos, width?: number, height?: number): void;
     restoreDefaultLayer(): void;

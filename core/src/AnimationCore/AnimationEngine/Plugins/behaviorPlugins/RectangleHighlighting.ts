@@ -26,8 +26,6 @@ export class RectangleHighlighting extends AbstractActorPlugin {
                 if (!isEnable && this.subscriberTick) {
                     this.subscriberTick.unsubscribe();
                     this.subscriberTick = <any>0;
-                } else {
-                    this.drawRectangle(root, shape);
                 }
             }),
             this.subscriber = root.isMouseOver$.subscribe(isOver => {

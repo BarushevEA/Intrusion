@@ -88,6 +88,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private innerEventsDisable() {
+        this.checkMouseOver();
         this._isMouseOver$.disable();
         this._isMouseClick$.disable();
         this._isMouseLeftClick$.disable();
@@ -143,6 +144,19 @@ export abstract class AbstractActor implements IActor, IDimensions {
         );
         this.innerEventsEnable();
         this.isEventsDisabled = false;
+    }
+
+    public resetEvents(): void {
+        this._isEventsBlock = false;
+        this.isEventsDisabled = false;
+        this._isEventsPaused = false;
+        if (this.mouseEventsCollector.isEmpty) {
+            this.initEvents();
+        } else {
+            this.mouseEventsCollector.pauseDisable();
+            this.innerEventsEnable();
+        }
+        this.checkMouseOver();
     }
 
     private getOrderedListener(callBack: ICallback): IOrderedListener {
@@ -226,7 +240,6 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
         if (isOver === this.isMouseOver) {
             return;
-
         }
         this.isMouseOver = isOver;
         this._isMouseOver$.next(this.isMouseOver);
@@ -438,6 +451,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public setAnimationOriginal(): void {
         this.layerHandler.setOriginalToPlay();
+    }
+
+    get isAnimationOriginal(): boolean{
+        return this.layerHandler.isOriginal;
     }
 
     public setVirtualLayer(name: string,

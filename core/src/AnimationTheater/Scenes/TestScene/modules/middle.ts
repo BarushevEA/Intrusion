@@ -179,6 +179,13 @@ function initActions(scene: IScene) {
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
+                    if (!el.isAnimationOriginal) {
+                        el.setAnimationOriginal();
+                    }
+                }
+            }),
+            el.onEventEnableChange$.subscribe((isEnabled) => {
+                if (!isEnabled && !el.isAnimationOriginal) {
                     el.setAnimationOriginal();
                 }
             })
@@ -196,10 +203,10 @@ function initActions(scene: IScene) {
                 const highlightingNewHeart = new RectangleHighlighting(scene);
                 newHeart.xPos = heart.xPos;
                 newHeart.yPos = heart.yPos;
-                scene.setActors(newHeart);
-                newHeart.enableEvents();
                 tickGenerator.executeTimeout(() => {
                     if (!scene.isDestroyed) {
+                        scene.setActors(newHeart);
+                        newHeart.enableEvents();
                         scene.moveOnMouseDrag(newHeart);
                         newHeart.pluginDock.add(cursorBehaviorNewHeart);
                         newHeart.pluginDock.add(highlightingNewHeart);

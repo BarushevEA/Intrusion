@@ -36,6 +36,7 @@ export class CanvasLayerHandler {
     };
     private _text = textHandler;
     private _shape = shapeHandler;
+    isOriginal = true;
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -217,11 +218,13 @@ export class CanvasLayerHandler {
     public setReverseToPlay() {
         this.framePool.playedFrames = this.framePool.reverseFrames;
         this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
+        this.isOriginal = false;
     }
 
     public setOriginalToPlay() {
         this.framePool.playedFrames = this.framePool.originalFrames;
         this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
+        this.isOriginal = true;
     }
 
     public setShowedFrame(index: number) {

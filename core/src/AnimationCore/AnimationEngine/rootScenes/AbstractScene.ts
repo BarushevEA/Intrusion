@@ -94,7 +94,7 @@ export abstract class AbstractScene implements IScene {
     private handleStartScene() {
         for (let i = 0; i < this._actors.length; i++) {
             const actor = this._actors[i];
-            actor.unPauseEvents();
+            actor.resetEvents();
         }
         this._renderController.renderStart(this.isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
