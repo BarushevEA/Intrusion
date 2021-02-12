@@ -3,7 +3,6 @@ import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
 import {Observable} from "../../Libraries/Observables/Observable";
 import {ICursor} from "../rootModels/Types";
 import {IActor} from "../rootModels/AbstractActor/ActorTypes";
-import {findElementOnArray} from "../../Libraries/FunctionLibs";
 import {EventCollector, ICollector} from "../../Libraries/EventCollector";
 import {IDragActor, IDragDropOptions, IScene, IUserData} from "./SceneTypes";
 import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
@@ -145,7 +144,7 @@ export abstract class AbstractScene implements IScene {
             if (!actor) {
                 continue;
             }
-            const index = findElementOnArray(this._actors, actor);
+            const index = this._actors.indexOf(actor);
             if (index === -1) {
                 this._actors.push(actor);
             }
@@ -159,7 +158,7 @@ export abstract class AbstractScene implements IScene {
             return;
         }
 
-        const index = findElementOnArray(this._actors, actor);
+        const index = this._actors.indexOf(actor);
         if (index === -1) {
             return;
         }

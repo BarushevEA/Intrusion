@@ -1,4 +1,3 @@
-import {findElementOnArray} from "../Libraries/FunctionLibs";
 import {Observable} from "../Libraries/Observables/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
 import {ISubscriber} from "../Libraries/Observables/Types";
@@ -57,20 +56,20 @@ export class RenderController implements IRenderController {
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
-        this._context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this._context = <CanvasRenderingContext2D>canvas.getContext('2d');
     }
 
     public setActor(actor: IActor): void {
-        const index = findElementOnArray(this.currentPool, actor);
+        const index = this.currentPool.indexOf(actor);
         if (index !== -1) {
             return;
         }
         if (this.currentPool.length) {
             actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
         }
-        this.currentPool.push(actor);
         actor.layerName = this.currentLayerName;
         actor.layerNumber = this.layersNames.indexOf(this.currentLayerName)
+        this.currentPool.push(actor);
         this.sortActorsByZIndex();
     }
 
@@ -225,7 +224,7 @@ export class RenderController implements IRenderController {
         if (!this.setCurrentPoolFromActor(actor)) {
             return;
         }
-        const index = findElementOnArray(this.currentPool, actor);
+        const index = this.currentPool.indexOf(actor);
         if (index === -1) {
             return;
         }
@@ -246,7 +245,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = findElementOnArray(this.currentPool, actors[i]);
+            const index = this.currentPool.indexOf(actors[i]);
             if (index === -1) {
                 return;
             }
@@ -263,7 +262,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = findElementOnArray(this.currentPool, actors[i]);
+            const index = this.currentPool.indexOf(actors[i]);
             if (index === -1) {
                 return;
             }

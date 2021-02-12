@@ -11,9 +11,9 @@ export function randomize(num: number): number {
     return Math.round(Math.random() * num)
 }
 
-export function findElementOnArray(arr: any[], element: any): number {
-    return arr.indexOf(element);
-}
+// export function findElementOnArray(arr: any[], element: any): number {
+//     return arr.indexOf(element);
+// }
 
 export function degreesToRadian(degrees: IDegrees): IRadian {
     return (Math.PI / 180) * degrees;
