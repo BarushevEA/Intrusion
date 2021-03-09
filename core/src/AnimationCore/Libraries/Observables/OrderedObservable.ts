@@ -1,5 +1,6 @@
 import {ICallback, IListener, IObserver, IOrderedListener, ISubscriptionLike} from "./Types";
 import {SubscriberLike} from "./Observable";
+import {deleteFromArray} from "../FunctionLibs";
 
 export class OrderedObservable<T> implements IObserver<T> {
     private _value: T;
@@ -40,18 +41,9 @@ export class OrderedObservable<T> implements IObserver<T> {
     }
 
     private unSubscribe(listener: IOrderedListener): void {
-        if (!this.listeners) {
-            return;
-        }
-        const elIndex = this.listeners.indexOf(listener);
+        this.listeners && deleteFromArray(this.listeners, listener);
         listener.callBack = <any>0;
         listener.order = 0;
-        if (elIndex > -1) {
-            for (let i = elIndex + 1; i < this.listeners.length; i++) {
-                this.listeners[i - 1] = this.listeners[i];
-            }
-            this.listeners.length = this.listeners.length - 1;
-        }
     }
 
     public destroy(): void {

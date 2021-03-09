@@ -8,6 +8,7 @@ import {
     IOrderedListener,
     ISubscriptionLike
 } from "./Types";
+import {deleteFromArray} from "../FunctionLibs";
 
 export class SubscriberLike implements ISubscriptionLike,
     IEventPause,
@@ -79,16 +80,7 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public unSubscribe(listener: IListener): void {
-        if (!this.listeners || !this.listeners.length) {
-            return;
-        }
-        const elIndex = this.listeners.indexOf(listener);
-        if (elIndex > -1) {
-            for (let i = elIndex + 1; i < this.listeners.length; i++) {
-                this.listeners[i - 1] = this.listeners[i];
-            }
-            this.listeners.length = this.listeners.length - 1;
-        }
+        this.listeners && deleteFromArray(this.listeners, listener);
     }
 
     public destroy(): void {

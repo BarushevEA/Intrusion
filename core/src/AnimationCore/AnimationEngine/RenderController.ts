@@ -1,6 +1,7 @@
 import {Observable} from "../Libraries/Observables/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
 import {ISubscriber} from "../Libraries/Observables/Types";
+import {deleteFromArray} from "../Libraries/FunctionLibs";
 
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
@@ -91,14 +92,7 @@ export class RenderController implements IRenderController {
         if (!this.layers[name]) {
             return;
         }
-        const tmp = [];
-        for (let i = 0; i < this.layersNames.length; i++) {
-            const layersName = this.layersNames[i];
-            if (layersName != name) {
-                tmp.push(layersName);
-            }
-        }
-        this.layersNames = tmp;
+        deleteFromArray(this.layersNames, name);
         this.layersNames.push(name);
         this.reInitLayerNumbers();
     }

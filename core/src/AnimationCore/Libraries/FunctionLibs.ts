@@ -11,16 +11,12 @@ export function randomize(num: number): number {
     return Math.round(Math.random() * num)
 }
 
-// export function findElementOnArray(arr: any[], element: any): number {
-//     return arr.indexOf(element);
-// }
-
 export function degreesToRadian(degrees: IDegrees): IRadian {
     return (Math.PI / 180) * degrees;
 }
 
 export function getRectCenterCoordinate(n1: number, n2: number): number {
-    return Math.trunc((n1 + n2) / 2);
+    return Math.floor((n1 + n2) / 2);
 }
 
 export function getCenterX(x: x_pos, width: number): x_pos {
@@ -37,6 +33,16 @@ export function getSceneRightX(scene: IScene, actor: IActor): x_pos {
 
 export function getSceneBottomY(scene: IScene, actor: IActor): x_pos {
     return scene.generalLayer.height - actor.height;
+}
+
+export function deleteFromArray<T>(arr: T[], component: T): void {
+    const index = arr.indexOf(component);
+    if (index > -1) {
+        for (let i = index; i < arr.length - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        arr.length--;
+    }
 }
 
 export class CoordinatesConverter implements ICoordinatesConverter {
