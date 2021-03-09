@@ -60,8 +60,7 @@ export class RenderController implements IRenderController {
     }
 
     public setActor(actor: IActor): void {
-        const index = this.currentPool.indexOf(actor);
-        if (index !== -1) {
+        if (this.currentPool.indexOf(actor) !== -1) {
             return;
         }
         if (this.currentPool.length) {
@@ -70,7 +69,6 @@ export class RenderController implements IRenderController {
         actor.layerName = this.currentLayerName;
         actor.layerNumber = this.layersNames.indexOf(this.currentLayerName)
         this.currentPool.push(actor);
-        this.sortActorsByZIndex();
     }
 
     public setActiveLayer(name: string): void {
@@ -276,10 +274,7 @@ export class RenderController implements IRenderController {
 
     public sortActorsByZIndex(): void {
         this.currentPool.sort((a, b) => {
-            if (a.z_index === b.z_index) {
-                return 0;
-            }
-            return a.z_index > b.z_index ? 1 : -1;
+            return a.z_index - b.z_index && a.z_index > b.z_index ? 1 : -1;
         });
     }
 
