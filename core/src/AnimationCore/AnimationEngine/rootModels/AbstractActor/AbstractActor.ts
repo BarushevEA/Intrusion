@@ -32,6 +32,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _pluginDock: IPluginDock = <any>0;
     private _isUnlinked = true;
 
+    protected _innerText = '';
     protected framePoolName: string = '';
     protected generalLayer: HTMLCanvasElement;
     protected layerHandler: CanvasLayerHandler;
@@ -658,5 +659,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     set layerNumber(value: number) {
         this._layerNumber = value;
+    }
+
+    get innerText(): string {
+        return this._innerText;
     }
 }
