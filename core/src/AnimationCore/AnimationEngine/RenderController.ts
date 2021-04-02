@@ -76,12 +76,12 @@ export class RenderController implements IRenderController {
         if (this.layers[name]) {
             this.currentPool = this.layers[name];
             this.currentLayerName = name;
-        } else {
-            this.layers[name] = [];
-            this.currentPool = this.layers[name];
-            this.currentLayerName = name;
-            this.layersNames = Object.keys(this.layers);
+            return;
         }
+        this.currentPool = [];
+        this.layers[name] = this.currentPool;
+        this.currentLayerName = name;
+        this.layersNames = Object.keys(this.layers);
     }
 
     getActiveLayerName(): string {
@@ -108,11 +108,11 @@ export class RenderController implements IRenderController {
                 if (layerName !== name) {
                     tmp.push(name);
                 }
-            } else {
-                tmp.push(layerName);
-                if (layerName !== name) {
-                    tmp.push(name);
-                }
+                continue;
+            }
+            tmp.push(layerName);
+            if (layerName !== name) {
+                tmp.push(name);
             }
         }
         this.layersNames = tmp;
