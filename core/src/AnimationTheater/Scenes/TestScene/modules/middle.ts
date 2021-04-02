@@ -183,11 +183,6 @@ function initActions(scene: IScene) {
                         el.setAnimationOriginal();
                     }
                 }
-            }),
-            el.onEventEnableChange$.subscribe((isEnabled) => {
-                if (!isEnabled && !el.isAnimationOriginal) {
-                    el.setAnimationOriginal();
-                }
             })
         );
     });
