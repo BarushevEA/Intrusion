@@ -1,4 +1,4 @@
-import {IRadian, x_pos, y_pos} from "../../../Libraries/Types";
+import {I_URL, IRadian, x_pos, y_pos} from "../../../Libraries/Types";
 import {AdvancedPolygon} from "./AdvancedPolygon";
 import {RadialGradient} from "./RadialGradient";
 import {LinearGradient} from "./LinearGradient";
@@ -56,6 +56,7 @@ export type IShapeHandler = {
     rotate(angle: IRadian): IShapeHandler;
     scale(x: x_pos, y: y_pos): IShapeHandler;
     setBase64Image(base64: string, x?: x_pos, y?: y_pos): Promise<IShapeHandler>;
+    setImageByUrl(url: I_URL, x?: x_pos, y?: y_pos): Promise<IShapeHandler>;
 }
 
 class ShapeHandler implements IShapeHandler {
@@ -110,6 +111,10 @@ class ShapeHandler implements IShapeHandler {
                 reject('Error image loading');
             };
         });
+    };
+
+    public setImageByUrl(url: I_URL, x = 0, y = 0): Promise<IShapeHandler> {
+        return this.setBase64Image(url, x, y);
     };
 
     public translate(x: x_pos, y: y_pos): IShapeHandler {

@@ -1,6 +1,8 @@
 import {Observable} from "./Observables/Observable";
 import {ISubscriptionLike} from "./Observables/Types";
 
+export type I_URL = string;
+
 export type IDestroyed = {
     isDestroyed: boolean;
 };
