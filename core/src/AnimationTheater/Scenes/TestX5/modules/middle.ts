@@ -1,6 +1,9 @@
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {Star} from "../../../AnimationModels/star/Star";
+
+let star: Star;
 
 export function handleMiddle(scene: IScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
@@ -10,10 +13,12 @@ export function handleMiddle(scene: IScene): void {
 }
 
 function clearVariables() {
+    star = <any>0;
 }
 
 function initActors(scene: IScene) {
-    scene.setActors();
+    star = new Star(scene.generalLayer);
+    scene.setActors(star);
 }
 
 function initActions(scene: IScene) {
