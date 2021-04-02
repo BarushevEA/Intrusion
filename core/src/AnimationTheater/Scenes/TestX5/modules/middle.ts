@@ -2,6 +2,7 @@ import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scen
 import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
 import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {Star} from "../../../AnimationModels/star/Star";
+import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 
 let star: Star;
 
@@ -22,5 +23,7 @@ function initActors(scene: IScene) {
 }
 
 function initActions(scene: IScene) {
+    const bouncePlugin = new BounceOffTheWall(scene);
+    star.pluginDock.add(bouncePlugin);
     clearOnSceneDestroy(scene, clearVariables);
 }
