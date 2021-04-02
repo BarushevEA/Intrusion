@@ -206,9 +206,7 @@ export class RenderController implements IRenderController {
         if (!this.setCurrentPoolFromActor(actor)) {
             return;
         }
-        this.currentPool = this.currentPool.filter(element => {
-            return element !== actor;
-        });
+        this.currentPool = this.currentPool.filter(element => element !== actor);
         this.layers[actor.layerName] = this.currentPool;
     }
 
@@ -216,8 +214,7 @@ export class RenderController implements IRenderController {
         if (!this.setCurrentPoolFromActor(actor)) {
             return;
         }
-        const index = this.currentPool.indexOf(actor);
-        if (index === -1) {
+        if (this.currentPool.indexOf(actor) === -1) {
             return;
         }
         actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
@@ -237,8 +234,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = this.currentPool.indexOf(actors[i]);
-            if (index === -1) {
+            if (this.currentPool.indexOf(actors[i]) === -1) {
                 return;
             }
         }
@@ -254,8 +250,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = this.currentPool.indexOf(actors[i]);
-            if (index === -1) {
+            if (this.currentPool.indexOf(actors[i]) === -1) {
                 return;
             }
         }
@@ -267,9 +262,7 @@ export class RenderController implements IRenderController {
     }
 
     public sortActorsByZIndex(): void {
-        this.currentPool.sort((a, b) => {
-            return a.z_index - b.z_index && a.z_index > b.z_index ? 1 : -1;
-        });
+        this.currentPool.sort((a, b) => a.z_index - b.z_index);
     }
 
     public destroyActors(): void {
@@ -281,10 +274,8 @@ export class RenderController implements IRenderController {
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];
             for (let i = 0; i < this.currentPool.length; i++) {
-                const element = this.currentPool[i];
-                if (element) {
-                    element.destroy();
-                }
+                const actor = this.currentPool[i];
+                actor && actor.destroy();
             }
             this.currentPool.length = 0;
             delete this.layers[this.layersNames[k]];
