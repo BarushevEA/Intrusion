@@ -94,7 +94,6 @@ export class Plane extends AbstractFramedShape {
     }
 
     getPlaneVariantTwo(sizeMultiplier = 1) {
-
         this.shape
             .lineWidth(2)
             .colors('rgb(175,175,175)', 'rgb(125,125,125)')
@@ -225,7 +224,6 @@ export class Plane extends AbstractFramedShape {
     }
 
     getPlaneVariantFour(sizeMultiplier = 1) {
-
         this.shape
             .lineWidth(2)
             .colors('rgb(175,175,175)', 'rgb(125,125,125)')

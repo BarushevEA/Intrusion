@@ -1,7 +1,7 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IHealthProgress} from "../HealthType";
 
-export class EnemyProgress extends AbstractFramedShape implements IHealthProgress{
+export class EnemyProgress extends AbstractFramedShape implements IHealthProgress {
     private progress = 100;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -26,9 +26,23 @@ export class EnemyProgress extends AbstractFramedShape implements IHealthProgres
     }
 
     private drawProgressBar() {
+        const green = 'rgb(46,114,20)';
+        const yellow = 'rgb(208,169,20)';
+        const red = 'rgb(234,55,23)';
+        let color = '';
+        switch (true) {
+            case this.progress > 60:
+                color = green;
+                break;
+            case this.progress > 30:
+                color = yellow;
+                break;
+            default:
+                color = red;
+        }
         this.shape
             .lineWidth(1)
-            .colors('rgb(255,86,5)', 'rgb(0,0,0)')
+            .colors(color, 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,
                 this.yPos,

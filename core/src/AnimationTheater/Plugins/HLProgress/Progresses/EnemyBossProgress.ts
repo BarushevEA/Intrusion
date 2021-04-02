@@ -42,9 +42,23 @@ export class EnemyBossProgress extends AbstractFramedShape implements IHealthPro
     }
 
     private drawProgressBar() {
+        const green = 'rgb(51,112,29)';
+        const yellow = 'rgb(169,136,17)';
+        const red = 'rgb(155,38,18)';
+        let color = '';
+        switch (true) {
+            case this.progress > 70:
+                color = green;
+                break;
+            case this.progress > 40:
+                color = yellow;
+                break;
+            default:
+                color = red;
+        }
         this.shape
             .lineWidth(5)
-            .colors('rgb(255,113,5)', 'rgb(0,0,0)')
+            .colors(color, 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,
                 this.yPos,

@@ -26,9 +26,23 @@ export class EnemyMiniBossProgress extends AbstractFramedShape implements IHealt
     }
 
     private drawProgressBar() {
+        const green = 'rgb(51,152,14)';
+        const yellow = 'rgb(184,150,21)';
+        const red = 'rgb(202,56,56)';
+        let color = '';
+        switch (true) {
+            case this.progress > 60:
+                color = green;
+                break;
+            case this.progress > 40:
+                color = yellow;
+                break;
+            default:
+                color = red;
+        }
         this.shape
             .lineWidth(1)
-            .colors('rgb(255,0,0)', 'rgb(0,0,0)')
+            .colors(color, 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,
                 this.yPos,
