@@ -67,10 +67,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     public static clearFramePool() {
         const keys = Object.keys(this._savedFramePool);
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            delete this._savedFramePool[key];
-        }
+        for (let i = 0; i < keys.length; i++) delete this._savedFramePool[keys[i]];
         this._savedFramePool = {};
     }
 
@@ -93,8 +90,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrop$.enable();
         this._beforeRender$.enable();
         this._afterRender$.enable();
-        this.checkMouseOver();
         this._onEventEnableChange$.next(true);
+        this.checkMouseOver();
     }
 
     private innerEventsDisable() {
@@ -133,9 +130,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private initEvents(): void {
         if (this._isEventsBlock ||
             this._isDestroyProcessed ||
-            !this.mouseEventsCollector.isEmpty) {
-            return;
-        }
+            !this.mouseEventsCollector.isEmpty) return;
+
         if (!this.mouseEventsCollector.collect) {
             this.isDestroyEnabled = true;
             this.destroy();
