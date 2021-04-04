@@ -320,68 +320,45 @@ export abstract class AbstractScene implements IScene {
 
     public exit() {
         this.stop();
-        this._actors.forEach(actor => {
-            actor.pauseEvents();
-        });
+        this._actors.forEach(actor => actor.pauseEvents());
         this._onExit$.next({...this._userData});
     }
 
     public destroy(initiator?: string): void {
-        if (this._isDestroyed || this._isDestroyProcessed) {
-            return;
-        }
+        if (this._isDestroyed || this._isDestroyProcessed) return;
         console.log('Scene destroy execute', this.name, initiator);
         this._isDestroyProcessed = true;
-
         this.exit();
 
-        this._actors.forEach(actor => {
-            actor.disableEvents();
-        });
-
+        this._actors.forEach(actor => actor.disableEvents());
         this._onDestroy$.next({...this._userData});
-
         this.collector.destroy();
         this.collector = <any>0;
 
-        if (this._render && this._render.destroyActors) {
-            this._render.destroyActors();
-        }
+        if (this._render && this._render.destroy) this._render.destroy();
+        this._render = <any>0;
 
         for (let i = 0; i < this._actors.length; i++) {
             let actor = this._actors[i];
-            if (actor) {
-                actor.destroy();
-            }
-            actor = <any>0;
+            if (actor) actor.destroy();
         }
-
         const keys = Object.keys(this._userData);
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            delete this._userData[key];
-        }
-
-        if (this.movedBehaviors) {
-            this.movedBehaviors.length = <any>0;
-        }
+        for (let i = 0; i < keys.length; i++) delete this._userData[keys[i]];
+        if (this.movedBehaviors) this.movedBehaviors.length = <any>0;
         this.movedBehaviors = <any>0;
-        this.collector = <any>0;
-        if (this._actors) {
-            this._actors.length = <any>0;
-        }
+
+        if (this._actors) this._actors.length = <any>0;
         this._actors = <any>0;
-        this._render = <any>0;
         this._generalLayer = <any>0;
         this.isFirstStart = <any>0;
-        if (this.movedOnDrag) {
-            this.movedOnDrag.length = <any>0;
-        }
+
+        if (this.movedOnDrag) this.movedOnDrag.length = <any>0;
         if (this._cursorHandler) {
             this._cursorHandler.clear();
             this._cursorHandler = <any>0;
         }
         this.movedOnDrag = <any>0;
+
         this._onStop$.destroy();
         this._onExit$.destroy();
         this._onStart$.destroy();
@@ -404,9 +381,7 @@ export abstract class AbstractScene implements IScene {
     }
 
     public unsubscribe(subscriber: ISubscriptionLike): void {
-        if (!!this.collector) {
-            this.collector.unsubscribe(subscriber);
-        }
+        if (this.collector) this.collector.unsubscribe(subscriber);
     }
 
     get name(): string {
@@ -421,24 +396,13 @@ class Drag implements IDragActor {
     constructor(actor: IActor, options?: IDragDropOptions) {
         this.actor = actor;
         this.options = this.getDefaultOptions();
-        if (!options) {
-            return;
-        }
-        if (!!options.callbackOnDrag) {
-            this.options.callbackOnDrag = options.callbackOnDrag;
-        }
-        if (!!options.callbackOnMOve) {
-            this.options.callbackOnMOve = options.callbackOnMOve;
-        }
-        if (!!options.callbackOnDrop) {
-            this.options.callbackOnDrop = options.callbackOnDrop;
-        }
-        if (!!options.mouseCatch) {
-            this.options.mouseCatch = options.mouseCatch;
-        }
-        if (!!options.zIndexOnDrop) {
-            this.options.zIndexOnDrop = options.zIndexOnDrop;
-        }
+        if (!options) return;
+
+        if (!!options.callbackOnDrag) this.options.callbackOnDrag = options.callbackOnDrag;
+        if (!!options.callbackOnMOve) this.options.callbackOnMOve = options.callbackOnMOve;
+        if (!!options.callbackOnDrop) this.options.callbackOnDrop = options.callbackOnDrop;
+        if (!!options.mouseCatch) this.options.mouseCatch = options.mouseCatch;
+        if (!!options.zIndexOnDrop) this.options.zIndexOnDrop = options.zIndexOnDrop;
     }
 
     private getDefaultOptions(): IDragDropOptions {

@@ -9,7 +9,7 @@ export type IRenderController = {
     start(isBackgroundLayerPresent: boolean): void;
     stop(): void;
     deleteActor(element: IActor): void;
-    destroyActors(): void;
+    destroy(): void;
     setActorOnTop(element: IActor): void;
     setActorZIndex(element: IActor, z_index: number): void;
     sortActorsByZIndex(): void;
@@ -265,7 +265,7 @@ export class RenderController implements IRenderController {
         this.currentPool.sort((a, b) => a.z_index - b.z_index);
     }
 
-    public destroyActors(): void {
+    public destroy(): void {
         this._beforeLayersRender$.destroy();
         this._beforeLayersRender$ = <any>0;
         this._afterLayersRender$.destroy();
