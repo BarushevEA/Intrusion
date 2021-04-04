@@ -1,5 +1,5 @@
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {E_Cells, IBackgroundMap, ICellScheme} from "./DimensionTypes";
+import {E_Cells, IBackgroundMap, ICellDrawOptions, ICellScheme} from "./DimensionTypes";
 import {GreenRectangle} from "../GreenRectangle";
 import {GreenTriangle} from "../GreenTriangle/GreenTriangle";
 import {BrickWall} from "../briks/BrickWall";
@@ -29,23 +29,35 @@ let draw: DrawHelper = <any>0;
 let layer: HTMLCanvasElement = <any>0;
 
 export class DimensionBackground extends AbstractActor {
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, private options?: ICellDrawOptions) {
         super(
             canvas,
             // Math.round(canvas.height),
             // Math.round(canvas.width));
-            400, 400);
+            500, 800);
         this.init();
     }
 
     init(): void {
         this.prepareCells();
+        draw = new DrawHelper(<any>0, cells, 0, 0);
+        this.options && (draw.options = this.options);
         layer = this.setVirtualLayer(ELayer.COPY, this.height, this.width);
         cells.setScheme(scheme, E_Cells.ACTOR_USE, layer);
         draw.render();
     }
 
-    get draw():DrawHelper {
+    prepareCells(): void {
+        cells = new Cells(100, 100, 5, 10);
+        cells
+            .fillWithActor(<any>[$.WAL])
+            .addRowAt(<any>[$.REC], 1, 0, 8)
+            .addRowAt(<any>[$.REC], 1, 4, 8)
+            .addColumnAt(<any>[$.REC], 0, 0, 5)
+            .addColumnAt(<any>[$.REC], 9, 0, 5);
+    }
+
+    get draw(): DrawHelper {
         return draw;
     }
 
@@ -67,17 +79,6 @@ export class DimensionBackground extends AbstractActor {
     moveBottom(): void {
         layer.width = layer.width;
         draw.moveBottom();
-    }
-
-    prepareCells(): void {
-        cells = new Cells(100, 100, 4, 10);
-        cells
-            .fillWithActor(<any>[$.WAL])
-            .addRowAt(<any>[$.REC],1,0,8)
-            .addRowAt(<any>[$.REC],1,3,8)
-            .addColumnAt(<any>[$.REC],0,0,4)
-            .addColumnAt(<any>[$.REC],9,0,4);
-        draw = new DrawHelper(<any>0, cells, 0, 0);
     }
 
     renderFrame(): void {

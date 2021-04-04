@@ -77,8 +77,8 @@ function clearVariables() {
 
 function initActors(scene: IScene) {
     const bgOptions: ICellDrawOptions = {
-        width: 4,
-        height: 4
+        width: 5,
+        height: 8
     };
 
     left = new ButtonGreenWithText(scene.generalLayer, 'Move left');
@@ -91,10 +91,9 @@ function initActors(scene: IScene) {
     top.xPos = scene.generalLayer.width - top.width * 3;
     bottom.xPos = scene.generalLayer.width - bottom.width * 2;
 
-    bg = new DimensionBackground(scene.generalLayer);
+    bg = new DimensionBackground(scene.generalLayer, bgOptions);
     bg.xPos = 400;
     bg.yPos = 50;
-    bg.draw.options = bgOptions;
 
     prepareCells(scene);
     prepareCellsString(scene);

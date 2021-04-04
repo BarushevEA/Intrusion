@@ -182,8 +182,8 @@ export class Cells implements IBackgroundMap {
 
     getRectangle(x: x_array, y: y_array, height: array_height, width: array_width): ICells {
         const cells: ICells = [];
-        for (let i = 0; i < height; i++) {
-            cells.push(this.getRow(x, y + i, width));
+        for (let i = 0; i < width; i++) {
+            cells.push(this.getRow(x, y + i, height));
         }
         return cells;
     }
@@ -482,13 +482,13 @@ export class DrawHelper {
     }
 
     public render(): void {
-        const width = this.cells.width;
-        const height = this.cells.height;
+        const width = this._options.width || this.cells.width;
+        const height = this._options.height || this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
         const cellHeight = this.cells.map.cellHeight;
-        for (let i = 0; i < height; i++) {
+        for (let i = 0; i < width; i++) {
             const row = this.cells.cells[i];
-            for (let j = 0; j < width; j++) {
+            for (let j = 0; j < height; j++) {
                 const cell = row[j];
                 for (let k = 0; k < cell.length; k++) {
                     const cellItem: IActor = cell[k];
