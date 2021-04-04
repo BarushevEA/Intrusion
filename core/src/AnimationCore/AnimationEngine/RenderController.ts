@@ -6,8 +6,8 @@ import {deleteFromArray} from "../Libraries/FunctionLibs";
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
     setActor(element: IActor): void;
-    renderStart(isBackgroundLayerPresent: boolean): void;
-    renderStop(): void;
+    start(isBackgroundLayerPresent: boolean): void;
+    stop(): void;
     deleteActor(element: IActor): void;
     destroyActors(): void;
     setActorOnTop(element: IActor): void;
@@ -137,7 +137,7 @@ export class RenderController implements IRenderController {
         return false;
     }
 
-    public renderStart(isBackgroundLayerPresent: boolean): void {
+    public start(isBackgroundLayerPresent: boolean): void {
         this.isBackgroundLayerPresent = isBackgroundLayerPresent;
         if (this.animFrameIndex === -1) {
             this.setFullSpeed();
@@ -145,7 +145,7 @@ export class RenderController implements IRenderController {
     }
 
     public setFullSpeed(): void {
-        this.renderStop();
+        this.stop();
         if (this.isBackgroundLayerPresent) {
             this.runFullSpeedWithBackground();
         } else {
@@ -154,7 +154,7 @@ export class RenderController implements IRenderController {
     };
 
     public setHalfSpeed(): void {
-        this.renderStop();
+        this.stop();
         this.runHalfSpeed();
     };
 
@@ -197,7 +197,7 @@ export class RenderController implements IRenderController {
         this._afterLayersRender$.next(true);
     }
 
-    public renderStop() {
+    public stop() {
         cancelAnimationFrame(this.animFrameIndex);
         this.animFrameIndex = -1;
     }
@@ -270,7 +270,7 @@ export class RenderController implements IRenderController {
         this._beforeLayersRender$ = <any>0;
         this._afterLayersRender$.destroy();
         this._afterLayersRender$ = <any>0;
-        this.renderStop();
+        this.stop();
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];
             for (let i = 0; i < this.currentPool.length; i++) {

@@ -11,7 +11,7 @@ import {ICursorHandler} from "../../Libraries/CursorHandler";
 import {ISubscriber, ISubscriptionLike} from "../../Libraries/Observables/Types";
 
 export abstract class AbstractScene implements IScene {
-    private _renderController: IRenderController;
+    private _render: IRenderController;
     private _generalLayer: HTMLCanvasElement;
     private _actors: IActor[] = [];
     private _cursor: ICursor & AbstractActor = <any>0;
@@ -36,8 +36,8 @@ export abstract class AbstractScene implements IScene {
 
     protected constructor(canvas: HTMLCanvasElement, name = '') {
         this._generalLayer = canvas;
-        this._renderController = new RenderController();
-        this._renderController.setCanvas(canvas);
+        this._render = new RenderController();
+        this._render.setCanvas(canvas);
         this.collector = new EventCollector();
         this._name = name;
         this.run();
@@ -64,11 +64,10 @@ export abstract class AbstractScene implements IScene {
     }
 
     get tickCount$(): ISubscriber<boolean> {
-        if (!!this._renderController && !!this._renderController.afterLayersRender$) {
-            return this._renderController.afterLayersRender$;
-        } else {
-            return <any>{subscribe: () => 0};
+        if (this._render && this._render.afterLayersRender$) {
+            return this._render.afterLayersRender$;
         }
+        return <any>{subscribe: () => 0};
     };
 
     private run(): void {
@@ -83,11 +82,9 @@ export abstract class AbstractScene implements IScene {
             const actor = this._actors[i];
             actor.pauseEvents();
         }
-        this.timerCounter = tickGenerator.executeTimeout(() => {
-            if (!this._isDestroyed) {
-                this.handleStartScene();
-            }
-        }, this.startDelayMs);
+        this.timerCounter = tickGenerator.executeTimeout(
+            () => !this._isDestroyed && this.handleStartScene(),
+            this.startDelayMs);
     }
 
     private handleStartScene() {
@@ -95,7 +92,7 @@ export abstract class AbstractScene implements IScene {
             const actor = this._actors[i];
             actor.resetEvents();
         }
-        this._renderController.renderStart(this.isBackgroundLayerPresent);
+        this._render.start(this.isBackgroundLayerPresent);
         this._onStart$.next({...this._userData});
     }
 
@@ -149,7 +146,7 @@ export abstract class AbstractScene implements IScene {
                 this._actors.push(actor);
             }
             actor.isUnlinked = false;
-            this._renderController.setActor(actor);
+            this._render.setActor(actor);
         }
     }
 
@@ -183,59 +180,59 @@ export abstract class AbstractScene implements IScene {
             return;
         }
         actor.isUnlinked = true;
-        this._renderController.deleteActor(actor);
+        this._render.deleteActor(actor);
     }
 
     public setHalfSpeed(): void {
-        this._renderController.setHalfSpeed();
+        this._render.setHalfSpeed();
     }
 
     public setFullSpeed(): void {
-        this._renderController.setFullSpeed();
+        this._render.setFullSpeed();
     }
 
     public setActorOnTop(actor: IActor): void {
-        this._renderController.setActorOnTop(actor);
+        this._render.setActorOnTop(actor);
     }
 
     public setActorZIndex(actor: IActor, z_index: number): void {
-        this._renderController.setActorZIndex(actor, z_index);
+        this._render.setActorZIndex(actor, z_index);
     }
 
     public setActorsGroupOnTop(actors: IActor[]): void {
-        this._renderController.setActorGroupOnTop(actors);
+        this._render.setActorGroupOnTop(actors);
     }
 
     public setActorsGroupByZIndex(actors: IActor[], z_index: number): void {
-        this._renderController.setActorsGroupByZIndex(actors, z_index);
+        this._render.setActorsGroupByZIndex(actors, z_index);
     }
 
     public sortActorsByZIndex(): void {
-        this._renderController.sortActorsByZIndex();
+        this._render.sortActorsByZIndex();
     }
 
     public setActiveLayer(name: string): void {
-        this._renderController.setActiveLayer(name);
+        this._render.setActiveLayer(name);
     }
 
     public getActiveLayerName(): string {
-        return this._renderController.getActiveLayerName();
+        return this._render.getActiveLayerName();
     }
 
     public setLayerOnTop(name: string): void {
-        this._renderController.setLayerOnTop(name);
+        this._render.setLayerOnTop(name);
     }
 
     public setLayerOnIndex(layerName: string, index: number): void {
-        this._renderController.setLayerOnIndex(layerName, index);
+        this._render.setLayerOnIndex(layerName, index);
     }
 
     public collect(...subscribers: ISubscriptionLike[]): void {
         this.collector.collect(...subscribers);
     }
 
-    get renderController(): IRenderController {
-        return this._renderController;
+    get render(): IRenderController {
+        return this._render;
     }
 
     get generalLayer(): HTMLCanvasElement {
@@ -374,7 +371,7 @@ export abstract class AbstractScene implements IScene {
     }
 
     public stop(): void {
-        this._renderController.renderStop();
+        this._render.stop();
         this._onStop$.next({...this._userData});
     }
 
@@ -404,8 +401,8 @@ export abstract class AbstractScene implements IScene {
         this.collector.destroy();
         this.collector = <any>0;
 
-        if (this._renderController && this._renderController.destroyActors) {
-            this._renderController.destroyActors();
+        if (this._render && this._render.destroyActors) {
+            this._render.destroyActors();
         }
 
         for (let i = 0; i < this._actors.length; i++) {
@@ -431,7 +428,7 @@ export abstract class AbstractScene implements IScene {
             this._actors.length = <any>0;
         }
         this._actors = <any>0;
-        this._renderController = <any>0;
+        this._render = <any>0;
         this._generalLayer = <any>0;
         this.isFirstStart = <any>0;
         if (this.movedOnDrag) {

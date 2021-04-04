@@ -15,7 +15,7 @@ export type IScene = {
     readonly onStartOnce$: ISubscriber<IUserData>;
     readonly onStart$: ISubscriber<IUserData>;
     readonly onDestroy$: ISubscriber<IUserData>;
-    readonly renderController: IRenderController;
+    readonly render: IRenderController;
     readonly generalLayer: HTMLCanvasElement;
     readonly actors: IActor[];
     cursorHandler: ICursorHandler;

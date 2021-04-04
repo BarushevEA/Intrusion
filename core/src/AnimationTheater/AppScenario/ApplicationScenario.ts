@@ -45,9 +45,7 @@ function initEvents(platform: AbstractPlatform): void {
                     case E_Scene.SERGE:
                         pool[E_Scene.SERGE] = platform.createScene(SergeScene);
                         collector.collect(
-                            pool[E_Scene.SERGE].onStart$.subscribe(() => {
-                                pool[E_Scene.SERGE].setHalfSpeed();
-                            }),
+                            pool[E_Scene.SERGE].onStart$.subscribe(() => pool[E_Scene.SERGE].setHalfSpeed()),
                         )
                         startMenuOnExit(E_Scene.SERGE);
                         pool[E_Scene.SERGE].start(false);

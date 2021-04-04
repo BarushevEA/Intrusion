@@ -54,7 +54,7 @@ export class PolygonWeb extends AbstractActorPlugin {
 
             const polygon = shape.advancedPolygon();
             polygon.startPoint(x0, y0);
-            shape.context = this.scene.renderController.context;
+            shape.context = this.scene.render.context;
             for (let i = 1; i < this.rootPool.length; i++) {
                 const actor = this.rootPool[i];
                 const x = getCenterX(actor.xPos, actor.width);

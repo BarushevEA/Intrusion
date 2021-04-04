@@ -37,12 +37,12 @@ function sceneEvents(scene: IScene) {
     let isHalf = false;
     let freezeCounter = 0;
     scene.collect(
-        scene.renderController.beforeLayersRender$.subscribe(() => {
+        scene.render.beforeLayersRender$.subscribe(() => {
             if (!isHalf) {
                 renderTime = Date.now();
             }
         }),
-        scene.renderController.afterLayersRender$.subscribe(() => {
+        scene.render.afterLayersRender$.subscribe(() => {
             if (isHalf) {
                 return;
             }

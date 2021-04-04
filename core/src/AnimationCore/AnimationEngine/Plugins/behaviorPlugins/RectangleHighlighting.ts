@@ -47,7 +47,7 @@ export class RectangleHighlighting extends AbstractActorPlugin {
             return;
         }
         this.subscriberTick = root.afterRender$.subscribe(() => {
-            shape.context = this.scene.renderController.context;
+            shape.context = this.scene.render.context;
             shape
                 .lineWidth(2)
                 .colors('rgba(0,195,15,0.5)', 'rgba(0,195,15,0.5)');
