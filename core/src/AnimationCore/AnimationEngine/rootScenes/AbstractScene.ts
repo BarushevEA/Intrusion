@@ -64,16 +64,12 @@ export abstract class AbstractScene implements IScene {
     }
 
     get tickCount$(): ISubscriber<boolean> {
-        if (this._render && this._render.afterLayersRender$) {
-            return this._render.afterLayersRender$;
-        }
+        if (this._render && this._render.afterLayersRender$) return this._render.afterLayersRender$;
         return <any>{subscribe: () => 0};
     };
 
     private run(): void {
-        this.collect(
-            this._onStartOnce$.subscribe(this.handleCreateScene.bind(this))
-        );
+        this.collect(this._onStartOnce$.subscribe(this.handleCreateScene.bind(this)));
     }
 
     private handleCreateScene() {
@@ -97,9 +93,7 @@ export abstract class AbstractScene implements IScene {
     }
 
     set userData(data: IUserData) {
-        Object.keys(data).forEach(key => {
-            this._userData[key] = data[key];
-        });
+        Object.keys(data).forEach(key => this._userData[key] = data[key]);
         this._onSetUserData$.next(this._userData);
     }
 
@@ -132,53 +126,33 @@ export abstract class AbstractScene implements IScene {
     }
 
     public setActors(...actors: IActor[]): void {
-        if (this._isDestroyed || !actors || !actors.length) {
-            return;
-        }
+        if (this._isDestroyed || !actors || !actors.length) return;
 
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            if (!actor) {
-                continue;
-            }
-            const index = this._actors.indexOf(actor);
-            if (index === -1) {
-                this._actors.push(actor);
-            }
+            if (!actor) continue;
+
+            (this._actors.indexOf(actor) === -1) && this._actors.push(actor);
             actor.isUnlinked = false;
             this._render.setActor(actor);
         }
     }
 
     public destroyActor(actor: IActor): void {
-        if (!this._actors) {
-            return;
-        }
+        if (!this._actors) return;
 
         const index = this._actors.indexOf(actor);
-        if (index === -1) {
-            return;
-        }
+        if (index === -1) return;
 
         this.unLink(actor);
-
-        for (let i = index; i < this._actors.length - 1; i++) {
-            this._actors[i] = this._actors[i + 1];
-        }
+        for (let i = index; i < this._actors.length - 1; i++) this._actors[i] = this._actors[i + 1];
 
         this._actors.length = this._actors.length - 1;
-
-        if (actor &&
-            !actor.isDestroyed &&
-            actor.destroy) {
-            actor.destroy();
-        }
+        if (actor && !actor.isDestroyed && actor.destroy) actor.destroy();
     }
 
     public unLink(actor: IActor): void {
-        if (!actor) {
-            return;
-        }
+        if (!actor) return;
         actor.isUnlinked = true;
         this._render.deleteActor(actor);
     }
@@ -246,79 +220,57 @@ export abstract class AbstractScene implements IScene {
     protected abstract createScene(): void;
 
     public moveOnMouseDrag(actor: IActor, options?: IDragDropOptions): void {
-        if (this._isDestroyed) {
-            return;
-        }
+        if (this._isDestroyed) return;
+
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(
-            drag.actor.isMouseLeftDrag$.subscribe(() => {
-                this.onMovedActorDrag(drag);
-            }),
-            drag.actor.isMouseLeftDrop$.subscribe(() => {
-                this.onMovedActorDrop(drag);
-            })
+            drag.actor.isMouseLeftDrag$.subscribe(() => this.onMovedActorDrag(drag)),
+            drag.actor.isMouseLeftDrop$.subscribe(() => this.onMovedActorDrop(drag))
         );
     }
 
     private onMovedActorDrop(drop: IDragActor): void {
-        if (this.movedBehaviors.length) {
-            for (let i = 0; i < this.movedBehaviors.length; i++) {
-                this.unsubscribe(this.movedBehaviors[i]);
-            }
-            this.movedBehaviors = [];
-            if (drop.options) {
-                if (drop.options.callbackOnDrop) {
-                    drop.options.callbackOnDrop();
-                }
-                switch (!!drop.options.zIndexOnDrop) {
-                    case drop.options.zIndexOnDrop === E_ZOnDrop.DEFAULT:
-                        drop.actor.restoreZIndex();
-                        this.sortActorsByZIndex();
-                        break;
-                    case typeof drop.options.zIndexOnDrop === 'number':
-                        this.setActorZIndex(drop.actor, <number>drop.options.zIndexOnDrop);
-                        break;
-                }
+        if (!this.movedBehaviors.length) return;
+        for (let i = 0; i < this.movedBehaviors.length; i++) this.unsubscribe(this.movedBehaviors[i]);
+        this.movedBehaviors = [];
+        if (drop.options) {
+            if (drop.options.callbackOnDrop) drop.options.callbackOnDrop();
+
+            switch (!!drop.options.zIndexOnDrop) {
+                case drop.options.zIndexOnDrop === E_ZOnDrop.DEFAULT:
+                    drop.actor.restoreZIndex();
+                    this.sortActorsByZIndex();
+                    break;
+                case typeof drop.options.zIndexOnDrop === 'number':
+                    this.setActorZIndex(drop.actor, <number>drop.options.zIndexOnDrop);
+                    break;
             }
         }
     }
 
     private onMovedActorDrag(drag: IDragActor): void {
-        const catchActors = this.movedOnDrag.filter(moved => {
-            return !moved.actor.isDestroyed && moved.actor.isMouseOver$.getValue();
-        });
-        if (!catchActors.length) {
-            return;
-        }
+        const catchActors = this.movedOnDrag.filter(moved =>
+            !moved.actor.isDestroyed && moved.actor.isMouseOver$.getValue());
+        if (!catchActors.length) return;
 
         let maxZIndex = catchActors[0].actor.z_index;
         for (let i = 0; i < catchActors.length; i++) {
             const actor = catchActors[i].actor;
-            if (maxZIndex < actor.z_index) {
-                maxZIndex = actor.z_index;
-            }
+            if (maxZIndex < actor.z_index) maxZIndex = actor.z_index;
         }
 
-        if (drag.actor.z_index < maxZIndex) {
-            return;
-        }
+        if (drag.actor.z_index < maxZIndex) return;
 
         drag.actor.saveZIndex();
         this.setActorOnTop(drag.actor);
 
-        if (drag.options && drag.options.callbackOnDrag) {
-            drag.options.callbackOnDrag();
-        }
+        if (drag.options && drag.options.callbackOnDrag) drag.options.callbackOnDrag();
 
         const dx = AbstractActor.mousePosition.x - drag.actor.xPos;
         const dy = AbstractActor.mousePosition.y - drag.actor.yPos;
 
-        this.movedBehaviors.push(
-            this.tickCount$.subscribe(() => {
-                this.handleDragOptions(drag, dx, dy);
-            })
-        );
+        this.movedBehaviors.push(this.tickCount$.subscribe(() => this.handleDragOptions(drag, dx, dy)));
 
         for (let i = 0; i < this.movedBehaviors.length; i++) {
             const behavior = this.movedBehaviors[i];
@@ -328,18 +280,14 @@ export abstract class AbstractScene implements IScene {
 
     private handleDragOptions(drag: IDragActor, dx: number, dy: number) {
         if (!drag.options) {
-            drag.actor.xPos =
-                AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
-            drag.actor.yPos =
-                AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
+            drag.actor.xPos = AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
+            drag.actor.yPos = AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
             return;
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_CENTER) {
-            drag.actor.xPos =
-                AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
-            drag.actor.yPos =
-                AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
+            drag.actor.xPos = AbstractActor.mousePosition.x - Math.round(drag.actor.width / 2);
+            drag.actor.yPos = AbstractActor.mousePosition.y - Math.round(drag.actor.height / 2);
         }
 
         if (drag.options.mouseCatch === E_MouseCatch.BY_POSITION) {
@@ -347,9 +295,7 @@ export abstract class AbstractScene implements IScene {
             drag.actor.yPos = AbstractActor.mousePosition.y - dy;
         }
 
-        if (drag.options.callbackOnMOve) {
-            drag.options.callbackOnMOve();
-        }
+        if (drag.options.callbackOnMOve) drag.options.callbackOnMOve();
     }
 
     public start(isBackgroundLayerPresent: boolean): void {
@@ -361,13 +307,10 @@ export abstract class AbstractScene implements IScene {
         if (this.isFirstStart) {
             this._onStartOnce$.next({...this._userData});
             this.isFirstStart = false;
-        } else {
-            this.timerCounter = tickGenerator.executeTimeout(() => {
-                if (!this._isDestroyed) {
-                    this.handleStartScene();
-                }
-            }, this.startDelayMs);
+            return;
         }
+        this.timerCounter = tickGenerator.executeTimeout(
+            () => !this._isDestroyed && this.handleStartScene(), this.startDelayMs);
     }
 
     public stop(): void {
