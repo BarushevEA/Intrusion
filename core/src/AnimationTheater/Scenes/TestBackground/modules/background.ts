@@ -106,7 +106,7 @@ function initDynamicalActions(scene: IScene) {
     const cursorOver = new PointerAndDragCursorPlugin(scene);
     redButton.pluginDock.add(cursorOver);
     scene.collect(
-        redButton.isMouseClick$.subscribe(() => {
+        redButton.onMouseClick$.subscribe(() => {
             const arr = cells.cells;
             for (let i = 0; i < arr.length; i++) {
                 const arrElement = arr[i];

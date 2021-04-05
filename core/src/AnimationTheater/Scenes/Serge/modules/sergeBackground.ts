@@ -114,16 +114,16 @@ function initActions(scene: IScene) {
     const bounce = new BounceOffTheWall(scene);
     bg.pluginDock.add(bounce);
     scene.collect(
-        left.isMouseClick$.subscribe(() => {
+        left.onMouseClick$.subscribe(() => {
             bg.moveLeft();
         }),
-        right.isMouseClick$.subscribe(() => {
+        right.onMouseClick$.subscribe(() => {
             bg.moveRight();
         }),
-        top.isMouseClick$.subscribe(() => {
+        top.onMouseClick$.subscribe(() => {
             bg.moveTop();
         }),
-        bottom.isMouseClick$.subscribe(() => {
+        bottom.onMouseClick$.subscribe(() => {
             bg.moveBottom();
         }),
     );

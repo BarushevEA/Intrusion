@@ -61,14 +61,14 @@ function initActions(scene: IScene) {
     link.setActorToLink(combinedRectangle);
 
     scene.collect(
-        combinedRectangle.isMouseClick$.subscribe(() => {
+        combinedRectangle.onMouseClick$.subscribe(() => {
             combinedRectangle.nextRectangle();
         }),
-        linkRectangle.isMouseClick$.subscribe(() => {
+        linkRectangle.onMouseClick$.subscribe(() => {
             heart.pluginDock.add(link);
             console.log(heart.pluginDock.getNameList());
         }),
-        unLinLinkRectangle.isMouseClick$.subscribe(() => {
+        unLinLinkRectangle.onMouseClick$.subscribe(() => {
             heart.pluginDock.unLink(link);
             console.log(heart.pluginDock.getNameList());
         })

@@ -28,7 +28,7 @@ function initActors(scene: IScene) {
 function initActions(scene: IScene) {
     for (let i = 0; i < circles.length; i++) {
         const circle = circles[i];
-        scene.collect(circle.isMouseOver$.subscribe(() => {
+        scene.collect(circle.onMouseOver$.subscribe(() => {
             circle.moreSpeed();
         }));
     }

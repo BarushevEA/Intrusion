@@ -8,14 +8,14 @@ export abstract class AbstractButton extends AbstractFramedShape {
         this.buttonText = text;
         this.enableEvents();
         this.collect(
-            this.isMouseOver$.subscribe(isOver => {
+            this.onMouseOver$.subscribe(isOver => {
                 if (isOver) {
                     this.setSecondFrame();
                 } else {
                     this.setFirstFrame();
                 }
             }),
-            this.isMouseLeftClick$.subscribe(isDown => {
+            this.onMouseLeftClick$.subscribe(isDown => {
                 if (isDown) {
                     this.setThirdFrame();
                 } else {

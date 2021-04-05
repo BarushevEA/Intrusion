@@ -28,7 +28,7 @@ export class RectangleHighlighting extends AbstractActorPlugin {
                     this.subscriberTick = <any>0;
                 }
             }),
-            this.subscriber = root.isMouseOver$.subscribe(isOver => {
+            this.subscriber = root.onMouseOver$.subscribe(isOver => {
                     if (isOver) {
                         this.drawRectangle(root, shape);
                     } else {
@@ -43,7 +43,7 @@ export class RectangleHighlighting extends AbstractActorPlugin {
     }
 
     private drawRectangle(root: IActor, shape: IShapeHandler) {
-        if (this.subscriberTick || !root.isMouseOver$.getValue()) {
+        if (this.subscriberTick || !root.onMouseOver$.getValue()) {
             return;
         }
         this.subscriberTick = root.afterRender$.subscribe(() => {

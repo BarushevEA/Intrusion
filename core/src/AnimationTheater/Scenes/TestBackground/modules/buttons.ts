@@ -28,11 +28,11 @@ function initActors(scene: IScene) {
 
 function initActions(scene: IScene) {
     scene.collect(
-        buttonExit.isMouseClick$.subscribe(() => {
+        buttonExit.onMouseClick$.subscribe(() => {
             scene.userData.test++;
             scene.destroy();
         }),
-        buttonExit.isMouseOver$.subscribe(() => {
+        buttonExit.onMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, buttonExit);
         })
     );

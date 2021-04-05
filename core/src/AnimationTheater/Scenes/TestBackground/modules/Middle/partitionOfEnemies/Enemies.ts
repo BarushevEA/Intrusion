@@ -240,11 +240,11 @@ function initGeneralBossesActions(scene: IScene) {
     generalBoss.pluginDock.add(cursorBehavior);
     generalBoss.enableEvents();
     scene.collect(
-        generalBoss.isMouseOver$.subscribe(() => {
+        generalBoss.onMouseOver$.subscribe(() => {
             generalBoss.pluginDock.unLink(bounce);
             generalBoss.pluginDock.add(bounce);
         }),
-        generalBoss.isDestroyed$.subscribe(() => {
+        generalBoss.onDestroyed$.subscribe(() => {
             genBossDestroyTimer = tickGenerator.executeTimeout(() => {
                 scene.destroy();
             }, 2000);

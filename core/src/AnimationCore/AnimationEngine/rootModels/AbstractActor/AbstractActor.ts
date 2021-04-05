@@ -48,13 +48,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private collector: ICollector = <any>0;
     private mouseEventsCollector: ICollector = <any>0;
     public isMouseOver = false;
-    private _isMouseOver$ = new Observable(false);
-    private _isMouseClick$ = new Observable(false);
-    private _isMouseLeftClick$ = new Observable(false);
-    private _isMouseRightClick$ = new Observable(false);
-    private _isDestroyed$ = new Observable(false);
-    private _isMouseLeftDrag$ = new Observable(<any>0);
-    private _isMouseLeftDrop$ = new Observable(<any>0);
+    private _onMouseOver$ = new Observable(false);
+    private _onMouseClick$ = new Observable(false);
+    private _onMouseLeftClick$ = new Observable(false);
+    private _onMouseRightClick$ = new Observable(false);
+    private _onDestroyed$ = new Observable(false);
+    private _onMouseLeftDrag$ = new Observable(<any>0);
+    private _onMouseLeftDrop$ = new Observable(<any>0);
     private _beforeRender$ = new Observable(<any>0);
     private _afterRender$ = new Observable(<any>0);
     private _onEventEnableChange$ = new Observable(false);
@@ -83,12 +83,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     private innerEventsEnable() {
-        this._isMouseOver$.enable();
-        this._isMouseClick$.enable();
-        this._isMouseLeftClick$.enable();
-        this._isMouseRightClick$.enable();
-        this._isMouseLeftDrag$.enable();
-        this._isMouseLeftDrop$.enable();
+        this._onMouseOver$.enable();
+        this._onMouseClick$.enable();
+        this._onMouseLeftClick$.enable();
+        this._onMouseRightClick$.enable();
+        this._onMouseLeftDrag$.enable();
+        this._onMouseLeftDrop$.enable();
         this._beforeRender$.enable();
         this._afterRender$.enable();
         this._onEventEnableChange$.next(true);
@@ -97,12 +97,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
 
     private innerEventsDisable() {
         this.checkMouseOver();
-        this._isMouseOver$.disable();
-        this._isMouseClick$.disable();
-        this._isMouseLeftClick$.disable();
-        this._isMouseRightClick$.disable();
-        this._isMouseLeftDrag$.disable();
-        this._isMouseLeftDrop$.disable();
+        this._onMouseOver$.disable();
+        this._onMouseClick$.disable();
+        this._onMouseLeftClick$.disable();
+        this._onMouseRightClick$.disable();
+        this._onMouseLeftDrag$.disable();
+        this._onMouseLeftDrop$.disable();
         this._beforeRender$.disable();
         this._afterRender$.disable();
         this._onEventEnableChange$.next(false);
@@ -124,8 +124,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this._onEventEnableChange$;
     }
 
-    get isDestroyed$(): Observable<boolean> {
-        return this._isDestroyed$;
+    get onDestroyed$(): Observable<boolean> {
+        return this._onDestroyed$;
     }
 
     private initEvents(): void {
@@ -146,7 +146,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             mouseRightDown$.subscribe(this.getOrderedListener(this.rightMouseDown.bind(this))),
             mouseRightUp$.subscribe(this.getOrderedListener(this.rightMouseUp.bind(this))),
 
-            this._isMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
+            this._onMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
         );
         this.innerEventsEnable();
@@ -249,7 +249,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             return;
         }
         this.isMouseOver = isOver;
-        this._isMouseOver$.next(this.isMouseOver);
+        this._onMouseOver$.next(this.isMouseOver);
     }
 
     private checkMouseOver(): void {
@@ -266,7 +266,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
-            this._isMouseClick$.next(isOver);
+            this._onMouseClick$.next(isOver);
         }
     }
 
@@ -293,7 +293,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
             this.leftMouseCatchTimeIndex = -1;
             if (!isDown && this._isLeftMouseCatch) {
                 this._isLeftMouseCatch = false;
-                this._isMouseLeftDrop$.next(0);
+                this._onMouseLeftDrop$.next(0);
             }
             return;
         }
@@ -303,7 +303,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.leftMouseCatchTimeIndex = <any>tickGenerator.executeTimeout(() => {
             if (!this._isDestroyed) {
                 this._isLeftMouseCatch = true;
-                this._isMouseLeftDrag$.next(0);
+                this._onMouseLeftDrag$.next(0);
             }
         }, this.leftMouseCatchTime);
     }
@@ -312,7 +312,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
-            this._isMouseLeftClick$.next(isDown);
+            this._onMouseLeftClick$.next(isDown);
         } else {
             this.tryLeftMouseCatch(isOver);
         }
@@ -322,7 +322,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         let isOver = this.checkOverPosition(position);
 
         if (isOver) {
-            this._isMouseRightClick$.next(isDown);
+            this._onMouseRightClick$.next(isDown);
         } else {
             this.tryLeftMouseCatch(isOver);
         }
@@ -531,7 +531,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
         }
         this._isDestroyProcessed = true;
 
-        this._isDestroyed$.next(true);
+        this._onDestroyed$.next(true);
 
         this.disableEvents();
 
@@ -551,24 +551,24 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this.leftMouseCatchTimeIndex = <any>0;
         this.leftMouseCatchTime = <any>0;
         this.isMouseOver = <any>0;
-        this._isMouseOver$.destroy();
-        this._isMouseClick$.destroy();
-        this._isMouseLeftClick$.destroy();
-        this._isMouseRightClick$.destroy();
-        this._isMouseLeftDrag$.destroy();
-        this._isMouseLeftDrop$.destroy();
-        this._isDestroyed$.destroy();
+        this._onMouseOver$.destroy();
+        this._onMouseClick$.destroy();
+        this._onMouseLeftClick$.destroy();
+        this._onMouseRightClick$.destroy();
+        this._onMouseLeftDrag$.destroy();
+        this._onMouseLeftDrop$.destroy();
+        this._onDestroyed$.destroy();
         this._onEventEnableChange$.destroy();
         this._onImageLoad$.destroy();
         this._onImageLoad$ = <any>0;
         this._onEventEnableChange$ = <any>0;
-        this._isDestroyed$ = <any>0;
-        this._isMouseOver$ = <any>0;
-        this._isMouseClick$ = <any>0;
-        this._isMouseLeftClick$ = <any>0;
-        this._isMouseRightClick$ = <any>0;
-        this._isMouseLeftDrag$ = <any>0;
-        this._isMouseLeftDrop$ = <any>0;
+        this._onDestroyed$ = <any>0;
+        this._onMouseOver$ = <any>0;
+        this._onMouseClick$ = <any>0;
+        this._onMouseLeftClick$ = <any>0;
+        this._onMouseRightClick$ = <any>0;
+        this._onMouseLeftDrag$ = <any>0;
+        this._onMouseLeftDrop$ = <any>0;
         this._pluginDock.destroy();
         this._pluginDock = <any>0;
         this.layerHandler = <any>0;
@@ -613,28 +613,28 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this._isLeftMouseCatch;
     }
 
-    get isMouseLeftDrop$(): ISubscriber<any> {
-        return this._isMouseLeftDrop$;
+    get onMouseLeftDrop$(): ISubscriber<any> {
+        return this._onMouseLeftDrop$;
     }
 
-    get isMouseLeftDrag$(): ISubscriber<any> {
-        return this._isMouseLeftDrag$;
+    get onMouseLeftDrag$(): ISubscriber<any> {
+        return this._onMouseLeftDrag$;
     }
 
-    get isMouseRightClick$(): ISubscriber<boolean> {
-        return this._isMouseRightClick$;
+    get onMouseRightClick$(): ISubscriber<boolean> {
+        return this._onMouseRightClick$;
     }
 
-    get isMouseClick$(): ISubscriber<boolean> {
-        return this._isMouseClick$;
+    get onMouseClick$(): ISubscriber<boolean> {
+        return this._onMouseClick$;
     }
 
-    get isMouseLeftClick$(): ISubscriber<boolean> {
-        return this._isMouseLeftClick$;
+    get onMouseLeftClick$(): ISubscriber<boolean> {
+        return this._onMouseLeftClick$;
     }
 
-    get isMouseOver$(): ISubscriber<boolean> {
-        return this._isMouseOver$;
+    get onMouseOver$(): ISubscriber<boolean> {
+        return this._onMouseOver$;
     }
 
     public saveZIndex(): void {

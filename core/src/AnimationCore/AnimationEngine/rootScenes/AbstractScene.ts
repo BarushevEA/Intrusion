@@ -225,8 +225,8 @@ export abstract class AbstractScene implements IScene {
         const drag = new Drag(actor, options);
         this.movedOnDrag.push(drag);
         this.collect(
-            drag.actor.isMouseLeftDrag$.subscribe(() => this.onMovedActorDrag(drag)),
-            drag.actor.isMouseLeftDrop$.subscribe(() => this.onMovedActorDrop(drag))
+            drag.actor.onMouseLeftDrag$.subscribe(() => this.onMovedActorDrag(drag)),
+            drag.actor.onMouseLeftDrop$.subscribe(() => this.onMovedActorDrop(drag))
         );
     }
 
@@ -251,7 +251,7 @@ export abstract class AbstractScene implements IScene {
 
     private onMovedActorDrag(drag: IDragActor): void {
         const catchActors = this.movedOnDrag.filter(moved =>
-            !moved.actor.isDestroyed && moved.actor.isMouseOver$.getValue());
+            !moved.actor.isDestroyed && moved.actor.onMouseOver$.getValue());
         if (!catchActors.length) return;
 
         let maxZIndex = catchActors[0].actor.z_index;

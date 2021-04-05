@@ -175,7 +175,7 @@ function initActions(scene: IScene) {
         el.pluginDock.add(highlightingEl);
         scene.moveOnMouseDrag(el, movedOptions);
         scene.collect(
-            el.isMouseOver$.subscribe(isOver => {
+            el.onMouseOver$.subscribe(isOver => {
                 if (isOver) {
                     el.setAnimationReverse();
                 } else {
@@ -191,7 +191,7 @@ function initActions(scene: IScene) {
         scene.onDestroy$.subscribe(() => {
             clearVariables();
         }),
-        heart.isMouseRightClick$.subscribe((isDown) => {
+        heart.onMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
                 const newHeart = new Heart(scene.generalLayer);
                 const cursorBehaviorNewHeart = new PointerAndDragCursorPlugin(scene);
@@ -209,7 +209,7 @@ function initActions(scene: IScene) {
                 }, 300);
             }
         }),
-        snakeSpiral.isMouseOver$.subscribe(() => {
+        snakeSpiral.onMouseOver$.subscribe(() => {
             snakeSpiral.pluginDock.unLink(bounce);
             snakeSpiral.pluginDock.add(bounce);
         })

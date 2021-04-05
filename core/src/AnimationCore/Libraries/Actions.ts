@@ -12,11 +12,11 @@ export function exitSceneOnButtonClick(scene: IScene,
                                        cursorHandler: CursorHandler,
                                        nextScene = E_Scene.NULL): void {
     scene.collect(
-        button.isMouseClick$.subscribe(() => {
+        button.onMouseClick$.subscribe(() => {
             scene.userData.nextScene = nextScene;
             scene.exit();
         }),
-        button.isMouseOver$.subscribe(() => {
+        button.onMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, button);
         }),
     )
@@ -27,14 +27,14 @@ export function destroySceneOnButtonClick(scene: IScene,
                                           cursorHandler: CursorHandler,
                                           nextScene = E_Scene.NULL): void {
     scene.collect(
-        button.isMouseClick$.subscribe(() => {
+        button.onMouseClick$.subscribe(() => {
             scene.userData.nextScene = nextScene;
             scene.destroy(button.getFramePoolName());
         }),
-        button.isMouseOver$.subscribe(() => {
+        button.onMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, button);
         }),
-        button.isMouseOver$.subscribe((isOver: boolean) => {
+        button.onMouseOver$.subscribe((isOver: boolean) => {
             if (isOver) {
                 console.log('over', scene.name, button.getFramePoolName());
             }
@@ -47,7 +47,7 @@ export function defaultCursorAction(scene: IScene,
                                     cursorHandler: CursorHandler): void {
     // do not use if before used: exitSceneOnButtonClick, destroySceneOnButtonClick
     scene.collect(
-        button.isMouseOver$.subscribe(() => {
+        button.onMouseOver$.subscribe(() => {
             cursorHandler.pointerOrDefaultChange(scene, button);
         }),
     )
@@ -80,7 +80,7 @@ export function setDefaultCursorActions(scene: IScene): void {
 
 export function toggleMouseEventsOnMouseOver(scene: IScene, initiator: IActor): void {
     scene.collect(
-        initiator.isMouseOver$.subscribe(isOver => {
+        initiator.onMouseOver$.subscribe(isOver => {
             const actors = scene.actors;
             if (isOver) {
                 for (let i = 0; i < actors.length; i++) {

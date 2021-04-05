@@ -90,25 +90,25 @@ function initActors(scene: IScene) {
 
 function initActions(scene: IScene) {
     scene.collect(
-        buttonMove.isMouseClick$.subscribe(() => {
+        buttonMove.onMouseClick$.subscribe(() => {
             isStopMove.value = false;
             recMoveStart(scene);
         }),
-        buttonStop.isMouseClick$.subscribe(() => {
+        buttonStop.onMouseClick$.subscribe(() => {
             scene.unsubscribe(move.value);
             move.value = <any>0;
             isStopMove.value = true;
         }),
-        buttonPlay.isMouseClick$.subscribe(() => {
+        buttonPlay.onMouseClick$.subscribe(() => {
             scene.start(true);
         }),
-        buttonPause.isMouseClick$.subscribe(() => {
+        buttonPause.onMouseClick$.subscribe(() => {
             scene.stop();
         }),
-        buttonInvisible.isMouseClick$.subscribe(() => {
+        buttonInvisible.onMouseClick$.subscribe(() => {
             toggleReverse();
         }),
-        buttonToggleSpeed.isMouseClick$.subscribe(() => {
+        buttonToggleSpeed.onMouseClick$.subscribe(() => {
             isHalfSpeed = !isHalfSpeed;
             if (isHalfSpeed) {
                 scene.setHalfSpeed();
