@@ -1,6 +1,6 @@
 import {x_pos, y_pos} from "../../../Libraries/Types";
 import {IPluginDock} from "../../Plugins/root/PluginTypes";
-import {ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IObserver, ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
 import {IFramePool} from "../../LayerHandler/CanvasLayerHandler";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
@@ -38,6 +38,7 @@ export type IActor = {
     readonly beforeRender$: ISubscriber<any>;
     readonly afterRender$: ISubscriber<any>;
     readonly onEventEnableChange$: ISubscriber<boolean>;
+    readonly onImageLoad$: IObserver<any>;
     readonly isDestroyed: boolean;
     readonly isMouseOver: boolean;
     readonly isAnimationOriginal: boolean;

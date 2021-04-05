@@ -58,6 +58,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private _beforeRender$ = new Observable(<any>0);
     private _afterRender$ = new Observable(<any>0);
     private _onEventEnableChange$ = new Observable(false);
+    private _onImageLoad$ = new Observable(<any>0);
     private _isDestroyed = false;
     private _isEventsBlock = false;
     private _isDestroyProcessed = false;
@@ -397,6 +398,10 @@ export abstract class AbstractActor implements IActor, IDimensions {
         return this._afterRender$;
     }
 
+    get onImageLoad$(): Observable<any> {
+        return this._onImageLoad$;
+    }
+
     get xPosPreview(): number {
         return this._elementXPreview;
     }
@@ -554,6 +559,8 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._isMouseLeftDrop$.destroy();
         this._isDestroyed$.destroy();
         this._onEventEnableChange$.destroy();
+        this._onImageLoad$.destroy();
+        this._onImageLoad$ = <any>0;
         this._onEventEnableChange$ = <any>0;
         this._isDestroyed$ = <any>0;
         this._isMouseOver$ = <any>0;

@@ -4,12 +4,17 @@ import {GreenRectangle} from "../GreenRectangle";
 import {GreenTriangle} from "../GreenTriangle/GreenTriangle";
 import {BrickWall} from "../briks/BrickWall";
 import {Cells, DrawHelper} from "./DimensionUtils";
+import {GreenTriangleLeft} from "../GreenTriangle/GreenTriangleLeft";
+import {GreenTriangleRight} from "../GreenTriangle/GreenTriangleRight";
+import {AnimatedRectangleLightGray} from "../rectangles/AnimatedRectangleLightGray";
+import {BlueBrick} from "../briks/BlueBrick";
 
 enum $ {
     NUL = 0,
     REC = 'REC',
     TRI = 'TRI',
-    WAL = 'WAL'
+    WAL = 'WAL',
+    SKY = 'SKY'
 }
 
 enum ELayer {
@@ -24,6 +29,12 @@ const scheme: ICellScheme = {};
 scheme[$.REC] = <any>GreenRectangle;
 scheme[$.TRI] = <any>GreenTriangle;
 scheme[$.WAL] = <any>BrickWall;
+scheme[$.SKY] = <any>BlueBrick;
+scheme[' '] = <any>0;
+scheme['0'] = <any>GreenRectangle;
+scheme['['] = <any>GreenTriangleLeft;
+scheme[`]`] = <any>GreenTriangleRight;
+scheme[`#`] = <any>AnimatedRectangleLightGray;
 
 let draw: DrawHelper = <any>0;
 let layer: HTMLCanvasElement = <any>0;
@@ -48,13 +59,26 @@ export class DimensionBackground extends AbstractActor {
     }
 
     prepareCells(): void {
-        cells = new Cells(100, 100, 5, 10);
+        cells = new Cells(100, 100, 6, 20);
         cells
-            .fillWithActor(<any>[$.WAL])
-            .addRowAt(<any>[$.REC], 1, 0, 8)
-            .addRowAt(<any>[$.REC], 1, 4, 8)
-            .addColumnAt(<any>[$.REC], 0, 0, 5)
-            .addColumnAt(<any>[$.REC], 9, 0, 5);
+            .fillWithActor(<any>[$.SKY])
+            .addRowAt(<any>[$.REC], 1, 0, 18)
+            .addRowAt(<any>[$.REC], 1, 5, 18)
+            .addColumnAt(<any>[$.REC], 0, 0, 6)
+            .addColumnAt(<any>[$.REC], 19, 0, 6)
+            .addStringDimension(
+                [
+                    '        ',
+                    '     [] ',
+                    '[]  [00]',
+                    '00  ####',
+                    '00  ####'
+                ], 2, 0)
+            .addStringDimension(
+                [
+                    '    0  0',
+                    '    0  0'
+                ], 2, 3);
     }
 
     get draw(): DrawHelper {

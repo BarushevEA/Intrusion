@@ -412,6 +412,10 @@ export class DrawHelper {
         this._y = y;
     }
 
+    public rerender(): void {
+        this.move(X_MOVE.NONE, Y_MOVE.NONE);
+    }
+
     public moveLeft(): void {
         this.move(X_MOVE.LEFT, Y_MOVE.NONE);
     }
@@ -496,6 +500,10 @@ export class DrawHelper {
                         cellItem.xPos = this._x + cellWidth * j;
                         cellItem.yPos = this._y + cellHeight * i;
                         cellItem.renderFrame();
+                        cellItem.onImageLoad$.subscribe(() => {
+                            cellItem.onImageLoad$.unsubscribeAll();
+                            this.rerender();
+                        });
                     }
                 }
             }

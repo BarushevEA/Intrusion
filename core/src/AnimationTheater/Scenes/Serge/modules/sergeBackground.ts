@@ -77,7 +77,7 @@ function clearVariables() {
 
 function initActors(scene: IScene) {
     const bgOptions: ICellDrawOptions = {
-        width: 5,
+        width: 6,
         height: 8
     };
 
