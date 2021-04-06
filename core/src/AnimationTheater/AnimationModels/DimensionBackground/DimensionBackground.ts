@@ -68,12 +68,11 @@ export class DimensionBackground extends AbstractActor {
             .addColumnAt(<any>[$.REC], 19, 0, 6)
             .addStringDimension(
                 [
-                    '        ',
                     '     [] ',
                     '[]  [00]',
                     '00  ####',
                     '00  ####'
-                ], 2, 0)
+                ], 2, 1)
             .addStringDimension(
                 [
                     '    0  0',
