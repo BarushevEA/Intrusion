@@ -25,27 +25,20 @@ class TickGenerator implements ITick {
 
     private init(): void {
         if (!secondFPSIndex) {
-            secondFPSIndex = setInterval(() => {
-                secondFPS$.next(-1);
-            }, 1000);
+            secondFPSIndex = setInterval(() => secondFPS$.next(-1), 1000);
         }
         if (!tickIndex) {
             tickIndex = setInterval(() => {
-                tick10$.next(10);
-                if (!this.counter100) {
-                    tick100$.next(100);
-                }
-                if (!this.counter1000) {
-                    tick1000$.next(1000);
-                }
                 this.counter100 += 10;
-                if (this.counter100 >= 100) {
-                    this.counter100 = 0;
-                }
+                if (this.counter100 >= 100) this.counter100 = 0;
+
                 this.counter1000 += 10;
-                if (this.counter1000 >= 1000) {
-                    this.counter1000 = 0;
-                }
+                if (this.counter1000 >= 1000) this.counter1000 = 0;
+
+                tick10$.next(10);
+                if (!this.counter100) tick100$.next(100);
+                if (!this.counter1000) tick1000$.next(1000);
+
                 this.handleTimeOutListeners();
             }, tickDelay);
         }
@@ -54,9 +47,8 @@ class TickGenerator implements ITick {
     executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick1000$.subscribe(() => {
-            if (time > 0) {
-                time--;
-            }
+            if (time > 0) time--;
+
             if (!time) {
                 cb();
                 time = number;
@@ -67,9 +59,8 @@ class TickGenerator implements ITick {
     execute100MsInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick100$.subscribe(() => {
-            if (time > 0) {
-                time--;
-            }
+            if (time > 0) time--;
+
             if (!time) {
                 cb();
                 time = number;
@@ -101,22 +92,17 @@ class TickGenerator implements ITick {
     }
 
     private optimizeKeys(isNeedToOptimize: boolean): void {
-        if (!isNeedToOptimize) {
-            return;
-        }
+        if (!isNeedToOptimize) return;
+
         optimizeCounter++;
-        if (optimizeCounter < optimizeNumber) {
-            return;
-        }
+        if (optimizeCounter < optimizeNumber) return;
+
         optimizeCounter = 0;
         const tmpListeners: ITickListener[] = [];
 
         const length = listeners.length;
-        for (let i = 0; i < length; i++) {
-            if (listeners[i]) {
-                tmpListeners.push(listeners[i])
-            }
-        }
+        for (let i = 0; i < length; i++) if (listeners[i]) tmpListeners.push(listeners[i]);
+
         listeners.length = 0;
         listeners = tmpListeners;
         tmpListeners.length = 0;
@@ -154,19 +140,14 @@ class TickGenerator implements ITick {
     }
 
     clearTimeout(id: ITickListener): void {
-        if (!id) {
-            return;
-        }
+        if (!id) return;
+
         id.isDestroy = true;
-        id.callback = () => {
-            console.log('listener has been destroyed');
-        };
+        id.callback = () => console.log('listener has been destroyed');
     }
 
     destroy(): void {
-        if (this.isDestroyProcessed) {
-            return;
-        }
+        if (this.isDestroyProcessed) return;
         this.isDestroyProcessed = true;
 
         this.counter100 = 0;
@@ -190,9 +171,7 @@ class TickGenerator implements ITick {
     }
 
     private resetListeners(observable: Observable<any>): void {
-        if (observable) {
-            observable.unsubscribeAll();
-        }
+        if (observable) observable.unsubscribeAll();
     }
 }
 
