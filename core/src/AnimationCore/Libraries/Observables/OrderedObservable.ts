@@ -42,6 +42,7 @@ export class OrderedObservable<T> implements IObserver<T> {
 
     private unSubscribe(listener: IOrderedListener): void {
         this.listeners && deleteFromArray(this.listeners, listener);
+        (<any>listener).unsubscribe && (<any>listener).unsubscribe();
         listener.callBack = <any>0;
         listener.order = 0;
     }
