@@ -35,12 +35,13 @@ export function getSceneBottomY(scene: IScene, actor: IActor): x_pos {
     return scene.generalLayer.height - actor.height;
 }
 
-export function deleteFromArray<T>(arr: T[], component: T): void {
+export function deleteFromArray<T>(arr: T[], component: T): boolean {
     const index = arr.indexOf(component);
-    if (index === -1) return;
+    if (index === -1) return false;
     const length = arr.length - 1;
     for (let i = index; i < length;) arr[i++] = arr[i];
     arr.length--;
+    return true;
 }
 
 export class CoordinatesConverter implements ICoordinatesConverter {

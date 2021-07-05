@@ -80,8 +80,12 @@ export class Observable<T> implements IObserver<T> {
     }
 
     public unSubscribe(listener: IListener): void {
-        this.listeners && deleteFromArray(this.listeners, listener);
-        (<any>listener).unsubscribe && (<any>listener).unsubscribe();
+        this.listeners &&
+        (
+            !deleteFromArray(this.listeners, listener) &&
+            (<any>listener).unsubscribe &&
+            (<any>listener).unsubscribe()
+        );
     }
 
     public destroy(): void {
