@@ -7,7 +7,6 @@ import {
     mouseRightDown$,
     mouseRightUp$
 } from "../../../Store/EventStore";
-import {IMousePosition} from "../../../DomComponent/AppAnimation";
 import {Observable} from "../../../Libraries/Observables/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
@@ -18,6 +17,7 @@ import {x_pos, y_pos} from "../../../Libraries/Types";
 import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
 import {tickGenerator} from "../../../Libraries/TickGenerator";
 import {ICallback, IOrderedListener, ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IMousePosition} from "../../../Store/MouseStore";
 
 /** Frame pool technology need to use for lot of entities of class */
 

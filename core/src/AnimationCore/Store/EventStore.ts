@@ -1,7 +1,7 @@
-import {IMousePosition} from "../DomComponent/AppAnimation";
 import {IKeyCode, ISize} from "./Types";
 import {OrderedObservable} from "../Libraries/Observables/OrderedObservable";
 import {Observable} from "../Libraries/Observables/Observable";
+import {IMousePosition} from "./MouseStore";
 
 export const mouseMovePosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
 export const mouseClickPosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
