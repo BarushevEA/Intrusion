@@ -1,5 +1,6 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 enum ELayer {
     WORK = 'WORK',
@@ -7,8 +8,8 @@ enum ELayer {
 
 export class GreenRectangle extends AbstractActor {
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 100, 100);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 100, 100);
         this.init();
         this.restoreDefaultLayer();
     }

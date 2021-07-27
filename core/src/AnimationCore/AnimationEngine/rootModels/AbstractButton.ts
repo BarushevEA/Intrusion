@@ -1,10 +1,15 @@
 import {AbstractFramedShape} from "./AbstractFramedShape";
+import {EventStore} from "../../Store/EventStore";
 
 export abstract class AbstractButton extends AbstractFramedShape {
     protected buttonText: string;
 
-    protected constructor(canvas: HTMLCanvasElement, text: string, height: number, width: number) {
-        super(canvas, height, width);
+    protected constructor(canvas: HTMLCanvasElement,
+                          eventStore: EventStore,
+                          text: string,
+                          height: number,
+                          width: number) {
+        super(canvas, eventStore, height, width);
         this.buttonText = text;
         this.enableEvents();
         this.collect(

@@ -1,8 +1,9 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class LaserRed extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 3, 40);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 3, 40);
     }
 
     protected setFramesName(): void {

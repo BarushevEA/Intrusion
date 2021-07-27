@@ -6,11 +6,12 @@ import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {E_Scene} from "../../AppScenario/types";
 import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {AnimationPlatform} from "../../../AnimationCore/AnimationEngine/rootScenes/AnimationPlatform";
 
 export class Menu extends AbstractScene {
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, E_Scene.MENU);
+    constructor(platform: AnimationPlatform) {
+        super(platform, E_Scene.MENU);
     }
 
     protected createScene(): void {

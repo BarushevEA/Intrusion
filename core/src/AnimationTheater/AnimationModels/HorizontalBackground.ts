@@ -3,6 +3,7 @@ import {GreenTriangle} from "./GreenTriangle/GreenTriangle";
 import {GreenRectangle} from "./GreenRectangle";
 import {BrickWall} from "./briks/BrickWall";
 import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 enum ELayer {
     WORK = 'WORK',
@@ -18,9 +19,10 @@ export class HorizontalBackground extends AbstractActor {
     private arrayCounter = 0;
     private arr: IActor[] = [];
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
         super(
             canvas,
+            eventStore,
             Math.round(canvas.height),
             Math.round(canvas.width));
         this.init();
@@ -81,27 +83,27 @@ function getGreed($: IActor): void {
 function setDataToCopy($: IActor, delta: number, arr: IActor[]) {
     if (!arr.length) {
         const layer = $.setVirtualLayer(ELayer.COPY, $.height, $.width * 2);
-        const brickWall = new BrickWall(layer);
+        const brickWall = new BrickWall(layer, $.eventStore);
         brickWall.xPos = $.width + delta * brickWall.width;
         brickWall.yPos = 0;
         brickWall.setShowedFrame(80);
         brickWall.renderFrame();
         brickWall.isEventsBlock = true;
         arr.push(brickWall);
-        const rectangle = new GreenRectangle(layer);
+        const rectangle = new GreenRectangle(layer, $.eventStore);
         rectangle.isEventsBlock = true;
         rectangle.xPos = $.width + delta * rectangle.width;
         rectangle.yPos = brickWall.height;
         rectangle.renderFrame();
         arr.push(rectangle);
-        const rectangle1 = new BrickWall(layer);
+        const rectangle1 = new BrickWall(layer, $.eventStore);
         rectangle1.isEventsBlock = true;
         rectangle1.xPos = $.width + delta * rectangle1.width;
         rectangle1.yPos = $.height - rectangle1.height * 2;
         rectangle1.setShowedFrame(80);
         rectangle1.renderFrame();
         arr.push(rectangle1);
-        const triangle1 = new GreenTriangle(layer);
+        const triangle1 = new GreenTriangle(layer, $.eventStore);
         triangle1.isEventsBlock = true;
         triangle1.xPos = $.width + delta * triangle1.width;
         triangle1.yPos = $.height - rectangle1.height;

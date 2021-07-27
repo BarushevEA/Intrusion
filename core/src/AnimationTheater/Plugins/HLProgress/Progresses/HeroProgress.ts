@@ -1,12 +1,13 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IHealthProgress} from "../HealthType";
 import {EAlign} from "../../../../AnimationCore/AnimationEngine/LayerHandler/TextHandler";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
-export class HeroProgress extends AbstractFramedShape implements IHealthProgress{
+export class HeroProgress extends AbstractFramedShape implements IHealthProgress {
     private progress = 100;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 20, 300);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 20, 300);
     }
 
     protected setFramesName(): void {

@@ -1,8 +1,9 @@
 import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 export class SnakeSpiral extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 250, 380);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 250, 380);
     }
 
     protected setFramesName(): void {

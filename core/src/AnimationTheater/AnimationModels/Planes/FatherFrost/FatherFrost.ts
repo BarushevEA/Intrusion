@@ -1,9 +1,10 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {fatherFrost_base64} from "./FatherFrost_base64";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class FatherFrost extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 162, 100);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 162, 100);
     }
 
     protected setFramesName(): void {

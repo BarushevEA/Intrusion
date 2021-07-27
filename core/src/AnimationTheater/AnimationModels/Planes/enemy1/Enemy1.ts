@@ -1,9 +1,10 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {enemy1} from "./Enemy1_base64";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class Enemy1 extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 100, 100);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 100, 100);
     }
 
     protected setFramesName(): void {

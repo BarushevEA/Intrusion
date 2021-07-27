@@ -17,7 +17,7 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    background = new HorizontalBackground1(scene.generalLayer);
+    background = new HorizontalBackground1(scene.generalLayer, scene.eventStore);
     background.isEventsBlock = true;
     scene.setActors(background);
 }

@@ -1,5 +1,6 @@
 import {AbstractFramedShape} from "../AbstractFramedShape";
 import {ECursor, ICursor} from "../Types";
+import {EventStore} from "../../../Store/EventStore";
 
 const bdColor = 'rgb(0,195,15)';
 const bgColor = 'rgb(0,114,9)';
@@ -7,8 +8,8 @@ const bgColor = 'rgb(0,114,9)';
 export class Cursor extends AbstractFramedShape implements ICursor {
     private _type: ECursor = ECursor.DEFAULT;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 40, 40);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 40, 40);
     }
 
     protected setFramesName(): void {

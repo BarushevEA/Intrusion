@@ -1,23 +1,23 @@
 import {AbstractPlatform} from "./AbstractPlatform";
 import {runApplicationScenario} from "../../../AnimationTheater/AppScenario/ApplicationScenario";
 import {AbstractActor} from "../rootModels/AbstractActor/AbstractActor";
+import {IAppAnimation} from "../../DomComponent/AppAnimation";
 
-class AnimationPlatform extends AbstractPlatform {
-    private htmlComponent: any;
+export class AnimationPlatform extends AbstractPlatform {
+    public htmlComponent: IAppAnimation = <any>0;
 
     constructor() {
         super();
     }
 
-    execute(htmlComponent: any): void {
+    execute(htmlComponent: IAppAnimation): void {
         this.htmlComponent = htmlComponent;
         runApplicationScenario(this);
     }
 
     destroy(): void {
+        super.destroy();
         AbstractActor.clearFramePool();
-        this.htmlComponent.destroy();
+        this.htmlComponent && this.htmlComponent.destroy();
     }
 }
-
-export const platform = new AnimationPlatform();

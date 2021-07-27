@@ -83,12 +83,12 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    snakeSpiral = new SnakeSpiral(scene.generalLayer);
-    heart = new Heart(scene.generalLayer);
-    wave = new AnimatedWave(scene.generalLayer);
-    wave1 = new AnimatedWaveDark(scene.generalLayer);
-    wave2 = new AnimatedWave(scene.generalLayer);
-    wave3 = new AnimatedWaveDark(scene.generalLayer);
+    snakeSpiral = new SnakeSpiral(scene.generalLayer, scene.eventStore);
+    heart = new Heart(scene.generalLayer, scene.eventStore);
+    wave = new AnimatedWave(scene.generalLayer, scene.eventStore);
+    wave1 = new AnimatedWaveDark(scene.generalLayer, scene.eventStore);
+    wave2 = new AnimatedWave(scene.generalLayer, scene.eventStore);
+    wave3 = new AnimatedWaveDark(scene.generalLayer, scene.eventStore);
 
     heart.xPos = scene.generalLayer.width - heart.width;
     heart.yPos = scene.generalLayer.height - heart.height * 2;
@@ -106,7 +106,7 @@ function initActors(scene: IScene) {
     wave3.setShowedFrame(56);
 
     for (let i = 0; i < 3; i++) {
-        const newHeart = new Heart(scene.generalLayer);
+        const newHeart = new Heart(scene.generalLayer, scene.eventStore);
         newHeart.xPos = Math.round(Math.random() * scene.generalLayer.width / 2);
         newHeart.yPos = Math.round(Math.random() * scene.generalLayer.height / 2);
         actorGroup.push(newHeart);
@@ -116,17 +116,17 @@ function initActors(scene: IScene) {
         for (let i = 0; i < 10; i++) {
             let rectangle0;
             if (i === 9 && k == 5) {
-                rectangle0 = new AnimatedRectangleLightYellow(scene.generalLayer);
+                rectangle0 = new AnimatedRectangleLightYellow(scene.generalLayer, scene.eventStore);
             } else {
                 if (i < 7) {
-                    rectangle0 = new AnimatedRectangleLightGray(scene.generalLayer);
+                    rectangle0 = new AnimatedRectangleLightGray(scene.generalLayer, scene.eventStore);
                 } else {
                     if (i === 7 && k == 5) {
-                        rectangle0 = new AnimatedRectangleLightGreen(scene.generalLayer);
+                        rectangle0 = new AnimatedRectangleLightGreen(scene.generalLayer, scene.eventStore);
                     } else if (i === 8 && k == 5) {
-                        rectangle0 = new AnimatedRectangleLightRed(scene.generalLayer);
+                        rectangle0 = new AnimatedRectangleLightRed(scene.generalLayer, scene.eventStore);
                     } else {
-                        rectangle0 = new AnimatedRectangleLightCyan(scene.generalLayer);
+                        rectangle0 = new AnimatedRectangleLightCyan(scene.generalLayer, scene.eventStore);
                     }
                 }
             }
@@ -193,7 +193,7 @@ function initActions(scene: IScene) {
         }),
         heart.onMouseRightClick$.subscribe((isDown) => {
             if (isDown) {
-                const newHeart = new Heart(scene.generalLayer);
+                const newHeart = new Heart(scene.generalLayer, scene.eventStore);
                 const cursorBehaviorNewHeart = new PointerAndDragCursorPlugin(scene);
                 const highlightingNewHeart = new RectangleHighlighting(scene);
                 newHeart.xPos = heart.xPos;

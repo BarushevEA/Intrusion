@@ -1,11 +1,12 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {enemy4_base64} from "./Enemy4_base64";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class Enemy4 extends AbstractFramedShape {
     private images = <any>0;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 53, 48);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 53, 48);
     }
 
     protected setFramesName(): void {

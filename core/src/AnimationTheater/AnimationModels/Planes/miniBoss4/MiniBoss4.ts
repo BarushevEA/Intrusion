@@ -1,12 +1,13 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {getCenterX} from "../../../../AnimationCore/Libraries/FunctionLibs";
 import {miniBoss_4} from "./MiniBoss4_base64";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class MiniBoss4 extends AbstractFramedShape {
     private images = <any>0;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 66, 100);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 66, 100);
     }
 
     protected setFramesName(): void {

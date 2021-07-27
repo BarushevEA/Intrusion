@@ -1,4 +1,5 @@
 import {AbstractActor} from "./AbstractActor/AbstractActor";
+import {EventStore} from "../../Store/EventStore";
 
 /**
  * WARNING !!!
@@ -7,8 +8,11 @@ import {AbstractActor} from "./AbstractActor/AbstractActor";
  **/
 
 export abstract class AbstractFramedShape extends AbstractActor {
-    protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
-        super(canvas, height, width);
+    protected constructor(canvas: HTMLCanvasElement,
+                          eventStore: EventStore,
+                          height: number,
+                          width: number) {
+        super(canvas, eventStore, height, width);
         this.init();
     }
 
@@ -57,6 +61,7 @@ export abstract class AbstractFramedShape extends AbstractActor {
     }
 
     renderFrame(): void {
+        if (this.isDestroyed) return;
         this.layerHandler.drawFrame(this.xPos, this.yPos);
     }
 }

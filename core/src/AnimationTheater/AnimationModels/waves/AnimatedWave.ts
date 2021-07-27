@@ -1,9 +1,10 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/shapeModules/ShapeHandler";
+import {EventStore} from "../../../AnimationCore/Store/EventStore";
 
 export class AnimatedWave extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 130, 1300);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 130, 1300);
     }
 
     protected setFramesName(): void {

@@ -1,5 +1,4 @@
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
-import {defaultCursor$} from "../../../../AnimationCore/Store/EventStore";
 import {Cursor} from "../../../../AnimationCore/AnimationEngine/rootModels/Cursor/Cursor";
 import {CursorHandler} from "../../../../AnimationCore/Libraries/CursorHandler";
 import {clearOnSceneDestroy, setDefaultCursorActions} from "../../../../AnimationCore/Libraries/Actions";
@@ -8,7 +7,7 @@ import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/Scene
 export let cursorHandler: CursorHandler = <any>0;
 
 export function initCursor(scene: IScene) {
-    scene.cursor = new Cursor(scene.generalLayer);
+    scene.cursor = new Cursor(scene.generalLayer, scene.eventStore);
     cursorHandler = new CursorHandler();
     scene.cursorHandler = cursorHandler;
 }
@@ -22,12 +21,12 @@ export function handleCursor(scene: IScene): void {
     initActions(scene);
 }
 
-function clearVariables() {
+function clearVariables(scene: IScene) {
     if (cursorHandler) {
         cursorHandler.clear();
         cursorHandler = <any>0;
     }
-    defaultCursor$.next(false);
+    scene.eventStore.defaultCursor$.next(false);
 }
 
 function initActors(scene: IScene) {

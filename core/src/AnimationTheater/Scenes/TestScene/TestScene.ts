@@ -6,6 +6,7 @@ import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {E_Scene} from "../../AppScenario/types";
 import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {AnimationPlatform} from "../../../AnimationCore/AnimationEngine/rootScenes/AnimationPlatform";
 
 export const userData = {
     test: 123,
@@ -14,8 +15,8 @@ export const userData = {
 
 export class TestScene extends AbstractScene {
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, E_Scene.TEST);
+    constructor(platform: AnimationPlatform) {
+        super(platform, E_Scene.TEST);
     }
 
     protected createScene(): void {

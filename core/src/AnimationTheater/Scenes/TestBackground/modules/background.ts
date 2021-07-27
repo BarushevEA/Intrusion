@@ -55,8 +55,8 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    background = new HorizontalBackground(scene.generalLayer);
-    background1 = new HorizontalBackground1(scene.generalLayer);
+    background = new HorizontalBackground(scene.generalLayer, scene.eventStore);
+    background1 = new HorizontalBackground1(scene.generalLayer, scene.eventStore);
 
     background.isEventsBlock = true;
     background1.isEventsBlock = true;
@@ -76,7 +76,7 @@ function initActions(scene: IScene) {
 }
 
 function initDynamical(scene: IScene) {
-    redButton = new ButtonRedWithText(scene.generalLayer, 'BOOM !!!');
+    redButton = new ButtonRedWithText(scene.generalLayer, scene.eventStore, 'BOOM !!!');
     redButton.xPos = getCenterX(0, scene.generalLayer.width - redButton.width);
     redButton.yPos = getCenterY(0, scene.generalLayer.height - redButton.height);
 

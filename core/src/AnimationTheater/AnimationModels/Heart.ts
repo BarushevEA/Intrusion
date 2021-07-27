@@ -1,9 +1,10 @@
 import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 
 export class Heart extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 130, 135);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 130, 135);
     }
 
     protected setFramesName(): void {

@@ -9,7 +9,6 @@ import {ShotLightingPlugin} from "../../../../../Plugins/ShotLighting/ShotLighti
 import {HealthPlugin} from "../../../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
-import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
 import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
@@ -26,7 +25,7 @@ class Heroes extends AbstractActorGroup {
     }
 
     initActors(scene: IScene): void {
-        plane = new Plane(scene.generalLayer);
+        plane = new Plane(scene.generalLayer, scene.eventStore);
         plane.xPos = plane.width;
         plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
     }
@@ -47,14 +46,14 @@ class Heroes extends AbstractActorGroup {
         plane.pluginDock.add(highlighting);
         plane.pluginDock.add(health);
         scene.collect(
-            keyDownCode$.subscribe((code: IKeyCode) => {
+            scene.eventStore.keyDownCode$.subscribe((code: IKeyCode) => {
                     if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.add(shotLighting);
                         plane.pluginDock.add(bulletShot);
                     }
                 }
             ),
-            keyUpCode$.subscribe((code: IKeyCode) => {
+            scene.eventStore.keyUpCode$.subscribe((code: IKeyCode) => {
                     if (code.code === 'Space' && !plane.isDestroyed) {
                         plane.pluginDock.unLink(shotLighting);
                         plane.pluginDock.unLink(bulletShot);

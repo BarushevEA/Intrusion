@@ -8,6 +8,7 @@ import {GreenTriangleLeft} from "../GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../GreenTriangle/GreenTriangleRight";
 import {AnimatedRectangleLightGray} from "../rectangles/AnimatedRectangleLightGray";
 import {BlueBrick} from "../briks/BlueBrick";
+import {EventStore} from "../../../AnimationCore/Store/EventStore";
 
 enum $ {
     NUL = 0,
@@ -40,9 +41,10 @@ let draw: DrawHelper = <any>0;
 let layer: HTMLCanvasElement = <any>0;
 
 export class DimensionBackground extends AbstractActor {
-    constructor(canvas: HTMLCanvasElement, private options?: ICellDrawOptions) {
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore, private options?: ICellDrawOptions) {
         super(
             canvas,
+            eventStore,
             // Math.round(canvas.height),
             // Math.round(canvas.width));
             500, 800);

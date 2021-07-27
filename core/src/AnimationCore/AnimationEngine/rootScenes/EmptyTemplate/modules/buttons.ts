@@ -15,12 +15,13 @@ let buttonExit: IActor;
 
 export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
-    clearVariables();
+    clearVariables(scene);
     initActors(scene);
     initActions(scene);
 }
 
-function clearVariables() {
+function clearVariables(scene: IScene) {
+    scene = scene;
     if (buttonExit) {
         buttonExit.destroy();
         buttonExit = <any>0;
@@ -28,7 +29,7 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    buttonExit = new ButtonExit(scene.generalLayer);
+    buttonExit = new ButtonExit(scene.generalLayer, scene.eventStore);
     buttonExit.xPos = getSceneRightX(scene, buttonExit);
     scene.setActors(buttonExit);
 }

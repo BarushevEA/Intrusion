@@ -4,6 +4,7 @@ import {ICursorHandler} from "../../Libraries/CursorHandler";
 import {ICursor} from "../rootModels/Types";
 import {ISubscriber, ISubscriptionLike} from "../../Libraries/Observables/Types";
 import {IRenderController} from "../RenderController";
+import {EventStore} from "../../Store/EventStore";
 
 export type IScene = {
     readonly name: string;
@@ -18,6 +19,7 @@ export type IScene = {
     readonly render: IRenderController;
     readonly generalLayer: HTMLCanvasElement;
     readonly actors: IActor[];
+    readonly eventStore: EventStore;
     cursorHandler: ICursorHandler;
     cursor: ICursor;
     userData: IUserData;

@@ -11,7 +11,7 @@ class Decoration extends AbstractActorGroup {
     initActors(scene: IScene): void {
         circles = [];
         for (let i = 0; i < 10; i++) {
-            const circle = new LightCircle(scene.generalLayer);
+            const circle = new LightCircle(scene.generalLayer, scene.eventStore);
             circle.xPos = randomize(scene.generalLayer.width);
             circle.yPos = randomize(scene.generalLayer.height);
             circles.push(circle);

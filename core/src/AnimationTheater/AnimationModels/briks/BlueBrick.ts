@@ -1,8 +1,9 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../../AnimationCore/Store/EventStore";
 
 export class BlueBrick extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 512, 512);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 512, 512);
     }
 
     protected setFramesName(): void {
@@ -13,7 +14,7 @@ export class BlueBrick extends AbstractFramedShape {
         this.createFrame(0);
         this.shape
             .setImageByUrl('images/blue_brick.png', 0, 0)
-            .then(()=>{
+            .then(() => {
                 this.onImageLoad$.next(0);
             })
             .catch(err => console.error(err));

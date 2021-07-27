@@ -4,12 +4,13 @@ import {IScene} from "../../SceneTypes";
 
 export function handleMiddle(scene: IScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
-    clearVariables();
+    clearVariables(scene);
     initActors(scene);
     initActions(scene);
 }
 
-function clearVariables() {
+function clearVariables(scene: IScene) {
+    scene = scene;
 }
 
 function initActors(scene: IScene) {

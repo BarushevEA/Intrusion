@@ -59,27 +59,27 @@ export class HealthPlugin extends AbstractActorPlugin {
         const space = 10;
         switch (this.type) {
             case HealthType.HERO:
-                this.progressBar = new HeroProgress(this.scene.generalLayer);
+                this.progressBar = new HeroProgress(this.scene.generalLayer, this.scene.eventStore);
                 this.progressBar.xPos = space * 10;
                 this.progressBar.yPos = space;
                 this.setBossProgressHealth();
                 break;
             case HealthType.ENEMY:
                 if (this.currentHealth < this.health) {
-                    this.progressBar = new EnemyProgress(this.scene.generalLayer);
+                    this.progressBar = new EnemyProgress(this.scene.generalLayer, this.scene.eventStore);
                     this.positionBalance = new PositionBalance(this.root, this.progressBar);
                     this.addProgressToScene(this.root.z_index);
                 }
                 break;
             case HealthType.ENEMY_MINI_BOSS:
                 if (this.currentHealth < this.health) {
-                    this.progressBar = new EnemyMiniBossProgress(this.scene.generalLayer);
+                    this.progressBar = new EnemyMiniBossProgress(this.scene.generalLayer, this.scene.eventStore);
                     this.positionBalance = new PositionBalance(this.root, this.progressBar);
                     this.addProgressToScene(this.root.z_index);
                 }
                 break;
             case HealthType.ENEMY_BOSS:
-                this.progressBar = new EnemyBossProgress(this.scene.generalLayer);
+                this.progressBar = new EnemyBossProgress(this.scene.generalLayer, this.scene.eventStore);
                 this.progressBar.xPos = this.scene.generalLayer.width - this.progressBar.width - space * 10;
                 this.progressBar.yPos = space;
                 this.setBossProgressHealth();
@@ -151,7 +151,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         }
 
         for (let i = 0; i < explodeCount; i++) {
-            const explosion = new Explode(this.scene.generalLayer);
+            const explosion = new Explode(this.scene.generalLayer, this.scene.eventStore);
             explosion.isEventsBlock = true;
             explosions.push(explosion);
         }

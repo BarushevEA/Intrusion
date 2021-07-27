@@ -1,11 +1,12 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IHealthProgress} from "../HealthType";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class EnemyProgress extends AbstractFramedShape implements IHealthProgress {
     private progress = 100;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 3, 40);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 3, 40);
     }
 
     protected setFramesName(): void {

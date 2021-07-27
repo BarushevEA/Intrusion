@@ -16,7 +16,7 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    hexagon = new HexagonGreed(scene.generalLayer);
+    hexagon = new HexagonGreed(scene.generalLayer, scene.eventStore);
     scene.setActors(hexagon);
 }
 

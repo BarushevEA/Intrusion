@@ -47,13 +47,15 @@ function initSimpleEnemies(scene: IScene) {
 
     for (let i = 0; i < numberOfSmallEnemies; i++) {
         const isHalf = i < numberOfSmallEnemies / 2;
-        const enemy1 = isHalf ? new EnemySmall1(scene.generalLayer) : new Enemy4(scene.generalLayer);
+        const enemy1 = isHalf ? new EnemySmall1(scene.generalLayer, scene.eventStore) :
+            new Enemy4(scene.generalLayer, scene.eventStore);
         addActor(enemy1, scene);
         enemies1.push(enemy1);
         enemy1.xPos = scene.generalLayer.width + 5 * enemy1.width;
         enemy1.yPos = randomize(scene.generalLayer.height - enemy1.height);
 
-        const enemy2 = isHalf ? new EnemySmall2(scene.generalLayer) : new EnemySmall3(scene.generalLayer);
+        const enemy2 = isHalf ? new EnemySmall2(scene.generalLayer, scene.eventStore) :
+            new EnemySmall3(scene.generalLayer, scene.eventStore);
         addActor(enemy2, scene);
         enemies2.push(enemy2);
         enemy2.xPos = scene.generalLayer.width + 5 * enemy2.width;
@@ -134,24 +136,24 @@ function initMiniBosses(scene: IScene) {
         enemiesMiniBosses.push(miniBoss);
     };
 
-    const miniBoss0 = new MiniBoss4(scene.generalLayer);
+    const miniBoss0 = new MiniBoss4(scene.generalLayer, scene.eventStore);
     miniBossActivate(miniBoss0);
 
-    const miniBoss1 = new Enemy1(scene.generalLayer);
+    const miniBoss1 = new Enemy1(scene.generalLayer, scene.eventStore);
     miniBossActivate(miniBoss1);
 
-    const miniBoss2 = new Enemy2(scene.generalLayer);
+    const miniBoss2 = new Enemy2(scene.generalLayer, scene.eventStore);
     miniBossActivate(miniBoss2);
 
-    const miniBoss21 = new Enemy2(scene.generalLayer);
+    const miniBoss21 = new Enemy2(scene.generalLayer, scene.eventStore);
     miniBossActivate(miniBoss21);
 
-    const miniBoss3 = new Enemy3(scene.generalLayer);
+    const miniBoss3 = new Enemy3(scene.generalLayer, scene.eventStore);
     miniBossActivate(miniBoss3);
 }
 
 function initGeneralBosses(scene: IScene) {
-    generalBoss = new KleschBoss(scene.generalLayer);
+    generalBoss = new KleschBoss(scene.generalLayer, scene.eventStore);
     generalBoss.xPos = scene.generalLayer.width + 2 * generalBoss.width;
     generalBoss.yPos = randomize(scene.generalLayer.height - generalBoss.height);
 }
@@ -180,7 +182,7 @@ function initMiniBossesActions(scene: IScene) {
             true,
             randomize(5000) + 1000);
         const health = new HealthPlugin(scene, HealthType.ENEMY_MINI_BOSS);
-        const heart = new Heart(scene.generalLayer);
+        const heart = new Heart(scene.generalLayer, scene.eventStore);
         const healthBuf = new HealsBuf(scene, heroes);
         const link = new Link(scene);
         link.setActorToLink(heart);

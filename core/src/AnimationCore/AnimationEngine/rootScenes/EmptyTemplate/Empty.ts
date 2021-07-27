@@ -5,11 +5,12 @@ import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../scenesEnvironment";
 import {IScene} from "../SceneTypes";
+import {AnimationPlatform} from "../AnimationPlatform";
 
 export class Empty extends AbstractScene {
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+    constructor(platform: AnimationPlatform) {
+        super(platform);
     }
 
     protected createScene(): void {

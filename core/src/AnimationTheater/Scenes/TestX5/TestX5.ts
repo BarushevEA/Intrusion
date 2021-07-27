@@ -6,11 +6,12 @@ import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesE
 import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {E_Scene} from "../../AppScenario/types";
 import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {AnimationPlatform} from "../../../AnimationCore/AnimationEngine/rootScenes/AnimationPlatform";
 
 export class TestX5 extends AbstractScene {
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, E_Scene.TESTx5);
+    constructor(platform: AnimationPlatform) {
+        super(platform, E_Scene.TESTx5);
     }
 
     protected createScene(): void {

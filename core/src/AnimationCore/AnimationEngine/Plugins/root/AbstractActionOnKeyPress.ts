@@ -1,6 +1,5 @@
 import {AbstractActorPlugin} from "./AbstractActorPlugin";
 import {Observable} from "../../../Libraries/Observables/Observable";
-import {keyDownCode$, keyUpCode$} from "../../../Store/EventStore";
 import {IKeyCode} from "../../../Store/Types";
 import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
 import {IScene} from "../../rootScenes/SceneTypes";
@@ -21,13 +20,13 @@ export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
 
     private init() {
         this.scene.collect(
-            keyDownCode$.subscribe((code: IKeyCode) => {
+            this.scene.eventStore.keyDownCode$.subscribe((code: IKeyCode) => {
                     if (code.code === this.key && !this.keyUp) {
                         this.initOnKeyDown();
                     }
                 }
             ),
-            keyUpCode$.subscribe((code: IKeyCode) => {
+            this.scene.eventStore.keyUpCode$.subscribe((code: IKeyCode) => {
                     if (code.code === this.key && this.keyUp) {
                         this.initOnKeyUp();
                     }

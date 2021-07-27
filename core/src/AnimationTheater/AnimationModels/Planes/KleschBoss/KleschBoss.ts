@@ -1,11 +1,12 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {kleschBoss} from "./KleschBoss_base64";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class KleschBoss extends AbstractFramedShape {
     private images = <any>0;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 234, 258);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 234, 258);
     }
 
     protected setFramesName(): void {

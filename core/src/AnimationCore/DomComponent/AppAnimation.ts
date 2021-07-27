@@ -1,27 +1,19 @@
 import {cssConverter, ICssPool} from "./CssClassConverter";
 import {IController} from "../Libraries/initOuterVariables";
-import {
-    defaultCursor$,
-    globalSize$,
-    keyDownCode$,
-    keyUpCode$,
-    mouseClickPosition$,
-    mouseLeftDown$,
-    mouseLeftUp$,
-    mouseMovePosition$,
-    mouseRightDown$,
-    mouseRightUp$
-} from "../Store/EventStore";
-import {platform} from "../AnimationEngine/rootScenes/AnimationPlatform";
+import {AnimationPlatform} from "../AnimationEngine/rootScenes/AnimationPlatform";
 import {IKeyCode, ISize} from "../Store/Types";
 import {IMousePosition, MouseStore} from "../Store/MouseStore";
+import {EventStore} from "../Store/EventStore";
 
-export type IAppAnimation = {
+export type IAppAnimation = HTMLElement & {
     customCanvas: HTMLCanvasElement;
     customWrapper: HTMLElement;
     customStyle: HTMLStyleElement;
     cssPool: ICssPool;
+    mouse: MouseStore;
+    readonly eventStore: EventStore;
     toggleColors(): void;
+    destroy(): void;
 };
 
 class AppAnimation extends HTMLElement implements IAppAnimation {
@@ -31,6 +23,9 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     customStyle: HTMLStyleElement = <any>0;
     cssPool: ICssPool = {};
     mouse: MouseStore = new MouseStore();
+    platform: AnimationPlatform = new AnimationPlatform();
+    eventStore: EventStore = new EventStore();
+
 
     constructor() {
         super();
@@ -40,7 +35,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
 
     private customInit(): void {
         const shadow = this.attachShadow({mode: 'open'});
-        defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
+        this.eventStore.defaultCursor$.subscribe(this.handleDefaultCursor.bind(this));
 
         this.customWrapper = document.createElement('div');
         this.customCanvas = document.createElement('canvas');
@@ -78,7 +73,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         }
 
         this.keyPressedPool.push(keyCode);
-        keyDownCode$.next(keyCode);
+        this.eventStore.keyDownCode$.next(keyCode);
     }
 
     setKeyUp(event: IKeyCode) {
@@ -94,7 +89,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         while (this.deleteKey(keyCode)) {
         }
 
-        keyUpCode$.next(keyCode);
+        this.eventStore.keyUpCode$.next(keyCode);
     }
 
     deleteKey(keyCode: IKeyCode): boolean {
@@ -121,11 +116,11 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         switch (event.button) {
             case 0:
                 this.convertOuterCoordinates(event, this.mouse.downPosition);
-                mouseLeftDown$.next(this.mouse.downPosition);
+                this.eventStore.mouseLeftDown$.next(this.mouse.downPosition);
                 break;
             case 2:
                 this.convertOuterCoordinates(event, this.mouse.downPosition);
-                mouseRightDown$.next(this.mouse.downPosition);
+                this.eventStore.mouseRightDown$.next(this.mouse.downPosition);
                 break;
         }
     }
@@ -134,23 +129,23 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
         switch (event.button) {
             case 0:
                 this.convertOuterCoordinates(event, this.mouse.upPosition);
-                mouseLeftUp$.next(this.mouse.upPosition);
+                this.eventStore.mouseLeftUp$.next(this.mouse.upPosition);
                 break;
             case 2:
                 this.convertOuterCoordinates(event, this.mouse.upPosition);
-                mouseRightUp$.next(this.mouse.upPosition);
+                this.eventStore.mouseRightUp$.next(this.mouse.upPosition);
                 break;
         }
     }
 
     setMouseMoveLocation(event: MouseEvent): void {
         this.convertOuterCoordinates(event, this.mouse.movePosition);
-        mouseMovePosition$.next(this.mouse.movePosition);
+        this.eventStore.mouseMovePosition$.next(this.mouse.movePosition);
     }
 
     setMouseClickLocation(event: MouseEvent): void {
         this.convertOuterCoordinates(event, this.mouse.clickPosition);
-        mouseClickPosition$.next(this.mouse.clickPosition);
+        this.eventStore.mouseClickPosition$.next(this.mouse.clickPosition);
     }
 
     private convertOuterCoordinates(event: MouseEvent, coordinates: IMousePosition) {
@@ -168,7 +163,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
             if (wrapperWidth != this.customWrapper.offsetWidth || wrapperHeight != this.customWrapper.offsetHeight) {
                 wrapperWidth = this.customWrapper.offsetWidth;
                 wrapperHeight = this.customWrapper.offsetHeight;
-                globalSize$.next({height: wrapperHeight, width: wrapperWidth});
+                this.eventStore.globalSize$.next({height: wrapperHeight, width: wrapperWidth});
             }
         };
 
@@ -176,7 +171,7 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     connectedCallback() {
-        globalSize$.subscribe(this.setCanvasSize.bind(this));
+        this.eventStore.globalSize$.subscribe(this.setCanvasSize.bind(this));
         this.addCustomEventResizeCustomWrapperListener();
         this.renderCanvas();
         (<IController>(<any>window)['AppAnimationController']).add(this);
@@ -224,22 +219,23 @@ class AppAnimation extends HTMLElement implements IAppAnimation {
     }
 
     private renderCanvas() {
-        platform.setCanvas(this.customCanvas);
-        platform.execute(this);
+        this.platform.setCanvas(this.customCanvas);
+        this.platform.execute(this);
     }
 
     public destroy() {
         this.disconnectedCallback();
-        globalSize$.destroy();
-        mouseClickPosition$.destroy();
-        mouseMovePosition$.destroy();
-        mouseLeftUp$.destroy();
-        mouseRightUp$.destroy();
-        mouseLeftDown$.destroy();
-        mouseRightDown$.destroy();
-        keyUpCode$.destroy();
-        keyDownCode$.destroy();
-        defaultCursor$.destroy();
+        this.eventStore.globalSize$.destroy();
+        this.eventStore.mouseClickPosition$.destroy();
+        this.eventStore.mouseMovePosition$.destroy();
+        this.eventStore.mouseLeftUp$.destroy();
+        this.eventStore.mouseRightUp$.destroy();
+        this.eventStore.mouseLeftDown$.destroy();
+        this.eventStore.mouseRightDown$.destroy();
+        this.eventStore.keyUpCode$.destroy();
+        this.eventStore.keyDownCode$.destroy();
+        this.eventStore.defaultCursor$.destroy();
+        this.eventStore = <any>0;
     }
 
     private setCanvasSize(size: ISize) {

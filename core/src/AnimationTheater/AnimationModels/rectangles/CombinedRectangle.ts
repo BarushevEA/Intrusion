@@ -5,6 +5,7 @@ import {AnimatedRectangleLightRed} from "./AnimatedRectangleLightRed";
 import {AnimatedRectangleLightGreen} from "./AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightGray} from "./AnimatedRectangleLightGray";
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../../AnimationCore/Store/EventStore";
 
 export class CombinedRectangle extends AbstractActor {
     private readonly blue: AbstractFramedShape;
@@ -16,13 +17,13 @@ export class CombinedRectangle extends AbstractActor {
     private currentShape: AbstractFramedShape;
     private counter = 0;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 0, 0);
-        this.rectangles.push(this.blue = <AbstractFramedShape>new AnimatedRectangleLightCyan(canvas));
-        this.rectangles.push(this.yellow = <AbstractFramedShape>new AnimatedRectangleLightYellow(canvas));
-        this.rectangles.push(this.red = <AbstractFramedShape>new AnimatedRectangleLightRed(canvas));
-        this.rectangles.push(this.green = <AbstractFramedShape>new AnimatedRectangleLightGreen(canvas));
-        this.rectangles.push(this.gray = <AbstractFramedShape>new AnimatedRectangleLightGray(canvas));
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 0, 0);
+        this.rectangles.push(this.blue = <AbstractFramedShape>new AnimatedRectangleLightCyan(canvas, this.eventStore));
+        this.rectangles.push(this.yellow = <AbstractFramedShape>new AnimatedRectangleLightYellow(canvas, this.eventStore));
+        this.rectangles.push(this.red = <AbstractFramedShape>new AnimatedRectangleLightRed(canvas, this.eventStore));
+        this.rectangles.push(this.green = <AbstractFramedShape>new AnimatedRectangleLightGreen(canvas, this.eventStore));
+        this.rectangles.push(this.gray = <AbstractFramedShape>new AnimatedRectangleLightGray(canvas, this.eventStore));
         this.setSize(this.gray.height, this.gray.width);
         this.currentShape = this.gray;
     }

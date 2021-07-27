@@ -9,6 +9,8 @@ import {E_MouseCatch, E_ZOnDrop} from "./scenesEnvironment";
 import {tickGenerator} from "../../Libraries/TickGenerator";
 import {ICursorHandler} from "../../Libraries/CursorHandler";
 import {ISubscriber, ISubscriptionLike} from "../../Libraries/Observables/Types";
+import {AnimationPlatform} from "./AnimationPlatform";
+import {EventStore} from "../../Store/EventStore";
 
 export abstract class AbstractScene implements IScene {
     private _render: IRenderController;
@@ -33,11 +35,13 @@ export abstract class AbstractScene implements IScene {
     private timerCounter = <any>0;
     private startDelayMs = 100;
     private readonly _name: string;
+    public eventStore: EventStore;
 
-    protected constructor(canvas: HTMLCanvasElement, name = '') {
-        this._generalLayer = canvas;
+    protected constructor(platform: AnimationPlatform, name = '') {
+        this.eventStore = platform.htmlComponent.eventStore;
+        this._generalLayer = platform.canvas;
         this._render = new RenderController();
-        this._render.setCanvas(canvas);
+        this._render.setCanvas(this._generalLayer);
         this.collector = new EventCollector();
         this._name = name;
         this.run();

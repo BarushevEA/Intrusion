@@ -55,12 +55,12 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    buttonExit = new ButtonExit(scene.generalLayer);
-    buttonTest = new ButtonYellowWithText(scene.generalLayer, E_Scene.TEST);
-    buttonSerge = new ButtonYellowWithText(scene.generalLayer, E_Scene.SERGE);
-    buttonBackground = new ButtonYellowWithText(scene.generalLayer, E_Scene.BACKGROUND);
-    buttonTestX5 = new ButtonYellowWithText(scene.generalLayer, E_Scene.TESTx5);
-    buttonQuit = new ButtonRedWithText(scene.generalLayer, 'QUIT');
+    buttonExit = new ButtonExit(scene.generalLayer, scene.eventStore);
+    buttonTest = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, E_Scene.TEST);
+    buttonSerge = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, E_Scene.SERGE);
+    buttonBackground = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, E_Scene.BACKGROUND);
+    buttonTestX5 = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, E_Scene.TESTx5);
+    buttonQuit = new ButtonRedWithText(scene.generalLayer, scene.eventStore, 'QUIT');
 
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     buttonTest.yPos = 20;

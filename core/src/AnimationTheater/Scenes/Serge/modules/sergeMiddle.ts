@@ -28,14 +28,14 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    linkRectangle = new AnimatedRectangleLightGreen(scene.generalLayer);
-    unLinLinkRectangle = new AnimatedRectangleLightRed(scene.generalLayer);
+    linkRectangle = new AnimatedRectangleLightGreen(scene.generalLayer, scene.eventStore);
+    unLinLinkRectangle = new AnimatedRectangleLightRed(scene.generalLayer, scene.eventStore);
     linkRectangle.xPos = 0;
     unLinLinkRectangle.xPos = linkRectangle.xPos + linkRectangle.width + 20;
 
 
-    combinedRectangle = new CombinedRectangle(scene.generalLayer);
-    heart = new Heart(scene.generalLayer);
+    combinedRectangle = new CombinedRectangle(scene.generalLayer, scene.eventStore);
+    heart = new Heart(scene.generalLayer, scene.eventStore);
 
     heart.yPos = scene.generalLayer.height - heart.height;
     combinedRectangle.xPos = scene.generalLayer.width - combinedRectangle.width;

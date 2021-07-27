@@ -1,6 +1,7 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {IPolygon} from "../../AnimationCore/AnimationEngine/LayerHandler/shapeModules/ShapeHandler";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 const startDelta = 1000;
 
@@ -16,9 +17,10 @@ export class HexagonGreed extends AbstractActor {
     bottomLayerName = 'bottomLayer';
     throttlingCounter = 0;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
         super(
             canvas,
+            eventStore,
             Math.round(canvas.height + startDelta * 1.2),
             Math.round(canvas.width + startDelta * 1.2));
         this.init();

@@ -1,9 +1,10 @@
 import {bullet_base64} from "./Bullet_base64";
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class Bullet extends AbstractFramedShape {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 12, 15);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 12, 15);
     }
 
     protected setFramesName(): void {

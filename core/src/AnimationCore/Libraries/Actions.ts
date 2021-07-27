@@ -1,6 +1,5 @@
 import {IActor} from "../AnimationEngine/rootModels/AbstractActor/ActorTypes";
 import {E_Scene} from "../../AnimationTheater/AppScenario/types";
-import {defaultCursor$, mouseMovePosition$} from "../Store/EventStore";
 import {ECursor} from "../AnimationEngine/rootModels/Types";
 import {CursorHandler} from "./CursorHandler";
 import {ICallback} from "./Observables/Types";
@@ -65,13 +64,13 @@ export function clearOnSceneDestroy(scene: IScene,
 export function setDefaultCursorActions(scene: IScene): void {
     scene.collect(
         scene.onStart$.subscribe(() => {
-            defaultCursor$.next(false);
+            scene.eventStore.defaultCursor$.next(false);
             scene.cursor.setType(ECursor.DEFAULT);
         }),
         scene.onStop$.subscribe(() => {
-            defaultCursor$.next(true);
+            scene.eventStore.defaultCursor$.next(true);
         }),
-        mouseMovePosition$.subscribe((position: IMousePosition) => {
+        scene.eventStore.mouseMovePosition$.subscribe((position: IMousePosition) => {
             scene.cursor.xPos = position.x;
             scene.cursor.yPos = position.y;
         })

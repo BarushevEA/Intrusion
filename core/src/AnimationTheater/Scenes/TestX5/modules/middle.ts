@@ -18,7 +18,7 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    star = new Star(scene.generalLayer);
+    star = new Star(scene.generalLayer, scene.eventStore);
     scene.setActors(star);
 }
 

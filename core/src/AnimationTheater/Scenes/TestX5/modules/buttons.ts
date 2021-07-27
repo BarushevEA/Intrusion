@@ -28,7 +28,7 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    buttonExit = new ButtonExit(scene.generalLayer);
+    buttonExit = new ButtonExit(scene.generalLayer, scene.eventStore);
     buttonExit.xPos = getSceneRightX(scene, buttonExit);
     scene.setActors(buttonExit);
 }

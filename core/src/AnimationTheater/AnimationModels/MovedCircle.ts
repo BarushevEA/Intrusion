@@ -1,5 +1,6 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {randomize} from "../../AnimationCore/Libraries/FunctionLibs";
+import {EventStore} from "../../AnimationCore/Store/EventStore";
 
 export class MovedCircle extends AbstractActor {
     maxStep = 7;
@@ -11,8 +12,8 @@ export class MovedCircle extends AbstractActor {
     bottomLayerName = 'circle';
     throttlingCounter = 0;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 0, 0);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 0, 0);
         this.init();
     }
 

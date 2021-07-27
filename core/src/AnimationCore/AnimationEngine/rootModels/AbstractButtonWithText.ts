@@ -2,14 +2,15 @@ import {AbstractActor} from "./AbstractActor/AbstractActor";
 import {AbstractFramedShape} from "./AbstractFramedShape";
 import {EAlign} from "../LayerHandler/TextHandler";
 import {AbstractButton} from "./AbstractButton";
+import {EventStore} from "../../Store/EventStore";
 
 
 export abstract class AbstractButtonWithText extends AbstractActor {
     private emptyButton: AbstractFramedShape = this.getButton();
     private textLayerName = 'text';
 
-    protected constructor(canvas: HTMLCanvasElement, text: string) {
-        super(canvas, 0, 0);
+    protected constructor(canvas: HTMLCanvasElement, eventStore: EventStore, text: string) {
+        super(canvas, eventStore, 0, 0);
         this.init(text);
     }
 

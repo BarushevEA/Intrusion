@@ -1,8 +1,9 @@
 import {AbstractButton} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractButton";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 export class ButtonEmptyGreen extends AbstractButton {
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, '', 50, 150);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, '', 50, 150);
     }
 
     protected setFramesName(): void {

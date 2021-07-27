@@ -82,13 +82,13 @@ export enum BULLET {
 function getBullet(type: BULLET, scene: IScene): IActor {
     switch (type) {
         case BULLET.SMALL:
-            return new Bullet(scene.generalLayer);
+            return new Bullet(scene.generalLayer, scene.eventStore);
         case BULLET.LASER_RED:
-            return new LaserRed(scene.generalLayer);
+            return new LaserRed(scene.generalLayer, scene.eventStore);
         case BULLET.LASER_BLUE:
-            return new LaserBlue(scene.generalLayer);
+            return new LaserBlue(scene.generalLayer, scene.eventStore);
         case BULLET.LASER_ORANGE:
-            return new LaserOrange(scene.generalLayer);
+            return new LaserOrange(scene.generalLayer, scene.eventStore);
         default:
             return <any>0;
     }

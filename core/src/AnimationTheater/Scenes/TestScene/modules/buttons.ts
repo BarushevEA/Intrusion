@@ -61,13 +61,13 @@ function clearVariables() {
 }
 
 function initActors(scene: IScene) {
-    buttonExit = new ButtonExit(scene.generalLayer);
-    buttonMove = new ButtonGreenWithText(scene.generalLayer, 'Move');
-    buttonStop = new ButtonRedWithText(scene.generalLayer, 'Stop');
-    buttonPlay = new ButtonBlueWithText(scene.generalLayer, 'Play');
-    buttonPause = new ButtonYellowWithText(scene.generalLayer, 'Pause');
-    buttonInvisible = new ButtonGrayWithText(scene.generalLayer, 'Invert');
-    buttonToggleSpeed = new ButtonGrayWithText(scene.generalLayer, 'Speed');
+    buttonExit = new ButtonExit(scene.generalLayer, scene.eventStore);
+    buttonMove = new ButtonGreenWithText(scene.generalLayer, scene.eventStore, 'Move');
+    buttonStop = new ButtonRedWithText(scene.generalLayer, scene.eventStore, 'Stop');
+    buttonPlay = new ButtonBlueWithText(scene.generalLayer, scene.eventStore, 'Play');
+    buttonPause = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, 'Pause');
+    buttonInvisible = new ButtonGrayWithText(scene.generalLayer, scene.eventStore, 'Invert');
+    buttonToggleSpeed = new ButtonGrayWithText(scene.generalLayer, scene.eventStore, 'Speed');
 
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     buttonPause.xPos = buttonPause.width;

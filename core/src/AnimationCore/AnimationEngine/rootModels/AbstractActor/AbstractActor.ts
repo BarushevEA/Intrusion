@@ -1,12 +1,4 @@
 import {CanvasLayerHandler, IFramePool} from "../../LayerHandler/CanvasLayerHandler";
-import {
-    mouseClickPosition$,
-    mouseLeftDown$,
-    mouseLeftUp$,
-    mouseMovePosition$,
-    mouseRightDown$,
-    mouseRightUp$
-} from "../../../Store/EventStore";
 import {Observable} from "../../../Libraries/Observables/Observable";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
@@ -18,6 +10,7 @@ import {EventCollector, ICollector} from "../../../Libraries/EventCollector";
 import {tickGenerator} from "../../../Libraries/TickGenerator";
 import {ICallback, IOrderedListener, ISubscriber, ISubscriptionLike} from "../../../Libraries/Observables/Types";
 import {IMousePosition} from "../../../Store/MouseStore";
+import {EventStore} from "../../../Store/EventStore";
 
 /** Frame pool technology need to use for lot of entities of class */
 
@@ -65,6 +58,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     private isEventsDisabled = false;
     private _isEventsPaused = false;
     private _isDestroyEnabled = true;
+    public eventStore: EventStore;
 
     public static clearFramePool() {
         const keys = Object.keys(this._savedFramePool);
@@ -72,9 +66,13 @@ export abstract class AbstractActor implements IActor, IDimensions {
         this._savedFramePool = {};
     }
 
-    protected constructor(canvas: HTMLCanvasElement, height: number, width: number) {
+    protected constructor(canvas: HTMLCanvasElement,
+                          eventStore: EventStore,
+                          height: number,
+                          width: number) {
         this._elementHeight = height;
         this._elementWidth = width;
+        this.eventStore = eventStore;
         this.generalLayer = canvas;
         this.layerHandler = new CanvasLayerHandler(this.generalLayer);
         this.collector = new EventCollector();
@@ -139,12 +137,12 @@ export abstract class AbstractActor implements IActor, IDimensions {
             return;
         }
         this.mouseEventsCollector.collect(
-            mouseMovePosition$.subscribe(this.getOrderedListener(this.mouseOver.bind(this))),
-            mouseClickPosition$.subscribe(this.getOrderedListener(this.mouseClick.bind(this))),
-            mouseLeftDown$.subscribe(this.getOrderedListener(this.leftMouseDown.bind(this))),
-            mouseLeftUp$.subscribe(this.getOrderedListener(this.leftMouseUp.bind(this))),
-            mouseRightDown$.subscribe(this.getOrderedListener(this.rightMouseDown.bind(this))),
-            mouseRightUp$.subscribe(this.getOrderedListener(this.rightMouseUp.bind(this))),
+            this.eventStore.mouseMovePosition$.subscribe(this.getOrderedListener(this.mouseOver.bind(this))),
+            this.eventStore.mouseClickPosition$.subscribe(this.getOrderedListener(this.mouseClick.bind(this))),
+            this.eventStore.mouseLeftDown$.subscribe(this.getOrderedListener(this.leftMouseDown.bind(this))),
+            this.eventStore.mouseLeftUp$.subscribe(this.getOrderedListener(this.leftMouseUp.bind(this))),
+            this.eventStore.mouseRightDown$.subscribe(this.getOrderedListener(this.rightMouseDown.bind(this))),
+            this.eventStore.mouseRightUp$.subscribe(this.getOrderedListener(this.rightMouseUp.bind(this))),
 
             this._onMouseLeftClick$.subscribe(this.tryLeftMouseCatch.bind(this)),
             tickGenerator.tick100$.subscribe(this.checkMouseOver.bind(this))
@@ -154,6 +152,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public resetEvents(): void {
+        if (this._isDestroyed) return;
         this._isEventsBlock = false;
         this.isEventsDisabled = false;
         this._isEventsPaused = false;
@@ -187,10 +186,9 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public unPauseEvents(): void {
+        if (this._isDestroyed) return;
         if (this._isEventsBlock ||
-            this.isEventsDisabled) {
-            return;
-        }
+            this.isEventsDisabled) return;
 
         if (this.mouseEventsCollector.isEmpty) {
             this.initEvents();
@@ -228,9 +226,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
     }
 
     public enableEvents(): void {
-        if (this.isDestroyed) {
-            return;
-        }
+        if (this._isDestroyed) return;
         if (this.mouseEventsCollector.isEmpty) {
             this.initEvents();
         } else {
@@ -502,6 +498,7 @@ export abstract class AbstractActor implements IActor, IDimensions {
                                 widthD?: number,
                                 heightD?: number
     ): void {
+        if (this.isDestroyed) return;
         this.layerHandler.drawVirtualOnGeneral(
             sourceName,
             x,

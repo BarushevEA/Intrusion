@@ -4,6 +4,7 @@ import {IObserver, ISubscriber, ISubscriptionLike} from "../../../Libraries/Obse
 import {IFramePool} from "../../LayerHandler/CanvasLayerHandler";
 import {ITextHandler} from "../../LayerHandler/TextHandler";
 import {IShapeHandler} from "../../LayerHandler/shapeModules/ShapeHandler";
+import {EventStore} from "../../../Store/EventStore";
 
 export type IDimensions = {
     xPos: x_pos;
@@ -46,6 +47,7 @@ export type IActor = {
     readonly pluginDock: IPluginDock;
     readonly xPosPreview: x_pos;
     readonly yPosPreview: y_pos;
+    readonly eventStore: EventStore;
     unsubscribe(subscriber: ISubscriptionLike): void;
     collect(...subscribers: ISubscriptionLike[]): void;
     setPosition(x: x_pos, y: y_pos): void;

@@ -1,6 +1,7 @@
 import {AbstractFramedShape} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {IPoint} from "../../../../AnimationCore/AnimationEngine/LayerHandler/shapeModules/ShapeHandler";
 import {getCenterX, getCenterY} from "../../../../AnimationCore/Libraries/FunctionLibs";
+import {EventStore} from "../../../../AnimationCore/Store/EventStore";
 
 type IOrt = { x: number, y: number };
 
@@ -11,8 +12,8 @@ export class ShotLighting extends AbstractFramedShape {
     private bgColor: string = '';
     private bdColor: string = '';
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas, 100, 100);
+    constructor(canvas: HTMLCanvasElement, eventStore: EventStore) {
+        super(canvas, eventStore, 100, 100);
     }
 
     protected setFramesName(): void {

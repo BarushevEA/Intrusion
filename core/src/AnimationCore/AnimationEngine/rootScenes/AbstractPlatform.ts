@@ -1,10 +1,14 @@
 import {AbstractScene} from "./AbstractScene";
 import {IScene} from "./SceneTypes";
+import {IScenePool} from "../../../AnimationTheater/AppScenario/types";
+import {EventCollector} from "../../Libraries/EventCollector";
 
-export abstract class AbstractPlatform {
+export abstract class AbstractPlatform extends EventCollector {
     private _canvas: HTMLCanvasElement = <any>0;
+    public scenePool: IScenePool = {};
 
     protected constructor() {
+        super()
     }
 
     public setCanvas(canvas: HTMLCanvasElement) {
@@ -15,10 +19,8 @@ export abstract class AbstractPlatform {
 
     public abstract execute(htmlComponent: any): void;
 
-    public abstract destroy(): void;
-
     createScene(scene: typeof AbstractScene): IScene {
-        return new (<any>scene)(this.canvas);
+        return new (<any>scene)(this);
     }
 
     get canvas(): HTMLCanvasElement {

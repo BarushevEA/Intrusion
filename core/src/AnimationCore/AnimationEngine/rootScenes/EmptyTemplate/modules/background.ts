@@ -4,12 +4,13 @@ import {IScene} from "../../SceneTypes";
 
 export function handleBackgrounds(scene: IScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
-    clearVariables();
+    clearVariables(scene);
     initActors(scene);
     initActions(scene);
 }
 
-function clearVariables() {
+function clearVariables(scene: IScene) {
+    scene = scene;
 }
 
 function initActors(scene: IScene) {

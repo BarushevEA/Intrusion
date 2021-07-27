@@ -18,7 +18,7 @@ function clearVariables() {
 
 function initActors(scene: IScene) {
     for (let i = 0; i < 50; i++) {
-        const circle = new MovedCircle(scene.generalLayer);
+        const circle = new MovedCircle(scene.generalLayer, scene.eventStore);
         circles.push(circle);
         scene.setActors(circle);
     }

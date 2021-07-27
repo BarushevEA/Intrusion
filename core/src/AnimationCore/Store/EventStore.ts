@@ -3,13 +3,15 @@ import {OrderedObservable} from "../Libraries/Observables/OrderedObservable";
 import {Observable} from "../Libraries/Observables/Observable";
 import {IMousePosition} from "./MouseStore";
 
-export const mouseMovePosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const mouseClickPosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const mouseLeftDown$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const mouseLeftUp$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const mouseRightDown$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const mouseRightUp$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
-export const defaultCursor$ = new Observable(<boolean>true);
-export const keyUpCode$ = new Observable(<IKeyCode>{keyCode: 0, key: ''});
-export const keyDownCode$ = new Observable(<IKeyCode>{keyCode: 0, key: ''});
-export const globalSize$ = new Observable(<ISize>{height: 0, width: 0});
+export class EventStore {
+    public mouseMovePosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public mouseClickPosition$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public mouseLeftDown$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public mouseLeftUp$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public mouseRightDown$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public mouseRightUp$ = new OrderedObservable(<IMousePosition>{x: 0, y: 0});
+    public defaultCursor$ = new Observable(<boolean>true);
+    public keyUpCode$ = new Observable(<IKeyCode>{keyCode: 0, key: ''});
+    public keyDownCode$ = new Observable(<IKeyCode>{keyCode: 0, key: ''});
+    public globalSize$ = new Observable(<ISize>{height: 0, width: 0});
+}

@@ -81,17 +81,17 @@ function initActors(scene: IScene) {
         height: 8
     };
 
-    left = new ButtonGreenWithText(scene.generalLayer, 'Move left');
-    right = new ButtonYellowWithText(scene.generalLayer, 'Move right');
-    top = new ButtonBlueWithText(scene.generalLayer, 'Move top');
-    bottom = new ButtonGrayWithText(scene.generalLayer, 'Move bottom');
+    left = new ButtonGreenWithText(scene.generalLayer, scene.eventStore, 'Move left');
+    right = new ButtonYellowWithText(scene.generalLayer, scene.eventStore, 'Move right');
+    top = new ButtonBlueWithText(scene.generalLayer, scene.eventStore, 'Move top');
+    bottom = new ButtonGrayWithText(scene.generalLayer, scene.eventStore, 'Move bottom');
 
     left.xPos = scene.generalLayer.width - left.width * 5;
     right.xPos = scene.generalLayer.width - right.width * 4;
     top.xPos = scene.generalLayer.width - top.width * 3;
     bottom.xPos = scene.generalLayer.width - bottom.width * 2;
 
-    bg = new DimensionBackground(scene.generalLayer, bgOptions);
+    bg = new DimensionBackground(scene.generalLayer, scene.eventStore, bgOptions);
     bg.xPos = 400;
     bg.yPos = 50;
 
