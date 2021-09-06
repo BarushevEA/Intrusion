@@ -1,5 +1,7 @@
-#Intrusion
-##Developing a Canvas 2D Engine to Improve JS Skills
+**Intrusion**
+
+**Developing a Canvas 2D Engine to Improve JS Skills**
+
 The aim of the training is to create interactive canvas elements built on the most independent internal components.
 The project consists of two parts:
 1) Core - a set of basic functions, types and objects
@@ -13,4 +15,4 @@ Theater is a space for creating animated scenes for user interaction. It contain
 
 In the project, the main basic component of the application is named - actor. Scenes are intended for grouping actors according to common characteristics, as well as for managing them within the scenario set for the scene.
 
-The electron framework in this project serves solely for the variety of testing the project.
+*The electron framework in this project serves solely for the variety of testing the project.*
