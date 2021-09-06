@@ -1,35 +1,35 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
-import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {EnemySmall1} from "../../../../../AnimationModels/Planes/enemySmall1/EnemySmall1";
 import {EnemySmall2} from "../../../../../AnimationModels/Planes/enemySmall2/EnemySmall2";
-import {BounceOffTheWall} from "../../../../../Plugins/BounceOffTheWall";
+import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {HealthPlugin} from "../../../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../../../Plugins/HLProgress/HealthType";
 import {Enemy1} from "../../../../../AnimationModels/Planes/enemy1/Enemy1";
 import {Enemy2} from "../../../../../AnimationModels/Planes/enemy2/Enemy2";
 import {Enemy3} from "../../../../../AnimationModels/Planes/enemy3/Enemy3";
-import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
-import {PointerAndDragCursorPlugin} from "../../../../../Plugins/PointerAndDragCursorPlugin";
+import {RectangleHighlighting} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/RectangleHighlighting";
+import {PointerAndDragCursorPlugin} from "../../../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
-import {SnakePlugin} from "../../../../../Plugins/SnakePlugin/SnakePlugin";
+import {SnakePlugin} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/SnakePlugin/SnakePlugin";
 import {KleschBoss} from "../../../../../AnimationModels/Planes/KleschBoss/KleschBoss";
 import {BULLET, BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {MiniBoss4} from "../../../../../AnimationModels/Planes/miniBoss4/MiniBoss4";
 import {Enemy4} from "../../../../../AnimationModels/Planes/enemy4/Enemy4";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
-import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observable";
 import {EnemySmall3} from "../../../../../AnimationModels/Planes/enemySmall3/EnemySmall3";
 import {Heart} from "../../../../../AnimationModels/Heart";
 import {Link} from "../../../../../Plugins/Link";
 import {HealsBuf} from "../../../../../Plugins/HLProgress/HealsBuf";
+import {ISubscriptionLike} from "../../../../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
-let enemies: AbstractActor[] = <any>0;
-let enemies2: AbstractActor[] = <any>0;
-let enemies1: AbstractActor[] = <any>0;
-let enemiesMiniBosses: AbstractActor[] = <any>0;
-let generalBoss: AbstractActor = <any>0;
-let heroes: AbstractActor[] = <any>0;
+let enemies: IActor[] = <any>0;
+let enemies2: IActor[] = <any>0;
+let enemies1: IActor[] = <any>0;
+let enemiesMiniBosses: IActor[] = <any>0;
+let generalBoss: IActor = <any>0;
+let heroes: IActor[] = <any>0;
 let intervalTimers: ISubscriptionLike[] = <any>0;
 
 let simpleEnemyTimer = <any>0;
@@ -41,7 +41,7 @@ let genBossDestroyTimer = <any>0;
 const numberOfSmallEnemies = 10;
 
 
-function initSimpleEnemies(scene: AbstractScene) {
+function initSimpleEnemies(scene: IScene) {
     enemies2 = [];
     enemies1 = [];
 
@@ -61,7 +61,7 @@ function initSimpleEnemies(scene: AbstractScene) {
     }
 }
 
-function initSimpleEnemiesActions(scene: AbstractScene) {
+function initSimpleEnemiesActions(scene: IScene) {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
         const health = new HealthPlugin(scene, HealthType.ENEMY, 200);
@@ -94,6 +94,9 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
     }
 
     simpleEnemyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         const bounce = new BounceOffTheWall(
             scene, Math.round(scene.generalLayer.width / 5),
             true);
@@ -117,15 +120,15 @@ function initSimpleEnemiesActions(scene: AbstractScene) {
 }
 
 
-function initBosses(scene: AbstractScene) {
+function initBosses(scene: IScene) {
     initMiniBosses(scene);
     initGeneralBosses(scene);
 }
 
-function initMiniBosses(scene: AbstractScene) {
+function initMiniBosses(scene: IScene) {
     enemiesMiniBosses = [];
 
-    const miniBossActivate = (miniBoss: AbstractActor) => {
+    const miniBossActivate = (miniBoss: IActor) => {
         miniBoss.xPos = scene.generalLayer.width + 3 * miniBoss.width;
         miniBoss.yPos = randomize(scene.generalLayer.height - miniBoss.height);
         enemiesMiniBosses.push(miniBoss);
@@ -147,22 +150,28 @@ function initMiniBosses(scene: AbstractScene) {
     miniBossActivate(miniBoss3);
 }
 
-function initGeneralBosses(scene: AbstractScene) {
+function initGeneralBosses(scene: IScene) {
     generalBoss = new KleschBoss(scene.generalLayer);
     generalBoss.xPos = scene.generalLayer.width + 2 * generalBoss.width;
     generalBoss.yPos = randomize(scene.generalLayer.height - generalBoss.height);
 }
 
-function initBossesActions(scene: AbstractScene) {
+function initBossesActions(scene: IScene) {
     boss1DestroyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         initMiniBossesActions(scene);
     }, 30000);
     boss2DestroyTimer = tickGenerator.executeTimeout(() => {
+        if (scene.isDestroyed) {
+            return;
+        }
         initGeneralBossesActions(scene);
     }, 40000);
 }
 
-function initMiniBossesActions(scene: AbstractScene) {
+function initMiniBossesActions(scene: IScene) {
     for (let i = 0; i < enemiesMiniBosses.length; i++) {
         const miniBoss = enemiesMiniBosses[i];
         const bounce = new BounceOffTheWall(
@@ -196,6 +205,9 @@ function initMiniBossesActions(scene: AbstractScene) {
         miniBoss.isEventsBlock = true;
         if (i >= (enemiesMiniBosses.length - 2)) {
             bossActionsTimer = tickGenerator.executeTimeout(() => {
+                if (scene.isDestroyed) {
+                    return;
+                }
                 scene.setActors(miniBoss);
             }, 15000);
         } else {
@@ -204,7 +216,7 @@ function initMiniBossesActions(scene: AbstractScene) {
     }
 }
 
-function initGeneralBossesActions(scene: AbstractScene) {
+function initGeneralBossesActions(scene: IScene) {
     if (scene.isDestroyed) {
         return;
     }
@@ -228,11 +240,11 @@ function initGeneralBossesActions(scene: AbstractScene) {
     generalBoss.pluginDock.add(cursorBehavior);
     generalBoss.enableEvents();
     scene.collect(
-        generalBoss.isMouseOver$.subscribe(() => {
+        generalBoss.onMouseOver$.subscribe(() => {
             generalBoss.pluginDock.unLink(bounce);
             generalBoss.pluginDock.add(bounce);
         }),
-        generalBoss.isDestroyed$.subscribe(() => {
+        generalBoss.onDestroyed$.subscribe(() => {
             genBossDestroyTimer = tickGenerator.executeTimeout(() => {
                 scene.destroy();
             }, 2000);
@@ -240,7 +252,7 @@ function initGeneralBossesActions(scene: AbstractScene) {
     );
 }
 
-function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.ENEMY): void {
+function addActor(actor: IActor, scene: IScene, type = HealthType.ENEMY): void {
     enemies.push(actor);
     actor.disableEvents();
     let delay = 0;
@@ -293,14 +305,14 @@ function addActor(actor: AbstractActor, scene: AbstractScene, type = HealthType.
 class EnemiesPool extends AbstractActorGroup {
     private timer: ISubscriptionLike = <any>0;
 
-    set heroes(values: AbstractActor[]) {
+    set heroes(values: IActor[]) {
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             heroes.push(value);
         }
     }
 
-    initActors(scene: AbstractScene): void {
+    initActors(scene: IScene): void {
         enemies = [];
         heroes = [];
         intervalTimers = [];
@@ -308,7 +320,7 @@ class EnemiesPool extends AbstractActorGroup {
         initBosses(scene);
     }
 
-    initActions(scene: AbstractScene): void {
+    initActions(scene: IScene): void {
         initSimpleEnemiesActions(scene);
         initBossesActions(scene);
         this.handleClearEnemies();
@@ -334,7 +346,7 @@ class EnemiesPool extends AbstractActorGroup {
         }, 5);
     }
 
-    get enemies(): AbstractActor[] {
+    get enemies(): IActor[] {
         return enemies;
     }
 
@@ -379,6 +391,12 @@ class EnemiesPool extends AbstractActorGroup {
         tickGenerator.clearTimeout(boss2DestroyTimer);
         tickGenerator.clearTimeout(bossActionsTimer);
         tickGenerator.clearTimeout(genBossDestroyTimer);
+
+        simpleEnemyTimer = <any>0;
+        boss1DestroyTimer = <any>0;
+        boss2DestroyTimer = <any>0;
+        bossActionsTimer = <any>0;
+        genBossDestroyTimer = <any>0;
     }
 }
 

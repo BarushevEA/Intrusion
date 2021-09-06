@@ -4,6 +4,7 @@ import {handleMiddle} from "./modules/middle";
 import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../scenesEnvironment";
+import {IScene} from "../SceneTypes";
 
 export class Empty extends AbstractScene {
 
@@ -29,6 +30,6 @@ export class Empty extends AbstractScene {
     }
 }
 
-function sceneEvents(scene: AbstractScene) {
+function sceneEvents(scene: IScene) {
     scene.collect();
 }

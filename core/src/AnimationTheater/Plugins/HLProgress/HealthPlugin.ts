@@ -1,7 +1,6 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {EnemyProgress} from "./Progresses/EnemyProgress";
-import {ISubscriptionLike, Observable} from "../../../AnimationCore/Libraries/Observable";
+import {Observable} from "../../../AnimationCore/Libraries/Observables/Observable";
 import {PositionBalance} from "../../../AnimationCore/Libraries/PositionBalance";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthType, IHealthProgress} from "./HealthType";
@@ -9,9 +8,11 @@ import {EnemyBossProgress} from "./Progresses/EnemyBossProgress";
 import {HeroProgress} from "./Progresses/HeroProgress";
 import {EnemyMiniBossProgress} from "./Progresses/EnemyMiniBossProgress";
 import {Explode} from "../../AnimationModels/Explode/Explode";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class HealthPlugin extends AbstractActorPlugin {
     private health = 0;
@@ -23,7 +24,7 @@ export class HealthPlugin extends AbstractActorPlugin {
     private isDestroyProcessed = false;
     private _beforeDeath$ = new Observable(<any>0);
 
-    constructor(scene: AbstractScene, viewType = HealthType.ENEMY, health = 1000) {
+    constructor(scene: IScene, viewType = HealthType.ENEMY, health = 1000) {
         super('HealthPlugin', scene);
         this.health = health;
         this.type = viewType;
@@ -131,7 +132,7 @@ export class HealthPlugin extends AbstractActorPlugin {
             this.scene.unLink(this.progressBar);
         }
 
-        const explosions: AbstractActor[] = [];
+        const explosions: IActor[] = [];
         let explodeCount = 0;
 
         switch (this.type) {
@@ -159,7 +160,7 @@ export class HealthPlugin extends AbstractActorPlugin {
         this.handleExplode(explosions, this.scene);
     }
 
-    private handleExplode(explosions: AbstractActor[], scene: AbstractScene) {
+    private handleExplode(explosions: IActor[], scene: IScene) {
         this.explodeShow(explosions, 0, scene);
         let counter = 1;
         const timer = tickGenerator.execute100MsInterval(() => {
@@ -171,15 +172,17 @@ export class HealthPlugin extends AbstractActorPlugin {
         }, 1);
         scene.unLink(this.root);
         tickGenerator.executeTimeout(() => {
-            for (let i = 0; i < explosions.length; i++) {
-                const explosion = explosions[i];
-                scene.destroyActor(explosion);
+            if (scene && !scene.isDestroyed) {
+                for (let i = 0; i < explosions.length; i++) {
+                    const explosion = explosions[i];
+                    scene.destroyActor(explosion);
+                }
+                scene.destroyActor(this.root);
             }
-            scene.destroyActor(this.root);
         }, 340 + (explosions.length - 1) * 100);
     }
 
-    private explodeShow(explosions: AbstractActor[], counter: number, scene: AbstractScene) {
+    private explodeShow(explosions: IActor[], counter: number, scene: IScene) {
         if (!this.root || !explosions || !explosions.length) {
             return;
         }

@@ -1,6 +1,6 @@
 import {AbstractFramedShape} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
-import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/ShapeHandler";
+import {IPoint} from "../../../AnimationCore/AnimationEngine/LayerHandler/shapeModules/ShapeHandler";
 
 export class BlueFire extends AbstractFramedShape {
     private points: IPoint[] = <any>0;

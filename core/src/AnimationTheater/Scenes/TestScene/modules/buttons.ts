@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonGreenWithText} from "../../../AnimationModels/Buttons/ButtonGreenWithText";
@@ -6,21 +5,28 @@ import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithT
 import {ButtonBlueWithText} from "../../../AnimationModels/Buttons/ButtonBlueWithText";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {ButtonGrayWithText} from "../../../AnimationModels/Buttons/ButtonGrayWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {E_Scene} from "../../../AppScenario/types";
 import {isStopMove, move, recMoveStart, toggleReverse} from "./middle";
 import {cursorHandler} from "./cursor";
+import {
+    clearOnSceneDestroy,
+    defaultCursorAction,
+    destroySceneOnButtonClick,
+    toggleMouseEventsOnMouseOverGroup
+} from "../../../../AnimationCore/Libraries/Actions";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
-let buttonExit: AbstractActor;
-let buttonMove: AbstractActor;
-let buttonStop: AbstractActor;
-let buttonPlay: AbstractActor;
-let buttonPause: AbstractActor;
-let buttonInvisible: AbstractActor;
-let buttonToggleSpeed: AbstractActor;
+let buttonExit: IActor;
+let buttonMove: IActor;
+let buttonStop: IActor;
+let buttonPlay: IActor;
+let buttonPause: IActor;
+let buttonInvisible: IActor;
+let buttonToggleSpeed: IActor;
 let isHalfSpeed = false;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -28,15 +34,33 @@ export function handleButtons(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    buttonExit = <any>0;
-    buttonMove = <any>0;
-    buttonStop = <any>0;
-    buttonPlay = <any>0;
-    buttonPause = <any>0;
-    buttonInvisible = <any>0;
+    if (buttonExit) {
+        buttonExit.destroy();
+        buttonExit = <any>0;
+    }
+    if (buttonMove) {
+        buttonMove.destroy();
+        buttonMove = <any>0;
+    }
+    if (buttonStop) {
+        buttonStop.destroy();
+        buttonStop = <any>0;
+    }
+    if (buttonPlay) {
+        buttonPlay.destroy();
+        buttonPlay = <any>0;
+    }
+    if (buttonPause) {
+        buttonPause.destroy();
+        buttonPause = <any>0;
+    }
+    if (buttonInvisible) {
+        buttonInvisible.destroy();
+        buttonInvisible = <any>0;
+    }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonMove = new ButtonGreenWithText(scene.generalLayer, 'Move');
     buttonStop = new ButtonRedWithText(scene.generalLayer, 'Stop');
@@ -64,61 +88,52 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     scene.collect(
-        buttonExit.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = E_Scene.MENU;
-            scene.destroy();
-        }),
-        buttonExit.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonExit);
-        }),
-        buttonMove.isMouseClick$.subscribe(() => {
+        buttonMove.onMouseClick$.subscribe(() => {
             isStopMove.value = false;
             recMoveStart(scene);
         }),
-        buttonMove.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonMove);
-        }),
-        buttonStop.isMouseClick$.subscribe(() => {
+        buttonStop.onMouseClick$.subscribe(() => {
             scene.unsubscribe(move.value);
             move.value = <any>0;
             isStopMove.value = true;
         }),
-        buttonStop.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonStop);
-        }),
-        buttonPlay.isMouseClick$.subscribe(() => {
+        buttonPlay.onMouseClick$.subscribe(() => {
             scene.start(true);
         }),
-        buttonPlay.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonPlay);
-        }),
-        buttonPause.isMouseClick$.subscribe(() => {
+        buttonPause.onMouseClick$.subscribe(() => {
             scene.stop();
         }),
-        buttonPause.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonPause);
-        }),
-        buttonInvisible.isMouseClick$.subscribe(() => {
+        buttonInvisible.onMouseClick$.subscribe(() => {
             toggleReverse();
         }),
-        buttonInvisible.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonInvisible);
-        }),
-        buttonToggleSpeed.isMouseClick$.subscribe(() => {
+        buttonToggleSpeed.onMouseClick$.subscribe(() => {
             isHalfSpeed = !isHalfSpeed;
             if (isHalfSpeed) {
                 scene.setHalfSpeed();
             } else {
                 scene.setFullSpeed();
             }
-        }),
-        buttonToggleSpeed.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonToggleSpeed);
-        }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
         })
     );
+
+    toggleMouseEventsOnMouseOverGroup(scene,
+        [
+            buttonExit,
+            buttonMove,
+            buttonStop,
+            buttonPlay,
+            buttonPause,
+            buttonInvisible,
+            buttonToggleSpeed
+        ])
+    destroySceneOnButtonClick(scene, buttonExit, cursorHandler, E_Scene.MENU);
+    defaultCursorAction(scene, buttonMove, cursorHandler);
+    defaultCursorAction(scene, buttonStop, cursorHandler);
+    defaultCursorAction(scene, buttonPlay, cursorHandler);
+    defaultCursorAction(scene, buttonPause, cursorHandler);
+    defaultCursorAction(scene, buttonInvisible, cursorHandler);
+    defaultCursorAction(scene, buttonToggleSpeed, cursorHandler);
+    clearOnSceneDestroy(scene, clearVariables);
 }

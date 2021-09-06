@@ -1,8 +1,9 @@
 import {AbstractActorPlugin} from "./AbstractActorPlugin";
-import {ISubscriptionLike, Observable} from "../../../Libraries/Observable";
-import {AbstractScene} from "../../rootScenes/AbstractScene";
+import {Observable} from "../../../Libraries/Observables/Observable";
 import {keyDownCode$, keyUpCode$} from "../../../Store/EventStore";
 import {IKeyCode} from "../../../Store/Types";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
     private readonly key = 'Key';
@@ -11,7 +12,7 @@ export abstract class AbstractActionOnKeyPress extends AbstractActorPlugin {
     protected _onKeyDown$ = new Observable<number>(0);
     protected _onKeyUp$ = new Observable<number>(0);
 
-    protected constructor(name: string, scene: AbstractScene, key: string, step: number) {
+    protected constructor(name: string, scene: IScene, key: string, step: number) {
         super(name, scene);
         this.key += key[0].toUpperCase();
         this._step = step;

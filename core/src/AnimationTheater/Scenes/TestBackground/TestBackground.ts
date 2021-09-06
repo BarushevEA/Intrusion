@@ -4,11 +4,13 @@ import {handleMiddle} from "./modules/Middle/middle";
 import {handleButtons} from "./modules/buttons";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {E_Scene} from "../../AppScenario/types";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class TestBackground extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, E_Scene.BACKGROUND);
     }
 
     protected createScene(): void {
@@ -30,6 +32,28 @@ export class TestBackground extends AbstractScene {
     }
 }
 
-function sceneEvents(scene: AbstractScene) {
-    scene.collect();
+function sceneEvents(scene: IScene) {
+    let renderTime = 0;
+    let isHalf = false;
+    let freezeCounter = 0;
+    scene.collect(
+        scene.render.beforeLayersRender$.subscribe(() => {
+            if (!isHalf) {
+                renderTime = Date.now();
+            }
+        }),
+        scene.render.afterLayersRender$.subscribe(() => {
+            if (isHalf) {
+                return;
+            }
+            renderTime = Date.now() - renderTime;
+            if (renderTime > 3) {
+                freezeCounter++;
+            }
+            if (freezeCounter > 1000) {
+                isHalf = true;
+                scene.setHalfSpeed();
+            }
+        })
+    );
 }

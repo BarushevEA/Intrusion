@@ -1,14 +1,15 @@
-import {findElementOnArray} from "../Libraries/FunctionLibs";
-import {ISubscriber, Observable} from "../Libraries/Observable";
+import {Observable} from "../Libraries/Observables/Observable";
 import {IActor} from "./rootModels/AbstractActor/ActorTypes";
+import {ISubscriber} from "../Libraries/Observables/Types";
+import {deleteFromArray} from "../Libraries/FunctionLibs";
 
 export type IRenderController = {
     setCanvas(canvas: HTMLCanvasElement): void;
     setActor(element: IActor): void;
-    renderStart(isBackgroundLayerPresent: boolean): void;
-    renderStop(): void;
+    start(isBackgroundLayerPresent: boolean): void;
+    stop(): void;
     deleteActor(element: IActor): void;
-    destroyActors(): void;
+    destroy(): void;
     setActorOnTop(element: IActor): void;
     setActorZIndex(element: IActor, z_index: number): void;
     sortActorsByZIndex(): void;
@@ -20,7 +21,8 @@ export type IRenderController = {
     setLayerOnIndex(layerName: string, index: number): void;
     setFullSpeed(): void;
     setHalfSpeed(): void;
-    tickCount$: ISubscriber<boolean>;
+    afterLayersRender$: ISubscriber<boolean>;
+    beforeLayersRender$: ISubscriber<boolean>;
     context: CanvasRenderingContext2D;
 }
 
@@ -38,44 +40,48 @@ export class RenderController implements IRenderController {
     private layersNames = [this.currentLayerName + ''];
     private delay = 1;
     private delayCounter = 0;
-    private _tickCount$ = new Observable(<boolean>false);
+    private _afterLayersRender$ = new Observable(<boolean>false);
+    private _beforeLayersRender$ = new Observable(<boolean>false);
 
     get context(): CanvasRenderingContext2D {
         return this._context;
     }
 
-    get tickCount$(): ISubscriber<boolean> {
-        return this._tickCount$;
+    get afterLayersRender$(): ISubscriber<boolean> {
+        return this._afterLayersRender$;
+    }
+
+    get beforeLayersRender$(): Observable<boolean> {
+        return this._beforeLayersRender$;
     }
 
     public setCanvas(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
-        this._context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
+        this._context = <CanvasRenderingContext2D>canvas.getContext('2d');
     }
 
     public setActor(actor: IActor): void {
-        const index = findElementOnArray(this.currentPool, actor);
-        if (index !== -1) {
+        if (this.currentPool.indexOf(actor) !== -1) {
             return;
         }
         if (this.currentPool.length) {
             actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
         }
-        this.currentPool.push(actor);
         actor.layerName = this.currentLayerName;
-        this.sortActorsByZIndex();
+        actor.layerNumber = this.layersNames.indexOf(this.currentLayerName)
+        this.currentPool.push(actor);
     }
 
     public setActiveLayer(name: string): void {
         if (this.layers[name]) {
             this.currentPool = this.layers[name];
             this.currentLayerName = name;
-        } else {
-            this.layers[name] = [];
-            this.currentPool = this.layers[name];
-            this.currentLayerName = name;
-            this.layersNames = Object.keys(this.layers);
+            return;
         }
+        this.currentPool = [];
+        this.layers[name] = this.currentPool;
+        this.currentLayerName = name;
+        this.layersNames = Object.keys(this.layers);
     }
 
     getActiveLayerName(): string {
@@ -86,15 +92,9 @@ export class RenderController implements IRenderController {
         if (!this.layers[name]) {
             return;
         }
-        const tmp = [];
-        for (let i = 0; i < this.layersNames.length; i++) {
-            const layersName = this.layersNames[i];
-            if (layersName != name) {
-                tmp.push(layersName);
-            }
-        }
-        this.layersNames = tmp;
+        deleteFromArray(this.layersNames, name);
         this.layersNames.push(name);
+        this.reInitLayerNumbers();
     }
 
     public setLayerOnIndex(layerName: string, index: number): void {
@@ -108,27 +108,36 @@ export class RenderController implements IRenderController {
                 if (layerName !== name) {
                     tmp.push(name);
                 }
-            } else {
-                tmp.push(layerName);
-                if (layerName !== name) {
-                    tmp.push(name);
-                }
+                continue;
+            }
+            tmp.push(layerName);
+            if (layerName !== name) {
+                tmp.push(name);
             }
         }
         this.layersNames = tmp;
+        this.reInitLayerNumbers();
+    }
+
+    private reInitLayerNumbers(): void {
+        for (let k = 0; k < this.layersNames.length; k++) {
+            const layerName = this.layersNames[k];
+            for (let i = 0; i < this.layers[layerName].length; i++) {
+                this.layers[layerName][i].layerNumber = k;
+            }
+        }
     }
 
     private setCurrentPoolFromActor(actor: IActor): boolean {
-        let isSet = false;
         if (this.layers[actor.layerName]) {
             this.currentLayerName = actor.layerName;
             this.currentPool = this.layers[actor.layerName];
-            isSet = true;
+            return true;
         }
-        return isSet;
+        return false;
     }
 
-    public renderStart(isBackgroundLayerPresent: boolean): void {
+    public start(isBackgroundLayerPresent: boolean): void {
         this.isBackgroundLayerPresent = isBackgroundLayerPresent;
         if (this.animFrameIndex === -1) {
             this.setFullSpeed();
@@ -136,7 +145,7 @@ export class RenderController implements IRenderController {
     }
 
     public setFullSpeed(): void {
-        this.renderStop();
+        this.stop();
         if (this.isBackgroundLayerPresent) {
             this.runFullSpeedWithBackground();
         } else {
@@ -145,35 +154,36 @@ export class RenderController implements IRenderController {
     };
 
     public setHalfSpeed(): void {
-        this.renderStop();
+        this.stop();
         this.runHalfSpeed();
     };
 
-    private drawLayers() {
+    private drawLayers(): void {
         for (let k = 0; k < this.layersNames.length; k++) {
             const layerName = this.layersNames[k];
             for (let i = 0; i < this.layers[layerName].length; i++) {
-                this.layers[layerName][i].renderFrame();
+                this.layers[layerName][i].render();
             }
         }
     }
 
     private runFullSpeedWithBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithBackground.bind(this));
-        this._tickCount$.next(true);
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
+        this._afterLayersRender$.next(true);
     }
 
     private runFullSpeedWithoutBackground(): void {
         this.animFrameIndex = requestAnimationFrame(this.runFullSpeedWithoutBackground.bind(this));
-        this._tickCount$.next(true);
         this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
+        this._afterLayersRender$.next(true);
     }
 
     private runHalfSpeed(): void {
         this.animFrameIndex = requestAnimationFrame(this.runHalfSpeed.bind(this));
-        this._tickCount$.next(true);
         if (this.delayCounter >= this.delay) {
             this.delayCounter = 0;
             return;
@@ -182,10 +192,12 @@ export class RenderController implements IRenderController {
         if (!this.isBackgroundLayerPresent) {
             this._context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
+        this._beforeLayersRender$.next(true);
         this.drawLayers();
+        this._afterLayersRender$.next(true);
     }
 
-    public renderStop() {
+    public stop() {
         cancelAnimationFrame(this.animFrameIndex);
         this.animFrameIndex = -1;
     }
@@ -194,9 +206,7 @@ export class RenderController implements IRenderController {
         if (!this.setCurrentPoolFromActor(actor)) {
             return;
         }
-        this.currentPool = this.currentPool.filter(element => {
-            return element !== actor;
-        });
+        this.currentPool = this.currentPool.filter(element => element !== actor);
         this.layers[actor.layerName] = this.currentPool;
     }
 
@@ -204,8 +214,7 @@ export class RenderController implements IRenderController {
         if (!this.setCurrentPoolFromActor(actor)) {
             return;
         }
-        const index = findElementOnArray(this.currentPool, actor);
-        if (index === -1) {
+        if (this.currentPool.indexOf(actor) === -1) {
             return;
         }
         actor.z_index = this.currentPool[this.currentPool.length - 1].z_index + 1;
@@ -225,8 +234,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = findElementOnArray(this.currentPool, actors[i]);
-            if (index === -1) {
+            if (this.currentPool.indexOf(actors[i]) === -1) {
                 return;
             }
         }
@@ -242,8 +250,7 @@ export class RenderController implements IRenderController {
             return;
         }
         for (let i = 0; i < actors.length; i++) {
-            const index = findElementOnArray(this.currentPool, actors[i]);
-            if (index === -1) {
+            if (this.currentPool.indexOf(actors[i]) === -1) {
                 return;
             }
         }
@@ -255,27 +262,20 @@ export class RenderController implements IRenderController {
     }
 
     public sortActorsByZIndex(): void {
-        this.currentPool.sort((a, b) => {
-            if (a.z_index === b.z_index) {
-                return 0;
-            }
-            return a.z_index > b.z_index ? 1 : -1;
-        });
+        this.currentPool.sort((a, b) => a.z_index - b.z_index);
     }
 
-    public destroyActors(): void {
-        this._tickCount$.destroy();
-        if (this._tickCount$) {
-            this._tickCount$ = <any>0;
-        }
-        this.renderStop();
+    public destroy(): void {
+        this._beforeLayersRender$.destroy();
+        this._beforeLayersRender$ = <any>0;
+        this._afterLayersRender$.destroy();
+        this._afterLayersRender$ = <any>0;
+        this.stop();
         for (let k = 0; k < this.layersNames.length; k++) {
             this.currentPool = this.layers[this.layersNames[k]];
             for (let i = 0; i < this.currentPool.length; i++) {
-                const element = this.currentPool[i];
-                if (element) {
-                    element.destroy();
-                }
+                const actor = this.currentPool[i];
+                actor && actor.destroy();
             }
             this.currentPool.length = 0;
             delete this.layers[this.layersNames[k]];

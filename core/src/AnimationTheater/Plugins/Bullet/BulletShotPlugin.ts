@@ -1,6 +1,4 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {Bullet} from "./Actors/Bullet";
 import {BulletPlugin} from "./BulletPlugin";
 import {getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
@@ -8,17 +6,19 @@ import {LaserRed} from "./Actors/LaserRed";
 import {LaserBlue} from "./Actors/LaserBlue";
 import {LaserOrange} from "./Actors/LaserOrange";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class BulletShotPlugin extends AbstractActorPlugin {
-    private enemies: AbstractActor[] = <any>0;
+    private enemies: IActor[] = <any>0;
     private bulletGenerator: ISubscriptionLike = <any>0;
     private isReverse = <any>0;
     private type: BULLET = <any>0;
     private damagePerBullet = 0;
 
-    constructor(scene: AbstractScene,
-                enemies: AbstractActor[],
+    constructor(scene: IScene,
+                enemies: IActor[],
                 type = BULLET.SMALL,
                 isReverse = false,
                 damagePerBullet = 50) {
@@ -52,7 +52,7 @@ export class BulletShotPlugin extends AbstractActorPlugin {
         bullet.pluginDock.add(plugin);
     }
 
-    setEnemies(enemies: AbstractActor[]) {
+    setEnemies(enemies: IActor[]) {
         if (enemies) {
             this.enemies = enemies;
         }
@@ -79,7 +79,7 @@ export enum BULLET {
     LASER_ORANGE = 'LASER_ORANGE',
 }
 
-function getBullet(type: BULLET, scene: AbstractScene): AbstractActor {
+function getBullet(type: BULLET, scene: IScene): IActor {
     switch (type) {
         case BULLET.SMALL:
             return new Bullet(scene.generalLayer);

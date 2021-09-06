@@ -1,14 +1,14 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
 import {AbstractFramedShape} from "../../AnimationCore/AnimationEngine/rootModels/AbstractFramedShape";
+import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
+import {IScene} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class MovePlaneFramePlugin extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
     private yBalance: number = 0;
     private xBalance: number = 0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('MovePlaneFramePlugin', scene);
     }
 

@@ -6,19 +6,23 @@ import {
     E_Cells,
     IBackgroundMap,
     ICell,
+    ICellDrawOptions,
     ICellPool,
     ICells,
     ICellScheme,
     ICellsMap,
     x_array,
     x_canvas,
+    X_MOVE,
     x_pair,
     y_array,
     y_canvas,
+    Y_MOVE,
     y_pair
 } from "./DimensionTypes";
 import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class Cells implements IBackgroundMap {
     private readonly _cells: ICells = [];
@@ -49,7 +53,7 @@ export class Cells implements IBackgroundMap {
             for (let j = 0; j < this._width; j++) {
                 const cell = row[j];
                 for (let k = 0; k < cell.length; k++) {
-                    const cellItem: AbstractActor = cell[k];
+                    const cellItem: IActor = cell[k];
                     if (cellItem && cellItem.destroy) {
                         cellItem.destroy();
                     }
@@ -68,7 +72,11 @@ export class Cells implements IBackgroundMap {
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
                     const ActorClassName: any = scheme[key];
-                    this.actorsPool[key] = <AbstractActor>(new ActorClassName(this.canvas));
+                    if (ActorClassName) {
+                        this.actorsPool[key] = <AbstractActor>(new ActorClassName(this.canvas));
+                    } else {
+                        this.actorsPool[key] = ActorClassName;
+                    }
                 }
                 break;
             case E_Cells.SCENE_USE:
@@ -96,10 +104,16 @@ export class Cells implements IBackgroundMap {
                                 break;
                             case E_Cells.SCENE_USE:
                                 const className: any = this.scheme[ActorClassName];
-                                cell[k] = <AbstractActor>(new className(this.canvas));
+                                if (className) {
+                                    cell[k] = <AbstractActor>(new className(this.canvas));
+                                } else {
+                                    cell[k] = className;
+                                }
                                 break;
                         }
-                        cell[k].disableEvents();
+                        if (cell[k]) {
+                            cell[k].disableEvents();
+                        }
                     }
                 }
             }
@@ -107,7 +121,7 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
-    fillWithActor(actor: AbstractActor): IBackgroundMap {
+    fillWithActor(actor: IActor): IBackgroundMap {
         for (let i = 0; i < this._height; i++) {
             this._cells[i] = [];
             for (let j = 0; j < this._width; j++) {
@@ -147,7 +161,7 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
-    addActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap {
+    addActorsAt(actors: IActor[], x: x_array, y: y_array): IBackgroundMap {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             if ((y < this._height && x < this._width) &&
@@ -168,8 +182,8 @@ export class Cells implements IBackgroundMap {
 
     getRectangle(x: x_array, y: y_array, height: array_height, width: array_width): ICells {
         const cells: ICells = [];
-        for (let i = 0; i < height; i++) {
-            cells.push(this.getRow(x, y + i, width));
+        for (let i = 0; i < width; i++) {
+            cells.push(this.getRow(x, y + i, height));
         }
         return cells;
     }
@@ -204,7 +218,7 @@ export class Cells implements IBackgroundMap {
         return this.getColumn(x, y - length + 1, length);
     }
 
-    add(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap {
+    add(actors: IActor[], x: x_array, y: y_array): IBackgroundMap {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             this.addActorsAt([actor], x + i, y);
@@ -212,7 +226,7 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
-    replaceActorsAt(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap {
+    replaceActorsAt(actors: IActor[], x: x_array, y: y_array): IBackgroundMap {
         if ((y < this._height && x < this._width) &&
             (y >= 0 && x >= 0)) {
             this._cells[y][x] = [];
@@ -224,7 +238,7 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
-    replace(actors: AbstractActor[], x: x_array, y: y_array): IBackgroundMap {
+    replace(actors: IActor[], x: x_array, y: y_array): IBackgroundMap {
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             this.replaceActorsAt([actor], x + i, y);
@@ -232,42 +246,51 @@ export class Cells implements IBackgroundMap {
         return this;
     }
 
-    addRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
+    addStringDimension(dim: string[], x: x_array = 0, y: y_array = 0) {
+        for (let i = 0; i < dim.length; i++) {
+            const element = dim[i];
+            const symbols = element.split('');
+            this.add(<any>symbols, x, y + i);
+        }
+        return this;
+    }
+
+    addRowAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
         for (let i = 0; i < repeat; i++) {
             this.addActorsAt(actors, x + i, y);
         }
         return this;
     }
 
-    replaceRowAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
+    replaceRowAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
         for (let i = 0; i < repeat; i++) {
             this.replaceActorsAt(actors, x + i, y);
         }
         return this;
     }
 
-    addColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
+    addColumnAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
         for (let i = 0; i < repeat; i++) {
             this.addActorsAt(actors, x, y + i);
         }
         return this;
     }
 
-    replaceColumnAt(actors: AbstractActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
+    replaceColumnAt(actors: IActor[], x: x_array, y: y_array, repeat: number): IBackgroundMap {
         for (let i = 0; i < repeat; i++) {
             this.replaceActorsAt(actors, x, y + i);
         }
         return this;
     }
 
-    addRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: array_height, width: array_width): IBackgroundMap {
+    addRectangleAt(actors: IActor[], x: x_array, y: y_array, height: array_height, width: array_width): IBackgroundMap {
         for (let i = 0; i < height; i++) {
             this.addRowAt(actors, x, y + i, width);
         }
         return this;
     }
 
-    replaceRectangleAt(actors: AbstractActor[], x: x_array, y: y_array, height: array_height, width: array_width): IBackgroundMap {
+    replaceRectangleAt(actors: IActor[], x: x_array, y: y_array, height: array_height, width: array_width): IBackgroundMap {
         for (let i = 0; i < height; i++) {
             this.replaceRowAt(actors, x, y + i, width);
         }
@@ -366,19 +389,82 @@ class CellsMap implements ICellsMap {
 }
 
 export class DrawHelper {
-    scene: AbstractScene;
-    cells: IBackgroundMap;
-    x = 0;
-    y = 0;
+    private scene: IScene;
+    private cells: IBackgroundMap;
+    private _options: ICellDrawOptions = {
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        step: 1
+    };
+    private _x: x_canvas = 0;
+    private _y: y_canvas = 0;
 
-    constructor(scene: AbstractScene, cells: IBackgroundMap, x: number, y: number) {
+
+    constructor(scene: IScene,
+                cells: IBackgroundMap,
+                x: x_canvas,
+                y: y_canvas) {
         this.scene = scene;
         this.cells = cells;
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
-    setToScene(): void {
+    public rerender(): void {
+        this.move(X_MOVE.NONE, Y_MOVE.NONE);
+    }
+
+    public moveLeft(): void {
+        this.move(X_MOVE.LEFT, Y_MOVE.NONE);
+    }
+
+    public moveRight(): void {
+        this.move(X_MOVE.RIGHT, Y_MOVE.NONE);
+    }
+
+    public moveTop(): void {
+        this.move(X_MOVE.NONE, Y_MOVE.TOP);
+    }
+
+    public moveBottom(): void {
+        this.move(X_MOVE.NONE, Y_MOVE.BOTTOM);
+    }
+
+    private move(moveX: X_MOVE, moveY: Y_MOVE): void {
+        // @ts-ignore
+        this._options.x += this._options.step * moveX;
+        // @ts-ignore
+        this._options.y += this._options.step * moveY;
+
+        const arr = this.cells.getRectangle(
+            // @ts-ignore
+            this._options.x,
+            this._options.y,
+            this._options.height,
+            this._options.width
+        );
+
+        const cellWidth = this.cells.map.cellWidth;
+        const cellHeight = this.cells.map.cellHeight;
+        for (let i = 0; i < arr.length; i++) {
+            const row = arr[i];
+            for (let j = 0; j < row.length; j++) {
+                const cell = row[j];
+                for (let k = 0; k < cell.length; k++) {
+                    const actor = cell[k];
+                    if (actor) {
+                        actor.xPos = this._x + cellWidth * j;
+                        actor.yPos = this._y + cellHeight * i;
+                        actor.renderFrame();
+                    }
+                }
+            }
+        }
+    }
+
+    public setToScene(): void {
         const width = this.cells.width;
         const height = this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
@@ -388,10 +474,10 @@ export class DrawHelper {
             for (let j = 0; j < width; j++) {
                 const cell = row[j];
                 for (let k = 0; k < cell.length; k++) {
-                    const cellItem: AbstractActor = cell[k];
+                    const cellItem: IActor = cell[k];
                     if (cellItem) {
-                        cellItem.xPos = this.x + cellWidth * j;
-                        cellItem.yPos = this.y + cellHeight * i;
+                        cellItem.xPos = this._x + cellWidth * j;
+                        cellItem.yPos = this._y + cellHeight * i;
                         this.scene.setActors(cellItem);
                     }
                 }
@@ -399,24 +485,69 @@ export class DrawHelper {
         }
     }
 
-    render(): void {
-        const width = this.cells.width;
-        const height = this.cells.height;
+    public render(): void {
+        const width = this._options.width || this.cells.width;
+        const height = this._options.height || this.cells.height;
         const cellWidth = this.cells.map.cellWidth;
         const cellHeight = this.cells.map.cellHeight;
-        for (let i = 0; i < height; i++) {
+        for (let i = 0; i < width; i++) {
             const row = this.cells.cells[i];
-            for (let j = 0; j < width; j++) {
+            for (let j = 0; j < height; j++) {
                 const cell = row[j];
                 for (let k = 0; k < cell.length; k++) {
-                    const cellItem: AbstractActor = cell[k];
+                    const cellItem: IActor = cell[k];
                     if (cellItem) {
-                        cellItem.xPos = this.x + cellWidth * j;
-                        cellItem.yPos = this.y + cellHeight * i;
+                        cellItem.xPos = this._x + cellWidth * j;
+                        cellItem.yPos = this._y + cellHeight * i;
                         cellItem.renderFrame();
+                        cellItem.onImageLoad$.subscribe(() => {
+                            cellItem.onImageLoad$.unsubscribeAll();
+                            this.rerender();
+                        });
                     }
                 }
             }
         }
+    }
+
+    get options(): ICellDrawOptions {
+        return this._options;
+    }
+
+    set options(value: ICellDrawOptions) {
+        if (!value) {
+            return;
+        }
+        if (!!value.step) {
+            this._options.step = value.step;
+        }
+        if (!!value.width) {
+            this._options.width = value.width;
+        }
+        if (!!value.height) {
+            this._options.height = value.height;
+        }
+        if (!!value.x) {
+            this._options.x = value.x;
+        }
+        if (!!value.y) {
+            this._options.y = value.y;
+        }
+    }
+
+    get x(): number {
+        return this._x;
+    }
+
+    set x(value: number) {
+        this._x = value;
+    }
+
+    get y(): number {
+        return this._y;
+    }
+
+    set y(value: number) {
+        this._y = value;
     }
 }

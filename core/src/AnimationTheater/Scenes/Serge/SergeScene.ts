@@ -4,11 +4,13 @@ import {handleMiddle} from "./modules/sergeMiddle";
 import {handleBackgrounds} from "./modules/sergeBackground";
 import {handleCursor, initCursor} from "./modules/cursor";
 import {ELayers} from "../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {E_Scene} from "../../AppScenario/types";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class SergeScene extends AbstractScene {
 
     constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+        super(canvas, E_Scene.SERGE);
     }
 
     protected createScene(): void {
@@ -29,7 +31,7 @@ export class SergeScene extends AbstractScene {
     }
 }
 
-function sceneEvents(scene: AbstractScene) {
+function sceneEvents(scene: IScene) {
     scene.collect(
         scene.onSetUserData$.subscribe(() => {
             console.log(scene.userData);

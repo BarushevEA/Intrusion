@@ -1,4 +1,5 @@
 import {AbstractScene} from "./AbstractScene";
+import {IScene} from "./SceneTypes";
 
 export abstract class AbstractPlatform {
     private _canvas: HTMLCanvasElement = <any>0;
@@ -12,9 +13,11 @@ export abstract class AbstractPlatform {
         }
     }
 
-    public abstract execute(): void;
+    public abstract execute(htmlComponent: any): void;
 
-    createScene(scene: typeof AbstractScene): AbstractScene {
+    public abstract destroy(): void;
+
+    createScene(scene: typeof AbstractScene): IScene {
         return new (<any>scene)(this.canvas);
     }
 

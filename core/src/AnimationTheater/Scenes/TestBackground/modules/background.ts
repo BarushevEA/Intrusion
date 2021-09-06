@@ -1,4 +1,3 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {HorizontalBackground} from "../../../AnimationModels/HorizontalBackground";
 import {HorizontalBackground1} from "../../../AnimationModels/HorizontalBackground1";
@@ -9,12 +8,14 @@ import {Cells, DrawHelper} from "../../../AnimationModels/DimensionBackground/Di
 import {GreenRectangle} from "../../../AnimationModels/GreenRectangle";
 import {GreenTriangleLeft} from "../../../AnimationModels/GreenTriangle/GreenTriangleLeft";
 import {GreenTriangleRight} from "../../../AnimationModels/GreenTriangle/GreenTriangleRight";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
-import {BounceOffTheWall} from "../../../Plugins/BounceOffTheWall";
+import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
+import {BounceOffTheWall} from "../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {tickGenerator} from "../../../../AnimationCore/Libraries/TickGenerator";
 import {HealthPlugin} from "../../../Plugins/HLProgress/HealthPlugin";
 import {HealthType} from "../../../Plugins/HLProgress/HealthType";
 import {BrickWall} from "../../../AnimationModels/briks/BrickWall";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let background: HorizontalBackground;
 let background1: HorizontalBackground1;
@@ -29,7 +30,7 @@ enum $ {
     WAL = 'WAL'
 }
 
-export function handleBackgrounds(scene: AbstractScene): void {
+export function handleBackgrounds(scene: IScene): void {
     scene.setActiveLayer(ELayers.BACKGROUND);
     clearVariables();
     initActors(scene);
@@ -53,7 +54,7 @@ function clearVariables() {
     redButton = <any>0;
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     background = new HorizontalBackground(scene.generalLayer);
     background1 = new HorizontalBackground1(scene.generalLayer);
 
@@ -69,16 +70,12 @@ function initActors(scene: AbstractScene) {
     initDynamical(scene);
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     initDynamicalActions(scene);
-    scene.collect(
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    clearOnSceneDestroy(scene, clearVariables);
 }
 
-function initDynamical(scene: AbstractScene) {
+function initDynamical(scene: IScene) {
     redButton = new ButtonRedWithText(scene.generalLayer, 'BOOM !!!');
     redButton.xPos = getCenterX(0, scene.generalLayer.width - redButton.width);
     redButton.yPos = getCenterY(0, scene.generalLayer.height - redButton.height);
@@ -105,11 +102,11 @@ function prepareCells() {
         .add([<any>$.REC], 1, 4);
 }
 
-function initDynamicalActions(scene: AbstractScene) {
-    const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
-    redButton.pluginDock.add(cursorBehaviorHeart);
+function initDynamicalActions(scene: IScene) {
+    const cursorOver = new PointerAndDragCursorPlugin(scene);
+    redButton.pluginDock.add(cursorOver);
     scene.collect(
-        redButton.isMouseClick$.subscribe(() => {
+        redButton.onMouseClick$.subscribe(() => {
             const arr = cells.cells;
             for (let i = 0; i < arr.length; i++) {
                 const arrElement = arr[i];

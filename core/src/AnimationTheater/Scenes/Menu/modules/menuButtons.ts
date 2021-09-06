@@ -1,19 +1,26 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ButtonExit} from "../../../AnimationModels/Buttons/ButtonExit";
 import {ButtonYellowWithText} from "../../../AnimationModels/Buttons/ButtonYellowWithText";
 import {E_Scene} from "../../../AppScenario/types";
 import {ButtonRedWithText} from "../../../AnimationModels/Buttons/ButtonRedWithText";
-import {AbstractActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
+import {
+    clearOnSceneDestroy,
+    destroySceneOnButtonClick,
+    exitSceneOnButtonClick,
+    toggleMouseEventsOnMouseOverGroup
+} from "../../../../AnimationCore/Libraries/Actions";
 import {cursorHandler} from "./cursor";
+import {IActor} from "../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
-let buttonExit: AbstractActor,
-    buttonTest: AbstractActor,
-    buttonSerge: AbstractActor,
-    buttonBackground: AbstractActor,
-    buttonQuit: AbstractActor;
+let buttonExit: IActor,
+    buttonTest: IActor,
+    buttonSerge: IActor,
+    buttonBackground: IActor,
+    buttonTestX5: IActor,
+    buttonQuit: IActor;
 
-export function handleButtons(scene: AbstractScene): void {
+export function handleButtons(scene: IScene): void {
     scene.setActiveLayer(ELayers.TOP);
     clearVariables();
     initActors(scene);
@@ -21,29 +28,51 @@ export function handleButtons(scene: AbstractScene): void {
 }
 
 function clearVariables() {
-    buttonExit = <any>0;
-    buttonTest = <any>0;
-    buttonSerge = <any>0;
-    buttonBackground = <any>0;
-    buttonQuit = <any>0;
+    if (buttonExit) {
+        buttonExit.destroy();
+        buttonExit = <any>0;
+    }
+    if (buttonTest) {
+        buttonTest.destroy();
+        buttonTest = <any>0;
+    }
+    if (buttonSerge) {
+        buttonSerge.destroy();
+        buttonSerge = <any>0;
+    }
+    if (buttonBackground) {
+        buttonBackground.destroy();
+        buttonBackground = <any>0;
+    }
+    if (buttonTestX5) {
+        buttonTestX5.destroy();
+        buttonTestX5 = <any>0;
+    }
+    if (buttonQuit) {
+        buttonQuit.destroy();
+        buttonQuit = <any>0;
+    }
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     buttonExit = new ButtonExit(scene.generalLayer);
     buttonTest = new ButtonYellowWithText(scene.generalLayer, E_Scene.TEST);
     buttonSerge = new ButtonYellowWithText(scene.generalLayer, E_Scene.SERGE);
     buttonBackground = new ButtonYellowWithText(scene.generalLayer, E_Scene.BACKGROUND);
+    buttonTestX5 = new ButtonYellowWithText(scene.generalLayer, E_Scene.TESTx5);
     buttonQuit = new ButtonRedWithText(scene.generalLayer, 'QUIT');
 
     buttonExit.xPos = scene.generalLayer.width - buttonExit.width;
     buttonTest.yPos = 20;
     buttonSerge.yPos = buttonTest.height + 25;
     buttonBackground.yPos = buttonTest.height * 2 + 30;
-    buttonQuit.yPos = buttonTest.height * 3 + 35;
+    buttonTestX5.yPos = buttonTest.height * 3 + 35;
+    buttonQuit.yPos = buttonTest.height * 4 + 40;
 
     buttonTest.xPos = 20;
     buttonSerge.xPos = 20;
     buttonBackground.xPos = 20;
+    buttonTestX5.xPos = 20;
     buttonQuit.xPos = 20;
 
     scene.setActors(
@@ -51,48 +80,27 @@ function initActors(scene: AbstractScene) {
         buttonTest,
         buttonSerge,
         buttonBackground,
+        buttonTestX5,
         buttonQuit
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
 
-    scene.collect(
-        buttonTest.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = E_Scene.TEST;
-            scene.exit();
-        }),
-        buttonTest.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonTest);
-        }),
-        buttonSerge.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = E_Scene.SERGE;
-            scene.exit();
-        }),
-        buttonSerge.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonSerge);
-        }),
-        buttonBackground.isMouseClick$.subscribe(() => {
-            scene.userData.nextScene = E_Scene.BACKGROUND;
-            scene.exit();
-        }),
-        buttonBackground.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonBackground);
-        }),
-        buttonExit.isMouseClick$.subscribe(() => {
-            scene.destroy();
-        }),
-        buttonExit.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonExit);
-        }),
-        buttonQuit.isMouseClick$.subscribe(() => {
-            scene.destroy();
-        }),
-        buttonQuit.isMouseOver$.subscribe(() => {
-            cursorHandler.pointerOrDefaultChange(scene, buttonQuit);
-        }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        })
-    );
+    toggleMouseEventsOnMouseOverGroup(scene, [
+        buttonTest,
+        buttonSerge,
+        buttonBackground,
+        buttonTestX5,
+        buttonQuit,
+        buttonExit
+    ])
+    exitSceneOnButtonClick(scene, buttonTest, cursorHandler, E_Scene.TEST);
+    exitSceneOnButtonClick(scene, buttonSerge, cursorHandler, E_Scene.SERGE);
+    exitSceneOnButtonClick(scene, buttonBackground, cursorHandler, E_Scene.BACKGROUND);
+    exitSceneOnButtonClick(scene, buttonTestX5, cursorHandler, E_Scene.TESTx5);
+    destroySceneOnButtonClick(scene, buttonExit, cursorHandler);
+    destroySceneOnButtonClick(scene, buttonQuit, cursorHandler);
+
+    clearOnSceneDestroy(scene, clearVariables);
 }

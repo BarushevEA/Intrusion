@@ -41,7 +41,9 @@ export abstract class AbstractFramedShape extends AbstractActor {
     }
 
     public setShowedFrame(index: number) {
-        this.layerHandler.setShowedFrame(index);
+        if (!!this.layerHandler && !!this.layerHandler.setShowedFrame) {
+            this.layerHandler.setShowedFrame(index);
+        }
     }
 
     protected createEmptyFrame(delay = 0): void {

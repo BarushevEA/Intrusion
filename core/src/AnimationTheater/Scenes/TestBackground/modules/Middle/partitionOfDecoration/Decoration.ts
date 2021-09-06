@@ -1,14 +1,14 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
-import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {LightCircle} from "../../../../../AnimationModels/circle/LightCircle";
-import {BounceOffTheWall} from "../../../../../Plugins/BounceOffTheWall";
+import {BounceOffTheWall} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/BounceOffTheWall";
 import {randomize} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
-let circles: AbstractActor[] = <any>0;
+let circles: IActor[] = <any>0;
 
 class Decoration extends AbstractActorGroup {
-    initActors(scene: AbstractScene): void {
+    initActors(scene: IScene): void {
         circles = [];
         for (let i = 0; i < 10; i++) {
             const circle = new LightCircle(scene.generalLayer);
@@ -19,7 +19,7 @@ class Decoration extends AbstractActorGroup {
         }
     }
 
-    initActions(scene: AbstractScene): void {
+    initActions(scene: IScene): void {
         for (let i = 0; i < circles.length; i++) {
             const circle = circles[i];
             const bounce = new BounceOffTheWall(scene);

@@ -1,18 +1,19 @@
-import {AbstractScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
 import {ELayers} from "../../../../AnimationCore/AnimationEngine/rootScenes/scenesEnvironment";
 import {CombinedRectangle} from "../../../AnimationModels/rectangles/CombinedRectangle";
 import {Heart} from "../../../AnimationModels/Heart";
-import {PointerAndDragCursorPlugin} from "../../../Plugins/PointerAndDragCursorPlugin";
+import {PointerAndDragCursorPlugin} from "../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/PointerAndDragCursorPlugin";
 import {AnimatedRectangleLightGreen} from "../../../AnimationModels/rectangles/AnimatedRectangleLightGreen";
 import {AnimatedRectangleLightRed} from "../../../AnimationModels/rectangles/AnimatedRectangleLightRed";
 import {Link} from "../../../Plugins/Link";
+import {clearOnSceneDestroy} from "../../../../AnimationCore/Libraries/Actions";
+import {IScene} from "../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 let combinedRectangle: CombinedRectangle,
     linkRectangle: AnimatedRectangleLightGreen,
     unLinLinkRectangle: AnimatedRectangleLightRed,
     heart: Heart;
 
-export function handleMiddle(scene: AbstractScene): void {
+export function handleMiddle(scene: IScene): void {
     scene.setActiveLayer(ELayers.MIDDLE);
     clearVariables();
     initActors(scene);
@@ -26,7 +27,7 @@ function clearVariables() {
     heart = <any>0;
 }
 
-function initActors(scene: AbstractScene) {
+function initActors(scene: IScene) {
     linkRectangle = new AnimatedRectangleLightGreen(scene.generalLayer);
     unLinLinkRectangle = new AnimatedRectangleLightRed(scene.generalLayer);
     linkRectangle.xPos = 0;
@@ -48,7 +49,7 @@ function initActors(scene: AbstractScene) {
     );
 }
 
-function initActions(scene: AbstractScene) {
+function initActions(scene: IScene) {
     const link = new Link(scene);
     const cursorBehaviorHeart = new PointerAndDragCursorPlugin(scene);
     const cursorBehaviorCombined = new PointerAndDragCursorPlugin(scene);
@@ -60,19 +61,18 @@ function initActions(scene: AbstractScene) {
     link.setActorToLink(combinedRectangle);
 
     scene.collect(
-        combinedRectangle.isMouseClick$.subscribe(() => {
+        combinedRectangle.onMouseClick$.subscribe(() => {
             combinedRectangle.nextRectangle();
         }),
-        scene.onDestroy$.subscribe(() => {
-            clearVariables();
-        }),
-        linkRectangle.isMouseClick$.subscribe(() => {
+        linkRectangle.onMouseClick$.subscribe(() => {
             heart.pluginDock.add(link);
             console.log(heart.pluginDock.getNameList());
         }),
-        unLinLinkRectangle.isMouseClick$.subscribe(() => {
+        unLinLinkRectangle.onMouseClick$.subscribe(() => {
             heart.pluginDock.unLink(link);
             console.log(heart.pluginDock.getNameList());
         })
     );
+
+    clearOnSceneDestroy(scene, clearVariables);
 }

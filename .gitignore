@@ -63,6 +63,8 @@ fabric.properties
 yarn.lock
 /dist_dev/
 
-.idea/git_toolbox_prj.xml
+.idea/codeStyles/codeStyleConfig.xml
+
+.idea/Intrusion.iml
 
 electron/package-lock.json

@@ -42,9 +42,23 @@ export class HeroProgress extends AbstractFramedShape implements IHealthProgress
     }
 
     private drawProgressBar() {
+        const green = 'rgb(36,95,15)';
+        const yellow = 'rgb(255,143,5)';
+        const red = 'rgb(136,37,25)';
+        let color = '';
+        switch (true) {
+            case this.progress > 70:
+                color = green;
+                break;
+            case this.progress > 40:
+                color = yellow;
+                break;
+            default:
+                color = red;
+        }
         this.shape
             .lineWidth(5)
-            .colors('rgb(255,29,2)', 'rgb(0,0,0)')
+            .colors(color, 'rgb(0,0,0)')
             .rectangle(
                 this.xPos,
                 this.yPos,

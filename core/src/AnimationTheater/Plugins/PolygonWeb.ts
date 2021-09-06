@@ -1,22 +1,22 @@
 import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
-import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {getCenterX, getCenterY} from "../../AnimationCore/Libraries/FunctionLibs";
+import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class PolygonWeb extends AbstractActorPlugin {
     private subscriber: ISubscriptionLike = <any>0;
-    private rootPool: AbstractActor[] = [];
+    private rootPool: IActor[] = [];
     private bgColor = '';
     private bdColor = '';
 
-    constructor(scene: AbstractScene, backgroundColor: string, borderColor: string) {
+    constructor(scene: IScene, backgroundColor: string, borderColor: string) {
         super('PolygonWeb', scene);
         this.bgColor = backgroundColor;
         this.bdColor = borderColor;
     }
 
-    onInit(root: AbstractActor): void {
+    onInit(root: IActor): void {
         this.rootPool.push(root);
         this.init();
     }
@@ -54,7 +54,7 @@ export class PolygonWeb extends AbstractActorPlugin {
 
             const polygon = shape.advancedPolygon();
             polygon.startPoint(x0, y0);
-            shape.context = this.scene.renderController.context;
+            shape.context = this.scene.render.context;
             for (let i = 1; i < this.rootPool.length; i++) {
                 const actor = this.rootPool[i];
                 const x = getCenterX(actor.xPos, actor.width);

@@ -1,13 +1,11 @@
-import {ISubscriptionLike, Observable} from "./Observable";
-import {cb_function, delay_ms, delay_second, id_string, ITick, ITickListeners} from "./Types";
+import {Observable} from "./Observables/Observable";
+import {cb_function, delay_ms, delay_second, ITick, ITickListener} from "./Types";
+import {ISubscriptionLike} from "./Observables/Types";
 
-const timeOutListeners: ITickListeners = {};
-const timeOutKeys: string[] = [];
-
+let listeners: ITickListener[] = [];
+const tickDelay = 10;
 let tickIndex = <any>0,
     secondFPSIndex = <any>0,
-    id = Number.MIN_SAFE_INTEGER,
-    tickDelay = 10,
     optimizeCounter = 0,
     optimizeNumber = 1000,
     tick10$ = new Observable(<any>0),
@@ -27,27 +25,20 @@ class TickGenerator implements ITick {
 
     private init(): void {
         if (!secondFPSIndex) {
-            secondFPSIndex = setInterval(() => {
-                secondFPS$.next(-1);
-            }, 1000);
+            secondFPSIndex = setInterval(() => secondFPS$.next(-1), 1000);
         }
         if (!tickIndex) {
             tickIndex = setInterval(() => {
+                this.counter100 += 10;
+                if (this.counter100 >= 100) this.counter100 = 0;
+
+                this.counter1000 += 10;
+                if (this.counter1000 >= 1000) this.counter1000 = 0;
+
                 tick10$.next(10);
-                if (!this.counter100) {
-                    tick100$.next(100);
-                }
-                if (!this.counter1000) {
-                    tick1000$.next(1000);
-                }
-                this.counter100++;
-                if (this.counter100 >= 10) {
-                    this.counter100 = 0;
-                }
-                this.counter1000++;
-                if (this.counter1000 >= 100) {
-                    this.counter1000 = 0;
-                }
+                if (!this.counter100) tick100$.next(100);
+                if (!this.counter1000) tick1000$.next(1000);
+
                 this.handleTimeOutListeners();
             }, tickDelay);
         }
@@ -56,9 +47,8 @@ class TickGenerator implements ITick {
     executeSecondInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick1000$.subscribe(() => {
-            if (time > 0) {
-                time--;
-            }
+            if (time > 0) time--;
+
             if (!time) {
                 cb();
                 time = number;
@@ -69,9 +59,8 @@ class TickGenerator implements ITick {
     execute100MsInterval(cb: cb_function, time: delay_second): ISubscriptionLike {
         const number = time;
         return tick100$.subscribe(() => {
-            if (time > 0) {
-                time--;
-            }
+            if (time > 0) time--;
+
             if (!time) {
                 cb();
                 time = number;
@@ -81,18 +70,18 @@ class TickGenerator implements ITick {
 
     private handleTimeOutListeners(): void {
         let isNeedToOptimize = false;
-        for (let i = 0; i < timeOutKeys.length; i++) {
-            const listener = timeOutListeners[timeOutKeys[i]];
+        for (let i = 0; i < listeners.length; i++) {
+            const listener = listeners[i];
             if (!listener) {
                 continue;
             }
             if (listener.isDestroy) {
-                delete timeOutListeners[timeOutKeys[i]];
+                listeners[i] = <any>0;
                 isNeedToOptimize = true;
             } else {
                 if (listener.counter >= listener.delay) {
                     listener.callback();
-                    delete timeOutListeners[timeOutKeys[i]];
+                    listeners[i] = <any>0;
                     isNeedToOptimize = true;
                 } else {
                     listener.counter += tickDelay;
@@ -103,21 +92,20 @@ class TickGenerator implements ITick {
     }
 
     private optimizeKeys(isNeedToOptimize: boolean): void {
-        if (!isNeedToOptimize) {
-            return;
-        }
+        if (!isNeedToOptimize) return;
+
         optimizeCounter++;
-        if (optimizeCounter < optimizeNumber) {
-            return;
-        }
+        if (optimizeCounter < optimizeNumber) return;
+
         optimizeCounter = 0;
-        timeOutKeys.length = 0;
-        const tmpKeys = Object.keys(timeOutListeners);
-        const length = tmpKeys.length;
-        for (let i = 0; i < length; i++) {
-            timeOutKeys.push(<string>tmpKeys.pop());
-        }
-        tmpKeys.length = 0;
+        const tmpListeners: ITickListener[] = [];
+
+        const length = listeners.length;
+        for (let i = 0; i < length; i++) if (listeners[i]) tmpListeners.push(listeners[i]);
+
+        listeners.length = 0;
+        listeners = tmpListeners;
+        tmpListeners.length = 0;
     }
 
     get isDestroyed(): boolean {
@@ -140,28 +128,26 @@ class TickGenerator implements ITick {
         return secondFPS$;
     }
 
-    executeTimeout(cb: cb_function, time: delay_ms): id_string {
-        const key = '' + ((++id === 0) ? ++id : id);
-        timeOutListeners[key] = {
+    executeTimeout(cb: cb_function, time: delay_ms): ITickListener {
+        const listener: ITickListener = {
             counter: 0,
             delay: time,
             callback: cb,
             isDestroy: false
         };
-        timeOutKeys.push(key);
-        return key;
+        listeners.push(listener);
+        return listener;
     }
 
-    clearTimeout(id: id_string): void {
-        if (timeOutListeners[id]) {
-            timeOutListeners[id].isDestroy = true;
-        }
+    clearTimeout(id: ITickListener): void {
+        if (!id) return;
+
+        id.isDestroy = true;
+        id.callback = () => console.log('listener has been destroyed');
     }
 
     destroy(): void {
-        if (this.isDestroyProcessed) {
-            return;
-        }
+        if (this.isDestroyProcessed) return;
         this.isDestroyProcessed = true;
 
         this.counter100 = 0;
@@ -185,9 +171,7 @@ class TickGenerator implements ITick {
     }
 
     private resetListeners(observable: Observable<any>): void {
-        if (observable) {
-            observable.unsubscribeAll();
-        }
+        if (observable) observable.unsubscribeAll();
     }
 }
 

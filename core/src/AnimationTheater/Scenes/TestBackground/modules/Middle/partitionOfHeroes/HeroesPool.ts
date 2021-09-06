@@ -1,10 +1,8 @@
 import {AbstractActorGroup} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractActorGroup";
-import {AbstractScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
 import {Plane} from "../../../../../AnimationModels/Planes/heroes/Plane";
 import {getCenterY} from "../../../../../../AnimationCore/Libraries/FunctionLibs";
-import {MoveKeyControls} from "../../../../../Plugins/MoveKeyControls";
-import {RectangleHighlighting} from "../../../../../Plugins/RectangleHighlighting";
+import {MoveKeyControls} from "../../../../../../AnimationCore/AnimationEngine/Plugins/keyPlugins/MoveKeyControls";
+import {RectangleHighlighting} from "../../../../../../AnimationCore/AnimationEngine/Plugins/behaviorPlugins/RectangleHighlighting";
 import {BlueFirePlugin} from "../../../../../Plugins/BlueFire/BlueFirePlugin";
 import {MovePlaneFramePlugin} from "../../../../../Plugins/MovePlaneFramePlugin";
 import {ShotLightingPlugin} from "../../../../../Plugins/ShotLighting/ShotLightingPlugin";
@@ -14,24 +12,26 @@ import {BulletShotPlugin} from "../../../../../Plugins/Bullet/BulletShotPlugin";
 import {keyDownCode$, keyUpCode$} from "../../../../../../AnimationCore/Store/EventStore";
 import {IKeyCode} from "../../../../../../AnimationCore/Store/Types";
 import {tickGenerator} from "../../../../../../AnimationCore/Libraries/TickGenerator";
+import {IActor} from "../../../../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
-let plane: AbstractActor = <any>0;
+let plane: IActor = <any>0;
 let destroyedCounter = <any>0;
 
 class Heroes extends AbstractActorGroup {
-    private _enemies: AbstractActor[] = <any>0;
+    private _enemies: IActor[] = <any>0;
 
-    set enemies(value: AbstractActor[]) {
+    set enemies(value: IActor[]) {
         this._enemies = value;
     }
 
-    initActors(scene: AbstractScene): void {
+    initActors(scene: IScene): void {
         plane = new Plane(scene.generalLayer);
         plane.xPos = plane.width;
         plane.yPos = getCenterY(0, scene.generalLayer.height) - Math.round(plane.height / 2);
     }
 
-    initActions(scene: AbstractScene): void {
+    initActions(scene: IScene): void {
         scene.setActors(plane);
 
         const moveKeys = new MoveKeyControls(scene, 'w', 's', 'a', 'd');
@@ -61,7 +61,7 @@ class Heroes extends AbstractActorGroup {
                     }
                 }
             ),
-            plane.isDestroyed$.subscribe(() => {
+            plane.onDestroyed$.subscribe(() => {
                 destroyedCounter = tickGenerator.executeTimeout(() => {
                     scene.destroy();
                 }, 2000);
@@ -71,7 +71,7 @@ class Heroes extends AbstractActorGroup {
         );
     }
 
-    get heroes(): AbstractActor[] {
+    get heroes(): IActor[] {
         return [plane];
     }
 
@@ -83,6 +83,7 @@ class Heroes extends AbstractActorGroup {
 
         this._enemies = <any>0;
         tickGenerator.clearTimeout(destroyedCounter);
+        destroyedCounter = <any>0;
     }
 }
 

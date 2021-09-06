@@ -1,5 +1,5 @@
 import {ITextHandler, textHandler} from "./TextHandler";
-import {IShapeHandler, shapeHandler} from "./ShapeHandler";
+import {IShapeHandler, shapeHandler} from "./shapeModules/ShapeHandler";
 import {x_pos, y_pos} from "../../Libraries/Types";
 
 export type IVirtualCanvasesPool = {
@@ -14,8 +14,8 @@ export type IFrame = {
 }
 
 export type IFramePool = {
-    startFrame: number;
-    showedFrame: number;
+    startFrameNumber: number;
+    showedFrameNumber: number;
     playedFrames: IFrame[];
     reverseFrames: IFrame[];
     originalFrames: IFrame[];
@@ -28,14 +28,15 @@ export class CanvasLayerHandler {
     private readonly savedContext: CanvasRenderingContext2D;
     private readonly virtualPool: IVirtualCanvasesPool = {};
     private readonly framePool: IFramePool = {
-        startFrame: 0,
-        showedFrame: 0,
+        startFrameNumber: 0,
+        showedFrameNumber: 0,
         playedFrames: [],
         reverseFrames: [],
         originalFrames: []
     };
     private _text = textHandler;
     private _shape = shapeHandler;
+    isOriginal = true;
 
     constructor(canvas: HTMLCanvasElement, isSetAlpha = true) {
         this.canvas = canvas;
@@ -111,6 +112,7 @@ export class CanvasLayerHandler {
     }
 
     public deleteVirtual(targetName: string): void {
+        this.virtualPool[targetName] = <any>0;
         delete this.virtualPool[targetName];
     }
 
@@ -123,7 +125,7 @@ export class CanvasLayerHandler {
     }
 
     public getFrame(): HTMLCanvasElement {
-        const frame = this.framePool.playedFrames[this.framePool.showedFrame];
+        const frame = this.framePool.playedFrames[this.framePool.showedFrameNumber];
         if (frame.isStopFrame) {
             return frame.frame;
         }
@@ -134,8 +136,8 @@ export class CanvasLayerHandler {
             frame.counter = frame.delay;
         }
 
-        if (++this.framePool.showedFrame >= this.framePool.playedFrames.length) {
-            this.framePool.showedFrame = this.framePool.startFrame;
+        if (++this.framePool.showedFrameNumber >= this.framePool.playedFrames.length) {
+            this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
         }
 
         return frame.frame;
@@ -169,9 +171,9 @@ export class CanvasLayerHandler {
 
     public setStartFrame(index: number) {
         if (index > -1 && index < this.framePool.playedFrames.length) {
-            this.framePool.startFrame = index;
+            this.framePool.startFrameNumber = index;
         } else {
-            this.framePool.startFrame = 0;
+            this.framePool.startFrameNumber = 0;
         }
     }
 
@@ -215,17 +217,19 @@ export class CanvasLayerHandler {
 
     public setReverseToPlay() {
         this.framePool.playedFrames = this.framePool.reverseFrames;
-        this.framePool.showedFrame = this.framePool.startFrame;
+        this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
+        this.isOriginal = false;
     }
 
     public setOriginalToPlay() {
         this.framePool.playedFrames = this.framePool.originalFrames;
-        this.framePool.showedFrame = this.framePool.startFrame;
+        this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
+        this.isOriginal = true;
     }
 
     public setShowedFrame(index: number) {
         if (index >= 0 && index < this.framePool.playedFrames.length) {
-            this.framePool.showedFrame = index;
+            this.framePool.showedFrameNumber = index;
         }
     }
 

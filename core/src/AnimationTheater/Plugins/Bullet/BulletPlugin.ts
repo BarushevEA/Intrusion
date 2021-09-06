@@ -1,22 +1,22 @@
 import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
 import {getCenterX, getCenterY} from "../../../AnimationCore/Libraries/FunctionLibs";
 import {HealthPlugin} from "../HLProgress/HealthPlugin";
 import {ShotLightingPlugin} from "../ShotLighting/ShotLightingPlugin";
 import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observables/Types";
+import {IActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 
 export class BulletPlugin extends AbstractActorPlugin {
     private damage: number = 0;
-    private enemies: AbstractActor[] = <any>0;
+    private enemies: IActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private xSpeed = 15;
     private isDestroyProcessed = false;
-    private damagedEnemy: AbstractActor = <any>0;
+    private damagedEnemy: IActor = <any>0;
     private handleDestroyCounter = <any>0;
 
-    constructor(scene: AbstractScene, enemies: AbstractActor[], isReverse = false, damage = 50) {
+    constructor(scene: IScene, enemies: IActor[], isReverse = false, damage = 50) {
         super('BulletPlugin', scene);
         this.damage = damage;
         this.setEnemies(enemies);
@@ -34,7 +34,7 @@ export class BulletPlugin extends AbstractActorPlugin {
                 this.scene.destroyActor(this.root);
             }
             this.damagedEnemy = this.getDamagedEnemy();
-            if (this.damagedEnemy) {
+            if (this.damagedEnemy && this.damagedEnemy.pluginDock) {
                 const health = <HealthPlugin>this.damagedEnemy.pluginDock.getPluginsFromRootName('HealthPlugin')[0];
                 if (health) {
                     health.setDamage(this.damage);
@@ -51,7 +51,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         this.isDestroyProcessed = true;
 
         this.handleDestroyCounter = tickGenerator.executeTimeout(() => {
-            if (!!this.scene) {
+            if (!!this.scene && !this.scene.isDestroyed) {
                 this.scene.destroyActor(this.root);
             } else if (this.root && !this.root.isDestroyed) {
                 this.root.destroy();
@@ -64,8 +64,8 @@ export class BulletPlugin extends AbstractActorPlugin {
         }
     }
 
-    private getDamagedEnemy(): AbstractActor {
-        let enemy: AbstractActor = <any>0;
+    private getDamagedEnemy(): IActor {
+        let enemy: IActor = <any>0;
         if (this.enemies && this.enemies.length) {
             for (let i = 0; i < this.enemies.length; i++) {
                 const actor = this.enemies[i];
@@ -91,7 +91,7 @@ export class BulletPlugin extends AbstractActorPlugin {
         }
     }
 
-    setEnemies(enemies: AbstractActor[]) {
+    setEnemies(enemies: IActor[]) {
         if (enemies) {
             this.enemies = enemies;
         }
@@ -99,6 +99,7 @@ export class BulletPlugin extends AbstractActorPlugin {
 
     unLink(): void {
         tickGenerator.clearTimeout(this.handleDestroyCounter);
+        this.handleDestroyCounter = <any>0;
         super.unLink();
     }
 

@@ -1,4 +1,5 @@
 import {AbstractActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
+import {IActor} from "../../AnimationCore/AnimationEngine/rootModels/AbstractActor/ActorTypes";
 
 enum ELayer {
     WORK = 'WORK',
@@ -21,7 +22,7 @@ export class GreenRectangle extends AbstractActor {
     }
 }
 
-function getWork($: AbstractActor) {
+function getWork($: IActor) {
     $.setVirtualLayer(ELayer.WORK);
     $.shape
         .colors('rgba(0,250,0,0.1)', 'rgba(0,250,0,0.5)')

@@ -1,14 +1,14 @@
-import {AbstractActorPlugin} from "../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {ECursor} from "../../AnimationCore/AnimationEngine/rootModels/Types";
-import {ISubscriptionLike} from "../../AnimationCore/Libraries/Observable";
+import {AbstractActorPlugin} from "../root/AbstractActorPlugin";
+import {ECursor} from "../../rootModels/Types";
+import {ISubscriptionLike} from "../../../Libraries/Observables/Types";
+import {IScene} from "../../rootScenes/SceneTypes";
 
 export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
     private PODSubscriber: ISubscriptionLike = <any>0;
     private dragSubscriber: ISubscriptionLike = <any>0;
     private dropSubscriber: ISubscriptionLike = <any>0;
 
-    constructor(scene: AbstractScene) {
+    constructor(scene: IScene) {
         super('PointerAndDrugCursorPlugin', scene);
     }
 
@@ -23,17 +23,17 @@ export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
 
     initSubscribers() {
         if (!this.PODSubscriber) {
-            this.PODSubscriber = this.root.isMouseOver$.subscribe(() => {
+            this.PODSubscriber = this.root.onMouseOver$.subscribe(() => {
                 this.scene.cursorHandler.pointerOrDefaultChange(this.scene, this.root);
             });
         }
         if (!this.dragSubscriber) {
-            this.dragSubscriber = this.root.isMouseLeftDrag$.subscribe(() => {
+            this.dragSubscriber = this.root.onMouseLeftDrag$.subscribe(() => {
                 this.scene.cursor.setType(ECursor.CATCH);
             });
         }
         if (!this.dropSubscriber) {
-            this.dropSubscriber = this.root.isMouseLeftDrop$.subscribe(() => {
+            this.dropSubscriber = this.root.onMouseLeftDrop$.subscribe(() => {
                 this.scene.cursor.setType(ECursor.POINTER);
             });
         }
@@ -48,6 +48,7 @@ export class PointerAndDragCursorPlugin extends AbstractActorPlugin {
         this.PODSubscriber = <any>0;
         this.dragSubscriber = <any>0;
         this.dropSubscriber = <any>0;
+        this.scene.cursor.setType(ECursor.DEFAULT);
         super.unLink();
     }
 

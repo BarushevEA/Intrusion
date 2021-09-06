@@ -1,20 +1,20 @@
-import {AbstractActorPlugin} from "../../../AnimationCore/AnimationEngine/Plugins/root/AbstractActorPlugin";
-import {AbstractScene} from "../../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
-import {AbstractActor} from "../../../AnimationCore/AnimationEngine/rootModels/AbstractActor/AbstractActor";
-import {ISubscriptionLike} from "../../../AnimationCore/Libraries/Observable";
+import {AbstractActorPlugin} from "../../root/AbstractActorPlugin";
 import {FakeActor} from "./FakeActor";
 import {EmptyActor} from "./EmptyActor";
-import {tickGenerator} from "../../../AnimationCore/Libraries/TickGenerator";
+import {tickGenerator} from "../../../../Libraries/TickGenerator";
+import {ISubscriptionLike} from "../../../../Libraries/Observables/Types";
+import {IActor} from "../../../rootModels/AbstractActor/ActorTypes";
+import {IScene} from "../../../rootScenes/SceneTypes";
 
 export class SnakePlugin extends AbstractActorPlugin {
-    private actors: AbstractActor[] = <any>0;
-    private realActors: AbstractActor[] = <any>0;
+    private actors: IActor[] = <any>0;
+    private realActors: IActor[] = <any>0;
     private subscriber: ISubscriptionLike = <any>0;
     private isUnlinkProcessed = false;
     private distance = 0;
-    private emptyActor: AbstractActor = <any>0;
+    private emptyActor: IActor = <any>0;
 
-    constructor(scene: AbstractScene, plugins: AbstractActorPlugin[], distance = 15) {
+    constructor(scene: IScene, plugins: AbstractActorPlugin[], distance = 15) {
         super('SnakePlugin', scene);
         this.distance = distance;
         this.emptyActor = new EmptyActor(scene.generalLayer);
@@ -119,7 +119,7 @@ export class SnakePlugin extends AbstractActorPlugin {
                 this.actors = <any>0;
                 this.realActors = <any>0;
                 if (this.emptyActor) {
-                    if (this.scene && this.scene.destroyActor) {
+                    if (this.scene && !this.scene.isDestroyed && this.scene.destroyActor) {
                         this.scene.destroyActor(this.emptyActor);
                     } else {
                         this.emptyActor.destroy();

@@ -1,16 +1,22 @@
 import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractPlatform";
 import {Menu} from "../Scenes/Menu/Menu";
 import {SergeScene} from "../Scenes/Serge/SergeScene";
-import {E_Scene} from "./types";
-import {AbstractScene} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractScene";
+import {E_Scene, IScenePool} from "./types";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
 import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
+import {EventCollector} from "../../AnimationCore/Libraries/EventCollector";
+import {TestX5} from "../Scenes/TestX5/TestX5";
+import {clearOnSceneDestroy} from "../../AnimationCore/Libraries/Actions";
 
-let menu: AbstractScene = <any>0,
-    sceneTest: AbstractScene = <any>0,
-    sceneSerge: AbstractScene = <any>0,
-    sceneBackground: AbstractScene = <any>0;
+const collector = new EventCollector();
+
+let pool: IScenePool = {};
+pool[E_Scene.MENU] = <any>0;
+pool[E_Scene.TEST] = <any>0;
+pool[E_Scene.SERGE] = <any>0;
+pool[E_Scene.BACKGROUND] = <any>0;
+pool[E_Scene.TESTx5] = <any>0;
 
 export function runApplicationScenario(platform: AbstractPlatform) {
     initScenes(platform);
@@ -19,64 +25,70 @@ export function runApplicationScenario(platform: AbstractPlatform) {
 }
 
 function runEnterPoint(): void {
-    menu.start(true);
+    pool[E_Scene.MENU].start(true);
 }
 
 function initScenes(platform: AbstractPlatform): void {
-    menu = platform.createScene(Menu);
+    pool[E_Scene.MENU] = platform.createScene(Menu);
 }
 
 function initEvents(platform: AbstractPlatform): void {
-    menu.onExit$.subscribe((data: IUserData) => {
-        if (data.nextScene) {
-            switch (data.nextScene) {
-                case E_Scene.TEST:
-                    sceneTest = platform.createScene(TestScene);
-                    sceneTest.onStart$.subscribe(() => {
-                    });
-                    sceneTest.onDestroy$.subscribe(() => {
-                        menu.start(true);
-                    });
-                    sceneTest.start(true);
-                    break;
-                case E_Scene.SERGE:
-                    sceneSerge = platform.createScene(SergeScene);
-                    sceneSerge.onStart$.subscribe(() => {
-                        sceneSerge.setHalfSpeed();
-                    });
-                    sceneSerge.start(false);
-                    sceneSerge.onExit$.subscribe(() => {
-                        menu.start(true);
-                    });
-                    break;
-                case E_Scene.BACKGROUND:
-                    sceneBackground = platform.createScene(TestBackground);
-                    sceneBackground.onStart$.subscribe(() => {
-                        // sceneBackground.setHalfSpeed();
-                    });
-                    sceneBackground.onExit$.subscribe(() => {
-                        menu.start(true);
-                    });
-                    sceneBackground.onDestroy$.subscribe(() => {
-                        menu.start(true);
-                    });
-                    sceneBackground.start(true);
-                    break;
+    collector.collect(
+        pool[E_Scene.MENU].onExit$.subscribe((data: IUserData) => {
+            if (data.nextScene) {
+                switch (data.nextScene) {
+                    case E_Scene.TEST:
+                        pool[E_Scene.TEST] = platform.createScene(TestScene);
+                        startMenuOnExit(E_Scene.TEST);
+                        pool[E_Scene.TEST].start(true);
+                        break;
+                    case E_Scene.SERGE:
+                        pool[E_Scene.SERGE] = platform.createScene(SergeScene);
+                        collector.collect(
+                            pool[E_Scene.SERGE].onStart$.subscribe(() => pool[E_Scene.SERGE].setHalfSpeed()),
+                        )
+                        startMenuOnExit(E_Scene.SERGE);
+                        pool[E_Scene.SERGE].start(false);
+                        break;
+                    case E_Scene.BACKGROUND:
+                        pool[E_Scene.BACKGROUND] = platform.createScene(TestBackground);
+                        startMenuOnExit(E_Scene.BACKGROUND);
+                        pool[E_Scene.BACKGROUND].start(true);
+                        break;
+                    case E_Scene.TESTx5:
+                        pool[E_Scene.TESTx5] = platform.createScene(TestX5);
+                        startMenuOnExit(E_Scene.TESTx5);
+                        pool[E_Scene.TESTx5].start(false);
+                        break;
+                    case E_Scene.MENU:
+                        break;
+                    default:
+                        pool[E_Scene.MENU].destroy('ApplicationScenario default');
+                }
+            }
+        }));
+
+    clearOnSceneDestroy(pool[E_Scene.MENU], () => {
+        const keys = Object.keys(pool);
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (pool[key] && key !== E_Scene.MENU) {
+                pool[key].destroy('ApplicationScenario clearOnSceneDestroy');
+                pool[key] = <any>0;
             }
         }
+        collector.destroy();
+        pool[E_Scene.MENU] = <any>0;
+        platform.destroy();
+        console.log(E_Scene.MENU, 'destroyed');
     });
-    menu.onDestroy$.subscribe(() => {
-        if (sceneTest) {
-            sceneTest.destroy();
-        }
-        if (sceneSerge) {
-            sceneSerge.destroy();
-        }
-        if (sceneBackground) {
-            sceneBackground.destroy();
-        }
-        sceneTest = <any>0;
-        sceneSerge = <any>0;
-        sceneBackground = <any>0;
-    });
+}
+
+function startMenuOnExit(sceneName: E_Scene): void {
+    collector.collect(
+        pool[sceneName].onExit$.subscribe(() => {
+            console.log(pool[sceneName].name, 'Try to start menu.')
+            pool[E_Scene.MENU].start(true);
+        })
+    );
 }
