@@ -1,11 +1,11 @@
 import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractPlatform";
 import {Menu} from "../Scenes/Menu/Menu";
 import {E_Scene, IScenePool} from "./types";
-import {TestBackground} from "../Scenes/TestBackground/TestBackground";
-import {TestScene} from "../Scenes/TestScene/TestScene";
 import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {EventCollector} from "../../AnimationCore/Libraries/EventCollector";
 import {clearOnSceneDestroy} from "../../AnimationCore/Libraries/Actions";
+import { TestScene } from "../Scenes/TestEvents/TestScene";
+import { TestBackground } from "../Scenes/TestPlugins/TestBackground";
 
 const collector = new EventCollector();
 

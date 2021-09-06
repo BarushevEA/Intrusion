@@ -1,7 +1,7 @@
 // TODO 1) Create project documentation
 // DONE 2) Create reverse and guided animation (set custom stop and start frames)
 // DONE 3) Add events to animation models (mouse over, click)
-// DONE 3.1) create effective observable un subscribe
+// DONE 3.1) create effective observable unsubscribe
 // DONE 3.2) Add events to animation models (mouse key up and key down)
 // DONE 3.3) Handle events - right mouse click
 // DONE 3.4) Update observable
