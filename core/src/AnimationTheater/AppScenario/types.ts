@@ -2,10 +2,8 @@ import {IScene} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes"
 
 export enum E_Scene {
     MENU = 'MENU',
-    TEST = 'TEST',
-    SERGE = 'SERGE',
-    BACKGROUND = 'BACKGROUND',
-    TESTx5 = 'TESTx5',
+    TEST = 'Test events',
+    BACKGROUND = 'Test plugins',
     NULL = 'NULL'
 }
 

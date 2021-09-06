@@ -1,12 +1,10 @@
 import {AbstractPlatform} from "../../AnimationCore/AnimationEngine/rootScenes/AbstractPlatform";
 import {Menu} from "../Scenes/Menu/Menu";
-import {SergeScene} from "../Scenes/Serge/SergeScene";
 import {E_Scene, IScenePool} from "./types";
 import {TestBackground} from "../Scenes/TestBackground/TestBackground";
 import {TestScene} from "../Scenes/TestScene/TestScene";
 import {IUserData} from "../../AnimationCore/AnimationEngine/rootScenes/SceneTypes";
 import {EventCollector} from "../../AnimationCore/Libraries/EventCollector";
-import {TestX5} from "../Scenes/TestX5/TestX5";
 import {clearOnSceneDestroy} from "../../AnimationCore/Libraries/Actions";
 
 const collector = new EventCollector();
@@ -14,9 +12,7 @@ const collector = new EventCollector();
 let pool: IScenePool = {};
 pool[E_Scene.MENU] = <any>0;
 pool[E_Scene.TEST] = <any>0;
-pool[E_Scene.SERGE] = <any>0;
 pool[E_Scene.BACKGROUND] = <any>0;
-pool[E_Scene.TESTx5] = <any>0;
 
 export function runApplicationScenario(platform: AbstractPlatform) {
     initScenes(platform);
@@ -42,23 +38,10 @@ function initEvents(platform: AbstractPlatform): void {
                         startMenuOnExit(E_Scene.TEST);
                         pool[E_Scene.TEST].start(true);
                         break;
-                    case E_Scene.SERGE:
-                        pool[E_Scene.SERGE] = platform.createScene(SergeScene);
-                        collector.collect(
-                            pool[E_Scene.SERGE].onStart$.subscribe(() => pool[E_Scene.SERGE].setHalfSpeed()),
-                        )
-                        startMenuOnExit(E_Scene.SERGE);
-                        pool[E_Scene.SERGE].start(false);
-                        break;
                     case E_Scene.BACKGROUND:
                         pool[E_Scene.BACKGROUND] = platform.createScene(TestBackground);
                         startMenuOnExit(E_Scene.BACKGROUND);
                         pool[E_Scene.BACKGROUND].start(true);
-                        break;
-                    case E_Scene.TESTx5:
-                        pool[E_Scene.TESTx5] = platform.createScene(TestX5);
-                        startMenuOnExit(E_Scene.TESTx5);
-                        pool[E_Scene.TESTx5].start(false);
                         break;
                     case E_Scene.MENU:
                         break;
