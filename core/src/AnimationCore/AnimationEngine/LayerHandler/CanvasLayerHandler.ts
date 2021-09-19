@@ -90,8 +90,7 @@ export class CanvasLayerHandler {
                                 xD = -1,
                                 yD = -1,
                                 widthD = -1,
-                                heightD = -1
-    ): void {
+                                heightD = -1): void {
         if (width > -1 &&
             height > -1 &&
             xD > -1 &&
@@ -100,9 +99,9 @@ export class CanvasLayerHandler {
             heightD > -1) {
             this.savedContext.drawImage(this.virtualPool[sourceName].canvas,
                 x, y, width, height, xD, yD, widthD, heightD);
-        } else {
-            this.savedContext.drawImage(this.virtualPool[sourceName].canvas, x, y);
+            return;
         }
+        this.savedContext.drawImage(this.virtualPool[sourceName].canvas, x, y);
     }
 
     public drawVirtualOnVirtual(targetName: string,
@@ -126,20 +125,15 @@ export class CanvasLayerHandler {
 
     public getFrame(): HTMLCanvasElement {
         const frame = this.framePool.playedFrames[this.framePool.showedFrameNumber];
-        if (frame.isStopFrame) {
-            return frame.frame;
-        }
+        if (frame.isStopFrame) return frame.frame;
         if (frame.counter) {
             frame.counter--;
             return frame.frame;
-        } else {
-            frame.counter = frame.delay;
         }
-
+        frame.counter = frame.delay;
         if (++this.framePool.showedFrameNumber >= this.framePool.playedFrames.length) {
             this.framePool.showedFrameNumber = this.framePool.startFrameNumber;
         }
-
         return frame.frame;
     }
 
@@ -172,9 +166,9 @@ export class CanvasLayerHandler {
     public setStartFrame(index: number) {
         if (index > -1 && index < this.framePool.playedFrames.length) {
             this.framePool.startFrameNumber = index;
-        } else {
-            this.framePool.startFrameNumber = 0;
+            return;
         }
+        this.framePool.startFrameNumber = 0;
     }
 
     public drawFrame(x: number, y: number) {
